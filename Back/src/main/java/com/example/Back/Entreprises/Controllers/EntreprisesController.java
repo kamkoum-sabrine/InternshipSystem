@@ -18,11 +18,20 @@ public class EntreprisesController {
     }
     @PostMapping
     public void createEntreprise(@RequestBody Entreprise entreprise) {
-       this.entreprisesService.ajouterEntreprise(entreprise);
+       this.entreprisesService.addEntreprise(entreprise);
     }
     @GetMapping
     public List<Entreprise> getAllEntreprises() {
        return this.entreprisesService.getAllEntreprises();
     }
+    @DeleteMapping("/{id}")
+    public void deleteEntreprise(@PathVariable Long id) {
+       this.entreprisesService.deleteEntreprise(id);
+    }
+    @PutMapping("/{id}")
+    public void updateEntreprise(@PathVariable Long id, @RequestBody Entreprise entreprise) {
+        this.entreprisesService.updateEntreprise(id, entreprise);
+    }
+
 }
 
