@@ -5,5 +5,16 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/entreprises")
+
 public class EntreprisesController {
+    private final EntreprisesService entreprisesService;
+   @Autowired
+    public EntreprisesController(EntreprisesService entreprisesService) {
+        this.entreprisesService = entreprisesService;
+    }
+    @PostMapping
+    public void createEntreprise(@RequestBody Entreprise entreprise) {
+       this.entreprisesService.ajouterEntreprise(entreprise);
+    }
+}
 
