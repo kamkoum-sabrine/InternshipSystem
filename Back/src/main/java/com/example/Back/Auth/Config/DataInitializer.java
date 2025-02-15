@@ -48,11 +48,15 @@ public class DataInitializer implements CommandLineRunner {
             roleRepository.save(directionRole);
             roleRepository.save(etudiantRole);
 
-            User superAdminUser = new User(null, "Kamkoum", "Sabrine", "kamkoumsabrine@gmail.com", adminRole, false);
-            User directionStageUser = new User(null, "Salhi", "Houssem", "salhihoussem@gmail.com", directionRole,
+            User superAdminUser = new User(null, "Kamkoum", "Sabrine", "kamkoumsabrine@gmail.com", "password",
+                    adminRole, false);
+            User directionStageUser = new User(null, "Salhi", "Houssem", "salhihoussem@gmail.com", "password",
+                    directionRole,
                     false);
-            User serviceStageUser = new User(null, "Toumi", "Mahdi", "toumimahdi@gmail.com", serviceRole, false);
-            User etudiantUser = new User(null, "Ahmed", "Ahmed", "ahmedahmed@gmail.com", etudiantRole, false);
+            User serviceStageUser = new User(null, "Toumi", "Mahdi", "toumimahdi@gmail.com", "password", serviceRole,
+                    false);
+            User etudiantUser = new User(null, "Ahmed", "Ahmed", "ahmedahmed@gmail.com", "password", etudiantRole,
+                    false);
 
             userRepository.save(superAdminUser);
             userRepository.save(directionStageUser);

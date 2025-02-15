@@ -9,8 +9,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Entity
 public class User {
@@ -22,6 +24,7 @@ public class User {
     private String prenom;
     @Column(unique = true)
     private String email;
+    private String password;
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
