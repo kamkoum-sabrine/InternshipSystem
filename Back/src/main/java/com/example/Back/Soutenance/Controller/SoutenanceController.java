@@ -26,6 +26,14 @@ public class SoutenanceController {
         return soutenanceService.getAllSoutenances();
     }
 
+    @GetMapping("/search")
+    public List<Soutenance> rechercherSoutenances(
+            @RequestParam(required = false) Long idEtudiant,
+            @RequestParam(required = false) Long idEncadrant,
+            @RequestParam(required = false) LocalDate date) {
+        return soutenanceService.rechercherSoutenances(idEtudiant, idEncadrant, date);
+    }
+
     @PostMapping
     public void createSoutenance(@RequestBody Soutenance soutenance) {
         soutenanceService.addSoutenance(soutenance);

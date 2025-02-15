@@ -80,4 +80,8 @@ public class SoutenanceService {
         // Sauvegarder et retourner l'entité mise à jour
         return soutenanceRepository.save(soutenance);
     }
+
+    public List<Soutenance> rechercherSoutenances(Long idEtudiant, Long idEncadrant, LocalDate date) {
+        return soutenanceRepository.rechercherSoutenances(idEtudiant, idEncadrant, date);
+    }
 }
