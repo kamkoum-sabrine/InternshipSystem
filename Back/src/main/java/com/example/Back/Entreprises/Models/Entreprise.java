@@ -1,4 +1,4 @@
-package com.example.Back.Entreprises;
+package com.example.Back.Entreprises.Models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

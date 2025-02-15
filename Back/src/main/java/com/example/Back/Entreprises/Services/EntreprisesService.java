@@ -1,5 +1,7 @@
-package com.example.Back.Entreprises;
+package com.example.Back.Entreprises.Services;
 
+import com.example.Back.Entreprises.Models.Entreprise;
+import com.example.Back.Entreprises.Repositories.EntreprisesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

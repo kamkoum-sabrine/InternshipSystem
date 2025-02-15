@@ -1,5 +1,6 @@
-package com.example.Back.Entreprises;
+package com.example.Back.Entreprises.Repositories;
 
+import com.example.Back.Entreprises.Models.Entreprise;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;

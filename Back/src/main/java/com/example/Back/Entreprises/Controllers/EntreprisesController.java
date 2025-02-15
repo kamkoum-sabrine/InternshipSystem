@@ -1,5 +1,7 @@
-package com.example.Back.Entreprises;
+package com.example.Back.Entreprises.Controllers;
 
+import com.example.Back.Entreprises.Models.Entreprise;
+import com.example.Back.Entreprises.Services.EntreprisesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
