@@ -3,6 +3,7 @@ package com.example.Back.Entreprises;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
@@ -38,12 +39,21 @@ public class EntreprisesService {
             throw new IllegalArgumentException("Le numéro de téléphone doit contenir entre 8 et 15 chiffres !");
         }
 
-        // 4️⃣ Vérification si une entreprise existe déjà avec le même nom ET la même adresse
+        // 5️⃣ Vérification si une entreprise existe déjà avec le même nom ET la même adresse
         if (entrepriseRepository.existsByNomAndAdresse(entreprise.getNom(), entreprise.getAdresse())) {
-            throw new IllegalArgumentException("Cette entreprise existe déja !");
+            throw new IllegalArgumentException("Cette entreprise existe déjà !");
+        }
+        // 4️⃣ Vérification de l'unicité du numéro de téléphone
+        if (entrepriseRepository.existsByTelephone(entreprise.getTelephone())) {
+            throw new IllegalArgumentException("Ce numéro de téléphone existe déja !");
         }
 
-        // 5️⃣ Sauvegarde de l'entreprise
+
+        // 6️⃣ Sauvegarde de l'entreprise
         entrepriseRepository.save(entreprise);
+    }
+
+    public List<Entreprise> getAllEntreprises() {
+        return this.entrepriseRepository.findAll();
     }
 }

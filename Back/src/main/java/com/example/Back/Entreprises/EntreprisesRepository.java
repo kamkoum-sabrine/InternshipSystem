@@ -15,4 +15,6 @@ public interface EntreprisesRepository extends JpaRepository<Entreprise, Long> {
 
     void deleteByEmail(String email);
     void deleteByNom(String nom);
+
+    boolean existsByTelephone(Long telephone);
 }

@@ -21,7 +21,7 @@ public class Entreprise {
     private String nom;
     @Column(nullable = false)
     private String adresse;
-    @Column(nullable = false , unique=true)
+    @Column(nullable = false )
     private String email;
     @Column(nullable = false , unique = true)
     private Long telephone;
