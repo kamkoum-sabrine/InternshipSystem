@@ -1,5 +1,6 @@
 package com.example.Back.Auth.Models;
 
+import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,17 +9,16 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
 @Entity
-public class User {
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String nom;
-    private String prenom;
-    @Column(unique = true)
-    private String email;
 
+    @NonNull
+    @Column(unique = true, nullable = false)
+    private String nom;
 }
