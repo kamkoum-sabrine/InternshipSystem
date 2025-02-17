@@ -1,2 +1,2 @@
-./Front/node_modules
-./Back/main/ressources/application.properties
+Front/node_modules
+Back/src/main/resources/application.properties
