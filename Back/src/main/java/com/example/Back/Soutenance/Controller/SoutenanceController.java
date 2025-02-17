@@ -1,9 +1,15 @@
 package com.example.Back.Soutenance.Controller;
 
 
+import com.example.Back.Soutenance.DTO.SoutenanceDTO;
+import com.example.Back.Soutenance.Model.Enseignant;
 import com.example.Back.Soutenance.Model.Soutenance;
 import com.example.Back.Soutenance.Service.SoutenanceService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -35,8 +41,9 @@ public class SoutenanceController {
     }
 
     @PostMapping
-    public void createSoutenance(@RequestBody Soutenance soutenance) {
-        soutenanceService.addSoutenance(soutenance);
+    public ResponseEntity<Soutenance> createSoutenance(@Valid @RequestBody SoutenanceDTO soutenanceDTO) {
+        Soutenance savedSoutenance = soutenanceService.addSoutenance(soutenanceDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedSoutenance);
     }
 
     @DeleteMapping(path = "{id}")
@@ -53,13 +60,13 @@ public class SoutenanceController {
                                @RequestParam(required = false) Integer salle,
                                @RequestParam(required = false) LocalTime heure,
                                @RequestParam(required = false) Long etudiantId,
-                               @RequestParam(required = false) Long encadrantId,
-                               @RequestParam(required = false) List<String> jury,
+                               @RequestParam(required = false) Enseignant encadrant,
+                               @RequestParam(required = false) List<Enseignant> jury,
                                @RequestParam(required = false) String sujet) {
         if (id == null) {
             throw new IllegalArgumentException("L'ID ne doit pas être nul.");
         }
-        soutenanceService.editSoutenance(id, date, salle, heure, etudiantId, encadrantId, jury ,sujet);
+        soutenanceService.editSoutenance(id, date, salle, heure, etudiantId, encadrant, jury ,sujet);
     }
 }
 

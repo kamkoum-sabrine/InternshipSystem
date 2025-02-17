@@ -14,12 +14,14 @@ import java.util.Optional;
 public interface SoutenanceRepository extends JpaRepository<Soutenance,Long> {
 
     Optional<Soutenance> findSoutenanceByEtudiantId(Long etudiantId);
-    Optional<Soutenance> findSoutenanceByDate(LocalDate date) ;
+
+    Optional<Soutenance> findSoutenanceByDate(LocalDate date);
 
     @Query("SELECT s FROM Soutenance s " +
             "WHERE (:etudiantId IS NULL OR s.etudiantId = :etudiantId) " +
-            "AND (:encadrantId IS NULL OR s.encadrantId = :encadrantId) " +
+            "AND (:encadrantId IS NULL OR s.encadrant.id = :encadrantId) " +
             "AND (:date IS NULL OR s.date = :date)")
     List<Soutenance> rechercherSoutenances(@Param("etudiantId") Long etudiantId,
                                            @Param("encadrantId") Long encadrantId,
-                                           @Param("date") LocalDate date);}
+                                           @Param("date") LocalDate date);
+}

@@ -1,6 +1,9 @@
 package com.example.Back.Soutenance.Service;
 
+import com.example.Back.Soutenance.DTO.SoutenanceDTO;
+import com.example.Back.Soutenance.Model.Enseignant;
 import com.example.Back.Soutenance.Model.Soutenance;
+import com.example.Back.Soutenance.Repository.EnseignantRepository;
 import com.example.Back.Soutenance.Repository.SoutenanceRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,15 +12,45 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SoutenanceService {
 
     private final SoutenanceRepository soutenanceRepository;
+    private final EnseignantRepository enseignantRepository;
 
     @Autowired
-    public SoutenanceService(SoutenanceRepository soutenanceRepository) {
+    public SoutenanceService(SoutenanceRepository soutenanceRepository, EnseignantRepository enseignantRepository) {
         this.soutenanceRepository = soutenanceRepository;
+        this.enseignantRepository = enseignantRepository;
+    }
+
+    @Transactional
+    public Soutenance addSoutenance(SoutenanceDTO soutenanceDTO) {
+        // Fetch the encadrant
+        Enseignant encadrant = enseignantRepository.findById(soutenanceDTO.getEncadrantId())
+                .orElseThrow(() -> new IllegalArgumentException("Encadrant not found with ID: " + soutenanceDTO.getEncadrantId()));
+
+        // Fetch the jury members
+        List<Enseignant> jury = soutenanceDTO.getJuryIds().stream()
+                .map(id -> enseignantRepository.findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("Jury member not found with ID: " + id)))
+                .collect(Collectors.toList());
+
+        // Create the Soutenance entity
+        Soutenance soutenance = new Soutenance(
+                soutenanceDTO.getDate(),
+                soutenanceDTO.getSalle(),
+                soutenanceDTO.getHeure(),
+                soutenanceDTO.getEtudiantId(),
+                encadrant,
+                jury,
+                soutenanceDTO.getSujet()
+        );
+
+        // Save the Soutenance entity
+        return soutenanceRepository.save(soutenance);
     }
 
     @Transactional
@@ -29,7 +62,7 @@ public class SoutenanceService {
     public Soutenance addSoutenance(Soutenance soutenance) {
         // Valider les champs obligatoires
         if (soutenance.getDate() == null || soutenance.getHeure() == null || soutenance.getSalle() <= 0 ||
-                soutenance.getEtudiantId() == null || soutenance.getEncadrantId() == null) {
+                soutenance.getEtudiantId() == null || soutenance.getEncadrant() == null) {
             throw new IllegalArgumentException("Les champs obligatoires (date, heure, salle, etudiantId, encadrantId) ne doivent pas être nuls");
         }
         // Sauvegarder et retourner l'entité
@@ -44,7 +77,7 @@ public class SoutenanceService {
     }
 
     @Transactional
-    public Soutenance editSoutenance(Long id, LocalDate date, Integer salle, LocalTime heure, Long etudiantId, Long encadrantId,List<String> jury, String sujet) {
+    public Soutenance editSoutenance(Long id, LocalDate date, Integer salle, LocalTime heure, Long etudiantId, Enseignant encadrant, List<Enseignant> jury, String sujet) {
         Soutenance soutenance = soutenanceRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("La soutenance n'existe pas"));
 
@@ -65,8 +98,8 @@ public class SoutenanceService {
             soutenance.setEtudiantId(etudiantId);
         }
 
-        if (encadrantId != null && encadrantId > 0 && !encadrantId.equals(soutenance.getEncadrantId())) {
-            soutenance.setEncadrantId(encadrantId);
+        if (encadrant != null  && !encadrant.equals(soutenance.getEncadrant())) {
+            soutenance.setEncadrant(encadrant);
         }
 
         if (jury != null && jury.equals(soutenance.getJury())) {

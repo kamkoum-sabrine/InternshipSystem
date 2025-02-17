@@ -1,6 +1,8 @@
 package com.example.Back.Soutenance.Model;
 
+import com.example.Back.Soutenance.Repository.EnseignantRepository;
 import jakarta.persistence.*;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,7 +13,6 @@ public class Soutenance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
 
     private LocalDate date;
@@ -22,10 +23,17 @@ public class Soutenance {
 
     private Long etudiantId;
 
-    private Long encadrantId;
+    @ManyToOne
+    @JoinColumn(name = "encadrant_id")
+    private Enseignant encadrant;
 
-    @ElementCollection
-    private List<String> jury;
+    @ManyToMany
+    @JoinTable(
+            name = "soutenance_jury",
+            joinColumns = @JoinColumn(name = "soutenance_id"),
+            inverseJoinColumns = @JoinColumn(name = "enseignant_id")
+    )
+    private List<Enseignant> jury;
 
     private String sujet;
 
@@ -35,21 +43,29 @@ public class Soutenance {
     public Soutenance() {
     }
 
-    public Soutenance(LocalDate date, int salle, LocalTime heure, Long etudiantId, Long encadrantId,List<String> jury, String sujet) {
+    public Soutenance(LocalDate date, int salle, LocalTime heure, Long etudiantId, Enseignant encadrant ,List<Enseignant> jury, String sujet) {
         this.date = date;
         this.salle = salle;
         this.heure = heure;
         this.etudiantId = etudiantId;
-        this.encadrantId = encadrantId;
+        this.encadrant =  encadrant;
         this.jury = jury;
         this.sujet = sujet;
     }
 
-    public List<String> getJury() {
+    public Enseignant getEncadrant() {
+        return encadrant;
+    }
+
+    public void setEncadrant(Enseignant encadrant) {
+        this.encadrant = encadrant;
+    }
+
+    public List<Enseignant> getJury() {
         return jury;
     }
 
-    public void setJury(List<String> jury) {
+    public void setJury(List<Enseignant> jury) {
         this.jury = jury;
     }
 
@@ -73,9 +89,7 @@ public class Soutenance {
         return etudiantId;
     }
 
-    public Long getEncadrantId() {
-        return encadrantId;
-    }
+
 
 
 
@@ -103,11 +117,6 @@ public class Soutenance {
         this.etudiantId = etudiantId;
     }
 
-    public void setEncadrantId(Long encadrantId) {
-        this.encadrantId = encadrantId;
-    }
-
-
 
     public void setSujet(String sujet) {
         this.sujet = sujet;
@@ -121,7 +130,7 @@ public class Soutenance {
                 ", heure=" + heure +
                 ", salle=" + salle +
                 ", etudiantId=" + etudiantId +
-                ", encadrantId=" + encadrantId +
+                ", encadrant=" + encadrant +
                 ", jury=" + jury +
                 ", sujet='" + sujet + '\'' +
                 '}';
