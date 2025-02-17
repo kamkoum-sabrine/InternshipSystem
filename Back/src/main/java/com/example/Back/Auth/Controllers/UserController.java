@@ -19,6 +19,7 @@ import com.example.Back.Auth.Models.User;
 import com.example.Back.Auth.Models.UserDTO;
 import com.example.Back.Auth.Repositories.RoleRepository;
 import com.example.Back.Auth.Repositories.UserRepository;
+import com.example.Back.Auth.Services.MailService;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -29,6 +30,13 @@ public class UserController {
 
     @Autowired
     RoleRepository roleRepository;
+
+    @Autowired
+    private MailService mailService;
+
+    public UserController(MailService mailService) {
+        this.mailService = mailService;
+    }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<Map<String, Object>> saveUser(@RequestBody UserDTO userDTO) {
@@ -73,9 +81,25 @@ public class UserController {
 
         userRepository.save(appUser);
 
+        String subject = "Bienvenue " + appUser.getPrenom() + " sur la plateforme de gestion des stages - ENICAR";
+        // helper.setSubject("Bienvenue sur la plateforme de gestion des stages -
+        // ENICAR");
+
+        String body = "Bonjour " + appUser.getPrenom() + ",\n\n"
+                + "Votre compte a été créé avec succès sur la plateforme de gestion des stages de l'ENICAR.\n"
+                + "Voici vos informations :\n"
+                + "- Email : " + appUser.getEmail() + "\n"
+                + "- Mot de passe : " + appUser.getPassword() + "\n"
+                + "À bientôt !" + "\n"
+                + "Vous pouvez vous connecter dès maintenant en cliquant sur le lien ci-dessous :" + "\n"
+                + "https://enic-stages.com/login \n"
+                + "Cordialement,\nL'équipe ENICAR\n";
+
+        mailService.sendEmail(appUser.getEmail(), subject, body);
+
         // JSONObject success = new JSONObject();
         Map<String, Object> success = new HashMap<>();
-        success.put("message", "Account created successfully");
+        success.put("message", "User registered successfully, email sent!");
         success.put("user", userDTO);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
