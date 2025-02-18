@@ -1,0 +1,73 @@
+body {
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    background-attachment: fixed;
+    color: #f8f9fa;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  /* Container */
+  .container {
+    max-width: 1100px;
+  }
+  
+  /* Card Styling */
+  .card {
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-header {
+    background: linear-gradient(135deg, #343a40, #495057);
+    color: white;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+  
+  /* Table Styling */
+  table {
+    font-size: 1.05rem;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  th, td {
+    vertical-align: middle;
+    padding: 12px;
+  }
+  
+  th {
+    background: #343a40;
+    color: #ffffff;
+    text-align: center;
+  }
+  
+  tr:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Buttons */
+  button {
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+    font-weight: 500;
+  }
+  
+  .btn-outline-warning:hover {
+    background: #ffc107;
+    color: #212529;
+  }
+  
+  .btn-outline-danger:hover {
+    background: #dc3545;
+    color: white;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    table {
+        font-size: 0.9rem;
+    }
+  }
