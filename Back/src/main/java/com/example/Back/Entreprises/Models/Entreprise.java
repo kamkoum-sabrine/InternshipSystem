@@ -33,5 +33,14 @@ public class Entreprise {
     public void setTest(int test)
     {
         this.test = test;
+
+    }
+    public int getTest()
+    {
+        return test;
+    }
+    public int get_test()
+    {
+        return test;
     }
 }
