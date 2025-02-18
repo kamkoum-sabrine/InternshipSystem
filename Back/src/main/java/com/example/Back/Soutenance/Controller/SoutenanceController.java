@@ -60,13 +60,13 @@ public class SoutenanceController {
                                @RequestParam(required = false) Integer salle,
                                @RequestParam(required = false) LocalTime heure,
                                @RequestParam(required = false) Long etudiantId,
-                               @RequestParam(required = false) Enseignant encadrant,
-                               @RequestParam(required = false) List<Enseignant> jury,
+                               @RequestParam(required = false) Long encadrantID,
+                               @RequestParam(required = false) List<Long> juryIds,
                                @RequestParam(required = false) String sujet) {
         if (id == null) {
             throw new IllegalArgumentException("L'ID ne doit pas être nul.");
         }
-        soutenanceService.editSoutenance(id, date, salle, heure, etudiantId, encadrant, jury ,sujet);
+        soutenanceService.editSoutenance(id, date, salle, heure, etudiantId, encadrantID, juryIds ,sujet);
     }
 }
 

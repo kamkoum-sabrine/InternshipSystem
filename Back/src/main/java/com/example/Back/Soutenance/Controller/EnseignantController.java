@@ -32,6 +32,7 @@ public class EnseignantController {
     @DeleteMapping(path = "{id}")
     public void deleteEnseignant(@PathVariable("id") Long id) {
         enseignantService.deleteEnseignant(id);
+
     }
 
     @PutMapping(path = "{id}")

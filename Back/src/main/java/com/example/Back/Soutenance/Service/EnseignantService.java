@@ -1,7 +1,9 @@
 package com.example.Back.Soutenance.Service;
 
 import com.example.Back.Soutenance.Model.Enseignant;
+import com.example.Back.Soutenance.Model.Soutenance;
 import com.example.Back.Soutenance.Repository.EnseignantRepository;
+import com.example.Back.Soutenance.Repository.SoutenanceRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,10 +14,12 @@ import java.util.List;
 public class EnseignantService {
 
     private EnseignantRepository enseignantRepository;
+    private SoutenanceRepository soutenanceRepository;
 
     @Autowired
-    public EnseignantService(EnseignantRepository enseignantRepository) {
+    public EnseignantService(EnseignantRepository enseignantRepository, SoutenanceRepository soutenanceRepository ) {
         this.enseignantRepository = enseignantRepository;
+        this.soutenanceRepository = soutenanceRepository;
     }
 
     public List<Enseignant> getEnseignants() {
@@ -34,6 +38,16 @@ public class EnseignantService {
     public void deleteEnseignant(Long id) {
         Enseignant enseignant = enseignantRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("L'enseignant n'existe pas"));
+        Boolean enseignantEncadrant = soutenanceRepository.findSoutenanceByEncadrant(enseignant).isEmpty() ;
+        Boolean enseignantJury = soutenanceRepository.findSoutenanceByEncadrant(enseignant).isEmpty() ;
+        if (!enseignantEncadrant) {
+            throw new IllegalStateException("L'enseignant est un encadrant d'une soutenance") ;
+        }
+
+        if (!enseignantJury) {
+            throw new IllegalStateException("L'enseignant est l'un des jury d'une soutenance");
+        }
+
         enseignantRepository.deleteById(id);
     }
 

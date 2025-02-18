@@ -77,9 +77,20 @@ public class SoutenanceService {
     }
 
     @Transactional
-    public Soutenance editSoutenance(Long id, LocalDate date, Integer salle, LocalTime heure, Long etudiantId, Enseignant encadrant, List<Enseignant> jury, String sujet) {
+    public Soutenance editSoutenance(Long id, LocalDate date, Integer salle, LocalTime heure, Long etudiantId, Long encadrantId, List<Long> juryIds, String sujet) {
         Soutenance soutenance = soutenanceRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("La soutenance n'existe pas"));
+
+        Enseignant encadrant = enseignantRepository.findById(encadrantId)
+                .orElseThrow(() -> new IllegalArgumentException("Encadrant not found with ID: " + encadrantId));
+
+        // Fetch the jury members
+        List<Enseignant> jury = juryIds.stream()
+                .map(Id -> enseignantRepository.findById(Id)
+                        .orElseThrow(() -> new IllegalArgumentException("Jury member not found with ID: " + Id)))
+                .collect(Collectors.toList());
+
+
 
         // Mettre à jour les champs si fournis
         if (date != null && !date.equals(soutenance.getDate())) {
