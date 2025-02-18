@@ -25,10 +25,13 @@ public class Entreprise {
     private String email;
     @Column(nullable = false , unique = true)
     private Long telephone;
-    //test
-    //test
+    private int test;
 
     public Entreprise() {
 
+    }
+    public void setTest(int test)
+    {
+        this.test = test;
     }
 }
