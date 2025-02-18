@@ -31,7 +31,7 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/auth/login", "api/auth/register", "api/auth/activate",
-                                "api/auth/desactivate")
+                                "api/auth/desactivate","/api/v1/soutenance","/api/v1/soutenance/search","/api/v1/enseingnant")
                         .permitAll() // Routes
                         // publiques
                         .anyRequest().authenticated())
