@@ -26,6 +26,7 @@ public class Entreprise {
     @Column(nullable = false , unique = true)
     private Long telephone;
     //test
+    //test
 
     public Entreprise() {
 
