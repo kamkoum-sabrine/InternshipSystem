@@ -30,7 +30,10 @@ public class WebSecurityConfig {
                 .sessionManagement(management -> management
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/auth/login", "api/auth/register").permitAll() // Routes publiques
+                        .requestMatchers("/auth/login", "api/auth/register", "api/auth/activate",
+                                "api/auth/desactivate")
+                        .permitAll() // Routes
+                        // publiques
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Ajout du
                                                                                                        // filtre JWT

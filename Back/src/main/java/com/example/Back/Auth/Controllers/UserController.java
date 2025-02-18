@@ -2,9 +2,9 @@ package com.example.Back.Auth.Controllers;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +20,9 @@ import com.example.Back.Auth.Models.UserDTO;
 import com.example.Back.Auth.Repositories.RoleRepository;
 import com.example.Back.Auth.Repositories.UserRepository;
 import com.example.Back.Auth.Services.MailService;
+import com.example.Back.Auth.Services.UserService;
+
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -27,6 +30,9 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     RoleRepository roleRepository;
@@ -72,7 +78,7 @@ public class UserController {
         String randomPassword = UUID.randomUUID().toString().replace("-",
                 "").substring(0, 8);
 
-        appUser.setPassword(randomPassword);
+        appUser.setPassword(WebSecurityConfig.passwordEncoder().encode(randomPassword));
         userDTO.setPassword(randomPassword);
         // appUser.setPassword(WebSecurityConfig.passwordEncoder().encode(userDTO.getPassword()));
         // // Sécurisé
@@ -89,7 +95,7 @@ public class UserController {
                 + "Votre compte a été créé avec succès sur la plateforme de gestion des stages de l'ENICAR.\n"
                 + "Voici vos informations :\n"
                 + "- Email : " + appUser.getEmail() + "\n"
-                + "- Mot de passe : " + appUser.getPassword() + "\n"
+                + "- Mot de passe : " + randomPassword + "\n"
                 + "À bientôt !" + "\n"
                 + "Vous pouvez vous connecter dès maintenant en cliquant sur le lien ci-dessous :" + "\n"
                 + "https://enic-stages.com/login \n"
@@ -106,48 +112,55 @@ public class UserController {
                 .body(success);
     }
 
-    // @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/activate", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> activateAccount(@RequestBody Integer idUser) {
+        Optional<User> user = userService.findUser(idUser);
+        Map<String, Object> response = new HashMap<>();
 
-    // public ResponseEntity<JSONObject> saveUser(@RequestBody User user) {
+        if (user.isPresent()) {
+            User existingUser = user.get();
 
-    // User appUser = new User();
-    // // user.get("email");
-    // if (userRepository.findUserByEmail(user.getEmail().toString()).isPresent()) {
-    // JSONObject item = new JSONObject();
-    // item.put("message", "email already exists");
-    // item.put("status", HttpStatus.BAD_REQUEST.value());
-    // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(item);
-    // }
-    // // String randomPassword = UUID.randomUUID().toString().replace("-",
-    // // "").substring(0, 12);
-    // //
-    // appUser.setPassword(WebSecurityConfig.passwordEncoder().encode(randomPassword));
+            existingUser.setActive(true);
+            userService.saveUser(existingUser);
 
-    // appUser.setNom(user.getNom().toString());
-    // appUser.setPassword(user.getPassword().toString());
-    // appUser.setPrenom(user.getPrenom().toString());
-    // appUser.setEmail(user.getEmail().toString());
-    // appUser.setActive(false);
-    // appUser.setRole(roleRepository.findRoleByNom(user.getRole().toString()));
+            response.put("message", "Compte activé avec succès !");
+            response.put("status", HttpStatus.ACCEPTED.value());
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(response);
+        } else {
+            response.put("message", "Utilisateur introuvable !");
+            response.put("status", HttpStatus.NOT_FOUND.value());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(response);
+        }
 
-    // User newUser = userRepository.save(appUser);
-    // // Optional<UserRole> userRole =
-    // // userRoleRepository.findFirstByUserId(newUser.getId());
-    // /**
-    // * try {
-    // * mailingService.sendVerificationEmail(newUser);
-    // * } catch (Exception e) {
-    // * JSONObject item = new JSONObject();
-    // * item.put("message", e.getMessage());
-    // * item.put("status", HttpStatus.BAD_REQUEST.value());
-    // * e.printStackTrace();
-    // * return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(item);
-    // * }
-    // */
-    // JSONObject item = new JSONObject();
-    // item.put("message", "Account");
-    // item.put("user", userRepository.findUserByEmail(newUser.getEmail()).get());
-    // return ResponseEntity.status(HttpStatus.CREATED).body(item);
+    }
 
-    // }
+    @RequestMapping(value = "/desactivate", method = RequestMethod.POST)
+    public ResponseEntity<Map<String, Object>> desactivateAccount(@RequestBody Integer idUser) {
+        Optional<User> user = userService.findUser(idUser);
+        Map<String, Object> response = new HashMap<>();
+
+        if (user.isPresent()) {
+            User existingUser = user.get();
+
+            existingUser.setActive(false);
+            userService.saveUser(existingUser);
+
+            response.put("message", "Compte desactivé avec succès !");
+            response.put("status", HttpStatus.ACCEPTED.value());
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(response);
+        } else {
+            response.put("message", "Utilisateur introuvable !");
+            response.put("status", HttpStatus.NOT_FOUND.value());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(response);
+        }
+
+    }
 }
