@@ -1,16 +1,56 @@
-body {
+/* Navbar */
+.navbar {
+  background-color: #2c3e50;
+  /* Couleur de fond */
+  color: white;
+  /* Couleur du texte */
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* Ombre légère */
+}
+
+.navbar-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.navbar h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.spacer {
+  flex: 1;
+  /* Prend tout l'espace disponible */
+}
+
+/* Avatar de l'utilisateur */
+.user-avatar {
+  cursor: pointer;
+  position: relative;
+}
+
+/* Contenu Principal */
+.main-content {
+  padding: 20px;
+  background-color: #f4f4f4;
+  /* Couleur de fond du contenu */
+}
+
+/* body {
     background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
     background-attachment: fixed;
     color: #f8f9fa;
     font-family: 'Poppins', sans-serif;
   }
   
-  /* Container */
   .container {
     max-width: 1100px;
   }
   
-  /* Card Styling */
   .card {
     border-radius: 12px;
     overflow: hidden;
@@ -25,7 +65,6 @@ body {
     border-top-right-radius: 12px;
   }
   
-  /* Table Styling */
   table {
     font-size: 1.05rem;
     background: #ffffff;
@@ -48,26 +87,26 @@ body {
     background: rgba(0, 0, 0, 0.05);
   }
   
-  /* Buttons */
-  button {
-    border-radius: 5px;
-    transition: all 0.3s ease-in-out;
-    font-weight: 500;
+button {
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+  font-weight: 500;
+}
+
+.btn-outline-warning:hover {
+  background: #ffc107;
+  color: #212529;
+}
+
+.btn-outline-danger:hover {
+  background: #dc3545;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  table {
+    font-size: 0.9rem;
   }
-  
-  .btn-outline-warning:hover {
-    background: #ffc107;
-    color: #212529;
-  }
-  
-  .btn-outline-danger:hover {
-    background: #dc3545;
-    color: white;
-  }
-  
-  /* Responsive */
-  @media (max-width: 768px) {
-    table {
-        font-size: 0.9rem;
-    }
-  }
+}
+
+*/
