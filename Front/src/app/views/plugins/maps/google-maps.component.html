@@ -1,0 +1,60 @@
+<c-card>
+  <c-card-header>
+    Angular Google Maps
+    <app-docs-link href="https://github.com/angular/components/tree/master/src/google-maps" />
+  </c-card-header>
+  <c-card-body>
+    @defer {
+      @if (scriptLoaded()) {
+        <!-- this creates a google map on the page with the given lat/lng from -->
+          <!-- the component as the initial center of the map: -->
+        <google-map [height]="mapHeight()" [options]="options" [width]="'100%'" #googleMap="googleMap">
+          <map-polygon [paths]="vertices" (polygonClick)="showPolygonInfoWindow($event)" />
+          <map-circle [center]="circleCenter" [radius]="3000" (circleClick)="showCircleInfoWindow($event)" />
+          @if (markerClusterer()) {
+            <map-marker-clusterer
+              #markerClusterer
+              [imagePath]="markerClustererImagePath"
+            >
+              @for (item of markers; track item; let i = $index) {
+                <map-marker
+                  #marker="mapMarker"
+                  (mapClick)="openInfoWindow(marker, item)"
+                  [label]="item.label"
+                  [options]="markerOptions"
+                  [position]="item.position"
+                  [title]="item.title"
+                />
+              }
+            </map-marker-clusterer>
+          }
+          <map-info-window>
+            <div class="ms-1 me-3 mt-1 mb-0">
+              <a href="{{ activeInfoWindow?.www }}" target="_blank">
+                <strong>{{ activeInfoWindow?.title }}</strong>
+              </a>
+            </div>
+            <br />
+          </map-info-window>
+        </google-map>
+      }
+    } @loading (minimum 500ms) {
+      <div cPlaceholderAnimation="glow">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             aria-label="Placeholder"
+             cCardImg="top"
+             focusable="false"
+             style="height: 65vh;"
+             preserveAspectRatio="xMidYMid slice"
+             role="img"
+             width="100%"
+             cPlaceholder>
+          <title>Map Placeholder</title>
+          <rect fill="#868e96" height="100%" width="100%"></rect>
+        </svg>
+      </div>
+    } @error {
+      <p>Failed to load the map</p>
+    }
+  </c-card-body>
+</c-card>

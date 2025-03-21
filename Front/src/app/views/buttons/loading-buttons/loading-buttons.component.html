@@ -1,0 +1,85 @@
+<c-row ngPreserveWhitespaces>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>Angular Loading Button</strong> <small>border spinner</small>
+      </c-card-header>
+      <c-card-body>
+        <p class="text-body-secondary small">
+          CoreUI includes a buttons with built-in loading indicators. Indicate the loading state
+          of the button bridging the gap between action and feedback..
+        </p>
+        <app-docs-example href="components/loading-button">
+          <c-row class="py-4 text-center">
+            @for (color of colors; track color; let i = $index) {
+              <c-col class="mb-1" lg="2" md="4" sm="6" xs="12">
+                <button (click)="onClick(i)" [color]="color" [loading]="loading[i]" cLoadingButton disabledOnLoading>
+                  Submit
+                </button>
+              </c-col>
+            }
+          </c-row>
+          <c-row class="py-4 text-center">
+            @for (color of colors; track color; let i = $index) {
+              <c-col class="mb-1" lg="2" md="4" sm="6" xs="12">
+                <button #btn (click)="onClick(i+6)" [color]="color" [loading]="loading[i+6]" cLoadingButton
+                        variant="outline">
+                  {{ btn.loading ? 'Cancel' : 'Upload' }}
+                </button>
+              </c-col>
+            }
+          </c-row>
+          <c-row class="py-4 text-center">
+            @for (color of colors; track color; let i = $index) {
+              <c-col class="mb-1" lg="2" md="4" sm="6" xs="12">
+                <button (click)="onClick(i+12)" [color]="color" [loading]="loading[i+12]" cLoadingButton variant="ghost"
+                        disabledOnLoading>
+                  Submit
+                </button>
+              </c-col>
+            }
+          </c-row>
+        </app-docs-example>
+      </c-card-body>
+    </c-card>
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>Angular Loading Button</strong> <small>grow spinner</small>
+      </c-card-header>
+      <c-card-body>
+        <app-docs-example href="components/loading-button#grow">
+          <c-row class="py-4 text-center">
+            @for (color of colors; track color; let i = $index) {
+              <c-col class="mb-1" lg="2" md="4" sm="6" xs="12">
+                <button (click)="onClick(i+18)" [color]="color" [loading]="loading[i+18]" cLoadingButton
+                        spinnerType="grow">
+                  Submit
+                </button>
+              </c-col>
+            }
+          </c-row>
+          <c-row class="py-4 text-center">
+            @for (color of colors; track color; let i = $index) {
+              <c-col class="mb-1" lg="2" md="4" sm="6" xs="12">
+                <button (click)="onClick(i+24)" [color]="color" [loading]="loading[i+24]" cLoadingButton
+                        spinnerType="grow"
+                        variant="outline">Submit
+                </button>
+              </c-col>
+            }
+          </c-row>
+          <c-row class="py-4 text-center">
+            @for (color of colors; track color; let i = $index) {
+              <c-col class="mb-1" lg="2" md="4" sm="6" xs="12">
+                <button (click)="onClick(i+30)" [color]="color" [loading]="loading[i+30]" cLoadingButton
+                        spinnerType="grow"
+                        variant="ghost">Submit
+                </button>
+              </c-col>
+            }
+          </c-row>
+        </app-docs-example>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>

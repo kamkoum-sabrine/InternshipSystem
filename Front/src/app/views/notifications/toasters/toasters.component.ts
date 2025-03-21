@@ -27,7 +27,7 @@ import {
   ToasterComponent,
   ToasterPlacement,
   ToastHeaderComponent
-} from '@coreui/angular';
+} from '@coreui/angular-pro';
 import { AppToastComponent } from './toast-simple/toast.component';
 
 export enum Colors {
@@ -43,10 +43,11 @@ export enum Colors {
 }
 
 @Component({
-    selector: 'app-toasters',
-    templateUrl: './toasters.component.html',
-    styleUrls: ['./toasters.component.scss'],
-    imports: [RowComponent, ColComponent, ToasterComponent, NgClass, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, ContainerComponent, ReactiveFormsModule, FormDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, InputGroupComponent, InputGroupTextDirective, FormControlDirective, FormSelectDirective, ButtonDirective, NgStyle, ToastComponent, ToastHeaderComponent, ToastBodyComponent, AppToastComponent, JsonPipe, SlicePipe, TextColorDirective]
+  selector: 'app-toasters',
+  templateUrl: './toasters.component.html',
+  styleUrls: ['./toasters.component.scss'],
+  standalone: true,
+  imports: [RowComponent, ColComponent, ToasterComponent, NgClass, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, ContainerComponent, ReactiveFormsModule, FormDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, InputGroupComponent, InputGroupTextDirective, FormControlDirective, FormSelectDirective, ButtonDirective, NgStyle, ToastComponent, ToastHeaderComponent, ToastBodyComponent, AppToastComponent, JsonPipe, SlicePipe, TextColorDirective]
 })
 export class ToastersComponent implements OnInit {
 
@@ -90,9 +91,18 @@ export class ToastersComponent implements OnInit {
     const toasterPosition = this.viewChildren.filter(item => item.placement === this.toasterForm.value.position);
     toasterPosition.forEach((item) => {
       const title = `Toast ${formValues.color} ${formValues.position}`;
-      const { position, ...props } = { ...formValues, title, position: formValues.position };
+      const { ...props } = { ...formValues, title };
       const componentRef = item.addToast(AppToastComponent, props, {});
       componentRef.instance['closeButton'] = props.closeButton;
+      componentRef.instance['visibleChange'].subscribe((value: any) => {
+        this.onVisibleChange(value)
+      });
+      componentRef.instance['visibleChange'].emit(true);
     });
+  }
+
+  onVisibleChange($event: any) {
+    console.log('onVisibleChange', $event)
+
   }
 }

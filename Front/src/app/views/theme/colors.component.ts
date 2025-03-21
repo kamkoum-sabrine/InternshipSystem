@@ -2,10 +2,11 @@ import { AfterViewInit, Component, HostBinding, Inject, Input, OnInit, Renderer2
 import { DOCUMENT, NgClass } from '@angular/common';
 
 import { getStyle, rgbToHex } from '@coreui/utils';
-import { TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, RowComponent, ColComponent } from '@coreui/angular';
+import { TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, RowComponent, ColComponent } from '@coreui/angular-pro';
 
 @Component({
     templateUrl: 'colors.component.html',
+    standalone: true,
     imports: [TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, RowComponent, forwardRef(() => ThemeColorComponent)]
 })
 export class ColorsComponent implements OnInit, AfterViewInit {
@@ -56,7 +57,8 @@ export class ColorsComponent implements OnInit, AfterViewInit {
       <ng-content></ng-content>
     </c-col>
   `,
-    imports: [ColComponent, NgClass]
+    standalone: true,
+    imports: [ColComponent, NgClass],
 })
 export class ThemeColorComponent implements OnInit {
   @Input() color = '';

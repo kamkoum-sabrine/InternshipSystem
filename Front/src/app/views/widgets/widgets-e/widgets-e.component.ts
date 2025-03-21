@@ -1,13 +1,14 @@
 import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { getStyle } from '@coreui/utils';
 import { ChartjsComponent } from '@coreui/angular-chartjs';
-import { RowComponent, ColComponent, WidgetStatEComponent, TextColorDirective } from '@coreui/angular';
+import { RowComponent, ColComponent, WidgetStatEComponent, TextColorDirective } from '@coreui/angular-pro';
 
 @Component({
     selector: 'app-widgets-e',
     templateUrl: './widgets-e.component.html',
     styleUrls: ['./widgets-e.component.scss'],
     changeDetection: ChangeDetectionStrategy.Default,
+    standalone: true,
     imports: [RowComponent, ColComponent, TextColorDirective, WidgetStatEComponent, ChartjsComponent]
 })
 export class WidgetsEComponent implements AfterContentInit {

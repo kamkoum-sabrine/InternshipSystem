@@ -27,6 +27,13 @@ export const routes: Routes = [
         }
       },
       {
+        path: 'multi-select',
+        loadComponent: () => import('./multi-select/multi-select.component').then(m => m.MultiSelectComponent),
+        data: {
+          title: 'Multi Select'
+        }
+      },
+      {
         path: 'checks-radios',
         loadComponent: () => import('./checks-radios/checks-radios.component').then(m => m.ChecksRadiosComponent),
         data: {
@@ -59,6 +66,27 @@ export const routes: Routes = [
         loadComponent: () => import('./layout/layout.component').then(m => m.LayoutComponent),
         data: {
           title: 'Layout'
+        }
+      },
+      {
+        path: 'date-picker',
+        loadComponent: () => import('./date-picker/date-picker.component').then(m => m.DatePickerComponent),
+        data: {
+          title: 'Date Picker'
+        }
+      },
+      {
+        path: 'date-range-picker',
+        loadComponent: () => import('./date-range-picker/date-range-picker.component').then(m => m.DateRangePickerComponent),
+        data: {
+          title: 'Date Range Picker'
+        }
+      },
+      {
+        path: 'time-picker',
+        loadComponent: () => import('./time-picker/time-picker.component').then(m => m.TimePickerComponent),
+        data: {
+          title: 'Time Picker'
         }
       },
       {

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
-import { ButtonModule, CardModule, GridModule, UtilitiesModule } from '@coreui/angular';
+import { ButtonModule, CardModule, GridModule, UtilitiesModule } from '@coreui/angular-pro';
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from '../../../icons/icon-subset';
 import { PlaceholdersComponent } from './placeholders.component';
@@ -13,10 +13,9 @@ describe('PlaceholdersComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CardModule, GridModule, UtilitiesModule, ButtonModule, PlaceholdersComponent],
-      providers: [IconSetService, provideRouter([])
-      ]
-    })
+    imports: [CardModule, GridModule, UtilitiesModule, ButtonModule, RouterTestingModule, PlaceholdersComponent],
+    providers: [IconSetService]
+})
       .compileComponents();
   });
 

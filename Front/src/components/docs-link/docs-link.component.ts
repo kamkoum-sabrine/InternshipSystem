@@ -3,7 +3,8 @@ import { Component, HostBinding, Input, OnInit } from '@angular/core';
 @Component({
     selector: 'app-docs-link',
     templateUrl: './docs-link.component.html',
-    styleUrls: ['./docs-link.component.scss']
+    styleUrls: ['./docs-link.component.scss'],
+    standalone: true
 })
 export class DocsLinkComponent implements OnInit {
 

@@ -1,0 +1,105 @@
+<c-row>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>CoreUI Angular Time Picker</strong>
+      </c-card-header>
+      <c-card-body>
+        <app-docs-example href="forms/time-picker">
+          <c-row>
+            <c-col lg="4">
+              <c-time-picker locale="en-US"></c-time-picker>
+            </c-col>
+            <c-col lg="4">
+              <c-time-picker locale="en-US" time="02:17 pm"></c-time-picker>
+            </c-col>
+          </c-row>
+        </app-docs-example>
+      </c-card-body>
+    </c-card>
+  </c-col>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>CoreUI Angular Time Picker</strong> Sizing
+      </c-card-header>
+      <c-card-body>
+        <p>Set heights using <code>size</code> property like <code>size="lg"</code> and <code>size="sm"</code>.</p>
+        <app-docs-example href="forms/time-picker">
+          <c-row class="mb-4">
+            <c-col lg="4">
+              <c-time-picker size="lg"></c-time-picker>
+            </c-col>
+          </c-row>
+          <c-row>
+            <c-col lg="3">
+              <c-time-picker size="sm"></c-time-picker>
+            </c-col>
+          </c-row>
+        </app-docs-example>
+      </c-card-body>
+    </c-card>
+  </c-col>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>CoreUI Angular Time Picker</strong> Disabled
+      </c-card-header>
+      <c-card-body>
+        <p>Add the <code>disabled</code> boolean attribute on an input to give it a grayed out appearance and remove
+          pointer events.</p>
+        <app-docs-example href="forms/time-picker">
+          <c-row>
+            <c-col lg="4">
+              <c-time-picker disabled locale="en-US" time="16:35"></c-time-picker>
+            </c-col>
+          </c-row>
+        </app-docs-example>
+      </c-card-body>
+    </c-card>
+  </c-col>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>CoreUI Angular Time Picker</strong> Readonly
+      </c-card-header>
+      <c-card-body>
+        <p>Add the <code>inputReadOnly</code> boolean attribute to prevent modification of the input value.</p>
+        <app-docs-example href="forms/time-picker">
+          <c-row>
+            <c-col lg="4">
+              <c-time-picker inputReadOnly></c-time-picker>
+            </c-col>
+          </c-row>
+        </app-docs-example>
+      </c-card-body>
+    </c-card>
+  </c-col>
+  <c-col>
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>CoreUI Angular Time Picker</strong> with Footer
+      </c-card-header>
+      <c-card-body>
+        <app-docs-example href="forms/time-picker">
+          <c-row>
+            <c-col lg="4">
+              <c-time-picker #timePicker="cTimePicker" [(time)]="time" placeholder="-- : --">
+                <ng-template cTemplateId="timePickerFooter" let-dropdown>
+                  <button (click)="timePicker.clearTime()" [dropdownComponent]="dropdown" cButton cDropdownClose
+                          color="secondary" size="sm"
+                          variant="ghost">
+                    Cancel
+                  </button>
+                  <button [disabled]="!time" [dropdownComponent]="dropdown" cButton cDropdownClose color="primary" size="sm">
+                    OK
+                  </button>
+                </ng-template>
+              </c-time-picker>
+            </c-col>
+          </c-row>
+        </app-docs-example>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DocsCalloutComponent } from './docs-callout.component';
-import { CalloutModule } from '@coreui/angular';
+import { CalloutModule } from '@coreui/angular-pro';
 
 describe('DocsCalloutComponent', () => {
   let component: DocsCalloutComponent;

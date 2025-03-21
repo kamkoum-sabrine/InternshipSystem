@@ -4,6 +4,7 @@ import { NgScrollbar } from 'ngx-scrollbar';
 
 import { IconDirective } from '@coreui/icons-angular';
 import {
+  ButtonCloseDirective,
   ContainerComponent,
   ShadowOnScrollDirective,
   SidebarBrandComponent,
@@ -13,9 +14,9 @@ import {
   SidebarNavComponent,
   SidebarToggleDirective,
   SidebarTogglerDirective
-} from '@coreui/angular';
+} from '@coreui/angular-pro';
 
-import { DefaultFooterComponent, DefaultHeaderComponent } from './';
+import { DefaultAsideComponent, DefaultFooterComponent, DefaultHeaderComponent } from './';
 import { navItems } from './_nav';
 
 function isOverflown(element: HTMLElement) {
@@ -29,24 +30,15 @@ function isOverflown(element: HTMLElement) {
   selector: 'app-dashboard',
   templateUrl: './default-layout.component.html',
   styleUrls: ['./default-layout.component.scss'],
-  imports: [
-    SidebarComponent,
-    SidebarHeaderComponent,
-    SidebarBrandComponent,
-    SidebarNavComponent,
-    SidebarFooterComponent,
-    SidebarToggleDirective,
-    SidebarTogglerDirective,
-    ContainerComponent,
-    DefaultFooterComponent,
-    DefaultHeaderComponent,
-    IconDirective,
-    NgScrollbar,
-    RouterOutlet,
-    RouterLink,
-    ShadowOnScrollDirective
-  ]
+  standalone: true,
+  imports: [SidebarComponent, SidebarHeaderComponent, SidebarBrandComponent, RouterLink, IconDirective, NgScrollbar, SidebarNavComponent, SidebarFooterComponent, SidebarToggleDirective, SidebarTogglerDirective, DefaultAsideComponent, DefaultHeaderComponent, ShadowOnScrollDirective, ContainerComponent, RouterOutlet, DefaultFooterComponent, ButtonCloseDirective]
 })
 export class DefaultLayoutComponent {
-  public navItems = [...navItems];
+  public navItems = navItems;
+
+  onScrollbarUpdate($event: any) {
+    // if ($event.verticalUsed) {
+    // console.log('verticalUsed', $event.verticalUsed);
+    // }
+  }
 }

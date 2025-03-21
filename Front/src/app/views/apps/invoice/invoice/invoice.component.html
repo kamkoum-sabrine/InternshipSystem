@@ -1,0 +1,143 @@
+<c-card ngPreserveWhitespaces>
+  <c-card-header>
+    <span>Invoice <strong>#90-98792</strong></span>
+    <div class="d-print-none float-end">
+      <button (click)="print($event)" cButton class="me-1" color="secondary" size="sm">
+        <svg cIcon name="cilPrint" size="sm"></svg>
+        <span class="d-none d-sm-inline-flex">Print</span>
+      </button>
+      <button cButton class="me-1" color="info" size="sm">
+        <svg cIcon name="cilSave" size="sm"></svg>
+        <span class="d-none d-sm-inline-flex">Save</span>
+      </button>
+    </div>
+  </c-card-header>
+  <c-card-body>
+    <c-row class="mb-4">
+      <c-col sm="4">
+        <h6 class="mb-3">From:</h6>
+        <div>
+          <strong>Your Great Company Inc.</strong>
+        </div>
+        <div>724 John Ave.</div>
+        <div>Cupertino, CA 95014</div>
+        <div>Email: email&#64;your-great-company.com</div>
+        <div>Phone: +1 123-456-7890</div>
+      </c-col>
+      <c-col sm="4">
+        <h6 class="mb-3">To:</h6>
+        <div>
+          <strong>Acme Inc.</strong>
+        </div>
+        <div>159 Manor Station Road</div>
+        <div>San Diego, CA 92154</div>
+        <div>Email: email&#64;acme.com</div>
+        <div>Phone: +1 123-456-7890</div>
+      </c-col>
+      <c-col sm="4">
+        <h6 class="mb-3">Details:</h6>
+        <div>
+          Invoice <strong>#90-98792</strong>
+        </div>
+        <div>March 30, 2020</div>
+        <div>VAT: EU9877281777</div>
+        <div>Account Name: ACME</div>
+        <div>
+          <strong>SWIFT code: 99 8888 7777 6666 5555</strong>
+        </div>
+      </c-col>
+    </c-row>
+    <table [hover]="true" [responsive]="true" [striped]="true" cTable>
+      <thead>
+      <tr>
+        <th class="text-center">#</th>
+        <th>Item</th>
+        <th>Description</th>
+        <th class="text-center">Quantity</th>
+        <th class="text-end">Unit Cost</th>
+        <th class="text-end">Total</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td class="text-center">1</td>
+        <td class="text-start">Origin License</td>
+        <td class="text-start">Extended License</td>
+        <td class="text-center">1</td>
+        <td class="text-end">$999,00</td>
+        <td class="text-end">$999,00</td>
+      </tr>
+      <tr>
+        <td class="text-center">2</td>
+        <td class="text-start">Custom Services</td>
+        <td class="text-start">
+          Installation and Customization (per hour)
+        </td>
+        <td class="text-center">20</td>
+        <td class="text-end">$150,00</td>
+        <td class="text-end">$3.000,00</td>
+      </tr>
+      <tr>
+        <td class="text-center">3</td>
+        <td class="text-start">Hosting</td>
+        <td class="text-start">1 year subscription</td>
+        <td class="text-center">1</td>
+        <td class="text-end">$499,00</td>
+        <td class="text-end">$499,00</td>
+      </tr>
+      <tr>
+        <td class="text-center">4</td>
+        <td class="text-start">Platinum Support</td>
+        <td class="text-start">1 year subscription 24/7</td>
+        <td class="text-center">1</td>
+        <td class="text-end">$3.999,00</td>
+        <td class="text-end">$3.999,00</td>
+      </tr>
+      </tbody>
+    </table>
+    <c-row>
+      <c-col lg="4" sm="5">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+        exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+        dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+      </c-col>
+      <c-col class="ms-auto" lg="4" sm="5">
+        <table [hover]="true" [responsive]="true" cTable color="success">
+          <tbody>
+          <tr>
+            <td class="text-start">
+              <strong>Subtotal</strong>
+            </td>
+            <td class="text-end">$8.497,00</td>
+          </tr>
+          <tr>
+            <td class="text-start">
+              <strong>Discount (20%)</strong>
+            </td>
+            <td class="text-end">$1,699,40</td>
+          </tr>
+          <tr>
+            <td class="text-start">
+              <strong>VAT (10%)</strong>
+            </td>
+            <td class="text-end">$679,76</td>
+          </tr>
+          <tr>
+            <td class="text-start">
+              <strong>Total</strong>
+            </td>
+            <td class="text-end">
+              <strong>$7.477,36</strong>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <button cButton class="d-print-none" color="success">
+          <svg cIcon name="cilDollar"></svg>
+          Proceed to Payment
+        </button>
+      </c-col>
+    </c-row>
+  </c-card-body>
+</c-card>

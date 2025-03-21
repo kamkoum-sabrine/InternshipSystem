@@ -28,46 +28,45 @@ import {
   RowComponent,
   TextColorDirective,
   ThemeDirective
-} from '@coreui/angular';
+} from '@coreui/angular-pro';
 
 @Component({
-    selector: 'app-dropdowns',
-    templateUrl: './dropdowns.component.html',
-    imports: [
-        RowComponent,
-        ColComponent,
-        TextColorDirective,
-        CardComponent,
-        CardHeaderComponent,
-        CardBodyComponent,
-        DocsExampleComponent,
-        ThemeDirective,
-        DropdownComponent,
-        ButtonDirective,
-        DropdownToggleDirective,
-        DropdownMenuDirective,
-        DropdownHeaderDirective,
-        DropdownItemDirective,
-        RouterLink,
-        DropdownDividerDirective,
-        NavbarComponent,
-        ContainerComponent,
-        NavbarBrandDirective,
-        NavbarTogglerDirective,
-        CollapseDirective,
-        NavbarNavComponent,
-        NavItemComponent,
-        NavLinkDirective,
-        ReactiveFormsModule,
-        FormDirective,
-        FormControlDirective,
-        ButtonGroupComponent
-    ]
+  selector: 'app-dropdowns',
+  templateUrl: './dropdowns.component.html',
+  standalone: true,
+  imports: [
+    RowComponent,
+    ColComponent,
+    TextColorDirective,
+    CardComponent,
+    CardHeaderComponent,
+    CardBodyComponent,
+    DocsExampleComponent,
+    ThemeDirective,
+    DropdownComponent,
+    ButtonDirective,
+    DropdownToggleDirective,
+    DropdownMenuDirective,
+    DropdownHeaderDirective,
+    DropdownItemDirective,
+    RouterLink,
+    DropdownDividerDirective,
+    NavbarComponent,
+    ContainerComponent,
+    NavbarBrandDirective,
+    NavbarTogglerDirective,
+    CollapseDirective,
+    NavbarNavComponent,
+    NavItemComponent,
+    NavLinkDirective,
+    ReactiveFormsModule,
+    FormDirective,
+    FormControlDirective,
+    ButtonGroupComponent
+  ]
 })
 export class DropdownsComponent {
 
   public colors = ['primary', 'secondary', 'success', 'info', 'warning', 'danger'];
-
-  constructor() { }
 
 }

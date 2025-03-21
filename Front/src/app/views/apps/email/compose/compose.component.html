@@ -1,0 +1,131 @@
+<c-card>
+  <c-card-header>
+    <strong>New Message</strong>
+  </c-card-header>
+  <c-card-body>
+    <form cForm>
+      <div class="row mb-3">
+        <label cLabel="col" class="col-sm-1" for="to">To:</label>
+        <c-col sm="11">
+          <input cFormControl
+                 id="to"
+                 placeholder="Type email"
+                 type="email"
+          />
+        </c-col>
+      </div>
+      <div class="row mb-3">
+        <label cLabel="col" class="col-sm-1" for="cc"><small>CC:</small></label>
+        <div cCol sm="11">
+          <input cFormControl
+                 id="cc"
+                 placeholder="Type email"
+                 type="email"
+          />
+        </div>
+      </div>
+      <div class="row mb-3">
+        <label cLabel="col" class="col-sm-1 pe-sm-1" for="bcc"><small>BCC:</small></label>
+        <c-col sm="11">
+          <input cFormControl
+                 id="bcc"
+                 placeholder="Type email"
+                 type="email"
+          />
+        </c-col>
+      </div>
+    </form>
+    <c-row>
+      <c-col class="ms-auto" sm="11">
+        <c-button-toolbar role="toolbar">
+          <c-button-group class="me-1 mb-1">
+            <button cButton color="light">
+              <svg cIcon name="cilBold"></svg>
+            </button>
+            <button cButton color="light">
+              <svg cIcon name="cilItalic"></svg>
+            </button>
+            <button cButton color="light">
+              <svg cIcon name="cil-underline"></svg>
+            </button>
+          </c-button-group>
+          <c-button-group class="me-1 mb-1">
+            <button cButton color="light">
+              <svg cIcon name="cil-align-left"></svg>
+            </button>
+            <button cButton color="light">
+              <svg cIcon name="cil-align-right"></svg>
+            </button>
+            <button cButton color="light">
+              <svg cIcon name="cil-align-center"></svg>
+            </button>
+            <button cButton color="light">
+              <svg cIcon name="cil-justify-center"></svg>
+            </button>
+          </c-button-group>
+          <c-button-group class="me-1 mb-1">
+            <button cButton color="light">
+              <svg cIcon name="cil-indent-increase"></svg>
+            </button>
+            <button cButton color="light">
+              <svg cIcon name="cil-indent-decrease"></svg>
+            </button>
+          </c-button-group>
+          <c-button-group class="me-1 mb-1">
+            <button cButton color="light">
+              <svg cIcon name="cil-list"></svg>
+            </button>
+            <button cButton color="light">
+              <svg cIcon name="cil-list-numbered"></svg>
+            </button>
+          </c-button-group>
+          <button cButton class="me-1 mb-1" color="light">
+            <svg cIcon name="cil-trash"></svg>
+          </button>
+          <button cButton color="light" class="mb-1">
+            <svg cIcon name="cil-paperclip"></svg>
+          </button>
+          <c-dropdown class="ms-1">
+            <button [routerLink]="[]" cButton cDropdownToggle color="light">
+              <svg cIcon name="cil-tags"></svg>
+            </button>
+            <div cDropdownMenu>
+              <a [routerLink]="[]" cDropdownItem class="d-flex">
+                <div class="align-self-start">add label</div>
+                <c-badge class="ms-auto align-self-end" color="info">Home</c-badge>
+              </a>
+              <a [routerLink]="[]" cDropdownItem class="d-flex">
+                add label
+                <c-badge class="ms-auto align-self-end" color="warning">
+                  Work
+                </c-badge>
+              </a>
+              <a [routerLink]="[]" cDropdownItem class="d-flex">
+                add label
+                <c-badge class="ms-auto align-self-end" color="success">Clients</c-badge>
+              </a>
+              <a [routerLink]="[]" cDropdownItem class="d-flex">
+                add label
+                <c-badge class="ms-auto align-self-end" color="primary">News</c-badge>
+              </a>
+            </div>
+          </c-dropdown>
+        </c-button-toolbar>
+        <div class="mb-3 mt-4">
+          <textarea cFormControl
+                    id="message"
+                    name="body"
+                    placeholder="Click here to reply"
+                    rows="12">
+          </textarea>
+        </div>
+        <div class="mt-1">
+          <button cButton class="me-1" color="success" type="submit">Send</button>
+          <button cButton class="me-1" color="light" type="button">Draft</button>
+          <button cButton class="me-1" color="danger" type="reset">Discard</button>
+        </div>
+      </c-col>
+    </c-row>
+  </c-card-body>
+</c-card>
+

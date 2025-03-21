@@ -33,6 +33,13 @@ export const routes: Routes = [
           title: 'Dropdowns'
         }
       },
+      {
+        path: 'loading-buttons',
+        loadComponent: () => import('./loading-buttons/loading-buttons.component').then(m => m.LoadingButtonsComponent),
+        data: {
+          title: 'Loading Buttons'
+        }
+      }
     ]
   }
 ];

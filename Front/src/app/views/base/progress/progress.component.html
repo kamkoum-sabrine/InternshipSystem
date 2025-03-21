@@ -80,10 +80,10 @@
           Use <code>color</code> prop to change the appearance of individual progress bars.
         </p>
         <app-docs-example href="components/progress#backgrounds">
-          <c-progress [value]="25" class="mb-3" color="success" />
-          <c-progress [value]="50" class="mb-3" color="info" />
-          <c-progress [value]="75" class="mb-3" color="warning" />
-          <c-progress [value]="100" class="mb-3" color="danger" />
+          <c-progress [value]="25" class="mb-3" color="success-gradient" />
+          <c-progress [value]="50" class="mb-3" color="info-gradient" />
+          <c-progress [value]="75" class="mb-3" color="warning-gradient" />
+          <c-progress [value]="100" class="mb-3" color="danger-gradient" />
         </app-docs-example>
       </c-card-body>
     </c-card>
@@ -102,14 +102,14 @@
             <c-progress [value]="15" class="mb-3" color="primary">15%</c-progress>
             <c-progress [value]="30" class="mb-3" color="info">30%</c-progress>
             <c-progress [value]="20" class="mb-3">
-              <c-progress-bar color="danger">20%</c-progress-bar>
+              <c-progress-bar color="danger-gradient">20%</c-progress-bar>
             </c-progress>
           </c-progress-stacked>
           <hr>
           <c-progress class="mb-3">
             <c-progress-bar [value]="15">15</c-progress-bar>
-            <c-progress-bar [value]="30" color="success">30</c-progress-bar>
-            <c-progress-bar [value]="20" color="info">20</c-progress-bar>
+            <c-progress-bar [value]="30" color="success-gradient">30</c-progress-bar>
+            <c-progress-bar [value]="20" color="info-gradient">20</c-progress-bar>
           </c-progress>
         </app-docs-example>
       </c-card-body>

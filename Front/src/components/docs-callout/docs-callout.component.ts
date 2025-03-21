@@ -1,13 +1,14 @@
 import { Component, Input } from '@angular/core';
 import packageJson from '../../../package.json';
 import { NgTemplateOutlet } from '@angular/common';
-import { CalloutComponent } from '@coreui/angular';
+import { CalloutComponent } from '@coreui/angular-pro';
 
 @Component({
-    selector: 'app-docs-callout',
-    templateUrl: './docs-callout.component.html',
-    styleUrls: ['./docs-callout.component.scss'],
-    imports: [CalloutComponent, NgTemplateOutlet]
+  selector: 'app-docs-callout',
+  templateUrl: './docs-callout.component.html',
+  styleUrls: ['./docs-callout.component.scss'],
+  standalone: true,
+  imports: [CalloutComponent, NgTemplateOutlet]
 })
 export class DocsCalloutComponent {
 

@@ -1,0 +1,152 @@
+<c-row>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>CoreUI Angular Date Range Picker</strong>
+      </c-card-header>
+      <c-card-body>
+        <app-docs-example href="forms/date-range-picker">
+          <c-row>
+            <c-col lg="4">
+              <c-date-range-picker [selectAdjacentDays]="true" locale="de-AT" />
+            </c-col>
+            <c-col lg="4">
+              <c-date-range-picker [showAdjacentDays]="false" endDate="9/15/2024" locale="en-US"
+                                   startDate="9/03/2024" />
+            </c-col>
+          </c-row>
+        </app-docs-example>
+      </c-card-body>
+    </c-card>
+  </c-col>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>CoreUI Angular Date Range Picker</strong> with footer
+      </c-card-header>
+      <c-card-body>
+        <app-docs-example href="forms/date-range-picker">
+          <c-row>
+            <c-col lg="4">
+              <c-date-range-picker
+                [(calendarDate)]="calendar"
+                [(endDate)]="endDate"
+                [(startDate)]="startDate"
+              >
+                <ng-template cTemplateId="datePickerFooter" let-dropdown>
+                  <button (click)="onToday();" cButton class="me-auto" color="danger" size="sm" variant="ghost">Today
+                  </button>
+                  <button (click)="onCancel()" [dropdownComponent]="dropdown" cButton cDropdownClose color="primary"
+                          size="sm">Cancel
+                  </button>
+                  <button [disabled]="!startDate || !endDate" [dropdownComponent]="dropdown" cButton cDropdownClose
+                          color="primary"
+                          size="sm">OK
+                  </button>
+                </ng-template>
+              </c-date-range-picker>
+            </c-col>
+            <c-col class="d-flex align-items-center">
+              {{ startDate | date }} -> {{ endDate | date }}
+            </c-col>
+          </c-row>
+        </app-docs-example>
+      </c-card-body>
+    </c-card>
+  </c-col>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>CoreUI Angular Date Range Picker</strong> Sizing
+      </c-card-header>
+      <c-card-body>
+        <p>Set heights using <code>size</code> property like <code>size="lg"</code> and <code>size="sm"</code>.</p>
+        <app-docs-example href="forms/date-range-picker">
+          <c-row class="mb-4">
+            <c-col lg="4">
+              <c-date-range-picker closeOnSelect size="lg" />
+            </c-col>
+          </c-row>
+          <c-row>
+            <c-col lg="3">
+              <c-date-range-picker closeOnSelect size="sm" />
+            </c-col>
+          </c-row>
+        </app-docs-example>
+      </c-card-body>
+    </c-card>
+  </c-col>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>CoreUI Angular Date Range Picker</strong> Disabled
+      </c-card-header>
+      <c-card-body>
+        <p>Add the <code>disabled</code> boolean attribute on an input to give it a grayed out appearance and remove
+          pointer events.</p>
+        <app-docs-example href="forms/date-range-picker">
+          <c-row>
+            <c-col lg="4">
+              <c-date-range-picker disabled />
+            </c-col>
+          </c-row>
+        </app-docs-example>
+      </c-card-body>
+    </c-card>
+  </c-col>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>CoreUI Angular Date Range Picker</strong> Readonly
+      </c-card-header>
+      <c-card-body>
+        <p>Add the <code>inputReadOnly</code> boolean attribute to prevent modification of the
+          input value.</p>
+        <app-docs-example href="forms/date-range-picker">
+          <c-row>
+            <c-col lg="4">
+              <c-date-range-picker inputReadOnly locale="fr-CA" />
+            </c-col>
+          </c-row>
+        </app-docs-example>
+      </c-card-body>
+    </c-card>
+  </c-col>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>CoreUI Angular Date Range Picker</strong> Disabled dates
+      </c-card-header>
+      <c-card-body>
+        <app-docs-example href="forms/date-range-picker">
+          <c-row>
+            <c-col lg="4">
+              <c-date-range-picker
+                [calendarDate]="dateDisabledExample"
+                [disabledDates]="disabledDates"
+                [maxDate]="maxDate"
+                [minDate]="minDate"
+              />
+            </c-col>
+          </c-row>
+        </app-docs-example>
+      </c-card-body>
+    </c-card>
+  </c-col>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header>
+        <strong>CoreUI Angular Date Range Picker</strong> Custom ranges
+      </c-card-header>
+      <c-card-body>
+        <app-docs-example href="forms/date-range-picker">
+          <c-row>
+            <c-col lg="4">
+              <c-date-range-picker [ranges]="customRanges" rangesButtonsColor="primary" />
+            </c-col>
+          </c-row>
+        </app-docs-example>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>

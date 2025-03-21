@@ -1,0 +1,54 @@
+<c-smart-table
+  [activePage]="3"
+  [columnSorter]="true"
+  [columns]="columns"
+  [columnFilter]="true"
+  [itemsPerPageSelect]="true"
+  [itemsPerPage]="5"
+  [items]="usersData"
+  [sorterValue]="{ column: 'name', state: 'asc' }"
+  [tableFilter]="true"
+  [tableProps]="{ hover: true, striped: true, responsive: true }"
+  [tableBodyProps]="{ align: 'middle' }"
+  cleaner
+  clickableRows
+  footer
+  header
+  pagination
+>
+  <ng-template cTemplateId="tableDetails" let-item="item">
+    <div>
+      <div [visible]="this.details_visible[item.id]===true" cCollapse>
+        <div class="card-body">
+          <h5>{{ item['name'] }}</h5>
+          <p class="text-muted">User since: {{ item['registered'] }}</p>
+          <button cButton color="info" size="sm">
+            User Settings
+          </button>
+          <button cButton class="ms-1" color="danger" size="sm">
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
+    <td>
+      @switch (columnName) {
+        @case ('status') {
+          <c-badge [color]="getBadge(tdContent)">
+            {{ (item[columnName]) }}
+          </c-badge>
+        }
+        @case ('show') {
+          <button (click)="toggleDetails(item.id)" cButton color="primary" size="sm" variant="outline">
+            Show
+          </button>
+        }
+        @default {
+          {{ tdContent }}
+        }
+      }
+    </td>
+  </ng-template>
+</c-smart-table>

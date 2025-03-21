@@ -1,11 +1,22 @@
 import { Routes } from '@angular/router';
-import { DefaultLayoutComponent } from './layout';
+import { DefaultLayoutComponent, EmailLayoutComponent } from './layout';
 
 export const routes: Routes = [
   {
     path: '',
     redirectTo: 'dashboard',
     pathMatch: 'full'
+  },
+  {
+    path: 'apps/email',
+    component: EmailLayoutComponent,
+
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('./views/apps/email/routes').then((m) => m.routes)
+      }
+    ]
   },
   {
     path: '',
@@ -47,12 +58,20 @@ export const routes: Routes = [
         loadChildren: () => import('./views/widgets/routes').then((m) => m.routes)
       },
       {
-        path: 'charts',
-        loadChildren: () => import('./views/charts/routes').then((m) => m.routes)
+        path: 'smart-table',
+        loadChildren: () => import('./views/smart-tables/routes').then((m) => m.routes)
+      },
+      {
+        path: 'plugins',
+        loadChildren: () => import('./views/plugins/routes').then((m) => m.routes)
       },
       {
         path: 'pages',
         loadChildren: () => import('./views/pages/routes').then((m) => m.routes)
+      },
+      {
+        path: 'apps',
+        loadChildren: () => import('./views/apps/routes').then((m) => m.routes)
       }
     ]
   },
