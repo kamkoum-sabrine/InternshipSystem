@@ -15,7 +15,9 @@
               Dropdown button
             </button>
             <ul cDropdownMenu>
-              <li><h6 cDropdownHeader>Header</h6></li>
+              <li>
+                <h6 cDropdownHeader>Header</h6>
+              </li>
               <li><a [routerLink]="[]" cDropdownItem>Action</a></li>
               <li><a [routerLink]="[]" cDropdownItem>Another action</a></li>
               <li><a [routerLink]="[]" cDropdownItem>Something else here</a></li>
@@ -33,28 +35,28 @@
         </p>
         <app-docs-example href="components/dropdown#single-button">
           @for (color of colors; track color; let i = $index) {
-            <c-dropdown variant="btn-group">
-              <button [color]="color" cButton cDropdownToggle>
-                {{ color }}
-              </button>
-              <ul cDropdownMenu>
-                <li>
-                  <button [routerLink]="[]" cDropdownItem>Action</button>
-                </li>
-                <li>
-                  <button [routerLink]="[]" cDropdownItem>Another action</button>
-                </li>
-                <li>
-                  <button [routerLink]="[]" cDropdownItem>Something else here</button>
-                </li>
-                <li>
-                  <hr cDropdownDivider>
-                </li>
-                <li>
-                  <button cDropdownItem>Separated link</button>
-                </li>
-              </ul>
-            </c-dropdown>
+          <c-dropdown variant="btn-group">
+            <button [color]="color" cButton cDropdownToggle>
+              {{ color }}
+            </button>
+            <ul cDropdownMenu>
+              <li>
+                <button [routerLink]="[]" cDropdownItem>Action</button>
+              </li>
+              <li>
+                <button [routerLink]="[]" cDropdownItem>Another action</button>
+              </li>
+              <li>
+                <button [routerLink]="[]" cDropdownItem>Something else here</button>
+              </li>
+              <li>
+                <hr cDropdownDivider>
+              </li>
+              <li>
+                <button cDropdownItem>Separated link</button>
+              </li>
+            </ul>
+          </c-dropdown>
           }
         </app-docs-example>
       </c-card-body>
@@ -79,31 +81,31 @@
         </p>
         <app-docs-example href="components/dropdown#split-button">
           @for (color of colors; track color; let i = $index) {
-            <c-dropdown placement="bottom-start" variant="btn-group">
-              <button [color]="color" cButton>
-                {{ color }}
-              </button>
-              <button [color]="color" cButton cDropdownToggle split>
-                <span class="visually-hidden">Toggle Dropdown</span>
-              </button>
-              <ul cDropdownMenu>
-                <li>
-                  <button [routerLink]="[]" cDropdownItem>Action</button>
-                </li>
-                <li>
-                  <button cDropdownItem>Another action</button>
-                </li>
-                <li>
-                  <button cDropdownItem>Something else here</button>
-                </li>
-                <li>
-                  <hr cDropdownDivider>
-                </li>
-                <li>
-                  <button cDropdownItem>Separated link</button>
-                </li>
-              </ul>
-            </c-dropdown>
+          <c-dropdown placement="bottom-start" variant="btn-group">
+            <button [color]="color" cButton>
+              {{ color }}
+            </button>
+            <button [color]="color" cButton cDropdownToggle split>
+              <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul cDropdownMenu>
+              <li>
+                <button [routerLink]="[]" cDropdownItem>Action</button>
+              </li>
+              <li>
+                <button cDropdownItem>Another action</button>
+              </li>
+              <li>
+                <button cDropdownItem>Something else here</button>
+              </li>
+              <li>
+                <hr cDropdownDivider>
+              </li>
+              <li>
+                <button cDropdownItem>Separated link</button>
+              </li>
+            </ul>
+          </c-dropdown>
           }
         </app-docs-example>
       </c-card-body>
@@ -485,7 +487,8 @@
       </c-card-header>
       <c-card-body>
         <p class="text-body-secondary small">
-          Trigger dropdown menus centered below the toggle by adding <code>direction="center"</code> to the <code>c-dropdown</code>
+          Trigger dropdown menus centered below the toggle by adding <code>direction="center"</code> to the
+          <code>c-dropdown</code>
           component.
         </p>
         <app-docs-example href="components/dropdown#centered">

@@ -11,6 +11,15 @@ export const navItems: INavData[] = [
     }
   },
   {
+    name: 'Utilisateurs',
+    url: '/smart-table',
+    iconComponent: { name: 'cil-grid' },
+    badge: {
+      color: 'danger-gradient',
+      text: 'PRO'
+    }
+  },
+  {
     title: true,
     name: 'Theme'
   },

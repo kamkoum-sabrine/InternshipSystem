@@ -22,7 +22,7 @@ import {
 export class BreadcrumbsComponent implements OnInit {
   public items = <any>[];
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
     this.items = [
