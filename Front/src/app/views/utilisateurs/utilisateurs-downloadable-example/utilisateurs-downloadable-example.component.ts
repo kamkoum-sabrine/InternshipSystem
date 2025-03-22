@@ -4,13 +4,13 @@ import { ButtonDirective, SmartTableComponent } from '@coreui/angular-pro';
 import usersData from '../_data';
 
 @Component({
-    selector: 'app-smart-tables-downloadable-example',
-    templateUrl: './smart-tables-downloadable-example.component.html',
-    styleUrls: ['./smart-tables-downloadable-example.component.scss'],
-    standalone: true,
-    imports: [ButtonDirective, SmartTableComponent]
+  selector: 'app-utilisateurs-downloadable-example',
+  templateUrl: './utilisateurs-downloadable-example.component.html',
+  styleUrls: ['./utilisateurs-downloadable-example.component.scss'],
+  standalone: true,
+  imports: [ButtonDirective, SmartTableComponent]
 })
-export class SmartTablesDownloadableExampleComponent implements OnInit {
+export class UtilisateursDownloadableExampleComponent implements OnInit {
 
   usersData = usersData;
 

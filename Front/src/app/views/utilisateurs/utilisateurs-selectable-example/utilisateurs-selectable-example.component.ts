@@ -9,13 +9,13 @@ import {
 import usersData from '../_data';
 
 @Component({
-  selector: 'app-smart-tables-selectable-example',
-  templateUrl: './smart-tables-selectable-example.component.html',
-  styleUrls: ['./smart-tables-selectable-example.component.scss'],
+  selector: 'app-utilisateurs-selectable-example',
+  templateUrl: './utilisateurs-selectable-example.component.html',
+  styleUrls: ['./utilisateurs-selectable-example.component.scss'],
   standalone: true,
   imports: [AlertComponent, BadgeComponent, SmartTableComponent, TemplateIdDirective, TextColorDirective]
 })
-export class SmartTablesSelectableExampleComponent implements OnInit {
+export class UtilisateursSelectableExampleComponent implements OnInit {
 
   constructor() { }
 

@@ -11,13 +11,13 @@ import {
 import usersData from '../_data';
 
 @Component({
-  selector: 'app-smart-tables-basic-example',
-  templateUrl: './smart-tables-basic-example.component.html',
-  styleUrls: ['./smart-tables-basic-example.component.scss'],
+  selector: 'app-utilisateurs-basic-example',
+  templateUrl: './utilisateurs-basic-example.component.html',
+  styleUrls: ['./utilisateurs-basic-example.component.scss'],
   standalone: true,
   imports: [BadgeComponent, ButtonDirective, CollapseDirective, SmartTableComponent, TemplateIdDirective, TextColorDirective]
 })
-export class SmartTablesBasicExampleComponent {
+export class UtilisateursBasicExampleComponent {
 
   usersData = usersData;
 

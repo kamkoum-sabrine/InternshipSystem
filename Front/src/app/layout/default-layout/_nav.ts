@@ -12,7 +12,7 @@ export const navItems: INavData[] = [
   },
   {
     name: 'Utilisateurs',
-    url: '/smart-table',
+    url: '/utilisateurs',
     iconComponent: { name: 'cil-grid' },
     badge: {
       color: 'danger-gradient',
@@ -298,7 +298,7 @@ export const navItems: INavData[] = [
   },
   {
     name: 'Smart Table',
-    url: '/smart-table',
+    url: '/utilisateurs',
     iconComponent: { name: 'cil-grid' },
     badge: {
       color: 'danger-gradient',

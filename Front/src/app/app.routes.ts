@@ -58,8 +58,8 @@ export const routes: Routes = [
         loadChildren: () => import('./views/widgets/routes').then((m) => m.routes)
       },
       {
-        path: 'smart-table',
-        loadChildren: () => import('./views/smart-tables/routes').then((m) => m.routes)
+        path: 'utilisateurs',
+        loadChildren: () => import('./views/utilisateurs/routes').then((m) => m.routes)
       },
       {
         path: 'plugins',
