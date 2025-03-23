@@ -1,5 +1,6 @@
 package com.example.Back.Auth.Controllers;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,7 @@ public class UserController {
         // appUser.setPassword(WebSecurityConfig.passwordEncoder().encode(userDTO.getPassword()));
         // // Sécurisé
         appUser.setActive(false);
+        appUser.setCreatedAt( LocalDateTime.now());
         appUser.setRole(roleRepository.findRoleByNom(userDTO.getRole()));
 
         userRepository.save(appUser);

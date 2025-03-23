@@ -5,9 +5,14 @@
         <strong>Gérer </strong> <small>Les utilisateurs</small>
       </c-card-header>
       <c-card-body>
-        <app-docs-example href="components/smart-table">
-          <app-utilisateurs-basic-example />
-        </app-docs-example>
+        <div *ngIf="users">
+          <!-- <app-docs-example href="components/smart-table" [users]="users"> -->
+          <app-utilisateurs-basic-example [users]="users" />
+          <!-- </app-docs-example> -->
+        </div>
+        <!-- <app-docs-example href="components/smart-table">
+          <app-utilisateurs-basic-example [users]="users" />
+        </app-docs-example> -->
       </c-card-body>
     </c-card>
   </c-col>

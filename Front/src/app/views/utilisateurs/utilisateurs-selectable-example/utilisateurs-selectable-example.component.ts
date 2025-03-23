@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   AlertComponent,
   BadgeComponent,
@@ -20,15 +20,20 @@ export class UtilisateursSelectableExampleComponent implements OnInit {
   constructor() { }
 
   usersData = usersData;
+  @Input() users: any;
   selectedItems = [2, 3];
   columns = [
     {
-      key: 'name',
+      key: 'nom',
       _style: { width: '10vw', minWidth: '10vw', maxWidth: '10vw' }
     },
-    'registered',
+    {
+      key: 'prenom',
+      _style: { width: '10vw', minWidth: '10vw', maxWidth: '10vw' }
+    },
+    'createdAt',
     'role',
-    'status'
+    'active'
   ];
 
   ngOnInit(): void {
@@ -50,7 +55,7 @@ export class UtilisateursSelectableExampleComponent implements OnInit {
       case 'Active':
         return 'success';
       case 'Inactive':
-        return 'secondary';
+        return 'danger';
       case 'Pending':
         return 'warning';
       case 'Banned':

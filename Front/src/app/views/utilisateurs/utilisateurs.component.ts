@@ -28,13 +28,13 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, DocsExampleComponent, UtilisateursBasicExampleComponent, UtilisateursSelectableExampleComponent, UtilisateursDownloadableExampleComponent]
 })
 export class UtilisateursComponent implements OnInit {
-  userData: any;
+  users: any;
 
   constructor(private utilisateursService: UtilisateursService) { }
   ngOnInit(): void {
     this.utilisateursService.getUtilisateurs().subscribe(data => {
-      this.userData = data;
-      console.log(this.userData);
+      this.users = data;
+      console.log(this.users);
     });
   }
 }

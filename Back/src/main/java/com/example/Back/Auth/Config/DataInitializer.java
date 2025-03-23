@@ -10,6 +10,8 @@ import com.example.Back.Auth.Repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDateTime;
+
 @Component
 public class DataInitializer implements CommandLineRunner {
     /**
@@ -49,14 +51,14 @@ public class DataInitializer implements CommandLineRunner {
             roleRepository.save(etudiantRole);
 
             User superAdminUser = new User(null, "Kamkoum", "Sabrine", "kamkoumsabrine@gmail.com", "password",
-                    adminRole, false);
+                    adminRole, false, LocalDateTime.now());
             User directionStageUser = new User(null, "Salhi", "Houssem", "salhihoussem@gmail.com", "password",
                     directionRole,
-                    false);
+                    false,LocalDateTime.now());
             User serviceStageUser = new User(null, "Toumi", "Mahdi", "toumimahdi@gmail.com", "password", serviceRole,
-                    false);
+                    false,LocalDateTime.now());
             User etudiantUser = new User(null, "Ahmed", "Ahmed", "ahmedahmed@gmail.com", "password", etudiantRole,
-                    false);
+                    false,LocalDateTime.now());
 
             userRepository.save(superAdminUser);
             userRepository.save(directionStageUser);
