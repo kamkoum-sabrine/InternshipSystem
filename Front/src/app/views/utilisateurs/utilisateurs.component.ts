@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   UtilisateursDownloadableExampleComponent
 } from './utilisateurs-downloadable-example/utilisateurs-downloadable-example.component';
@@ -16,12 +16,25 @@ import {
 } from '@coreui/angular-pro';
 import { DocsExampleComponent } from '@docs-components/public-api';
 
+import { UtilisateursService } from './utilisateurs-service.service';
+import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-utilisateurs',
   templateUrl: './utilisateurs.component.html',
   styleUrls: ['./utilisateurs.component.scss'],
   standalone: true,
-  imports: [RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, DocsExampleComponent, UtilisateursBasicExampleComponent, UtilisateursSelectableExampleComponent, UtilisateursDownloadableExampleComponent]
+  imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, DocsExampleComponent, UtilisateursBasicExampleComponent, UtilisateursSelectableExampleComponent, UtilisateursDownloadableExampleComponent]
 })
-export class UtilisateursComponent {
+export class UtilisateursComponent implements OnInit {
+  userData: any;
+
+  constructor(private utilisateursService: UtilisateursService) { }
+  ngOnInit(): void {
+    this.utilisateursService.getUtilisateurs().subscribe(data => {
+      this.userData = data;
+      console.log(this.userData);
+    });
+  }
 }

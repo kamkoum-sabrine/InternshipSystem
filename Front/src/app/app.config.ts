@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import {
@@ -27,6 +28,7 @@ export const appConfig: ApplicationConfig = {
       withViewTransitions(),
       withHashLocation()
     ),
+    importProvidersFrom(HttpClientModule),
     importProvidersFrom(SidebarModule, DropdownModule),
     IconSetService,
     provideAnimations()
