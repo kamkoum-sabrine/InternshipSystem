@@ -13,7 +13,16 @@ export const navItems: INavData[] = [
   {
     name: 'Utilisateurs',
     url: '/utilisateurs',
-    iconComponent: { name: 'cil-grid' },
+    iconComponent: { name: 'cil-user' },
+    badge: {
+      color: 'danger-gradient',
+      text: 'PRO'
+    }
+  },
+  {
+    name: 'Entreprises',
+    url: '/entreprises',
+    iconComponent: { name: 'cil-home' },
     badge: {
       color: 'danger-gradient',
       text: 'PRO'
