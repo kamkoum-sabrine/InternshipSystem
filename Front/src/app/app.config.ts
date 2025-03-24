@@ -13,6 +13,7 @@ import {
 import { DropdownModule, SidebarModule } from '@coreui/angular-pro';
 import { IconSetService } from '@coreui/icons-angular';
 import { routes } from './app.routes';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,6 +32,6 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(HttpClientModule),
     importProvidersFrom(SidebarModule, DropdownModule),
     IconSetService,
-    provideAnimations()
+    provideAnimations(), provideAnimationsAsync()
   ]
 };

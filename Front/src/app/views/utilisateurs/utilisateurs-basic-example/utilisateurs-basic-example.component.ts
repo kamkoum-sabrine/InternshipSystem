@@ -9,7 +9,10 @@ import {
   TemplateIdDirective,
   TextColorDirective
 } from '@coreui/angular-pro';
+import Swal from 'sweetalert2';
+
 import usersData from '../_data';
+import { GererUtilisateurService } from './gerer-utilisateur.service';
 
 @Component({
   selector: 'app-utilisateurs-basic-example',
@@ -50,7 +53,8 @@ export class UtilisateursBasicExampleComponent implements OnInit {
   ];
   details_visible = Object.create({});
 
-  constructor(private cdr: ChangeDetectorRef) { }
+  constructor(private cdr: ChangeDetectorRef, private gererUtilisateurService: GererUtilisateurService) { }
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['users']) {
@@ -84,5 +88,33 @@ export class UtilisateursBasicExampleComponent implements OnInit {
 
     console.log("Après :", this.details_visible[itemId]);
   }
+  desactiverCompte(itemId: number) {
+
+
+    Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: 'Voulez vous désactiver ce comple',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Oui, désactiver!',
+      cancelButtonText: 'Annuler',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // L'événement est confirmé
+        this.gererUtilisateurService.desactiverCompte(itemId).subscribe(data => {
+          console.log(data);
+        });
+        Swal.fire('Compte désactivé !', '', 'success');
+        // Ajouter la logique de confirmation ici
+      } else if (result.isDismissed) {
+        // L'événement est annulé
+        Swal.fire('Événement annulé', '', 'info');
+      }
+    });
+
+
+  }
+
 
 }

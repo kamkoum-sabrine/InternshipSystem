@@ -4,6 +4,8 @@
       <c-card-header ngPreserveWhitespaces>
         <strong>Gérer </strong> <small>Les utilisateurs</small>
       </c-card-header>
+      <button mat-raised-button (click)="openDialog()">Ajouter un utilisateur</button>
+
       <c-card-body>
         <div *ngIf="users">
           <!-- <app-docs-example href="components/smart-table" [users]="users"> -->

@@ -13,7 +13,7 @@
         <button cButton color="info" size="sm">
           Modifier l'utilisateur
         </button>
-        <button cButton class="ms-1" color="danger" size="sm">
+        <button cButton class="ms-1" color="danger" size="sm" (click)="desactiverCompte(item.id)">
           Désactiver le compte
         </button>
         <p class="text-muted">Date de création de compte: {{ item.createdAt | date }}</p>
@@ -28,7 +28,6 @@
 
     </td>
   </ng-template>
-
 
   <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
     <td>
