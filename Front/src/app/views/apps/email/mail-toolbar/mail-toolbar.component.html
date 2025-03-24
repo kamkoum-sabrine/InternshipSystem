@@ -1,0 +1,60 @@
+<c-button-toolbar class="mb-4">
+  <c-button-group class="me-1 mb-1">
+    <button cButton color="light">
+      <svg cIcon name="cil-envelope-closed"></svg>
+    </button>
+    <button cButton color="light">
+      <svg cIcon name="cil-star"></svg>
+    </button>
+    <button cButton color="light">
+      <svg cIcon name="cil-bookmark"></svg>
+    </button>
+  </c-button-group>
+  <c-button-group class="me-1 mb-1">
+    <button cButton color="light">
+      <svg cIcon name="cil-share"></svg>
+    </button>
+    <button cButton color="light">
+      <svg cIcon name="cil-share-all"></svg>
+    </button>
+    <button cButton color="light">
+      <svg cIcon name="cil-share-boxed"></svg>
+    </button>
+  </c-button-group>
+  <button cButton color="light" class="mb-1">
+    <svg cIcon name="cil-trash"></svg>
+  </button>
+  <c-dropdown class="ms-1 mb-1">
+    <button [routerLink]="[]" cButton cDropdownToggle color="light">
+      <svg cIcon name="cil-tags"></svg>
+    </button>
+    <div cDropdownMenu>
+      <a [routerLink]="[]" cDropdownItem class="d-flex">
+        <div class="align-self-start">add label</div>
+        <c-badge class="ms-auto align-self-end" color="info">Home</c-badge>
+      </a>
+      <a [routerLink]="[]" cDropdownItem class="d-flex">
+        add label
+        <c-badge class="ms-auto align-self-end" color="warning">
+          Work
+        </c-badge>
+      </a>
+      <a [routerLink]="[]" cDropdownItem class="d-flex">
+        add label
+        <c-badge class="ms-auto align-self-end" color="success">Clients</c-badge>
+      </a>
+      <a [routerLink]="[]" cDropdownItem class="d-flex">
+        add label
+        <c-badge class="ms-auto align-self-end" color="primary">News</c-badge>
+      </a>
+    </div>
+  </c-dropdown>
+  <c-button-group class="ms-auto mb-1">
+    <button cButton color="light">
+      <svg cIcon name="cil-chevron-left"></svg>
+    </button>
+    <button cButton color="light">
+      <svg cIcon name="cil-chevron-right"></svg>
+    </button>
+  </c-button-group>
+</c-button-toolbar>

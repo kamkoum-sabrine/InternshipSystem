@@ -1,0 +1,22 @@
+<c-row>
+  <c-col xs="12">
+    <c-card class="mb-4">
+      <c-card-header ngPreserveWhitespaces>
+        <strong>Gérer </strong> <small>Les utilisateurs</small>
+      </c-card-header>
+      <button mat-raised-button (click)="openDialog()">Ajouter un utilisateur</button>
+
+      <c-card-body>
+        <div *ngIf="users">
+          <!-- <app-docs-example href="components/smart-table" [users]="users"> -->
+          <app-utilisateurs-basic-example [users]="users" />
+          <!-- </app-docs-example> -->
+        </div>
+        <!-- <app-docs-example href="components/smart-table">
+          <app-utilisateurs-basic-example [users]="users" />
+        </app-docs-example> -->
+      </c-card-body>
+    </c-card>
+  </c-col>
+
+</c-row>

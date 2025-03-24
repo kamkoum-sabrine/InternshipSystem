@@ -1,18 +1,13 @@
 package com.example.Back.Auth.Controllers;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.Back.Auth.Config.WebSecurityConfig;
 import com.example.Back.Auth.Models.User;
@@ -21,8 +16,6 @@ import com.example.Back.Auth.Repositories.RoleRepository;
 import com.example.Back.Auth.Repositories.UserRepository;
 import com.example.Back.Auth.Services.MailService;
 import com.example.Back.Auth.Services.UserService;
-
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -83,6 +76,7 @@ public class UserController {
         // appUser.setPassword(WebSecurityConfig.passwordEncoder().encode(userDTO.getPassword()));
         // // Sécurisé
         appUser.setActive(false);
+        appUser.setCreatedAt( LocalDateTime.now());
         appUser.setRole(roleRepository.findRoleByNom(userDTO.getRole()));
 
         userRepository.save(appUser);
@@ -162,5 +156,9 @@ public class UserController {
                     .body(response);
         }
 
+    }
+    @GetMapping("/users")
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
 }
