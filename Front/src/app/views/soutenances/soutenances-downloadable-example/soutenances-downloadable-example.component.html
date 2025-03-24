@@ -1,7 +1,0 @@
-<a [disabled]="!currentItems.length" [href]="csvCode" cButton class="mb-2" color="primary"
-  download="coreui-table-data.csv" target="_blank">
-  Download current items (.csv)
-</a>
-
-<c-smart-table [columnSorter]="false" [itemsPerPage]="5" [items]="usersData"
-  [tableProps]="{ hover: true, responsive: true }" cleaner header pagination />

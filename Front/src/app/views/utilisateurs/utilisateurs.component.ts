@@ -1,10 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  UtilisateursDownloadableExampleComponent
-} from './utilisateurs-downloadable-example/utilisateurs-downloadable-example.component';
-import {
-  UtilisateursSelectableExampleComponent
-} from './utilisateurs-selectable-example/utilisateurs-selectable-example.component';
 import { UtilisateursBasicExampleComponent } from './utilisateurs-basic-example/utilisateurs-basic-example.component';
 import {
   CardBodyComponent,
@@ -28,7 +22,7 @@ import { MatDialogModule } from '@angular/material/dialog';
   templateUrl: './utilisateurs.component.html',
   styleUrls: ['./utilisateurs.component.scss'],
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, DocsExampleComponent, UtilisateursBasicExampleComponent, UtilisateursSelectableExampleComponent, UtilisateursDownloadableExampleComponent, MatDialogModule, MatButtonModule]
+  imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, DocsExampleComponent, UtilisateursBasicExampleComponent, MatDialogModule, MatButtonModule]
 })
 export class UtilisateursComponent implements OnInit {
   users: any;

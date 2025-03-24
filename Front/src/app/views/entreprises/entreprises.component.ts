@@ -1,10 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  EntreprisesDownloadableExampleComponent
-} from './entreprises-downloadable-example/entreprises-downloadable-example.component';
-import {
-  EntreprisesSelectableExampleComponent
-} from './entreprises-selectable-example/entreprises-selectable-example.component';
 import { EntreprisesBasicExampleComponent } from './entreprises-basic-example/entreprises-basic-example.component';
 import {
   CardBodyComponent,
@@ -28,7 +22,7 @@ import { MatDialogModule } from '@angular/material/dialog';
   templateUrl: './entreprises.component.html',
   styleUrls: ['./entreprises.component.scss'],
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, DocsExampleComponent, EntreprisesBasicExampleComponent, EntreprisesSelectableExampleComponent, EntreprisesDownloadableExampleComponent, MatDialogModule, MatButtonModule]
+  imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, DocsExampleComponent, EntreprisesBasicExampleComponent, MatDialogModule, MatButtonModule]
 })
 export class EntreprisesComponent {
   users: any;
