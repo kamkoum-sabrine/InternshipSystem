@@ -1,5 +1,5 @@
 <c-smart-table *ngIf="users && users.length > 0" [activePage]="1" [columnSorter]="true" [columns]="columns"
-  [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="10" [items]="users"
+  [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="5" [items]="users"
   [sorterValue]="{ column: 'name', state: 'asc' }" [tableFilter]="true"
   [tableProps]="{ hover: true, striped: true, responsive: true }" [tableBodyProps]="{ align: 'middle' }" cleaner
   clickableRows footer header pagination>
@@ -21,13 +21,7 @@
       </div>
     </div>
   </ng-template>
-  <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
-    <td>
 
-      {{ (item[columnName]) }}
-
-    </td>
-  </ng-template>
 
   <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
     <td>
