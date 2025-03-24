@@ -29,6 +29,15 @@ export const navItems: INavData[] = [
     }
   },
   {
+    name: 'Soutenances',
+    url: '/soutenances',
+    iconComponent: { name: 'cil-graduation' },
+    badge: {
+      color: 'danger-gradient',
+      text: 'PRO'
+    }
+  },
+  {
     title: true,
     name: 'Theme'
   },
