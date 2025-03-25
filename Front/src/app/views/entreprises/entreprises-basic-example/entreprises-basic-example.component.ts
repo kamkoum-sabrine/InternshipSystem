@@ -1,68 +1,47 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
-  BadgeComponent,
-  ButtonDirective,
-  CollapseDirective,
-  IColumn,
   SmartTableComponent,
-  TemplateIdDirective,
-  TextColorDirective
+  IColumn,
 } from '@coreui/angular-pro';
-import Swal from 'sweetalert2';
-
-import usersData from '../_data';
-import { GererEntreprisesService } from './gerer-entreprises.service';
+import { EntreprisesServiceService } from '../entreprises-service.service'; // Import your service for delete functionality
 
 @Component({
   selector: 'app-entreprises-basic-example',
   templateUrl: './entreprises-basic-example.component.html',
   styleUrls: ['./entreprises-basic-example.component.scss'],
   standalone: true,
-  imports: [CommonModule, BadgeComponent, ButtonDirective, CollapseDirective, SmartTableComponent, TemplateIdDirective, TextColorDirective]
+  imports: [CommonModule, SmartTableComponent]
 })
 export class EntreprisesBasicExampleComponent implements OnInit {
 
-  usersData = usersData;
-  @Input() users: any[] = [];;
+  @Input() entreprises: any[] = [];
 
   columns: IColumn[] = [
-
-    {
-      key: 'nom',
-      label: 'Nom',
-    },
-    {
-      key: 'prenom'
-    },
-
-    // {
-    //   key: 'createdAt',
-    //   label: 'Date Registered',
-    //   _props: { class: 'text-truncate' }
-    // },
-    { key: 'role', _style: { width: '20%' } },
-    { key: 'active', _style: { width: '15%' } },
-    {
-      key: 'show',
-      label: '',
-      _style: { width: '5%' },
-      filter: false,
-      sorter: false
-    }
+    { key: 'nom', label: 'Nom de l\'entreprise' },
+    { key: 'adresse', label: 'Adresse' },
+    { key: 'email', label: 'Email' },
+    { key: 'telephone', label: 'Téléphone' },
+    { key: 'actions', label: 'Actions' } // Add actions column
   ];
-  details_visible = Object.create({});
 
-  constructor() { }
+  constructor(private entrepriseService: EntreprisesServiceService) { }
 
   ngOnInit() {
-    console.log('Valeur reçue du parent:', this.users);
-
+    console.log('Entreprises reçues du parent:', this.entreprises);
   }
 
-
+  // Delete entreprise function
+  deleteEntreprise(id: number): void {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?')) {
+      this.entrepriseService.deleteEntreprise(id).subscribe(() => {
+        // Remove the deleted entreprise from the list
+        this.entreprises = this.entreprises.filter(entreprise => entreprise.id !== id);
+        console.log('Entreprise supprimée avec succès');
+      }, error => {
+        console.error('Erreur lors de la suppression de l\'entreprise:', error);
+      });
+    }
+  }
 
 }
-
-
-

@@ -6,6 +6,15 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class EntreprisesServiceService {
+  private apiUrl = 'http://localhost:8085/api/entreprises';
 
+  constructor(private http: HttpClient) { }
+
+  getEntreprises(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}`);
+  }
+  deleteEntreprise(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`); // Adjust the URL to match your endpoint
+  }
 
 }
