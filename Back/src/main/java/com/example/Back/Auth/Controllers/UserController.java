@@ -3,6 +3,7 @@ package com.example.Back.Auth.Controllers;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import com.example.Back.Soutenance.Model.Enseignant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,6 +37,8 @@ public class UserController {
     public UserController(MailService mailService) {
         this.mailService = mailService;
     }
+
+
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<Map<String, Object>> saveUser(@RequestBody UserDTO userDTO) {
@@ -107,7 +110,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/activate", method = RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> activateAccount(@RequestBody Integer idUser) {
+    public ResponseEntity<Map<String, Object>> activateAccount(@RequestBody Long idUser) {
         Optional<User> user = userService.findUser(idUser);
         Map<String, Object> response = new HashMap<>();
 
@@ -133,7 +136,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/desactivate", method = RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> desactivateAccount(@RequestBody Integer idUser) {
+    public ResponseEntity<Map<String, Object>> desactivateAccount(@RequestBody Long idUser) {
         Optional<User> user = userService.findUser(idUser);
         Map<String, Object> response = new HashMap<>();
 
@@ -160,5 +163,9 @@ public class UserController {
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
+    }
+    @GetMapping("/etudiants")
+    public List<User> getAllEtudiants() {
+        return userService.getAlletudiants();
     }
 }
