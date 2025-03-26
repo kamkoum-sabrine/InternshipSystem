@@ -1,56 +1,46 @@
-<c-smart-table *ngIf="users && users.length > 0" [activePage]="1" [columnSorter]="true" [columns]="columns"
-  [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="10" [items]="users"
+<c-smart-table *ngIf="soutenances && soutenances.length > 0" [activePage]="1" [columnSorter]="true" [columns]="columns"
+  [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="10" [items]="soutenances"
   [sorterValue]="{ column: 'name', state: 'asc' }" [tableFilter]="true"
   [tableProps]="{ hover: true, striped: true, responsive: true }" [tableBodyProps]="{ align: 'middle' }" cleaner
-  clickableRows footer header pagination>
-  <ng-template cTemplateId="tableDetails" let-item="item">
+  clickableRows header pagination>
 
-    <div [visible]="this.details_visible[item.id]===true" cCollapse>
-      <div class="card-body">
-        <h5>{{ item.nom }} {{ item.prenom }}</h5>
-        <p class="text-muted">Email: {{ item.email }}</p>
-        <!-- <p class="text-muted">Date Registered: {{ item.createdAt }}</p> -->
-        <button cButton color="info" size="sm">
-          Modifier l'utilisateur
-        </button>
-        <button cButton class="ms-1" color="danger" size="sm" (click)="desactiverCompte(item.id)">
-          Désactiver le compte
-        </button>
-        <p class="text-muted">Date de création de compte: {{ item.createdAt | date }}</p>
 
-      </div>
-    </div>
-  </ng-template>
   <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
     <td>
 
-      {{ (item[columnName]) }}
+
+      <!-- Vérifier si la colonne est 'encadrant' et afficher son nom -->
+      <ng-container *ngIf="columnName === 'encadrant'">
+        {{ item.encadrant?.nom }} {{ item.encadrant?.prenom }} <!-- Accéder au nom de l'encadrant -->
+      </ng-container>
+
+      <ng-container *ngIf="columnName === 'etudiant'">
+        {{ item.etudiant?.nom }} {{ item.etudiant?.prenom }} <!-- Accéder au nom de l'encadrant -->
+      </ng-container>
+
+      <!-- Pour les autres colonnes, afficher la valeur par défaut -->
+      <ng-container *ngIf="columnName !== 'encadrant' && columnName !== 'action' && columnName !== 'etudiant'">
+        {{ item[columnName] }}
+      </ng-container>
+
+      <!-- Pour la colonne 'Action', afficher les boutons de suppression et de modification -->
+      <ng-container *ngIf="columnName === 'action'">
+        <button cButton class="me-3" color="info" size="sm" (click)="AfficherJury(item.id)" style="color: #ffffff;">
+          Afficher Jury
+        </button>
+        <button cButton color="info" size="sm" (click)="openDialogUpdate(item.id)">
+          <i class="fa fa-edit" style="color: #ffffff;"></i> <!-- Icon for edit -->
+        </button>
+        <button cButton class="ms-1" color="danger" size="sm" (click)="supprimerSoutenance(item.id)">
+          <i class="fa fa-trash" style="color: #ffffff;"></i> <!-- Icon for delete -->
+        </button>
+      </ng-container>
+
+
 
     </td>
   </ng-template>
 
-  <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
-    <td>
-      @switch (columnName) {
-      @case ('active') {
-      <c-badge [color]="getBadge(tdContent)">
-        {{ (item[columnName]) }}
-      </c-badge>
-      }
-      @case ('show') {
-      <button (click)="toggleDetails(item.id)" cButton color="primary" size="sm" variant="outline">
-        Détails
-      </button>
-      }
-      @case ('role') {
-      {{ item[columnName]?.nom }}
-      }
 
-      @default {
 
-      {{ item[columnName] }}
-      }
-      }
-    </td>
-  </ng-template> -->
 </c-smart-table>

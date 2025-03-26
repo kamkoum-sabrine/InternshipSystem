@@ -17,7 +17,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/soutenance")
+@RequestMapping(path = "api/soutenance")
 public class SoutenanceController {
 
     private final SoutenanceService soutenanceService;
@@ -30,6 +30,11 @@ public class SoutenanceController {
     @GetMapping
     public List<Soutenance> getAllSoutenance() {
         return soutenanceService.getAllSoutenances();
+    }
+
+    @GetMapping(path = "{id}")
+    public Soutenance getSoutenanceById(@PathVariable("id") Long id) {
+        return soutenanceService.getSoutenanceById(id);
     }
 
     @GetMapping("/search")
@@ -53,7 +58,7 @@ public class SoutenanceController {
         }
         soutenanceService.deleteSoutenance(id);
     }
-
+    /*
     @PutMapping(path = "{id}")
     public void editSoutenance(@PathVariable("id") Long id,
                                @RequestParam(required = false) LocalDate date,
@@ -67,6 +72,14 @@ public class SoutenanceController {
             throw new IllegalArgumentException("L'ID ne doit pas être nul.");
         }
         soutenanceService.editSoutenance(id, date, salle, heure, etudiantId, encadrantID, juryIds ,sujet);
+    }*/
+
+    @PutMapping(path = "{id}")
+    public ResponseEntity<Soutenance> editSoutenance(@PathVariable("id") Long id,@Valid @RequestBody SoutenanceDTO soutenanceDTO) {
+        Soutenance updatedSoutenance = soutenanceService.editSoutenance(id,soutenanceDTO);
+        return ResponseEntity.ok(updatedSoutenance);
     }
+
+
 }
 

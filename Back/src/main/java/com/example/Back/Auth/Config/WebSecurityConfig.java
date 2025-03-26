@@ -2,6 +2,7 @@ package com.example.Back.Auth.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,8 +39,13 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/activate",
-                                "/api/auth/desactivate","/api/entreprises","/api/auth/users")
-                        .permitAll() // Routes
+                                "/api/auth/desactivate","/api/entreprises","/api/auth/users","/api/auth/etudiants","/api/soutenance","api/enseingnant")
+
+                        .permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/soutenance/{id}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/soutenance").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/soutenance/{id}").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/soutenance/{id}").permitAll()
                         // publiques
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Ajout du
