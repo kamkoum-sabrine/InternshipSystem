@@ -7,7 +7,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormControlDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ButtonDirective, CardBodyComponent, CardComponent, CardHeaderComponent, ColComponent, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, FormDirective, FormFeedbackComponent, FormLabelDirective, FormSelectDirective, InputGroupComponent, InputGroupTextDirective, ListGroupDirective, ListGroupItemDirective, RowComponent, TextColorDirective } from '@coreui/angular-pro';
+import { DocsExampleComponent } from '@docs-components/public-api';
 @Component({
   selector: 'app-add-user-dialog',
   standalone: true,
@@ -17,12 +19,17 @@ import { FormsModule } from '@angular/forms';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
+    RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, DocsExampleComponent, ReactiveFormsModule, FormsModule, FormDirective, FormLabelDirective, FormFeedbackComponent, InputGroupComponent, InputGroupTextDirective, FormSelectDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, ButtonDirective, ListGroupDirective, ListGroupItemDirective
   ],
   templateUrl: './add-user-dialog.component.html',
-  //styleUrls: ['./add-user-dialog.component.css']
+  styleUrls: ['./add-user-dialog.component.scss']
 })
 export class AddUserDialogComponent {
+  customStylesValidated = false;
+  browserDefaultsValidated = false;
+  tooltipValidated = false;
+
   // user = {
   //   name: '',
   //   email: ''
@@ -58,9 +65,24 @@ export class AddUserDialogComponent {
     console.log('Modal fermé');
   }
 
-  // Soumettre le formulaire
+
+  onSubmit1() {
+    this.customStylesValidated = true;
+    console.log('Submit... 1');
+  }
+
+  onReset1() {
+    this.customStylesValidated = false;
+    console.log('Reset... 1');
+  }
+  role: 'student' | 'employee' = 'student';
+
+  selectRole(role: 'student' | 'employee') {
+    this.role = role;
+  }
+
   onSubmit() {
-    console.log('Form submitted', this.user);
-    // Logique pour traiter le formulaire
+    // Traitement de la création du compte ici
+    console.log('Formulaire soumis');
   }
 }

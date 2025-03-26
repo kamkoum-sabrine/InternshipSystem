@@ -1,10 +1,45 @@
-<p (modalClose)="onModalClose()">
-<h2>Create New User</h2>
 <form>
-    <label for="name">Name</label>
-    <input id="name" type="text" />
-    <label for="email">Email</label>
-    <input id="email" type="email" />
-    <button type="submit">Submit</button>
+    <div class="form-row">
+        <div class="form-group">
+            <label>Nom</label>
+            <input type="text" class="form-control" placeholder="Nom">
+        </div>
+
+        <div class="form-group">
+            <label>Prénom</label>
+            <input type="text" class="form-control" placeholder="Prénom">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group">
+            <label>CIN</label>
+            <input type="text" class="form-control" placeholder="CIN">
+        </div>
+
+        <div class="form-group">
+            <label>Téléphone</label>
+            <input type="text" class="form-control" placeholder="Téléphone">
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" class="form-control" placeholder="Email">
+        </div>
+
+        <!-- Champs spécifiques -->
+        <div *ngIf="role === 'employee'" class="form-group">
+            <label>Direction de stage</label>
+            <input type="text" class="form-control" placeholder="Direction de stage">
+        </div>
+
+        <div *ngIf="role === 'student'" class="form-group">
+            <label>Service de stage</label>
+            <input type="text" class="form-control" placeholder="Service de stage">
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success w-100">Créer un compte</button>
 </form>
-<p>
