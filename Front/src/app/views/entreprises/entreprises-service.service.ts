@@ -11,10 +11,15 @@ export class EntreprisesServiceService {
   constructor(private http: HttpClient) { }
 
   getEntreprises(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}`);
-  }
-  deleteEntreprise(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`); // Adjust the URL to match your endpoint
+    return this.http.get<any>(this.apiUrl);
   }
 
+  deleteEntreprise(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
+
+  // ✅ Ajout d'une entreprise (Méthode POST)
+  addEntreprise(entreprise: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, entreprise);
+  }
 }

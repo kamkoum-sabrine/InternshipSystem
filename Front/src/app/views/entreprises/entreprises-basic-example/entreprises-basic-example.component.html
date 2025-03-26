@@ -1,6 +1,36 @@
+<!-- Bouton Ajouter Entreprise -->
+<button class="btn btn-primary mb-3" (click)="ouvrirModal()">Ajouter Entreprise</button>
+
+<!-- Smart Table -->
 <c-smart-table *ngIf="entreprises && entreprises.length > 0" [activePage]="1" [columnSorter]="true" 
   [columns]="columns" [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="5" 
   [items]="entreprises" [sorterValue]="{ column: 'nom', state: 'asc' }"
   [tableFilter]="true" [tableProps]="{ hover: true, striped: true, responsive: true }" 
   [tableBodyProps]="{ align: 'middle' }" cleaner footer header pagination>
 </c-smart-table>
+
+<!-- Modal -->
+<div *ngIf="modalOuvert" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Ajouter une entreprise</h3>
+    <form>
+      <label>Nom:</label>
+      <input type="text" [(ngModel)]="newEntreprise.nom" name="nom" required />
+
+      <label>Adresse:</label>
+      <input type="text" [(ngModel)]="newEntreprise.adresse" name="adresse" required />
+
+      <label>Email:</label>
+      <input type="email" [(ngModel)]="newEntreprise.email" name="email" required />
+
+      <label>Téléphone:</label>
+      <input type="number" [(ngModel)]="newEntreprise.telephone" name="telephone" required />
+
+      <div class="modal-actions">
+        <button type="button" (click)="ajouterEntreprise()" class="btn btn-success">Ajouter</button>
+        <button type="button" (click)="fermerModal()" class="btn btn-secondary">Annuler</button>
+      </div>
+    </form>
+  </div>
+</div>
+
