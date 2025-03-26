@@ -1,5 +1,7 @@
 package com.example.Back.Auth.Config;
 
+import com.example.Back.Entreprises.Models.Entreprise;
+import com.example.Back.Entreprises.Repositories.EntreprisesRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -29,10 +31,11 @@ public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-
-    public DataInitializer(UserRepository userRepository, RoleRepository roleRepository) {
+    private final EntreprisesRepository entreprisesRepository;
+    public DataInitializer(UserRepository userRepository, RoleRepository roleRepository,EntreprisesRepository entreprisesRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.entreprisesRepository = entreprisesRepository;
     }
 
     @Override
@@ -66,6 +69,14 @@ public class DataInitializer implements CommandLineRunner {
             userRepository.save(etudiantUser);
 
             System.out.println("Données initiales insérées !");
+            if (entreprisesRepository.count() == 0) {
+                Entreprise entreprise1 = new Entreprise(null, "TechCorp", "123 Rue de la Technologie", "contact@techcorp.com", 123456789L);
+                Entreprise entreprise2 = new Entreprise(null, "InnoSoft", "456 Avenue de l'Innovation", "contact@innosoft.com", 987654321L);
+
+                entreprisesRepository.save(entreprise1);
+                entreprisesRepository.save(entreprise2);
+
+                System.out.println("Entreprises initiales insérées !");
         }
     }
-}
+}}
