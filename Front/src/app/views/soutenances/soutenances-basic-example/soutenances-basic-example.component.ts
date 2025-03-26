@@ -17,6 +17,7 @@ import { UpdateSoutenanceDialogComponent } from '../update-soutenance-dialog/upd
 import { AfficherJuryDialogComponent } from '../afficher-jury-dialog/afficher-jury-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
+
 @Component({
   selector: 'app-soutenances-basic-example',
   templateUrl: './soutenances-basic-example.component.html',
@@ -33,27 +34,33 @@ export class SoutenancesBasicExampleComponent implements OnInit {
     {
       key: 'etudiant',
       label: 'Nom & Prénom',
-      _style: { width: '15%' }
+      _style: { width: '15%' },
+      filter: true
     },
     {
       key: 'date',
       label: 'Date',
-      _style: { width: '15%' }
+      _style: { width: '15%' },
+      filter: true
     },
     {
       key: 'salle',
       label: 'Salle',
-      _style: { width: '10%' }
+      _style: { width: '10%' },
+      filter: true
     },
     {
       key: 'sujet',
       label: 'sujet',
-      _style: { width: '25%' }
+      _style: { width: '25%' },
+      filter: true
     },
     {
       key: 'encadrant',
       label: 'Encadrant',
-      _style: { width: '15%' }
+      _style: { width: '15%' },
+      filter: true
+
     },
     {
       key: 'action',
@@ -69,6 +76,10 @@ export class SoutenancesBasicExampleComponent implements OnInit {
 
   ngOnInit() {
     console.log('Valeur reçue du parent:', this.soutenances);
+    // Créer une propriété combinée pour l'étudiant
+    this.soutenances.forEach(item => {
+      item.etudiantNomComplet = `${item.etudiant?.nom} ${item.etudiant?.prenom}`; // Combinaison du nom et prénom
+    });
 
   }
 

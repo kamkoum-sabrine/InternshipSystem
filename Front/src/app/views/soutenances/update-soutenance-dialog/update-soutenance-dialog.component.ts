@@ -46,7 +46,8 @@ export class UpdateSoutenanceDialogComponent implements OnInit {
   soutenance: any = {};
   etudiants: any[] = [];
   encadrants: any[] = [];
-  jurySelectionnes: any[] = []; // Stocker les IDs des membres du jury sélectionnés
+  jurySelectionnes: any[] = [];
+  juryMember: any[] = [];// Stocker les IDs des membres du jury sélectionnés
 
   constructor(
     public dialogRef: MatDialogRef<UpdateSoutenanceDialogComponent>,
@@ -60,11 +61,18 @@ export class UpdateSoutenanceDialogComponent implements OnInit {
     this.chargerEncadrants();
   }
 
+  getJuryIds(): void {
+    for (let juryid of this.jurySelectionnes) {
+      this.juryMember.push(juryid.id);
+    }
+  }
+
   chargerSoutenance(): void {
     this.GererSoutenancesService.getSoutenanceById(this.data.soutenanceId).subscribe(
       (data) => {
         this.soutenance = data;
-        this.jurySelectionnes = data.juryIds;
+        this.jurySelectionnes = data.jury;
+        this.getJuryIds();
 
       },
       (error) => {

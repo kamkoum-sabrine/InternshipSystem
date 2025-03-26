@@ -65,7 +65,7 @@
                         <label cLabel class="col-sm-2 col-form-label" for="jury">Jury</label>
                         <c-col sm="10">
 
-                            <c-multi-select [(ngModel)]="soutenance.jury" name="juryIds" id="jury" multiple
+                            <c-multi-select [(ngModel)]="juryMember" name="juryIds" id="jury" multiple
                                 optionsStyle="text" selectionType="tags">
                                 <c-multi-select-option *ngFor="let encadrant of encadrants" [value]="encadrant.id">
                                     {{ encadrant.nom }} {{ encadrant.prenom }}
