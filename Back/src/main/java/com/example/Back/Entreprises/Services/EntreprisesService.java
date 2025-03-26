@@ -54,6 +54,8 @@ public class EntreprisesService {
         // 6️⃣ Sauvegarde de l'entreprise
         entrepriseRepository.save(entreprise);
     }
+    // Ajout de la méthode dans le service
+
 
     public List<Entreprise> getAllEntreprises() {
         return this.entrepriseRepository.findAll();
