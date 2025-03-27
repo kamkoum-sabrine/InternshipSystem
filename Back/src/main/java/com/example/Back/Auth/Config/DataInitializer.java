@@ -70,13 +70,13 @@ public class DataInitializer implements CommandLineRunner {
                     false,LocalDateTime.now());
             User etudiantUser = new User(null, "Ahmed", "Ahmed", "ahmedahmed@gmail.com",5656565,"Genie informatique", "password", etudiantRole,
                     false,LocalDateTime.now());
-            User etudiantUser1 = new User(null, "Amine", "Amine", "Amineamine@gmail.com", "password", etudiantRole,
+            User etudiantUser1 = new User(null, "Amine", "Amine", "Amineamine@gmail.com",123456,null, "password", etudiantRole,
                     false,LocalDateTime.now());
-            User etudiantUser2 = new User(null, "Mahdi", "Mahdi", "Mahdimahdi@gmail.com", "password", etudiantRole,
+            User etudiantUser2 = new User(null, "Mahdi", "Mahdi", "Mahdimahdi@gmail.com",123456,null, "password", etudiantRole,
                     false,LocalDateTime.now());
-            User etudiantUser3 = new User(null, "Sabrine", "Sabrine", "Sabrinesabroucha@gmail.com", "password", etudiantRole,
+            User etudiantUser3 = new User(null, "Sabrine", "Sabrine", "Sabrinesabroucha@gmail.com",123456,null, "password", etudiantRole,
                     false,LocalDateTime.now());
-            User etudiantUser4 = new User(null, "Salhi", "Hama", "HamaSalhi@gmail.com", "password", etudiantRole,
+            User etudiantUser4 = new User(null, "Salhi", "Hama", "HamaSalhi@gmail.com",123456,null, "password", etudiantRole,
                     false,LocalDateTime.now());
 
             userRepository.save(superAdminUser);

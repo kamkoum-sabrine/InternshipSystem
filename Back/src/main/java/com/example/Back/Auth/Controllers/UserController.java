@@ -167,7 +167,8 @@ public class UserController {
 
      @GetMapping("/userId/{id}")
     public Optional<User> getUserById(@PathVariable Long id) {
-        return userService.findUserById(id);
+         return userService.findUserById(id);
+     }
 
     @GetMapping("/etudiants")
     public List<User> getAllEtudiants() {
