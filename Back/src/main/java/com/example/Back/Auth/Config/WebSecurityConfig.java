@@ -39,7 +39,7 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
                          .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/activate",
-                                "/api/auth/desactivate","/api/entreprises","/api/auth/users","/api/roles/all","/api/auth/etudiants","/api/soutenance","api/enseingnant/**")                   
+                                "/api/auth/desactivate","/api/entreprises","/api/auth/users","/api/roles/all","/api/auth/etudiants","/api/soutenance","api/enseignant/**","api/enseignant/**")
                        
                              
                         .permitAll()
