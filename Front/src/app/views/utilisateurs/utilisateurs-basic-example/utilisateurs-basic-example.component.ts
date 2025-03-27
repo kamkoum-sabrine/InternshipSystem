@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import {
   BadgeComponent,
   ButtonDirective,
@@ -10,6 +11,8 @@ import {
   TextColorDirective
 } from '@coreui/angular-pro';
 import Swal from 'sweetalert2';
+import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.component';
+import { UtilisateursService } from '../utilisateurs-service.service';
 
 import usersData from '../_data';
 import { GererUtilisateurService } from './gerer-utilisateur.service';
@@ -53,7 +56,7 @@ export class UtilisateursBasicExampleComponent implements OnInit {
   ];
   details_visible = Object.create({});
 
-  constructor(private cdr: ChangeDetectorRef, private gererUtilisateurService: GererUtilisateurService) { }
+  constructor(private cdr: ChangeDetectorRef, private gererUtilisateurService: GererUtilisateurService, public dialog: MatDialog, private utilisateursService: UtilisateursService) { }
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -88,31 +91,81 @@ export class UtilisateursBasicExampleComponent implements OnInit {
 
     console.log("Après :", this.details_visible[itemId]);
   }
-  desactiverCompte(itemId: number) {
+  changerEtatCompte(itemId: number, active: boolean) {
 
 
-    Swal.fire({
-      title: 'Êtes-vous sûr ?',
-      text: 'Voulez vous désactiver ce comple',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Oui, désactiver!',
-      cancelButtonText: 'Annuler',
-      reverseButtons: true
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // L'événement est confirmé
-        this.gererUtilisateurService.desactiverCompte(itemId).subscribe(data => {
-          console.log(data);
-        });
-        Swal.fire('Compte désactivé !', '', 'success');
-        // Ajouter la logique de confirmation ici
-      } else if (result.isDismissed) {
-        // L'événement est annulé
-        Swal.fire('Événement annulé', '', 'info');
-      }
-    });
+    if (active == true) {
+      Swal.fire({
+        title: 'Êtes-vous sûr ?',
+        text: 'Voulez vous désactiver ce comple',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Oui, désactiver!',
+        cancelButtonText: 'Annuler',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // L'événement est confirmé
+          this.gererUtilisateurService.desactiverCompte(itemId).subscribe(data => {
+            console.log(data);
 
+          });
+          Swal.fire('Compte désactivé !', '', 'success');
+          // Ajouter la logique de confirmation ici
+        } else if (result.isDismissed) {
+          // L'événement est annulé
+          Swal.fire('Événement annulé', '', 'info');
+        }
+      });
+
+    }
+    else {
+
+      Swal.fire({
+        title: 'Êtes-vous sûr ?',
+        text: 'Voulez vous activer ce comple',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Oui, activer!',
+        cancelButtonText: 'Annuler',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // L'événement est confirmé
+          this.gererUtilisateurService.activerCompte(itemId).subscribe(data => {
+            console.log(data);
+            this.utilisateursService.getUtilisateurs().subscribe(data => {
+              this.users = data
+            });
+
+          });
+          Swal.fire('Compte activé !', '', 'success');
+          // Ajouter la logique de confirmation ici
+        } else if (result.isDismissed) {
+          // L'événement est annulé
+          Swal.fire('Événement annulé', '', 'info');
+        }
+      });
+
+    }
+
+
+  }
+
+  openDialogUpdate(id: number): void {
+    // const dialogRef = this.dialog.open(AddUserDialogComponent, {
+    //   width: '600px',
+    //   minWidth: '600px',  // Largeur minimale de 400px
+    //   maxWidth: '600px',
+    //   data: { utilisateur: id, edit: true }
+    // });
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result) {
+    //     console.log('Editer utilisateur:', result);
+    //     // Logic to add the user
+    //   }
+    // });
 
   }
 

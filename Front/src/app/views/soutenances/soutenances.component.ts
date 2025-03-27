@@ -9,7 +9,6 @@ import {
   RowComponent,
   TextColorDirective
 } from '@coreui/angular-pro';
-import { DocsExampleComponent } from '@docs-components/public-api';
 
 import { SoutenancesServiceService } from './soutenances-service.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -23,10 +22,32 @@ import { MatDialogModule } from '@angular/material/dialog';
   templateUrl: './soutenances.component.html',
   styleUrls: ['./soutenances.component.scss'],
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, DocsExampleComponent, SoutenancesBasicExampleComponent, MatDialogModule, MatButtonModule]
+  imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, SoutenancesBasicExampleComponent, MatDialogModule, MatButtonModule]
 })
 export class SoutenancesComponent {
-  users: any;
 
+  soutenances: any;
 
+  constructor(private SoutenancesServiceService: SoutenancesServiceService, public dialog: MatDialog) { }
+  ngOnInit(): void {
+    this.SoutenancesServiceService.getSoutenances().subscribe(data => {
+      this.soutenances = data;
+      console.log(this.soutenances);
+    });
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(AddUserDialogComponent, {
+      width: '600px',
+      minWidth: '600px',  // Largeur minimale de 400px
+      maxWidth: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Nouvelle soutenance:', result);
+        // Logic to add the user
+      }
+    });
+  }
 }

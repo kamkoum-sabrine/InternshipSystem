@@ -1,0 +1,99 @@
+<c-row>
+    <c-col xs="12">
+        <c-card class="mb-4">
+            <c-card-header>
+                <strong>Modification de la soutenance</strong>
+            </c-card-header>
+            <c-card-body>
+                <form (ngSubmit)="onSubmit()" cForm>
+
+                    <!-- Date Field -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="date">Date</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="soutenance.date" name="date" cFormControl id="date" type="date"
+                                required />
+                        </c-col>
+                    </c-row>
+
+                    <!-- Heure Field -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="heure">Heure</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="soutenance.heure" name="heure" cFormControl id="heure" type="time"
+                                required />
+                        </c-col>
+                    </c-row>
+
+                    <!-- Salle Field -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="salle">Salle</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="soutenance.salle" name="salle" cFormControl id="salle" type="text"
+                                required />
+                        </c-col>
+                    </c-row>
+
+                    <!-- Étudiant Field -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="etudiant">Étudiant</label>
+                        <c-col sm="10">
+                            <select [(ngModel)]="soutenance.etudiant.id" name="etudiantId" id="etudiant" cSelect
+                                required>
+                                <option *ngFor="let etudiant of etudiants" [value]="etudiant.id">
+                                    {{ etudiant.nom }} {{ etudiant.prenom }}
+                                </option>
+                            </select>
+                        </c-col>
+                    </c-row>
+
+                    <!-- Encadrant Field -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="encadrant">Encadrant</label>
+                        <c-col sm="10">
+                            <select [(ngModel)]="soutenance.encadrant.id" name="encadrantId" id="encadrant" cSelect
+                                required>
+                                <option *ngFor="let encadrant of encadrants" [value]="encadrant.id">
+                                    {{ encadrant.nom }} {{ encadrant.prenom }}
+                                </option>
+                            </select>
+                        </c-col>
+                    </c-row>
+
+                    <!-- Jury Fields -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="jury">Jury</label>
+                        <c-col sm="10">
+
+                            <c-multi-select [(ngModel)]="juryMember" name="juryIds" id="jury" multiple
+                                optionsStyle="text" selectionType="tags">
+                                <c-multi-select-option *ngFor="let encadrant of encadrants" [value]="encadrant.id">
+                                    {{ encadrant.nom }} {{ encadrant.prenom }}
+                                </c-multi-select-option>
+                            </c-multi-select>
+                        </c-col>
+                    </c-row>
+
+                    <!-- Sujet Field -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="sujet">Sujet</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="soutenance.sujet" name="sujet" cFormControl id="sujet" type="text"
+                                required />
+                        </c-col>
+                    </c-row>
+
+                    <!-- Action Buttons -->
+                    <c-row class="mb-3">
+                        <c-col sm="12" class="d-flex justify-content-end">
+                            <button cButton class="me-3" color="danger" style="color: #ffffff;" type="button"
+                                (click)="onCancel()">Annuler</button>
+                            <button cButton color="info" style="color: #ffffff;" type="submit">Modifier</button>
+                        </c-col>
+                    </c-row>
+
+                </form>
+            </c-card-body>
+        </c-card>
+    </c-col>
+</c-row>

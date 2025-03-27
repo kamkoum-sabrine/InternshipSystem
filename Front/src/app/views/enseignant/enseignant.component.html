@@ -1,0 +1,19 @@
+<c-row>
+    <c-col xs="12">
+        <c-card class="mb-4">
+            <c-card-header ngPreserveWhitespaces>
+                <strong>Gérer </strong> <small>Les enseignants</small>
+            </c-card-header>
+            <button mat-raised-button (click)="openDialog()">Ajouter un enseignant</button>
+
+
+            <c-card-body>
+                <div *ngIf="Enseignants">
+                    <app-enseignant-basic-example [Enseignants]="Enseignants" />
+                </div>
+
+            </c-card-body>
+        </c-card>
+    </c-col>
+
+</c-row>

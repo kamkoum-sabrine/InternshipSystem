@@ -37,14 +37,17 @@ export class UtilisateursComponent implements OnInit {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(AddUserDialogComponent, {
-      width: '250px'
+      width: '600px',
+      minWidth: '600px',  // Largeur minimale de 400px
+      maxWidth: '600px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log('Nouvel utilisateur:', result);
+        console.log('Nouvelle soutenance:', result);
         // Logic to add the user
       }
     });
   }
+
 }

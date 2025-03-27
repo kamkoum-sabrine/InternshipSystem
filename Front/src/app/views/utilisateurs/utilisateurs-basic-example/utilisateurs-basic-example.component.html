@@ -10,11 +10,12 @@
         <h5>{{ item.nom }} {{ item.prenom }}</h5>
         <p class="text-muted">Email: {{ item.email }}</p>
         <!-- <p class="text-muted">Date Registered: {{ item.createdAt }}</p> -->
-        <button cButton color="info" size="sm">
+        <!-- <button cButton color="info" size="sm" (click)="openDialogUpdate(item.id)">
           Modifier l'utilisateur
-        </button>
-        <button cButton class="ms-1" color="danger" size="sm" (click)="desactiverCompte(item.id)">
-          Désactiver le compte
+        </button> -->
+        <button cButton class="ms-1 text-white" [color]="getBadge(!item.active)" size="sm"
+          (click)="changerEtatCompte(item.id, item.active)">
+          {{ item.active ? 'Désactiver le compte' : 'Activer le compte' }}
         </button>
         <p class="text-muted">Date de création de compte: {{ item.createdAt | date }}</p>
 
@@ -28,7 +29,7 @@
       @switch (columnName) {
       @case ('active') {
       <c-badge [color]="getBadge(tdContent)">
-        {{ (item[columnName]) }}
+        {{ item.active ? 'Activé' : 'Désactivé' }}
       </c-badge>
       }
       @case ('show') {

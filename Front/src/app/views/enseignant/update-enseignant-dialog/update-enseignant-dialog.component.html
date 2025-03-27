@@ -1,0 +1,50 @@
+<c-row>
+    <c-col xs="12">
+        <c-card class="mb-4">
+            <c-card-header ngPreserveWhitespaces>
+                <strong>Modification de l'enseignant</strong>
+            </c-card-header>
+            <c-card-body>
+                <form (ngSubmit)="onSubmit()" cForm>
+
+                    <!-- Name Field -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="nom">Nom</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="enseignant.nom" name="nom" cFormControl id="nom" type="text"
+                                placeholder="Nom de l'enseignant" required />
+                        </c-col>
+                    </c-row>
+
+                    <!-- Name Field -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="prenom">Preom</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="enseignant.prenom" name="prenom" cFormControl id="prenom" type="text"
+                                placeholder="Prenom de l'enseignant" required />
+                        </c-col>
+                    </c-row>
+
+                    <!-- Email Field -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="email">Email</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="enseignant.email" name="email" cFormControl id="email" type="text"
+                                placeholder="Email de l'enseignant" required />
+                        </c-col>
+                    </c-row>
+
+                    <!-- Action Buttons -->
+                    <c-row class="mb-3">
+                        <c-col sm="12" class="d-flex justify-content-end">
+                            <button cButton class="me-3" color="danger" style="color: #ffffff;" type="button"
+                                (click)="onCancel()">Annuler</button>
+                            <button cButton color="info" style="color: #ffffff;" type="submit">Modifier</button>
+                        </c-col>
+                    </c-row>
+
+                </form>
+            </c-card-body>
+        </c-card>
+    </c-col>
+</c-row>

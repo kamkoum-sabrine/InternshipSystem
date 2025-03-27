@@ -20,13 +20,15 @@ public interface SoutenanceRepository extends JpaRepository<Soutenance,Long> {
 
     Optional<Soutenance> findSoutenanceByEncadrant(Enseignant encadrant) ;
 
+    Soutenance findSoutenanceById(Long id);
+
     @Query("SELECT s FROM Soutenance s " +
             "WHERE :enseignant MEMBER OF s.jury")
     Optional<Soutenance> findSoutenanceByJuryExists(@Param("enseignant") Enseignant enseignant);
 
 
     @Query("SELECT s FROM Soutenance s " +
-            "WHERE (:etudiantId IS NULL OR s.etudiantId = :etudiantId) " +
+            "WHERE (:etudiantId IS NULL OR s.etudiant.id = :etudiantId) " +
             "AND (:encadrantId IS NULL OR s.encadrant.id = :encadrantId) " +
             "AND (:date IS NULL OR s.date = :date)")
     List<Soutenance> rechercherSoutenances(@Param("etudiantId") Long etudiantId,

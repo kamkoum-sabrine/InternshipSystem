@@ -1,10 +1,102 @@
-<p (modalClose)="onModalClose()">
-<h2>Create New User</h2>
-<form>
-    <label for="name">Name</label>
-    <input id="name" type="text" />
-    <label for="email">Email</label>
-    <input id="email" type="email" />
-    <button type="submit">Submit</button>
-</form>
-<p>
+<c-row>
+    <c-col xs="12">
+        <c-card class="mb-4">
+            <c-card-header ngPreserveWhitespaces>
+                <strong>Création de la soutenance</strong>
+            </c-card-header>
+            <c-card-body>
+                <form (ngSubmit)="onSubmit()" cForm>
+
+                    <!-- Date Field -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="date">Date</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="soutenance.date" name="date" cFormControl id="date" type="date"
+                                placeholder="Date de la soutenance" required />
+                        </c-col>
+                    </c-row>
+
+                    <!-- Heure Field -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="heure">Heure</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="soutenance.heure" name="heure" cFormControl id="heure" type="time"
+                                placeholder="Heure de la soutenance" required />
+                        </c-col>
+                    </c-row>
+
+                    <!-- Salle Field -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="salle">Salle</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="soutenance.salle" name="salle" cFormControl id="salle" type="text"
+                                placeholder="Salle" required />
+                        </c-col>
+                    </c-row>
+
+                    <!-- Étudiant Field -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="etudiant">Étudiant</label>
+                        <c-col sm="10">
+                            <select [(ngModel)]="soutenance.etudiantId" name="etudiantId" id="etudiant"
+                                aria-label="Default select example" cSelect required>
+                                <option></option>
+                                <option *ngFor="let etudiant of etudiants" [value]="etudiant.id">{{ etudiant.nom }} {{
+                                    etudiant.prenom }}</option>
+                            </select>
+                        </c-col>
+                    </c-row>
+
+                    <!-- Encadrant Field -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="encadrant">Encadrant</label>
+                        <c-col sm="10">
+                            <select [(ngModel)]="soutenance.encadrantId" name="encadrantId" id="encadrant"
+                                aria-label="Default select example" cSelect required>
+                                <option></option>
+                                <option *ngFor="let encadrant of encadrants" [value]="encadrant.id">{{ encadrant.nom }}
+                                    {{encadrant.prenom }}
+                                </option>
+                            </select>
+                        </c-col>
+                    </c-row>
+
+                    <!-- Jury Fields -->
+                    <div>
+                        <c-row class="mb-3">
+                            <label cLabel class="col-sm-2 col-form-label" for="jury">Jury</label>
+                            <c-col class="mb-1" lg="10" md="6">
+                                <!-- c-multi-select pour permettre la sélection multiple -->
+                                <c-multi-select [(ngModel)]="soutenance.juryIds" name="juryIds" id="jury" multiple
+                                    optionsStyle="text" selectionType="tags">
+                                    <c-multi-select-option *ngFor="let encadrant of encadrants" [value]="encadrant.id">
+                                        {{ encadrant.nom }} {{ encadrant.prenom }}
+                                    </c-multi-select-option>
+                                </c-multi-select>
+                            </c-col>
+                        </c-row>
+                    </div>
+
+                    <!-- Sujet Field -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="sujet">Sujet</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="soutenance.sujet" name="sujet" cFormControl id="sujet" type="text"
+                                placeholder="Sujet de la soutenance" required />
+                        </c-col>
+                    </c-row>
+
+                    <!-- Action Buttons -->
+                    <c-row class="mb-3">
+                        <c-col sm="12" class="d-flex justify-content-end">
+                            <button cButton class="me-3" color="danger" type="button" style="color: #ffffff;"
+                                (click)="onNoClick()">Annuler</button>
+                            <button cButton color="info" style="color: #ffffff;" type="submit">Soumettre</button>
+                        </c-col>
+                    </c-row>
+
+                </form>
+            </c-card-body>
+        </c-card>
+    </c-col>
+</c-row>

@@ -1,7 +1,14 @@
 package com.example.Back.Auth.Config;
 
+
 import com.example.Back.Entreprises.Models.Entreprise;
 import com.example.Back.Entreprises.Repositories.EntreprisesRepository;
+
+import com.example.Back.Soutenance.Model.Enseignant;
+import com.example.Back.Soutenance.Model.Soutenance;
+import com.example.Back.Soutenance.Repository.EnseignantRepository;
+import com.example.Back.Soutenance.Repository.SoutenanceRepository;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +19,10 @@ import com.example.Back.Auth.Repositories.UserRepository;
 
 import jakarta.transaction.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -31,11 +41,17 @@ public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final EntreprisesRepository entreprisesRepository;
-    public DataInitializer(UserRepository userRepository, RoleRepository roleRepository,EntreprisesRepository entreprisesRepository) {
+    private final EnseignantRepository enseignantRepository;
+    private final SoutenanceRepository soutenanceRepository;
+
+   
+
+    public DataInitializer(UserRepository userRepository, RoleRepository roleRepository, EnseignantRepository enseignantRepository, SoutenanceRepository soutenanceRepository,EntreprisesRepository entreprisesRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.entreprisesRepository = entreprisesRepository;
+        this.enseignantRepository = enseignantRepository;
+        this.soutenanceRepository = soutenanceRepository;
+    this.entreprisesRepository = entreprisesRepository;
     }
 
     @Override
@@ -53,20 +69,91 @@ public class DataInitializer implements CommandLineRunner {
             roleRepository.save(directionRole);
             roleRepository.save(etudiantRole);
 
-            User superAdminUser = new User(null, "Kamkoum", "Sabrine", "kamkoumsabrine@gmail.com", "password",
+            User superAdminUser = new User(null, "Kamkoum", "Sabrine", "kamkoumsabrine@gmail.com",123456,null, "password",
                     adminRole, false, LocalDateTime.now());
-            User directionStageUser = new User(null, "Salhi", "Houssem", "salhihoussem@gmail.com", "password",
+            User directionStageUser = new User(null, "Salhi", "Houssem", "salhihoussem@gmail.com",21212,null, "password",
                     directionRole,
                     false,LocalDateTime.now());
-            User serviceStageUser = new User(null, "Toumi", "Mahdi", "toumimahdi@gmail.com", "password", serviceRole,
+            User serviceStageUser = new User(null, "Toumi", "Mahdi", "toumimahdi@gmail.com",2145412,null, "password", serviceRole,
                     false,LocalDateTime.now());
-            User etudiantUser = new User(null, "Ahmed", "Ahmed", "ahmedahmed@gmail.com", "password", etudiantRole,
+            User etudiantUser = new User(null, "Ahmed", "Ahmed", "ahmedahmed@gmail.com",5656565,"Genie informatique", "password", etudiantRole,
+                    false,LocalDateTime.now());
+            User etudiantUser1 = new User(null, "Amine", "Amine", "Amineamine@gmail.com",123456,null, "password", etudiantRole,
+                    false,LocalDateTime.now());
+            User etudiantUser2 = new User(null, "Mahdi", "Mahdi", "Mahdimahdi@gmail.com",123456,null, "password", etudiantRole,
+                    false,LocalDateTime.now());
+            User etudiantUser3 = new User(null, "Sabrine", "Sabrine", "Sabrinesabroucha@gmail.com",123456,null, "password", etudiantRole,
+                    false,LocalDateTime.now());
+            User etudiantUser4 = new User(null, "Salhi", "Hama", "HamaSalhi@gmail.com",123456,null, "password", etudiantRole,
                     false,LocalDateTime.now());
 
             userRepository.save(superAdminUser);
             userRepository.save(directionStageUser);
             userRepository.save(serviceStageUser);
             userRepository.save(etudiantUser);
+            userRepository.save(etudiantUser1);
+            userRepository.save(etudiantUser2);
+            userRepository.save(etudiantUser3);
+            userRepository.save(etudiantUser4);
+
+            Enseignant e1 = new Enseignant("Mahdi", "Toumi", "Mahdi.Toumi");
+            Enseignant e2 = new Enseignant("Ahmed", "Toumi", "Ahmed.Toumi");
+            Enseignant e3 = new Enseignant("Hama", "Toumi", "Hama.Toumi");
+            Enseignant e4 = new Enseignant("Sabrine", "Toumi", "Sabrine.Toumi");
+            enseignantRepository.saveAll(List.of(e1, e2, e3, e4));
+
+            // Save Soutenance entities
+            Soutenance S1 = new Soutenance(
+                    LocalDate.of(2025, 12, 12),
+                    5,
+                    LocalTime.of(10, 30),
+                    etudiantUser,
+                    e4, // Use the saved Enseignant entity
+                    List.of(e2, e3), // Use the saved Enseignant entities
+                    "Conception"
+            );
+
+            Soutenance S2 = new Soutenance(
+                    LocalDate.of(2025, 11, 20),
+                    3,
+                    LocalTime.of(14, 00),
+                    etudiantUser1,
+                    e1, // Use the saved Enseignant entity
+                    List.of(e2, e3), // Use the saved Enseignant entities
+                    "Machine Learning"
+            );
+
+            Soutenance S3 = new Soutenance(
+                    LocalDate.of(2025, 10, 5),
+                    2,
+                    LocalTime.of(9, 00),
+                    etudiantUser2,
+                    e3, // Use the saved Enseignant entity
+                    List.of(e1, e4), // Use the saved Enseignant entities
+                    "Blockchain Security"
+            );
+
+            Soutenance S4 = new Soutenance(
+                    LocalDate.of(2025, 9, 18),
+                    4,
+                    LocalTime.of(13, 45),
+                    etudiantUser3,
+                    e3, // Use the saved Enseignant entity
+                    List.of(e2, e1), // Use the saved Enseignant entities
+                    "Big Data Analysis"
+            );
+
+            Soutenance S5 = new Soutenance(
+                    LocalDate.of(2025, 8, 10),
+                    1,
+                    LocalTime.of(15, 30),
+                    etudiantUser4,
+                    e2, // Use the saved Enseignant entity
+                    List.of(e3, e4), // Use the saved Enseignant entities
+                    "AI in Healthcare"
+            );
+
+            soutenanceRepository.saveAll(List.of(S1, S2, S3, S4, S5));
 
             System.out.println("Données initiales insérées !");
             if (entreprisesRepository.count() == 0) {

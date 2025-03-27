@@ -38,6 +38,12 @@ export const navItems: INavData[] = [
     }
   },
   {
+    name: 'Enseignants',
+    url: '/enseignants',
+    iconComponent: { name: 'cil-graduation' },
+
+  },
+  {
     title: true,
     name: 'Theme'
   },

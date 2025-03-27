@@ -1,15 +1,17 @@
 package com.example.Back.Soutenance.Controller;
 
 
+import com.example.Back.Soutenance.DTO.SoutenanceDTO;
 import com.example.Back.Soutenance.Model.Enseignant;
 import com.example.Back.Soutenance.Service.EnseignantService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/enseingnant")
+@RequestMapping(path = "api/enseignant")
 public class EnseignantController {
 
     private final EnseignantService enseignantService;
@@ -25,6 +27,11 @@ public class EnseignantController {
         return enseignantService.getEnseignants();
     }
 
+    @GetMapping(path = "{id}")
+    public Enseignant getEnseignantById(@PathVariable("id") Long id) {
+        return enseignantService.getEnseignantsById(id);
+    }
+
     @PostMapping
     public void addEnseignant(@RequestBody Enseignant enseignant) {
         enseignantService.addEnseignant(enseignant);
@@ -37,13 +44,10 @@ public class EnseignantController {
     }
 
     @PutMapping(path = "{id}")
-    public void updateEnseignant(@PathVariable("id") Long id,
-                                 @RequestParam (required = false) String nom,
-                                 @RequestParam (required = false) String prenom,
-                                 @RequestParam (required = false) String email
+    public void updateEnseignant(@PathVariable("id") Long id,@Valid @RequestBody Enseignant enseignant
                                  )
     {
-            enseignantService.editEnseignant(id,nom,prenom,email) ;
+            enseignantService.editEnseignant(id,enseignant) ;
 
     }
 }
