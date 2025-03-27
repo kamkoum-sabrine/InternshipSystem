@@ -109,19 +109,24 @@
       </div>
 
       <label>Téléphone:</label>
-      <input type="text" [(ngModel)]="editedEntreprise.telephone" name="telephone" required pattern="[0-9]{8,}" #editTelephone="ngModel" 
-             (input)="editTelephone.touched = true" (blur)="editTelephone.touched = true" />
+      <input type="text" [(ngModel)]="editedEntreprise.telephone" name="telephone" 
+             required pattern="[0-9]{8,}" #editTelephone="ngModel"
+             (blur)="editTelephone.control.markAsTouched()" />
+             
       <div *ngIf="editTelephone.invalid && (editTelephone.dirty || editTelephone.touched)" class="text-danger">
         <div *ngIf="editTelephone.errors?.['required']">Le téléphone est obligatoire</div>
         <div *ngIf="editTelephone.errors?.['pattern']">Le téléphone doit contenir au moins 8 chiffres</div>
       </div>
-      <div *ngIf="editTelephone.valid && editTelephone.touched && telephoneExisteDejaPourAutreEntreprise(editedEntreprise.id, editedEntreprise.telephone)" class="text-danger">
-        Ce numéro de téléphone est déjà utilisé
+      
+      <div *ngIf="editTelephone.valid && editTelephone.touched && telephoneExisteDejaPourAutreEntreprise(editedEntreprise.id, editedEntreprise.telephone)" 
+           class="text-danger">
+        Ce numéro de téléphone est déjà utilisé par une autre entreprise
       </div>
 
       <div class="modal-actions">
         <button type="button" (click)="mettreAJourEntreprise()" class="btn btn-success" 
         [disabled]="editForm.invalid || 
+                   emailExisteDejaPourAutreEntreprise(editedEntreprise.id, editedEntreprise.email) ||
                    telephoneExisteDejaPourAutreEntreprise(editedEntreprise.id, editedEntreprise.telephone)">
   Mettre à jour
 </button>

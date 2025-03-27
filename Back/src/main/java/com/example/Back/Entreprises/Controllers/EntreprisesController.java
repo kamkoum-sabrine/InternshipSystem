@@ -21,6 +21,7 @@ public class EntreprisesController {
     public void createEntreprise(@RequestBody Entreprise entreprise) {
        this.entreprisesService.addEntreprise(entreprise);
     }
+
     @GetMapping
     public List<Entreprise> getAllEntreprises() {
        return this.entreprisesService.getAllEntreprises();

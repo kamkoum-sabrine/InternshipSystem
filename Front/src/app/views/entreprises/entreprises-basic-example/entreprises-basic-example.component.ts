@@ -175,6 +175,7 @@ ajouterEntreprise() {
     return;
   }
 
+
   console.log("🔍 Tentative de mise à jour :", this.editedEntreprise);
 
   this.entrepriseService.updateEntreprise(this.editedEntreprise.id, this.editedEntreprise).subscribe(
@@ -238,12 +239,28 @@ emailExisteDeja(email: string): boolean {
 }
 // Ajoutez ces méthodes dans la classe EntreprisesBasicExampleComponent
 telephoneExisteDejaPourAutreEntreprise(id: number, telephone: string): boolean {
-  return this.entreprises.some(entreprise => 
-    entreprise.id !== id && 
-    entreprise.telephone === telephone
-  );
+  console.log('Checking phone:', telephone, 'for id:', id);
+  console.log('All phones:', this.entreprises.map(e => ({id: e.id, tel: e.telephone})));
+  
+  if (!telephone) return false;
+  
+  const normalizedTel = telephone.toString().trim().replace(/\D/g, '');
+  
+  const exists = this.entreprises.some(entreprise => {
+    if (entreprise.id === id) return false;
+    
+    const existingTel = entreprise.telephone.toString().trim().replace(/\D/g, '');
+    console.log(`Comparing ${normalizedTel} with ${existingTel} (id: ${entreprise.id})`);
+    return existingTel === normalizedTel;
+  });
+  
+  console.log('Result:', exists);
+  return exists;
 }
-
+onTelephoneBlur() {
+  // Cette méthode permet de marquer le champ comme touched sans modifier directement la propriété
+  // Le blur natif du champ suffira à marquer le champ comme touched
+}
 // Vérifie si l'email existe déjà pour une autre entreprise
 emailExisteDejaPourAutreEntreprise(id: number, email: string): boolean {
   return this.entreprises.some(entreprise => 
