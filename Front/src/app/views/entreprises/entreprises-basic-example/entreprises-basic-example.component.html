@@ -1,15 +1,17 @@
-<!-- Bouton Ajouter Entreprise -->
 <button class="btn btn-primary mb-3" (click)="ouvrirModal()">Ajouter Entreprise</button>
 
 <!-- Smart Table -->
-<c-smart-table *ngIf="entreprises && entreprises.length > 0" [activePage]="1" [columnSorter]="true" 
-  [columns]="columns" [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="5" 
-  [items]="entreprises" [sorterValue]="{ column: 'nom', state: 'asc' }"
+<c-smart-table *ngIf="entreprises && entreprises.length > 0"
+  (rowClick)="ouvrirModalActions($event)"
+  [activePage]="1" [columnSorter]="true" 
+  [columns]="columns" [columnFilter]="true" [itemsPerPageSelect]="true" 
+  [itemsPerPage]="5" [items]="entreprises" 
+  [sorterValue]="{ column: 'nom', state: 'asc' }"
   [tableFilter]="true" [tableProps]="{ hover: true, striped: true, responsive: true }" 
   [tableBodyProps]="{ align: 'middle' }" cleaner footer header pagination>
 </c-smart-table>
 
-<!-- Modal -->
+<!-- Modal d'ajout -->
 <div *ngIf="modalOuvert" class="modal-overlay">
   <div class="modal-content">
     <h3>Ajouter une entreprise</h3>
@@ -31,5 +33,55 @@
         <button type="button" (click)="fermerModal()" class="btn btn-secondary">Annuler</button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- Modal d'actions -->
+<div *ngIf="entrepriseSelectionnee" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Gérer l'entreprise</h3>
+    <p>Que souhaitez-vous faire avec cette entreprise ?</p>
+
+    <div class="modal-actions">
+      <button type="button" (click)="ouvrirModalEdition()" class="btn btn-info">Éditer</button>
+      <button type="button" (click)="ouvrirConfirmationSuppression()" class="btn btn-danger">Supprimer</button>
+      <button type="button" (click)="fermerModalActions()" class="btn btn-secondary">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal d'édition -->
+<div *ngIf="modalEditionOuvert" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Éditer l'entreprise</h3>
+    <form>
+      <label>Nom:</label>
+      <input type="text" [(ngModel)]="editedEntreprise.nom" name="nom" required />
+
+      <label>Adresse:</label>
+      <input type="text" [(ngModel)]="editedEntreprise.adresse" name="adresse" required />
+
+      <label>Email:</label>
+      <input type="email" [(ngModel)]="editedEntreprise.email" name="email" required />
+
+      <label>Téléphone:</label>
+      <input type="number" [(ngModel)]="editedEntreprise.telephone" name="telephone" required />
+
+      <div class="modal-actions">
+        <button type="button" (click)="mettreAJourEntreprise()" class="btn btn-success">Mettre à jour</button>
+        <button type="button" (click)="fermerModalEdition()" class="btn btn-secondary">Annuler</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Confirmation suppression -->
+<div *ngIf="confirmationSuppressionOuverte" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Êtes-vous sûr de vouloir supprimer cette entreprise ?</h3>
+    <div class="modal-actions">
+      <button type="button" (click)="confirmerSuppression()" class="btn btn-danger">Confirmer</button>
+      <button type="button" (click)="fermerConfirmationSuppression()" class="btn btn-secondary">Annuler</button>
+    </div>
   </div>
 </div>

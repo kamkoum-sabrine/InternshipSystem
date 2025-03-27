@@ -9,7 +9,7 @@ import { EntreprisesServiceService } from '../entreprises-service.service';
   templateUrl: './entreprises-basic-example.component.html',
   styleUrls: ['./entreprises-basic-example.component.scss'],
   standalone: true,
-  imports: [CommonModule, SmartTableComponent, FormsModule] // Ajout de FormsModule pour [(ngModel)]
+  imports: [CommonModule, SmartTableComponent, FormsModule]
 })
 export class EntreprisesBasicExampleComponent implements OnInit {
   @Input() entreprises: any[] = [];
@@ -19,7 +19,6 @@ export class EntreprisesBasicExampleComponent implements OnInit {
     { key: 'adresse', label: 'Adresse' },
     { key: 'email', label: 'Email' },
     { key: 'telephone', label: 'Téléphone' },
-    { key: 'actions', label: 'Actions' },
   ];
 
   newEntreprise = {
@@ -29,7 +28,21 @@ export class EntreprisesBasicExampleComponent implements OnInit {
     telephone: ''
   };
 
-  modalOuvert = false; // Gérer l'affichage du modal
+  editedEntreprise = {
+    id: 0,
+    nom: '',
+    adresse: '',
+    email: '',
+    telephone: ''
+  };
+
+  modalOuvert = false;
+  modalEditionOuvert = false;
+  entrepriseSelectionnee: any = null;
+  confirmationSuppressionOuverte = false;
+
+  doubleClickTimeout: any = null;
+  lastClickedId: number | null = null;
 
   constructor(private entrepriseService: EntreprisesServiceService) {}
 
@@ -37,49 +50,151 @@ export class EntreprisesBasicExampleComponent implements OnInit {
     console.log('Entreprises reçues du parent:', this.entreprises);
   }
 
-  // Ouvrir le modal
   ouvrirModal() {
+    console.log("🔍 Ouverture du modal d'ajout");
     this.modalOuvert = true;
   }
 
-  // Fermer le modal
   fermerModal() {
+    console.log("🔍 Fermeture du modal d'ajout");
     this.modalOuvert = false;
     this.newEntreprise = { nom: '', adresse: '', email: '', telephone: '' };
   }
 
-  // Ajouter une entreprise
- // Ajouter une entreprise
-ajouterEntreprise() {
-  console.log("Valeurs actuelles:", this.newEntreprise); // Debug
+  ajouterEntreprise() {
+    console.log("Valeurs actuelles:", this.newEntreprise);
 
-  // Vérifie si un champ est vide
-  if (Object.values(this.newEntreprise).some(value => !value?.toString().trim())) {
-    alert("Tous les champs sont obligatoires !");
-    return;
+    if (Object.values(this.newEntreprise).some(value => !value?.toString().trim())) {
+      alert("Tous les champs sont obligatoires !");
+      return;
+    }
+
+    console.log("🔍 Tentative d'ajout de l'entreprise :", this.newEntreprise);
+
+    this.entrepriseService.addEntreprise(this.newEntreprise).subscribe(
+      (data) => {
+        console.log("✅ Entreprise ajoutée :", data);
+        this.entreprises.push(data);
+        window.location.reload();
+
+        this.fermerModal();
+      },
+      (error) => {
+        console.error("❌ Erreur lors de l'ajout :", error);
+        alert("Erreur lors de l'ajout !");
+      }
+    );
   }
 
-  this.entrepriseService.addEntreprise(this.newEntreprise).subscribe(
-    (data) => {
-      this.entreprises.push(data); // Ajouter l'entreprise à la liste
-      this.fermerModal();
-    },
-    (error) => {
-      console.error("Erreur lors de l'ajout de l'entreprise :", error);
-      alert("Erreur lors de l'ajout !");
+  ouvrirModalActions(entreprise: any) {
+    const entrepriseId = entreprise.item.id;
+    if (this.lastClickedId === entrepriseId) {
+      // Double-clic détecté
+      console.log("🔍 Double-clic sur l'entreprise :", entreprise);
+      this.entrepriseSelectionnee = entreprise;
+    } else {
+      // Premier clic, enregistrer l'ID et attendre le second clic
+      this.lastClickedId = entrepriseId;
+
+      if (this.doubleClickTimeout) {
+        clearTimeout(this.doubleClickTimeout);  // Annuler le délai précédent si c'est un nouveau clic
+      }
+
+      // Attendre 300ms pour voir si c'est un double-clic
+      this.doubleClickTimeout = setTimeout(() => {
+        this.lastClickedId = null;  // Réinitialiser après le délai
+      }, 300);  // Délai de 300ms pour un double-clic
     }
-  );
-}
+  }
 
+  fermerModalActions() {
+    console.log("🔍 Fermeture du modal des actions");
+    this.entrepriseSelectionnee = null;
+  }
 
-  // Supprimer une entreprise
-  deleteEntreprise(id: number): void {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?')) {
-      this.entrepriseService.deleteEntreprise(id).subscribe(() => {
-        this.entreprises = this.entreprises.filter(entreprise => entreprise.id !== id);
-      }, error => {
-        console.error("Erreur lors de la suppression de l'entreprise:", error);
-      });
+  ouvrirModalEdition() {
+    if (this.entrepriseSelectionnee) {
+      this.editedEntreprise = {
+        id: this.entrepriseSelectionnee.item.id,
+        nom: this.entrepriseSelectionnee.item.nom,
+        adresse: this.entrepriseSelectionnee.item.adresse,
+        email: this.entrepriseSelectionnee.item.email,
+        telephone: this.entrepriseSelectionnee.item.telephone
+      };
+      this.modalEditionOuvert = true;
+    }
+  }
+
+  fermerModalEdition() {
+    console.log("🔍 Fermeture du modal d'édition");
+    this.modalEditionOuvert = false;
+    this.editedEntreprise = { id: 0, nom: '', adresse: '', email: '', telephone: '' };
+  }
+
+  mettreAJourEntreprise() {
+    if (Object.values(this.editedEntreprise).some(value => !value?.toString().trim())) {
+      alert("Tous les champs sont obligatoires !");
+      return;
+    }
+
+    if (!this.editedEntreprise.id) {
+      console.error("❌ ID invalide !");
+      return;
+    }
+
+    console.log("🔍 Tentative de mise à jour :", this.editedEntreprise);
+
+    this.entrepriseService.updateEntreprise(this.editedEntreprise.id, this.editedEntreprise).subscribe(
+      (data) => {
+        console.log("✅ Entreprise mise à jour :", data);
+        window.location.reload();
+
+        const index = this.entreprises.findIndex(e => e.id === this.editedEntreprise.id);
+        if (index !== -1) {
+          this.entreprises[index] = data;
+        }
+        this.fermerModalEdition();
+        this.fermerModalActions();
+      },
+      (error) => {
+        console.error("❌ Erreur lors de la mise à jour :", error);
+        alert("Erreur lors de la mise à jour !");
+      }
+    );
+  }
+
+  ouvrirConfirmationSuppression() {
+    console.log("🔍 Ouverture du modal de confirmation");
+    this.confirmationSuppressionOuverte = true;
+  }
+
+  fermerConfirmationSuppression() {
+    console.log("🔍 Fermeture du modal de confirmation");
+    this.confirmationSuppressionOuverte = false;
+  }
+
+  confirmerSuppression() {
+    if (this.entrepriseSelectionnee) {
+      const entrepriseId = this.entrepriseSelectionnee.item?.id;
+
+      console.log("🔍 Tentative de suppression - ID :", entrepriseId);
+
+      if (!entrepriseId) {
+        console.error("❌ Erreur : ID non défini !");
+        return;
+      }
+
+      this.entrepriseService.deleteEntreprise(entrepriseId).subscribe(
+        () => {
+          console.log("✅ Suppression réussie !");
+          this.entreprises = this.entreprises.filter(entreprise => entreprise.id !== entrepriseId);
+          this.fermerConfirmationSuppression();
+          this.fermerModalActions();
+        },
+        (error) => {
+          console.error("❌ Erreur lors de la suppression :", error);
+        }
+      );
     }
   }
 }
