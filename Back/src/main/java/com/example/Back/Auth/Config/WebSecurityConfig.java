@@ -38,12 +38,11 @@ public class WebSecurityConfig {
                 .sessionManagement(management -> management
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/activate",
-                                "/api/auth/desactivate","/api/entreprises","/api/auth/users","/api/auth/etudiants","/api/soutenance","/api/enseignant","/api/enseignant/**")
+                        .requestMatchers("/api/**","/api/auth/login", "/api/auth/register", "/api/auth/activate",
+                                "/api/auth/desactivate","/api/entreprises","/api/auth/users","/api/auth/etudiants","/api/soutenance","/api/enseignant/**")
 
                         .permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/soutenance/{id}").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/enseignant/{id}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/soutenance/{id}","/api/enseignant/{id}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/soutenance").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/soutenance/{id}").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/soutenance/{id}").permitAll()

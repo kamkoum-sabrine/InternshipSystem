@@ -32,19 +32,19 @@ export class EnseignantBasicExampleComponent implements OnInit {
     {
       key: 'nom',
       label: 'Nom',
-      _style: { width: '15%' },
+      _style: { width: '25%' },
       filter: true
     },
     {
       key: 'prenom',
       label: 'Prénom',
-      _style: { width: '15%' },
+      _style: { width: '25%' },
       filter: true
     },
     {
       key: 'email',
       label: 'Email',
-      _style: { width: '15%' },
+      _style: { width: '25%' },
       filter: true
     },
 
