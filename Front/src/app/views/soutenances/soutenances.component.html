@@ -4,17 +4,14 @@
       <c-card-header ngPreserveWhitespaces>
         <strong>Gérer </strong> <small>Les soutenances</small>
       </c-card-header>
+      <button mat-raised-button (click)="openDialog()">Ajouter une soutenance</button>
 
 
       <c-card-body>
-        <div *ngIf="users">
-          <!-- <app-docs-example href="components/smart-table" [users]="users"> -->
-          <app-soutenances-basic-example [users]="users" />
-          <!-- </app-docs-example> -->
+        <div *ngIf="soutenances">
+          <app-soutenances-basic-example [soutenances]="soutenances" />
         </div>
-        <!-- <app-docs-example href="components/smart-table">
-          <app-utilisateurs-basic-example [users]="users" />
-        </app-docs-example> -->
+
       </c-card-body>
     </c-card>
   </c-col>

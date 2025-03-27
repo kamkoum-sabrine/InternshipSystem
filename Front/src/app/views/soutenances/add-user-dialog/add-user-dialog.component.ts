@@ -8,6 +8,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, FormControlDirective, FormDirective, FormLabelDirective, FormSelectDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, ButtonDirective, ColDirective, InputGroupComponent, InputGroupTextDirective } from '@coreui/angular-pro';
+import {
+
+  MultiSelectComponent as MultiSelectComponent_1,
+  MultiSelectOptgroupComponent,
+  MultiSelectOptionComponent,
+
+} from '@coreui/angular-pro';
+import { GererSoutenancesService } from '../soutenances-basic-example/gerer-soutenances.service';
+
+
 @Component({
   selector: 'app-add-user-dialog',
   standalone: true,
@@ -17,50 +29,75 @@ import { FormsModule } from '@angular/forms';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    FormsModule
+    FormsModule,
+    RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, FormControlDirective, ReactiveFormsModule, FormsModule, FormDirective, FormLabelDirective, FormSelectDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, ButtonDirective, ColDirective, InputGroupComponent, InputGroupTextDirective,
+    RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, MultiSelectComponent_1, MultiSelectOptionComponent, MultiSelectOptgroupComponent
   ],
   templateUrl: './add-user-dialog.component.html',
   //styleUrls: ['./add-user-dialog.component.css']
 })
 export class AddUserDialogComponent {
-  // user = {
-  //   name: '',
-  //   email: ''
-  // };
 
-  // constructor(
-  //   public dialogRef: MatDialogRef<AddUserDialogComponent>,
-  //   @Inject(MAT_DIALOG_DATA) public data: any
-  // ) { }
+  etudiants: any[] = [];
+  encadrants: any[] = [];
+  jurys: any[] = [null];
 
-  // onNoClick(): void {
-  //   this.dialogRef.close();
-  // }
+  soutenance = {
+    date: '',
+    heure: '',
+    salle: '',
+    etudiantId: '',
+    encadrantId: '',
+    juryIds: [],
+    sujet: ''
+  };
 
-  // onSave(): void {
-  //   // Logic to save the user
-  //   console.log('User added:', this.user);
-  //   this.dialogRef.close(this.user);
-  // }
-  user = { nom: '', prenom: '', email: '' };
+  constructor(private gererSoutenancesService: GererSoutenancesService,
+    public dialogRef: MatDialogRef<AddUserDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) { }
 
-  constructor() { }
+  ngOnInit() {
+    this.gererSoutenancesService.getEtudiants().subscribe((data) => {
+      this.etudiants = data;
+    });
+    this.gererSoutenancesService.getEncadrants().subscribe((data) => {
+      this.encadrants = data;
+    });
 
-  // Ouvrir le modal
-  openModal() {
-    // Appel la méthode open() du modal
-    const modal = document.querySelector('app-modal') as any;
-    modal.open();
   }
 
-  onModalClose() {
-    // Action après la fermeture du modal
-    console.log('Modal fermé');
+  // Fermer le modal sans enregistrer
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
   // Soumettre le formulaire
-  onSubmit() {
-    console.log('Form submitted', this.user);
-    // Logique pour traiter le formulaire
+  onSubmit(): void {
+    console.log('Soutenance créée:', this.soutenance);
+
+    // Enregistrer la soutenance via le service
+    this.gererSoutenancesService.addSoutenance(this.soutenance).subscribe(
+      response => {
+        console.log('Soutenance enregistrée avec succès:', response);
+        this.dialogRef.close(this.soutenance);
+        window.location.reload();
+      },
+      error => {
+        console.error('Erreur lors de l\'enregistrement de la soutenance:', error);
+      }
+    );
+  }
+
+
+
+  // Ajouter un nouveau jury (ajouter un nouvel encadrant à la liste des jurys)
+  addJury() {
+    this.jurys.push(null);
+  }
+
+  // Supprimer un jury
+  removeJury(index: number) {
+    this.soutenance.juryIds.splice(index, 1);
   }
 }

@@ -19,6 +19,7 @@ public class EnseignantConfig {
     CommandLineRunner commandLineRunner(EnseignantRepository enseignantRepository, SoutenanceRepository soutenanceRepository) {
         return args -> {
             // Save Enseignant entities
+            /*
             Enseignant e1 = new Enseignant("Mahdi", "Toumi", "Mahdi.Toumi");
             Enseignant e2 = new Enseignant("Ahmed", "Toumi", "Ahmed.Toumi");
             Enseignant e3 = new Enseignant("Hama", "Toumi", "Hama.Toumi");
@@ -76,7 +77,7 @@ public class EnseignantConfig {
                     "AI in Healthcare"
             );
 
-            soutenanceRepository.saveAll(List.of(S1, S2, S3, S4, S5));
+            soutenanceRepository.saveAll(List.of(S1, S2, S3, S4, S5));*/
         };
     }
 }

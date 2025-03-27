@@ -1,0 +1,30 @@
+<c-card>
+    <c-card-header>
+        <strong>Jury</strong>
+    </c-card-header>
+    <c-card-body>
+
+
+        <c-row>
+            <c-col lg="12">
+                <c-card>
+                    <c-card-body>
+                        <ul [flush]="true" cListGroup *ngIf="jury.length > 0; else noJury">
+                            <li *ngFor="let juryMember of jury" cListGroupItem
+                                class="d-flex align-items-center     mb-2">
+                                {{ juryMember.nom }} {{ juryMember.prenom }}
+                            </li>
+                        </ul>
+                        <ng-template #noJury>
+                            <div class="text-muted fst-italic">Aucun jury sélectionné</div>
+                        </ng-template>
+                    </c-card-body>
+                </c-card>
+            </c-col>
+        </c-row>
+
+    </c-card-body>
+    <div class="d-flex justify-content-end mt-auto me-3">
+        <button cButton class="ms-1" color="danger" style="color: #ffffff;" size="sm" (click)="close()">Fermer</button>
+    </div>
+</c-card>

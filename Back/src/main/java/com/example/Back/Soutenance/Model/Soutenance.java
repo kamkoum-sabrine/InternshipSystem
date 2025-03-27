@@ -1,5 +1,6 @@
 package com.example.Back.Soutenance.Model;
 
+import com.example.Back.Auth.Models.User;
 import com.example.Back.Soutenance.Repository.EnseignantRepository;
 import jakarta.persistence.*;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -7,6 +8,8 @@ import org.antlr.v4.runtime.misc.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Entity
 public class Soutenance {
@@ -21,7 +24,9 @@ public class Soutenance {
 
     private int salle;
 
-    private Long etudiantId;
+    @ManyToOne
+    @JoinColumn(name = "etudiant_id")
+    private User etudiant;
 
     @ManyToOne
     @JoinColumn(name = "encadrant_id")
@@ -43,14 +48,17 @@ public class Soutenance {
     public Soutenance() {
     }
 
-    public Soutenance(LocalDate date, int salle, LocalTime heure, Long etudiantId, Enseignant encadrant ,List<Enseignant> jury, String sujet) {
+    public Soutenance(LocalDate date, int salle, LocalTime heure, User etudiant, Enseignant encadrant ,List<Enseignant> jury, String sujet) {
         this.date = date;
         this.salle = salle;
         this.heure = heure;
-        this.etudiantId = etudiantId;
+        this.etudiant = etudiant ;
         this.encadrant =  encadrant;
         this.jury = jury;
         this.sujet = sujet;
+    }
+
+    public Soutenance(LocalDate date, int salle, LocalTime heure, Optional<User> user, Enseignant encadrant, List<Enseignant> jury, String sujet) {
     }
 
     public Enseignant getEncadrant() {
@@ -85,12 +93,9 @@ public class Soutenance {
         return salle;
     }
 
-    public Long getEtudiantId() {
-        return etudiantId;
+    public User getEtudiant() {
+        return etudiant;
     }
-
-
-
 
 
     public String getSujet() {
@@ -113,9 +118,10 @@ public class Soutenance {
         this.salle = salle;
     }
 
-    public void setEtudiantId(Long etudiantId) {
-        this.etudiantId = etudiantId;
+    public void setEtudiant(User etudiant) {
+        this.etudiant = etudiant;
     }
+
 
 
     public void setSujet(String sujet) {
@@ -129,10 +135,12 @@ public class Soutenance {
                 ", date=" + date +
                 ", heure=" + heure +
                 ", salle=" + salle +
-                ", etudiantId=" + etudiantId +
+                ", etudiant=" + etudiant +
                 ", encadrant=" + encadrant +
                 ", jury=" + jury +
                 ", sujet='" + sujet + '\'' +
                 '}';
     }
+
+
 }

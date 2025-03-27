@@ -3,6 +3,7 @@ package com.example.Back.Auth.Controllers;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import com.example.Back.Soutenance.Model.Enseignant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,6 +37,8 @@ public class UserController {
     public UserController(MailService mailService) {
         this.mailService = mailService;
     }
+
+
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<Map<String, Object>> saveUser(@RequestBody UserDTO userDTO) {
@@ -161,8 +164,14 @@ public class UserController {
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
+
      @GetMapping("/userId/{id}")
     public Optional<User> getUserById(@PathVariable Long id) {
         return userService.findUserById(id);
+
+    @GetMapping("/etudiants")
+    public List<User> getAllEtudiants() {
+        return userService.getAlletudiants();
+
     }
 }

@@ -7,5 +7,14 @@ import { Observable } from 'rxjs';
 })
 export class SoutenancesServiceService {
 
+  private apiUrl = 'http://localhost:8081/api/soutenance';
+
+  constructor(private http: HttpClient) { }
+
+  getSoutenances(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}`);
+  }
+
+
 
 }
