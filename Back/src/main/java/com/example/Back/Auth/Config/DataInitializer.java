@@ -1,9 +1,14 @@
 package com.example.Back.Auth.Config;
 
+
+import com.example.Back.Entreprises.Models.Entreprise;
+import com.example.Back.Entreprises.Repositories.EntreprisesRepository;
+
 import com.example.Back.Soutenance.Model.Enseignant;
 import com.example.Back.Soutenance.Model.Soutenance;
 import com.example.Back.Soutenance.Repository.EnseignantRepository;
 import com.example.Back.Soutenance.Repository.SoutenanceRepository;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -39,11 +44,14 @@ public class DataInitializer implements CommandLineRunner {
     private final EnseignantRepository enseignantRepository;
     private final SoutenanceRepository soutenanceRepository;
 
-    public DataInitializer(UserRepository userRepository, RoleRepository roleRepository, EnseignantRepository enseignantRepository, SoutenanceRepository soutenanceRepository) {
+   
+
+    public DataInitializer(UserRepository userRepository, RoleRepository roleRepository, EnseignantRepository enseignantRepository, SoutenanceRepository soutenanceRepository,EntreprisesRepository entreprisesRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.enseignantRepository = enseignantRepository;
         this.soutenanceRepository = soutenanceRepository;
+    this.entreprisesRepository = entreprisesRepository;
     }
 
     @Override
@@ -148,6 +156,14 @@ public class DataInitializer implements CommandLineRunner {
             soutenanceRepository.saveAll(List.of(S1, S2, S3, S4, S5));
 
             System.out.println("Données initiales insérées !");
+            if (entreprisesRepository.count() == 0) {
+                Entreprise entreprise1 = new Entreprise(null, "TechCorp", "123 Rue de la Technologie", "contact@techcorp.com", 123456789L);
+                Entreprise entreprise2 = new Entreprise(null, "InnoSoft", "456 Avenue de l'Innovation", "contact@innosoft.com", 987654321L);
+
+                entreprisesRepository.save(entreprise1);
+                entreprisesRepository.save(entreprise2);
+
+                System.out.println("Entreprises initiales insérées !");
         }
     }
-}
+}}

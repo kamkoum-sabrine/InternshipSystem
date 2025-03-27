@@ -25,7 +25,27 @@ import { MatDialogModule } from '@angular/material/dialog';
   imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, DocsExampleComponent, EntreprisesBasicExampleComponent, MatDialogModule, MatButtonModule]
 })
 export class EntreprisesComponent {
-  users: any;
+  entreprises: any;
+  constructor(private entrepriseService: EntreprisesServiceService, public dialog: MatDialog) { }
+  ngOnInit(): void {
+    this.entrepriseService.getEntreprises().subscribe(data => {
+      this.entreprises = data;
+      console.log(this.entreprises);
+    });
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(AddUserDialogComponent, {
+      width: '250px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Nouvel utilisateur:', result);
+        // Logic to add the user
+      }
+    });
+  }
 
 
 }

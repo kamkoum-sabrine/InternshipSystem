@@ -1,56 +1,148 @@
-<c-smart-table *ngIf="users && users.length > 0" [activePage]="1" [columnSorter]="true" [columns]="columns"
-  [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="10" [items]="users"
-  [sorterValue]="{ column: 'name', state: 'asc' }" [tableFilter]="true"
-  [tableProps]="{ hover: true, striped: true, responsive: true }" [tableBodyProps]="{ align: 'middle' }" cleaner
-  clickableRows footer header pagination>
-  <ng-template cTemplateId="tableDetails" let-item="item">
+<button class="btn btn-primary mb-3" (click)="ouvrirModal()">Ajouter Entreprise</button>
 
-    <div [visible]="this.details_visible[item.id]===true" cCollapse>
-      <div class="card-body">
-        <h5>{{ item.nom }} {{ item.prenom }}</h5>
-        <p class="text-muted">Email: {{ item.email }}</p>
-        <!-- <p class="text-muted">Date Registered: {{ item.createdAt }}</p> -->
-        <button cButton color="info" size="sm">
-          Modifier l'utilisateur
-        </button>
-        <button cButton class="ms-1" color="danger" size="sm" (click)="desactiverCompte(item.id)">
-          Désactiver le compte
-        </button>
-        <p class="text-muted">Date de création de compte: {{ item.createdAt | date }}</p>
-
-      </div>
-    </div>
-  </ng-template>
-  <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
-    <td>
-
-      {{ (item[columnName]) }}
-
-    </td>
-  </ng-template>
-
-  <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
-    <td>
-      @switch (columnName) {
-      @case ('active') {
-      <c-badge [color]="getBadge(tdContent)">
-        {{ (item[columnName]) }}
-      </c-badge>
-      }
-      @case ('show') {
-      <button (click)="toggleDetails(item.id)" cButton color="primary" size="sm" variant="outline">
-        Détails
-      </button>
-      }
-      @case ('role') {
-      {{ item[columnName]?.nom }}
-      }
-
-      @default {
-
-      {{ item[columnName] }}
-      }
-      }
-    </td>
-  </ng-template> -->
+<!-- Smart Table -->
+<c-smart-table *ngIf="entreprises && entreprises.length > 0"
+  (rowClick)="ouvrirModalActions($event)"
+  [activePage]="1" [columnSorter]="true" 
+  [columns]="columns" [columnFilter]="true" [itemsPerPageSelect]="true" 
+  [itemsPerPage]="5" [items]="entreprises" 
+  [sorterValue]="{ column: 'nom', state: 'asc' }"
+  [tableFilter]="true" [tableProps]="{ hover: true, striped: true, responsive: true }" 
+  [tableBodyProps]="{ align: 'middle' }" cleaner footer header pagination>
 </c-smart-table>
+
+<!-- Modal d'ajout -->
+<div *ngIf="modalOuvert" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Ajouter une entreprise</h3>
+    <form #entrepriseForm="ngForm">
+      <label>Nom:</label>
+      <input type="text" [(ngModel)]="newEntreprise.nom" name="nom" required minlength="2" maxlength="50" #nom="ngModel" />
+      <div *ngIf="nom.invalid && (nom.dirty || nom.touched)" class="text-danger">
+        <div *ngIf="nom.errors?.['required']">Le nom est obligatoire</div>
+        <div *ngIf="nom.errors?.['minlength']">Le nom doit avoir au moins 2 caractères</div>
+        <div *ngIf="nom.errors?.['maxlength']">Le nom ne doit pas dépasser 50 caractères</div>
+      </div>
+
+      <label>Adresse:</label>
+      <input type="text" [(ngModel)]="newEntreprise.adresse" name="adresse" required minlength="5" maxlength="100" #adresse="ngModel" />
+      <div *ngIf="adresse.invalid && (adresse.dirty || adresse.touched)" class="text-danger">
+        <div *ngIf="adresse.errors?.['required']">L'adresse est obligatoire</div>
+        <div *ngIf="adresse.errors?.['minlength']">L'adresse doit avoir au moins 5 caractères</div>
+        <div *ngIf="adresse.errors?.['maxlength']">L'adresse ne doit pas dépasser 100 caractères</div>
+      </div>
+
+      <label>Email:</label>
+      <input type="email" [(ngModel)]="newEntreprise.email" name="email" required email #email="ngModel" (blur)="email.touched = true" />
+      <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
+        <div *ngIf="email.errors?.['required']">L'email est obligatoire</div>
+        <div *ngIf="email.errors?.['email']">Veuillez entrer un email valide</div>
+      </div>
+      <div *ngIf="email.valid && email.touched && emailExisteDeja(newEntreprise.email)" class="text-danger">
+        Cette adresse email est déjà utilisée
+      </div>
+
+      <label>Téléphone:</label>
+      <input type="text" [(ngModel)]="newEntreprise.telephone" name="telephone" required pattern="[0-9]{8,}" #telephone="ngModel" (blur)="telephone.touched = true" />
+      <div *ngIf="telephone.invalid && (telephone.dirty || telephone.touched)" class="text-danger">
+        <div *ngIf="telephone.errors?.['required']">Le téléphone est obligatoire</div>
+        <div *ngIf="telephone.errors?.['pattern']">Le téléphone doit contenir au moins 8 chiffres</div>
+      </div>
+      <div *ngIf="telephone.valid && telephone.touched && telephoneExisteDeja(newEntreprise.telephone)" class="text-danger">
+        Ce numéro de téléphone est déjà utilisé
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" (click)="ajouterEntreprise()" class="btn btn-success" 
+                [disabled]="entrepriseForm.invalid || emailExisteDeja(newEntreprise.email) || telephoneExisteDeja(newEntreprise.telephone)">
+          Ajouter
+        </button>
+        <button type="button" (click)="fermerModal()" class="btn btn-secondary">Annuler</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal d'actions -->
+<div *ngIf="entrepriseSelectionnee" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Gérer l'entreprise</h3>
+    <p>Que souhaitez-vous faire avec cette entreprise ?</p>
+
+    <div class="modal-actions">
+      <button type="button" (click)="ouvrirModalEdition()" class="btn btn-info">Éditer</button>
+      <button type="button" (click)="ouvrirConfirmationSuppression()" class="btn btn-danger">Supprimer</button>
+      <button type="button" (click)="fermerModalActions()" class="btn btn-secondary">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal d'édition -->
+<div *ngIf="modalEditionOuvert" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Éditer l'entreprise</h3>
+    <form #editForm="ngForm">
+      <label>Nom:</label>
+      <input type="text" [(ngModel)]="editedEntreprise.nom" name="nom" required minlength="2" maxlength="50" #editNom="ngModel" />
+      <div *ngIf="editNom.invalid && (editNom.dirty || editNom.touched)" class="text-danger">
+        <div *ngIf="editNom.errors?.['required']">Le nom est obligatoire</div>
+        <div *ngIf="editNom.errors?.['minlength']">Le nom doit avoir au moins 2 caractères</div>
+        <div *ngIf="editNom.errors?.['maxlength']">Le nom ne doit pas dépasser 50 caractères</div>
+      </div>
+
+      <label>Adresse:</label>
+      <input type="text" [(ngModel)]="editedEntreprise.adresse" name="adresse" required minlength="5" maxlength="100" #editAdresse="ngModel" />
+      <div *ngIf="editAdresse.invalid && (editAdresse.dirty || editAdresse.touched)" class="text-danger">
+        <div *ngIf="editAdresse.errors?.['required']">L'adresse est obligatoire</div>
+        <div *ngIf="editAdresse.errors?.['minlength']">L'adresse doit avoir au moins 5 caractères</div>
+        <div *ngIf="editAdresse.errors?.['maxlength']">L'adresse ne doit pas dépasser 100 caractères</div>
+      </div>
+
+      <label>Email:</label>
+      <input type="email" [(ngModel)]="editedEntreprise.email" name="email" required email #editEmail="ngModel" (blur)="editEmail.touched = true" />
+      <div *ngIf="editEmail.invalid && (editEmail.dirty || editEmail.touched)" class="text-danger">
+        <div *ngIf="editEmail.errors?.['required']">L'email est obligatoire</div>
+        <div *ngIf="editEmail.errors?.['email']">Veuillez entrer un email valide</div>
+      </div>
+      <div *ngIf="editEmail.valid && editEmail.touched && emailExisteDejaPourAutreEntreprise(editedEntreprise.id, editedEntreprise.email)" class="text-danger">
+        Cette adresse email est déjà utilisée
+      </div>
+
+      <label>Téléphone:</label>
+      <input type="text" [(ngModel)]="editedEntreprise.telephone" name="telephone" 
+             required pattern="[0-9]{8,}" #editTelephone="ngModel"
+             (blur)="editTelephone.control.markAsTouched()" />
+             
+      <div *ngIf="editTelephone.invalid && (editTelephone.dirty || editTelephone.touched)" class="text-danger">
+        <div *ngIf="editTelephone.errors?.['required']">Le téléphone est obligatoire</div>
+        <div *ngIf="editTelephone.errors?.['pattern']">Le téléphone doit contenir au moins 8 chiffres</div>
+      </div>
+      
+      <div *ngIf="editTelephone.valid && editTelephone.touched && telephoneExisteDejaPourAutreEntreprise(editedEntreprise.id, editedEntreprise.telephone)" 
+           class="text-danger">
+        Ce numéro de téléphone est déjà utilisé par une autre entreprise
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" (click)="mettreAJourEntreprise()" class="btn btn-success" 
+        [disabled]="editForm.invalid || 
+                   emailExisteDejaPourAutreEntreprise(editedEntreprise.id, editedEntreprise.email) ||
+                   telephoneExisteDejaPourAutreEntreprise(editedEntreprise.id, editedEntreprise.telephone)">
+  Mettre à jour
+</button>
+        <button type="button" (click)="fermerModalEdition()" class="btn btn-secondary">Annuler</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Confirmation suppression -->
+<div *ngIf="confirmationSuppressionOuverte" class="modal-overlay">
+  <div class="modal-content">
+    <h3>Êtes-vous sûr de vouloir supprimer cette entreprise ?</h3>
+    <div class="modal-actions">
+      <button type="button" (click)="confirmerSuppression()" class="btn btn-danger">Confirmer</button>
+      <button type="button" (click)="fermerConfirmationSuppression()" class="btn btn-secondary">Annuler</button>
+    </div>
+  </div>
+</div>

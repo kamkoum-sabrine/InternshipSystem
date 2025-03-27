@@ -25,22 +25,10 @@ public class Entreprise {
     private String email;
     @Column(nullable = false , unique = true)
     private Long telephone;
-    private int test;
 
     public Entreprise() {
 
     }
-    public void setTest(int test)
-    {
-        this.test = test;
 
-    }
-    public int getTest()
-    {
-        return test;
-    }
-    public int get_test()
-    {
-        return test;
-    }
+
 }
