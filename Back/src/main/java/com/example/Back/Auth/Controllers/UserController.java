@@ -78,7 +78,7 @@ public class UserController {
         userDTO.setPassword(randomPassword);
         // appUser.setPassword(WebSecurityConfig.passwordEncoder().encode(userDTO.getPassword()));
         // // Sécurisé
-        appUser.setActive(false);
+        appUser.setActive(true);
         appUser.setCreatedAt( LocalDateTime.now());
         appUser.setRole(roleRepository.findRoleByNom(userDTO.getRole()));
 
@@ -164,8 +164,15 @@ public class UserController {
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
+
+     @GetMapping("/userId/{id}")
+    public Optional<User> getUserById(@PathVariable Long id) {
+         return userService.findUserById(id);
+     }
+
     @GetMapping("/etudiants")
     public List<User> getAllEtudiants() {
         return userService.getAlletudiants();
+
     }
 }

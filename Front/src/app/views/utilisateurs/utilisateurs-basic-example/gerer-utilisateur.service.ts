@@ -7,11 +7,26 @@ import { Observable } from 'rxjs';
 })
 export class GererUtilisateurService {
 
-  private apiUrl = 'http://localhost:8081/api/auth';
+  private apiUrl = 'http://localhost:8081/api';
 
   constructor(private http: HttpClient) { }
 
   desactiverCompte(id: number): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/desactivate`, id);
+    return this.http.post<any>(`${this.apiUrl}/auth/desactivate`, id);
+  }
+  activerCompte(id: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/auth/activate`, id);
+  }
+
+  getAllRoles(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/roles/all`);
+  }
+
+  creerUtilisateur(utilisateur: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/auth/register`, utilisateur);
+  }
+
+  getUserById(id: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/auth/userId/${id}`);
   }
 }
