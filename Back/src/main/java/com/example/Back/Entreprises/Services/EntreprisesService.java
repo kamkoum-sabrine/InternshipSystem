@@ -18,44 +18,45 @@ public class EntreprisesService {
     }
 
     public void addEntreprise(Entreprise entreprise) {
-        // 1️⃣ Vérification que tous les champs sont remplis
+        // Vérification que les champs obligatoires ne sont pas vides
         if (entreprise.getNom() == null || entreprise.getNom().trim().isEmpty() ||
                 entreprise.getAdresse() == null || entreprise.getAdresse().trim().isEmpty() ||
                 entreprise.getEmail() == null || entreprise.getEmail().trim().isEmpty() ||
-                entreprise.getTelephone() == null) { // Vérification seulement null pour Long
+                entreprise.getTelephone() == null) {
             throw new IllegalArgumentException("Tous les champs sont obligatoires !");
         }
 
-        // 2️⃣ Vérification du format de l'email (doit être au format example@domaine.com ou autre extension)
+        // Vérification de la longueur du nom (au moins 2 caractères)
+        if (entreprise.getNom().trim().length() < 2) {
+            throw new IllegalArgumentException("Le nom doit contenir au moins 2 caractères !");
+        }
+
+        // Vérification de la longueur de l'adresse (au moins 5 caractères)
+        if (entreprise.getAdresse().trim().length() < 5) {
+            throw new IllegalArgumentException("L'adresse doit contenir au moins 5 caractères !");
+        }
+
+        // Vérification du format de l'email et de son unicité
         String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         if (!Pattern.matches(emailRegex, entreprise.getEmail())) {
-            throw new IllegalArgumentException("L'email doit être au format example@domaine.com !");
+            throw new IllegalArgumentException("L'email doit être au format valide (example@domaine.com) !");
+        }
+        if (entrepriseRepository.existsByEmail(entreprise.getEmail())) {
+            throw new IllegalArgumentException("Cet email est déjà utilisé par une autre entreprise !");
         }
 
-        // 3️⃣ Vérification du format du téléphone
-        if (entreprise.getTelephone() <= 0) {
-            throw new IllegalArgumentException("Le numéro de téléphone doit être un nombre positif !");
-        }
+        // Vérification du téléphone (au moins 8 chiffres et unicité)
         String telephoneStr = String.valueOf(entreprise.getTelephone());
-        if (telephoneStr.length() < 8 || telephoneStr.length() > 15) {
-            throw new IllegalArgumentException("Le numéro de téléphone doit contenir entre 8 et 15 chiffres !");
+        if (telephoneStr.length() < 8) {
+            throw new IllegalArgumentException("Le numéro de téléphone doit contenir au moins 8 chiffres !");
         }
-
-        // 5️⃣ Vérification si une entreprise existe déjà avec le même nom ET la même adresse
-        if (entrepriseRepository.existsByNomAndAdresse(entreprise.getNom(), entreprise.getAdresse())) {
-            throw new IllegalArgumentException("Cette entreprise existe déjà !");
-        }
-        // 4️⃣ Vérification de l'unicité du numéro de téléphone
         if (entrepriseRepository.existsByTelephone(entreprise.getTelephone())) {
-            throw new IllegalArgumentException("Ce numéro de téléphone existe déja !");
+            throw new IllegalArgumentException("Ce numéro de téléphone est déjà utilisé par une autre entreprise !");
         }
 
-
-        // 6️⃣ Sauvegarde de l'entreprise
+        // Sauvegarde de l'entreprise
         entrepriseRepository.save(entreprise);
     }
-    // Ajout de la méthode dans le service
-
 
     public List<Entreprise> getAllEntreprises() {
         return this.entrepriseRepository.findAll();
@@ -80,43 +81,47 @@ public class EntreprisesService {
             throw new IllegalArgumentException("Tous les champs sont obligatoires !");
         }
 
+        // Vérification de la longueur du nom (2-50 caractères)
+        if (updatedEntreprise.getNom().trim().length() < 2 || updatedEntreprise.getNom().trim().length() > 50) {
+            throw new IllegalArgumentException("Le nom doit contenir entre 2 et 50 caractères !");
+        }
+
+        // Vérification de la longueur de l'adresse (5-100 caractères)
+        if (updatedEntreprise.getAdresse().trim().length() < 5 || updatedEntreprise.getAdresse().trim().length() > 100) {
+            throw new IllegalArgumentException("L'adresse doit contenir entre 5 et 100 caractères !");
+        }
+
         // Vérification du format de l'email
         String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         if (!Pattern.matches(emailRegex, updatedEntreprise.getEmail())) {
-            throw new IllegalArgumentException("L'email doit être au format example@domaine.com !");
+            throw new IllegalArgumentException("L'email doit être au format valide (exemple@domaine.com) !");
         }
 
-        // Vérification du format du téléphone
-        if (updatedEntreprise.getTelephone() <= 0) {
-            throw new IllegalArgumentException("Le numéro de téléphone doit être un nombre positif !");
+        // Vérification de l'unicité de l'email (sauf pour l'entreprise actuelle)
+        if (!existingEntreprise.getEmail().equalsIgnoreCase(updatedEntreprise.getEmail()) &&
+                entrepriseRepository.existsByEmailIgnoreCase(updatedEntreprise.getEmail())) {
+            throw new IllegalArgumentException("Cette adresse email est déjà utilisée !");
         }
+
+        // Vérification du format du téléphone (au moins 8 chiffres)
         String telephoneStr = String.valueOf(updatedEntreprise.getTelephone());
-        if (telephoneStr.length() < 8 || telephoneStr.length() > 15) {
-            throw new IllegalArgumentException("Le numéro de téléphone doit contenir entre 8 et 15 chiffres !");
+        if (!telephoneStr.matches("\\d{8,}")) {
+            throw new IllegalArgumentException("Le téléphone doit contenir au moins 8 chiffres !");
         }
 
-        // Vérification de l'unicité du numéro de téléphone (uniquement si différent de l'ancien)
+        // Vérification de l'unicité du téléphone (sauf pour l'entreprise actuelle)
         if (!existingEntreprise.getTelephone().equals(updatedEntreprise.getTelephone()) &&
                 entrepriseRepository.existsByTelephone(updatedEntreprise.getTelephone())) {
-            throw new IllegalArgumentException("Ce numéro de téléphone existe déjà !");
-        }
-
-        // Vérification si une entreprise existe déjà avec le même nom et la même adresse (uniquement si différent de l'ancien)
-        if (!existingEntreprise.getNom().equals(updatedEntreprise.getNom()) ||
-                !existingEntreprise.getAdresse().equals(updatedEntreprise.getAdresse())) {
-            if (entrepriseRepository.existsByNomAndAdresse(updatedEntreprise.getNom(), updatedEntreprise.getAdresse())) {
-                throw new IllegalArgumentException("Une entreprise avec le même nom et la même adresse existe déjà !");
-            }
+            throw new IllegalArgumentException("Ce numéro de téléphone est déjà utilisé !");
         }
 
         // Mise à jour des champs
-        existingEntreprise.setNom(updatedEntreprise.getNom());
-        existingEntreprise.setAdresse(updatedEntreprise.getAdresse());
-        existingEntreprise.setEmail(updatedEntreprise.getEmail());
+        existingEntreprise.setNom(updatedEntreprise.getNom().trim());
+        existingEntreprise.setAdresse(updatedEntreprise.getAdresse().trim());
+        existingEntreprise.setEmail(updatedEntreprise.getEmail().trim());
         existingEntreprise.setTelephone(updatedEntreprise.getTelephone());
 
         // Sauvegarde de l'entreprise mise à jour
         entrepriseRepository.save(existingEntreprise);
     }
-
 }

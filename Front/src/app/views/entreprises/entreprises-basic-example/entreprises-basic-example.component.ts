@@ -61,30 +61,49 @@ export class EntreprisesBasicExampleComponent implements OnInit {
     this.newEntreprise = { nom: '', adresse: '', email: '', telephone: '' };
   }
 
-  ajouterEntreprise() {
-    console.log("Valeurs actuelles:", this.newEntreprise);
+  // Ajoutez cette méthode dans la classe EntreprisesBasicExampleComponent
+telephoneExisteDeja(telephone: string): boolean {
+  return this.entreprises.some(entreprise => 
+    entreprise.telephone === telephone
+  );
+}
 
-    if (Object.values(this.newEntreprise).some(value => !value?.toString().trim())) {
-      alert("Tous les champs sont obligatoires !");
-      return;
-    }
+// Modifiez la méthode ajouterEntreprise()
+ajouterEntreprise() {
+  console.log("Valeurs actuelles:", this.newEntreprise);
 
-    console.log("🔍 Tentative d'ajout de l'entreprise :", this.newEntreprise);
-
-    this.entrepriseService.addEntreprise(this.newEntreprise).subscribe(
-      (data) => {
-        console.log("✅ Entreprise ajoutée :", data);
-        this.entreprises.push(data);
-        window.location.reload();
-
-        this.fermerModal();
-      },
-      (error) => {
-        console.error("❌ Erreur lors de l'ajout :", error);
-        alert("Erreur lors de l'ajout !");
-      }
-    );
+  if (Object.values(this.newEntreprise).some(value => !value?.toString().trim())) {
+    alert("Tous les champs sont obligatoires !");
+    return;
   }
+
+  // Vérification de l'unicité de l'email
+  if (this.emailExisteDeja(this.newEntreprise.email)) {
+    alert("Cette adresse email est déjà utilisée par une autre entreprise !");
+    return;
+  }
+
+  // Vérification de l'unicité du téléphone
+  if (this.telephoneExisteDeja(this.newEntreprise.telephone)) {
+    alert("Ce numéro de téléphone est déjà utilisé par une autre entreprise !");
+    return;
+  }
+
+  console.log("🔍 Tentative d'ajout de l'entreprise :", this.newEntreprise);
+
+  this.entrepriseService.addEntreprise(this.newEntreprise).subscribe(
+    (data) => {
+      console.log("✅ Entreprise ajoutée :", data);
+      this.entreprises.push(data);
+      window.location.reload();
+      this.fermerModal();
+    },
+    (error) => {
+      console.error("❌ Erreur lors de l'ajout :", error);
+      alert("Erreur lors de l'ajout !");
+    }
+  );
+}
 
   ouvrirModalActions(entreprise: any) {
     const entrepriseId = entreprise.item.id;
@@ -131,37 +150,51 @@ export class EntreprisesBasicExampleComponent implements OnInit {
     this.editedEntreprise = { id: 0, nom: '', adresse: '', email: '', telephone: '' };
   }
 
-  mettreAJourEntreprise() {
-    if (Object.values(this.editedEntreprise).some(value => !value?.toString().trim())) {
-      alert("Tous les champs sont obligatoires !");
-      return;
-    }
-
-    if (!this.editedEntreprise.id) {
-      console.error("❌ ID invalide !");
-      return;
-    }
-
-    console.log("🔍 Tentative de mise à jour :", this.editedEntreprise);
-
-    this.entrepriseService.updateEntreprise(this.editedEntreprise.id, this.editedEntreprise).subscribe(
-      (data) => {
-        console.log("✅ Entreprise mise à jour :", data);
-        window.location.reload();
-
-        const index = this.entreprises.findIndex(e => e.id === this.editedEntreprise.id);
-        if (index !== -1) {
-          this.entreprises[index] = data;
-        }
-        this.fermerModalEdition();
-        this.fermerModalActions();
-      },
-      (error) => {
-        console.error("❌ Erreur lors de la mise à jour :", error);
-        alert("Erreur lors de la mise à jour !");
-      }
-    );
+ // Modifiez la méthode mettreAJourEntreprise()
+ mettreAJourEntreprise() {
+  // Vérification des champs obligatoires
+  if (Object.values(this.editedEntreprise).some(value => !value?.toString().trim())) {
+    alert("Tous les champs sont obligatoires !");
+    return;
   }
+
+  if (!this.editedEntreprise.id) {
+    console.error("❌ ID invalide !");
+    return;
+  }
+
+  // Vérification de l'unicité de l'email
+  if (this.emailExisteDejaPourAutreEntreprise(this.editedEntreprise.id, this.editedEntreprise.email)) {
+    alert("Cette adresse email est déjà utilisée par une autre entreprise !");
+    return;
+  }
+
+  // Vérification de l'unicité du téléphone
+  if (this.telephoneExisteDejaPourAutreEntreprise(this.editedEntreprise.id, this.editedEntreprise.telephone)) {
+    alert("Ce numéro de téléphone est déjà utilisé par une autre entreprise !");
+    return;
+  }
+
+  console.log("🔍 Tentative de mise à jour :", this.editedEntreprise);
+
+  this.entrepriseService.updateEntreprise(this.editedEntreprise.id, this.editedEntreprise).subscribe(
+    (data) => {
+      console.log("✅ Entreprise mise à jour :", data);
+      window.location.reload();
+
+      const index = this.entreprises.findIndex(e => e.id === this.editedEntreprise.id);
+      if (index !== -1) {
+        this.entreprises[index] = data;
+      }
+      this.fermerModalEdition();
+      this.fermerModalActions();
+    },
+    (error) => {
+      console.error("❌ Erreur lors de la mise à jour :", error);
+      alert("Erreur lors de la mise à jour !");
+    }
+  );
+}
 
   ouvrirConfirmationSuppression() {
     console.log("🔍 Ouverture du modal de confirmation");
@@ -197,4 +230,25 @@ export class EntreprisesBasicExampleComponent implements OnInit {
       );
     }
   }
+  // Ajoutez cette méthode dans la classe EntreprisesBasicExampleComponent
+emailExisteDeja(email: string): boolean {
+  return this.entreprises.some(entreprise => 
+    entreprise.email.toLowerCase() === email.toLowerCase()
+  );
+}
+// Ajoutez ces méthodes dans la classe EntreprisesBasicExampleComponent
+telephoneExisteDejaPourAutreEntreprise(id: number, telephone: string): boolean {
+  return this.entreprises.some(entreprise => 
+    entreprise.id !== id && 
+    entreprise.telephone === telephone
+  );
+}
+
+// Vérifie si l'email existe déjà pour une autre entreprise
+emailExisteDejaPourAutreEntreprise(id: number, email: string): boolean {
+  return this.entreprises.some(entreprise => 
+    entreprise.id !== id && 
+    entreprise.email.toLowerCase() === email.toLowerCase()
+  );
+}
 }
