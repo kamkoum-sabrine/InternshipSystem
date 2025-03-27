@@ -11,7 +11,6 @@ import {
 } from '@coreui/angular-pro';
 import Swal from 'sweetalert2';
 
-import soutenancesData from '../_data';
 import { GererSoutenancesService } from './gerer-soutenances.service';
 import { UpdateSoutenanceDialogComponent } from '../update-soutenance-dialog/update-soutenance-dialog.component';
 import { AfficherJuryDialogComponent } from '../afficher-jury-dialog/afficher-jury-dialog.component';
@@ -27,7 +26,6 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class SoutenancesBasicExampleComponent implements OnInit {
 
-  soutenancesData = soutenancesData;
   @Input() soutenances: any[] = [];
 
   columns: IColumn[] = [
@@ -70,7 +68,6 @@ export class SoutenancesBasicExampleComponent implements OnInit {
       sorter: false
     }
   ];
-  details_visible = Object.create({});
 
   constructor(private cdr: ChangeDetectorRef, private GererSoutenancesService: GererSoutenancesService, public dialog: MatDialog) { }
 
@@ -94,16 +91,7 @@ export class SoutenancesBasicExampleComponent implements OnInit {
   getItem(item: any) {
     console.log("item " + item)
   }
-  getBadge(status: boolean) {
-    switch (status) {
-      case true:
-        return 'success';
-      case false:
-        return 'danger';
-      default:
-        return 'primary';
-    }
-  }
+
 
 
 
