@@ -10,4 +10,9 @@ import { ContainerComponent, RowComponent, ColComponent, CardGroupComponent, Tex
   standalone: true,
   imports: [ContainerComponent, RowComponent, ColComponent, CardGroupComponent, TextColorDirective, CardComponent, CardBodyComponent, FormDirective, InputGroupComponent, InputGroupTextDirective, IconDirective, FormControlDirective, ButtonDirective, NgStyle]
 })
-export class LoginComponent {}
+export class LoginComponent {
+
+  login() {
+    console.log("to dash")
+  }
+}
