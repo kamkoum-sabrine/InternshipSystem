@@ -43,6 +43,7 @@ public class DataInitializer implements CommandLineRunner {
     private final RoleRepository roleRepository;
     private final EnseignantRepository enseignantRepository;
     private final SoutenanceRepository soutenanceRepository;
+    private final EntreprisesRepository entreprisesRepository;
 
    
 
