@@ -27,6 +27,9 @@ public class User {
     private String prenom;
     @Column(unique = true)
     private String email;
+    private Integer cin;
+    @Column(nullable = true)
+    private String filiere;
     private String password;
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)

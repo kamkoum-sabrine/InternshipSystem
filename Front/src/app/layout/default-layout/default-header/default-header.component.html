@@ -1,17 +1,11 @@
 <!--<c-header class="mb-4 d-print-none" position="sticky">-->
 <ng-container>
   <c-container [fluid]="true" class="border-bottom px-4">
-    <button
-      [cSidebarToggle]="sidebarId()"
-      cHeaderToggler
-      class="btn"
-      toggle="visible"
-      style="margin-inline-start: -14px;"
-      aria-label="Toggle sidebar navigation"
-    >
+    <button [cSidebarToggle]="sidebarId()" cHeaderToggler class="btn" toggle="visible"
+      style="margin-inline-start: -14px;" aria-label="Toggle sidebar navigation">
       <svg cIcon name="cilMenu" size="lg"></svg>
     </button>
-    <c-header-nav class="d-none d-md-flex">
+    <!-- <c-header-nav class="d-none d-md-flex">
       <c-nav-item>
         <a cNavLink routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
       </c-nav-item>
@@ -21,7 +15,7 @@
       <c-nav-item>
         <a cNavLink routerLink="/settings" routerLinkActive="active">Settings</a>
       </c-nav-item>
-    </c-header-nav>
+    </c-header-nav> -->
 
     <c-header-nav class="d-none d-md-flex ms-auto ">
       <ng-container *ngTemplateOutlet="notifyDropdown" />
@@ -45,12 +39,7 @@
     </c-header-nav>
 
     <!--aside toggler-->
-    <button
-      cHeaderToggler
-      cSidebarToggle="aside1"
-      style="margin-inline-end: -12px"
-      toggle="visible"
-    >
+    <button cHeaderToggler cSidebarToggle="aside1" style="margin-inline-end: -12px" toggle="visible">
       <svg cIcon name="cilApplicationsSettings" size="lg"></svg>
     </button>
   </c-container>
@@ -63,14 +52,8 @@
 <ng-template #userDropdown>
   <c-dropdown [popperOptions]="{ placement: 'bottom-start' }" variant="nav-item">
     <button [caret]="false" cDropdownToggle class="py-0" aria-label="Open user menu">
-      <c-avatar
-        shape="rounded-1"
-        size="md"
-        src="./assets/images/avatars/8.jpg"
-        status="success"
-        textColor="primary"
-        alt="User avatar"
-      />
+      <c-avatar shape="rounded-1" size="md" src="./assets/images/avatars/8.jpg" status="success" textColor="primary"
+        alt="User avatar" />
     </button>
     <ul cDropdownMenu class="pt-0 w-auto">
       <li>
@@ -168,13 +151,9 @@
     <button [caret]="false" cDropdownToggle>
       <svg cIcon class="my-1 mx-2" name="cilEnvelopeOpen" size="lg"></svg>
       @if (newMessages?.length) {
-        <c-badge
-          class="position-absolute top-0 end-0"
-          color="info-gradient"
-          shape="rounded-pill"
-        >
-          {{ newMessages?.length ?? 0 }}
-        </c-badge>
+      <c-badge class="position-absolute top-0 end-0" color="info-gradient" shape="rounded-pill">
+        {{ newMessages?.length ?? 0 }}
+      </c-badge>
       }
     </button>
     <div cDropdownMenu class="pt-0" [ngStyle]="{minWidth: '24rem'}">
@@ -182,30 +161,26 @@
         <span>You have {{ newMessages?.length ?? 0 }} messages</span>
       </h6>
       @for (message of newMessages; track message.id) {
-        <a cDropdownItem routerLink="{{message.link}}">
-          <div class="d-flex">
-            <c-avatar
-              size=""
-              src="./assets/images/avatars/{{message.avatar}}"
-              status="{{message.status}}"
-              class="flex-shrink-0 my-3 me-3" />
-            <div class="message text-wrap">
-              <div class="d-flex justify-content-between small text-body-secondary mt-1">
-                <div>{{ message.from }}</div>
-                <div>{{ message.time }}</div>
-              </div>
-              <div class="fw-semibold">
-                @if (message.id < 2) {
-                  <span class="text-danger me-1">!</span>
+      <a cDropdownItem routerLink="{{message.link}}">
+        <div class="d-flex">
+          <c-avatar size="" src="./assets/images/avatars/{{message.avatar}}" status="{{message.status}}"
+            class="flex-shrink-0 my-3 me-3" />
+          <div class="message text-wrap">
+            <div class="d-flex justify-content-between small text-body-secondary mt-1">
+              <div>{{ message.from }}</div>
+              <div>{{ message.time }}</div>
+            </div>
+            <div class="fw-semibold">
+              @if (message.id < 2) { <span class="text-danger me-1">!</span>
                 }
                 <span>{{ message.title }}</span>
-              </div>
-              <div class="small text-body-secondary">
-                {{ message.message }}
-              </div>
+            </div>
+            <div class="small text-body-secondary">
+              {{ message.message }}
             </div>
           </div>
-        </a>
+        </div>
+      </a>
       }
       <hr cDropdownDivider>
       <a cDropdownItem class="text-center fw-semibold" routerLink="apps/email/inbox">
@@ -220,13 +195,9 @@
     <button [caret]="false" cDropdownToggle>
       <svg cIcon class="my-1 mx-2" name="cilBell" size="lg"></svg>
       @if (newNotifications?.length) {
-        <c-badge
-          class="position-absolute top-0 end-0"
-          color="danger-gradient"
-          shape="rounded-pill"
-        >
-          {{ newNotifications?.length ?? 0 }}
-        </c-badge>
+      <c-badge class="position-absolute top-0 end-0" color="danger-gradient" shape="rounded-pill">
+        {{ newNotifications?.length ?? 0 }}
+      </c-badge>
       }
     </button>
     <div cDropdownMenu class="pt-0">
@@ -234,22 +205,22 @@
         <span>You have {{ newNotifications?.length ?? 0 }} notifications</span>
       </h6>
       @for (notification of newNotifications; track notification.id) {
-        <a cDropdownItem routerLink="">
-          <svg cIcon class="me-2 text-{{notification.color}}" name="{{notification.icon}}"></svg>
-          {{ notification.title }}
-        </a>
+      <a cDropdownItem routerLink="">
+        <svg cIcon class="me-2 text-{{notification.color}}" name="{{notification.icon}}"></svg>
+        {{ notification.title }}
+      </a>
       }
       <h6 cDropdownHeader class="bg-body-secondary text-body-secondary fw-semibold my-2">
         <span>Server</span>
       </h6>
       @for (status of newStatus; track status.id; let last = $last) {
-        <a cDropdownItem class="d-block {{last ? 'py-1' : 'py-2'}}" routerLink="">
-          <div class="text-uppercase small fw-semibold mb-1">
-            {{ status.title }}
-          </div>
-          <c-progress thin [value]="status.value" color="{{status.color}}-gradient" />
-          <div class="text-body-secondary small">{{ status.details }}</div>
-        </a>
+      <a cDropdownItem class="d-block {{last ? 'py-1' : 'py-2'}}" routerLink="">
+        <div class="text-uppercase small fw-semibold mb-1">
+          {{ status.title }}
+        </div>
+        <c-progress thin [value]="status.value" color="{{status.color}}-gradient" />
+        <div class="text-body-secondary small">{{ status.details }}</div>
+      </a>
       }
     </div>
   </c-dropdown>
@@ -260,13 +231,9 @@
     <button [caret]="false" cDropdownToggle href>
       <svg cIcon class="my-1 mx-2" name="cilList" size="lg"></svg>
       @if (newTasks?.length) {
-        <c-badge
-          class="position-absolute top-0 end-0"
-          color="warning-gradient"
-          shape="rounded-pill"
-        >
-          {{ newTasks.length ?? 0 }}
-        </c-badge>
+      <c-badge class="position-absolute top-0 end-0" color="warning-gradient" shape="rounded-pill">
+        {{ newTasks.length ?? 0 }}
+      </c-badge>
       }
     </button>
     <div cDropdownMenu class="pt-0">
@@ -274,13 +241,13 @@
         <span>You have {{ newTasks.length ?? 0 }} pending tasks</span>
       </h6>
       @for (task of newTasks; track task.id) {
-        <a cDropdownItem class="d-block py-2" routerLink="">
-          <div class="d-flex justify-content-between mb-1">
-            <span class="small">{{ task.title }} </span>
-            <span class="fw-semibold">{{ task.value }}%</span>
-          </div>
-          <c-progress thin [value]="task.value" color="{{task.color}}-gradient" />
-        </a>
+      <a cDropdownItem class="d-block py-2" routerLink="">
+        <div class="d-flex justify-content-between mb-1">
+          <span class="small">{{ task.title }} </span>
+          <span class="fw-semibold">{{ task.value }}%</span>
+        </div>
+        <c-progress thin [value]="task.value" color="{{task.color}}-gradient" />
+      </a>
       }
       <hr cDropdownDivider>
       <a cDropdownItem class="text-center fw-semibold" routerLink="">
@@ -306,15 +273,11 @@
     </button>
     <div cDropdownMenu>
       @for (mode of colorModes; track mode.name) {
-        <button
-          (click)="colorMode.set(mode.name)"
-          [active]="colorMode()===mode.name"
-          cDropdownItem
-          class="d-flex align-items-center"
-        >
-          <svg cIcon class="me-2" [name]="mode.icon" size="lg"></svg>
-          {{ mode.text }}
-        </button>
+      <button (click)="colorMode.set(mode.name)" [active]="colorMode()===mode.name" cDropdownItem
+        class="d-flex align-items-center">
+        <svg cIcon class="me-2" [name]="mode.icon" size="lg"></svg>
+        {{ mode.text }}
+      </button>
       }
     </div>
   </c-dropdown>

@@ -28,11 +28,15 @@ public class UserService {
         return userRepository.findAll();
     }
 
+
     public List<User> getAlletudiants() {
         return userRepository.getUsersByRole(roleRepository.findRoleByNom("Etudiant"));
     }
 
+
     public Optional<User> findUser(Long id) {
         return userRepository.findById(id);
     }
+
+    public Optional<User> findUserById(Long id) { return userRepository.findById(id);  }
 }
