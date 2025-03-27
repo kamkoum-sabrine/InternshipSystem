@@ -2,6 +2,7 @@ package com.example.Back.Auth.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,8 +39,10 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/activate",
-                                "/api/auth/desactivate","/api/entreprises","/api/auth/users")
+                                "/api/auth/desactivate","/api/entreprises","/api/auth/users","/api/roles/all")
                         .permitAll() // Routes
+
+                        .requestMatchers(HttpMethod.GET, "/api/auth/userId/{id}").permitAll()
                         // publiques
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Ajout du

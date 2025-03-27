@@ -1,45 +1,79 @@
-<form>
-    <div class="form-row">
-        <div class="form-group">
-            <label>Nom</label>
-            <input type="text" class="form-control" placeholder="Nom">
-        </div>
+<c-row>
+    <c-col xs="12">
+        <c-card class="mb-4">
+            <c-card-header ngPreserveWhitespaces>
+                <strong>Création d'un utilisateur</strong>
+            </c-card-header>
+            <c-card-body>
+                <form (ngSubmit)="onSubmit()" cForm>
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="nom">nom</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="utilisateur.nom" name="nom" cFormControl id="nom" type="text"
+                                placeholder="Nom" required />
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="prenom">prenom</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="utilisateur.prenom" name="prenom" cFormControl id="prenom" type="text"
+                                placeholder="Prenom" required />
+                        </c-col>
+                    </c-row>
+                    <!-- Salle Field -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="cin">CIN</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="utilisateur.cin" name="cin" cFormControl id="cin" type="text"
+                                placeholder="CIN" required />
+                        </c-col>
+                    </c-row>
 
-        <div class="form-group">
-            <label>Prénom</label>
-            <input type="text" class="form-control" placeholder="Prénom">
-        </div>
-    </div>
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="email">Email</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="utilisateur.email" name="email" cFormControl id="email" type="text"
+                                placeholder="Email" required />
+                        </c-col>
+                    </c-row>
 
-    <div class="form-row">
-        <div class="form-group">
-            <label>CIN</label>
-            <input type="text" class="form-control" placeholder="CIN">
-        </div>
 
-        <div class="form-group">
-            <label>Téléphone</label>
-            <input type="text" class="form-control" placeholder="Téléphone">
-        </div>
-    </div>
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="role">Role</label>
+                        <c-col sm="10">
+                            <select [(ngModel)]="utilisateur.role" name="role" id="role"
+                                aria-label="Default select example" cSelect required>
+                                <option></option>
+                                <option *ngFor="let role of roles" [value]="role.nom">{{ role.nom }}
+                                </option>
+                            </select>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-3" *ngIf="utilisateur.role === 'Etudiant'">
+                        <label cLabel class="col-sm-2 col-form-label" for="filiere">filiere</label>
+                        <c-col sm="10">
+                            <select [(ngModel)]="utilisateur.filiere" name="filiereId" id="filiere"
+                                aria-label="Default select example" cSelect required>
+                                <option></option>
+                                <option>Génie informatique</option>
+                                <option>Génie industrielle</option>
+                                <option>Génie mécatronique</option>
+                                <option>Génie infotronique</option>
 
-    <div class="form-row">
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" class="form-control" placeholder="Email">
-        </div>
+                            </select>
+                        </c-col>
+                    </c-row>
+                    <!-- Action Buttons -->
+                    <c-row class="mb-3">
+                        <c-col sm="12" class="d-flex justify-content-end">
+                            <button cButton class="me-3" color="danger" type="button" style="color: #ffffff;"
+                                (click)="onNoClick()">Annuler</button>
+                            <button cButton color="info" style="color: #ffffff;" type="submit">Soumettre</button>
+                        </c-col>
+                    </c-row>
 
-        <!-- Champs spécifiques -->
-        <div *ngIf="role === 'employee'" class="form-group">
-            <label>Direction de stage</label>
-            <input type="text" class="form-control" placeholder="Direction de stage">
-        </div>
-
-        <div *ngIf="role === 'student'" class="form-group">
-            <label>Service de stage</label>
-            <input type="text" class="form-control" placeholder="Service de stage">
-        </div>
-    </div>
-
-    <button type="submit" class="btn btn-success w-100">Créer un compte</button>
-</form>
+                </form>
+            </c-card-body>
+        </c-card>
+    </c-col>
+</c-row>

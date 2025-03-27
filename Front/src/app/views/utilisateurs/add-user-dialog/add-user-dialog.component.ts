@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { FormControlDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonDirective, CardBodyComponent, CardComponent, CardHeaderComponent, ColComponent, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, FormDirective, FormFeedbackComponent, FormLabelDirective, FormSelectDirective, InputGroupComponent, InputGroupTextDirective, ListGroupDirective, ListGroupItemDirective, RowComponent, TextColorDirective } from '@coreui/angular-pro';
 import { DocsExampleComponent } from '@docs-components/public-api';
+import { GererUtilisateurService } from '../utilisateurs-basic-example/gerer-utilisateur.service';
 @Component({
   selector: 'app-add-user-dialog',
   standalone: true,
@@ -26,63 +27,86 @@ import { DocsExampleComponent } from '@docs-components/public-api';
   styleUrls: ['./add-user-dialog.component.scss']
 })
 export class AddUserDialogComponent {
-  customStylesValidated = false;
-  browserDefaultsValidated = false;
-  tooltipValidated = false;
 
-  // user = {
-  //   name: '',
-  //   email: ''
-  // };
+  roles: any[] = [];
 
-  // constructor(
-  //   public dialogRef: MatDialogRef<AddUserDialogComponent>,
-  //   @Inject(MAT_DIALOG_DATA) public data: any
-  // ) { }
+  utilisateur = {
+    nom: '',
+    prenom: '',
+    email: '',
+    cin: '',
+    filiere: '',
+    role: ''
+  };
+  userId: any;
+  edit: any;
+  constructor(private gererUtilisateurService: GererUtilisateurService,
+    public dialogRef: MatDialogRef<AddUserDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {
+    // this.userId = data.utilisateur
+    // this.edit = data.edit
+    // console.log("TYPE de userId:", typeof this.userId);
+    // console.log("VALEUR de userId:", this.userId);
+    // if (data.utilisateur) {
+    //   console.log("undefiiiineeeeeed", this.userId)
+    //   this.userId = data.utilisateur
+    //   this.gererUtilisateurService.getUserById(this.userId).subscribe(data => {
+    //     this.utilisateur = data;
+    //     console.log('data', data)
+    //     console.log(this.utilisateur)
+    //   })
 
-  // onNoClick(): void {
-  //   this.dialogRef.close();
-  // }
+    // }
+    // else {
+    //   this.utilisateur = {
+    //     nom: '',
+    //     prenom: '',
+    //     email: '',
+    //     cin: '',
+    //     filiere: '',
+    //     role: ''
+    //   };
+    // }
 
-  // onSave(): void {
-  //   // Logic to save the user
-  //   console.log('User added:', this.user);
-  //   this.dialogRef.close(this.user);
-  // }
-  user = { nom: '', prenom: '', email: '' };
-
-  constructor() { }
-
-  // Ouvrir le modal
-  openModal() {
-    // Appel la méthode open() du modal
-    const modal = document.querySelector('app-modal') as any;
-    modal.open();
   }
 
-  onModalClose() {
-    // Action après la fermeture du modal
-    console.log('Modal fermé');
-  }
+  ngOnInit() {
 
 
-  onSubmit1() {
-    this.customStylesValidated = true;
-    console.log('Submit... 1');
+    console.log("userID", this.userId)
+
+    this.gererUtilisateurService.getAllRoles().subscribe((data) => {
+      this.roles = data;
+    });
+
   }
 
-  onReset1() {
-    this.customStylesValidated = false;
-    console.log('Reset... 1');
-  }
-  role: 'student' | 'employee' = 'student';
-
-  selectRole(role: 'student' | 'employee') {
-    this.role = role;
+  // Fermer le modal sans enregistrer
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
-  onSubmit() {
-    // Traitement de la création du compte ici
-    console.log('Formulaire soumis');
+  // Soumettre le formulaire
+  onSubmit(): void {
+    console.log('Utilisateur créée:', this.utilisateur);
+    if (this.edit != true) {
+      // Enregistrer la soutenance via le service
+      this.gererUtilisateurService.creerUtilisateur(this.utilisateur).subscribe(
+        response => {
+          console.log('Utilisateur crée avec succès:', response);
+          this.dialogRef.close(this.utilisateur);
+          window.location.reload();
+        },
+        error => {
+          console.error('Erreur lors de l\'enregistrement de l\'utilisateur: ', error);
+        }
+      );
+    }
+    else {
+      console.log("Ediiiiiiiiiiiiiit")
+    }
+
   }
+
 }

@@ -22,11 +22,14 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
     private String nom;
     private String prenom;
     @Column(unique = true)
     private String email;
+    private Integer cin;
+    @Column(nullable = true)
+    private String filiere;
     private String password;
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)

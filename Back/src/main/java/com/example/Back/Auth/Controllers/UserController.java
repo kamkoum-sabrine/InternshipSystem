@@ -75,7 +75,7 @@ public class UserController {
         userDTO.setPassword(randomPassword);
         // appUser.setPassword(WebSecurityConfig.passwordEncoder().encode(userDTO.getPassword()));
         // // Sécurisé
-        appUser.setActive(false);
+        appUser.setActive(true);
         appUser.setCreatedAt( LocalDateTime.now());
         appUser.setRole(roleRepository.findRoleByNom(userDTO.getRole()));
 
@@ -107,7 +107,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/activate", method = RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> activateAccount(@RequestBody Integer idUser) {
+    public ResponseEntity<Map<String, Object>> activateAccount(@RequestBody Long idUser) {
         Optional<User> user = userService.findUser(idUser);
         Map<String, Object> response = new HashMap<>();
 
@@ -133,7 +133,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/desactivate", method = RequestMethod.POST)
-    public ResponseEntity<Map<String, Object>> desactivateAccount(@RequestBody Integer idUser) {
+    public ResponseEntity<Map<String, Object>> desactivateAccount(@RequestBody Long idUser) {
         Optional<User> user = userService.findUser(idUser);
         Map<String, Object> response = new HashMap<>();
 
@@ -160,5 +160,9 @@ public class UserController {
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
+    }
+     @GetMapping("/userId/{id}")
+    public Optional<User> getUserById(@PathVariable Long id) {
+        return userService.findUserById(id);
     }
 }
