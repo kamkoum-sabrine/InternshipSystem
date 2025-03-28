@@ -57,7 +57,7 @@ export class EnseignantBasicExampleComponent implements OnInit {
     }
   ];
 
-  constructor(private gererEnseignatService: GererEnseignatService, private dialog: MatDialog, private cdr: ChangeDetectorRef) { }
+  constructor(private gererEnseignatService: GererEnseignatService, private dialog: MatDialog, private cdr: ChangeDetectorRef,private enseignantService : EnseignantService) { }
 
   ngOnInit() {
     console.log('Valeur reçue du parent:', this.Enseignants);
@@ -88,7 +88,7 @@ export class EnseignantBasicExampleComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         // L'événement est confirmé
-        this.gererEnseignatService.supprimerEnseignant(itemId).subscribe(data => {
+        this.enseignantService.supprimerEnseignant(itemId).subscribe(data => {
           console.log(data);
         });
         Swal.fire('Enseignant suprimeé !', '', 'success');

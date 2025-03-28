@@ -18,9 +18,7 @@ export class GererEnseignatService {
   }
 
   constructor(private http: HttpClient) { }
-  supprimerEnseignant(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/${id}`);
-  }
+  
 
   addEnseignant(enseignant: any): Observable<any> {
     return this.http.post<any>(this.apiUrl, enseignant);

@@ -40,15 +40,21 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(requests -> requests
 
                          .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/activate",
-                                "/api/auth/desactivate","/api/entreprises/**","/api/auth/users","/api/roles/all","/api/auth/etudiants","/api/soutenance","api/enseignant/**","api/enseignant/**")
+                                "/api/auth/desactivate","/api/entreprises/**","/api/auth/users","/api/roles/all","/api/auth/etudiants","/api/soutenance")
                        
                              
                         .permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/soutenance/{id}","/api/enseignant/{id}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/soutenance/{id}").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/soutenance").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/soutenance/{id}").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/soutenance/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/auth/userId/{id}").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/api/enseignant/{id}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/enseignant/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/enseignant/{id}").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/enseignant/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/enseignant").permitAll()
+
 
                         // publiques
                         .anyRequest().authenticated())

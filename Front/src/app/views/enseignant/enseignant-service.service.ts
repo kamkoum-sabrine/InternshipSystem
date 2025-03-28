@@ -14,7 +14,9 @@ export class EnseignantService {
   getEnseignants(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}`);
   }
-
+  supprimerEnseignant(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
 
 
 }
