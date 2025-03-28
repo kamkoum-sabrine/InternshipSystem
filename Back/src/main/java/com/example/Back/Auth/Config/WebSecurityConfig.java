@@ -3,8 +3,12 @@ package com.example.Back.Auth.Config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -31,6 +35,20 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+        return authProvider;
+    }
+
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Activer CORS
@@ -40,7 +58,8 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/activate",
 
-                                "/api/auth/desactivate","/api/entreprises","/api/auth/users","/api/roles/all","/api/auth/etudiants","/api/soutenance","api/enseingnant")                   
+                                "/api/auth/desactivate","/api/entreprises","/api/auth/users",
+                                "/api/auth/etudiants","/api/soutenance","api/enseingnant")
                        
                              
                         .permitAll()
@@ -50,6 +69,9 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/soutenance/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/auth/userId/{id}").permitAll()
                         // publiques
+
+                        // Routes protégées en fonction des rôles
+                        .requestMatchers("/api/roles/all").hasRole("SUPER_ADMINISTRATEUR") // Exemples de routes nécessitant le rôle ADMIN
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Ajout du
                                                                                                        // filtre JWT
