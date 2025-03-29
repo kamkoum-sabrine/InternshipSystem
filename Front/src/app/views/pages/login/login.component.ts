@@ -30,6 +30,7 @@ export class LoginComponent {
         console.log('Connexion réussie:', response);
         localStorage.setItem('token', response.token);
         localStorage.setItem('user', JSON.stringify(response.user));
+        window.location.replace('/#/dashboard');
         // Par exemple, rediriger vers une autre page après la connexion
         // this.router.navigate(['/dashboard']);
       },
