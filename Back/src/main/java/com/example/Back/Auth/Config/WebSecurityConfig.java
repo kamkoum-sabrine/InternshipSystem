@@ -56,7 +56,25 @@ public class WebSecurityConfig {
                 .sessionManagement(management -> management
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/activate",
+                        .requestMatchers("/api/login").permitAll()
+                        .requestMatchers("/api/roles/all").hasRole("SUPER_ADMINISTRATEUR")
+                        .requestMatchers("/api/users/register").hasRole("SUPER_ADMINISTRATEUR")
+                        .requestMatchers("/api/users/activate").hasRole("SUPER_ADMINISTRATEUR")
+                        .requestMatchers("/api/users/desactivate").hasRole("SUPER_ADMINISTRATEUR")
+
+                        .requestMatchers("/api/users/getAll").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/userId/{id}").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/users/etudiants").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+
+                        .requestMatchers(HttpMethod.DELETE, "/api/soutenance/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        .requestMatchers(HttpMethod.POST, "/api/soutenance").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        .requestMatchers(HttpMethod.GET, "/api/soutenance/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        .requestMatchers(HttpMethod.PUT, "/api/soutenance/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/entreprises").hasAnyAuthority("ROLE_SERVICE_STAGE")
+
+
+                        .anyRequest().authenticated())
+                       /** .requestMatchers("/api/login", "/api/admin/register", "/api/admin/activate",
 
                                 "/api/auth/desactivate","/api/entreprises","/api/auth/users",
                                 "/api/auth/etudiants","/api/soutenance","api/enseingnant")
@@ -68,11 +86,10 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/soutenance/{id}").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/soutenance/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/auth/userId/{id}").permitAll()
-                        // publiques
+                        // publiques**/
 
                         // Routes protégées en fonction des rôles
-                        .requestMatchers("/api/roles/all").hasRole("SUPER_ADMINISTRATEUR") // Exemples de routes nécessitant le rôle ADMIN
-                        .anyRequest().authenticated())
+
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Ajout du
                                                                                                        // filtre JWT
 

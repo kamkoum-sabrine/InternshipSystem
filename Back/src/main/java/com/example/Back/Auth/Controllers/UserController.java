@@ -19,7 +19,7 @@ import com.example.Back.Auth.Services.MailService;
 import com.example.Back.Auth.Services.UserService;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
@@ -160,7 +160,7 @@ public class UserController {
         }
 
     }
-    @GetMapping("/users")
+    @GetMapping("/getAll")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
