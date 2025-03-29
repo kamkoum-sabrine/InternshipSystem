@@ -41,4 +41,5 @@ export class DefaultLayoutComponent {
     // console.log('verticalUsed', $event.verticalUsed);
     // }
   }
+
 }

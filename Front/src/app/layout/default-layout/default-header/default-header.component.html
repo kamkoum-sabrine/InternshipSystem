@@ -136,7 +136,7 @@
           Lock Account
         </a>
       </li>
-      <li>
+      <li *ngIf="isLogged()" (click)="logout()">
         <a cDropdownItem routerLink="">
           <svg cIcon class="me-2" name="cilAccountLogout"></svg>
           Logout

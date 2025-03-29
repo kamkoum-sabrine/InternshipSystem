@@ -27,6 +27,7 @@ import {
 } from '@coreui/angular-pro';
 
 import { IconDirective } from '@coreui/icons-angular';
+import { AuthService } from 'src/app/views/pages/login/auth.service';
 
 @Component({
   selector: 'app-default-header',
@@ -50,8 +51,16 @@ export class DefaultHeaderComponent extends HeaderComponent {
     return this.colorModes.find(mode => mode.name === currentMode)?.icon ?? 'cilSun';
   });
 
-  constructor() {
+  constructor(public authService: AuthService) {
     super();
+  }
+  isLogged() {
+    return this.authService.isLoggedIn();
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
   }
 
   sidebarId = input('sidebar1');
