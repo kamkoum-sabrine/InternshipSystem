@@ -66,10 +66,10 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/userId/{id}").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/users/etudiants").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
 
-                        .requestMatchers(HttpMethod.DELETE, "/api/soutenance/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
-                        .requestMatchers(HttpMethod.POST, "/api/soutenance").hasAnyAuthority("ROLE_SERVICE_STAGE")
-                        .requestMatchers(HttpMethod.GET, "/api/soutenance/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
-                        .requestMatchers(HttpMethod.PUT, "/api/soutenance/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        .requestMatchers( "/api/soutenance/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        .requestMatchers( "/api/soutenance").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        //.requestMatchers( "/api/soutenance/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        //.requestMatchers( "/api/soutenance/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/entreprises").hasAnyAuthority("ROLE_SERVICE_STAGE")
 
 
