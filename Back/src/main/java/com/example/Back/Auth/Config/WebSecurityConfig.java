@@ -3,8 +3,12 @@ package com.example.Back.Auth.Config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -31,6 +35,20 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+        return authProvider;
+    }
+
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Activer CORS
@@ -39,8 +57,37 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
 
+                        .requestMatchers("/api/login").permitAll()
+                        .requestMatchers("/api/roles/all").hasRole("SUPER_ADMINISTRATEUR")
+                        .requestMatchers("/api/users/register").hasRole("SUPER_ADMINISTRATEUR")
+                        .requestMatchers("/api/users/activate").hasRole("SUPER_ADMINISTRATEUR")
+                        .requestMatchers("/api/users/desactivate").hasRole("SUPER_ADMINISTRATEUR")
+
+                        .requestMatchers("/api/users/getAll").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/userId/{id}").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/users/etudiants").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+
+                        .requestMatchers( "/api/soutenance/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        .requestMatchers( "/api/soutenance").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        //.requestMatchers( "/api/soutenance/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        //.requestMatchers( "/api/soutenance/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/entreprises").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        //.requestMatchers( "/api/enseignant/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                       // .requestMatchers("/api/enseignant/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                       // .requestMatchers("/api/enseignant/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/enseignant/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/enseignant").hasAnyAuthority("ROLE_SERVICE_STAGE")
+
+                        .anyRequest().authenticated())
+                       /** .requestMatchers("/api/login", "/api/admin/register", "/api/admin/activate",
+
+                                "/api/auth/desactivate","/api/entreprises","/api/auth/users",
+                                "/api/auth/etudiants","/api/soutenance","api/enseingnant")
+
+
                          .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/activate",
                                 "/api/auth/desactivate","/api/entreprises/**","/api/auth/users","/api/roles/all","/api/auth/etudiants","/api/soutenance")
+
                        
                              
                         .permitAll()
@@ -49,15 +96,18 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/soutenance/{id}").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/soutenance/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/auth/userId/{id}").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/enseignant/{id}").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/enseignant/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/enseignant/{id}").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/enseignant/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/enseignant").permitAll()
+
+                        // publiques**/
+
+                        // Routes protégées en fonction des rôles
+
+
+                       
 
 
                         // publiques
                         .anyRequest().authenticated())
+
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Ajout du
                                                                                                        // filtre JWT
 

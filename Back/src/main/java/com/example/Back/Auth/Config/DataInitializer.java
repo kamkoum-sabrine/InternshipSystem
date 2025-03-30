@@ -10,6 +10,7 @@ import com.example.Back.Soutenance.Repository.EnseignantRepository;
 import com.example.Back.Soutenance.Repository.SoutenanceRepository;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.example.Back.Auth.Models.Role;
@@ -60,32 +61,32 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if (userRepository.count() == 0) {
 
-            Role adminRole = new Role(null, "Super Administrateur");
-            Role serviceRole = new Role(null, "Service Stage");
-            Role directionRole = new Role(null, "Direction stage");
-            Role etudiantRole = new Role(null, "Etudiant");
+            Role adminRole = new Role(null, "SUPER_ADMINISTRATEUR");
+            Role serviceRole = new Role(null, "SERVICE_STAGE");
+            Role directionRole = new Role(null, "DIRECTION_STAGE");
+            Role etudiantRole = new Role(null, "ETUDIANT");
 
             roleRepository.save(adminRole);
             roleRepository.save(serviceRole);
             roleRepository.save(directionRole);
             roleRepository.save(etudiantRole);
 
-            User superAdminUser = new User(null, "Kamkoum", "Sabrine", "kamkoumsabrine@gmail.com",123456,null, "password",
+            User superAdminUser = new User(null, "Kamkoum", "Sabrine", "kamkoumsabrine@gmail.com",123456,null, new BCryptPasswordEncoder().encode("password"),
                     adminRole, false, LocalDateTime.now());
-            User directionStageUser = new User(null, "Salhi", "Houssem", "salhihoussem@gmail.com",21212,null, "password",
+            User directionStageUser = new User(null, "Salhi", "Houssem", "salhihoussem@gmail.com",21212,null, new BCryptPasswordEncoder().encode("password"),
                     directionRole,
                     false,LocalDateTime.now());
-            User serviceStageUser = new User(null, "Toumi", "Mahdi", "toumimahdi@gmail.com",2145412,null, "password", serviceRole,
+            User serviceStageUser = new User(null, "Toumi", "Mahdi", "toumimahdi@gmail.com",2145412,null, new BCryptPasswordEncoder().encode("password"), serviceRole,
                     false,LocalDateTime.now());
-            User etudiantUser = new User(null, "Ahmed", "Ahmed", "ahmedahmed@gmail.com",5656565,"Genie informatique", "password", etudiantRole,
+            User etudiantUser = new User(null, "Ahmed", "Ahmed", "ahmedahmed@gmail.com",5656565,"Genie informatique", new BCryptPasswordEncoder().encode("password"), etudiantRole,
                     false,LocalDateTime.now());
-            User etudiantUser1 = new User(null, "Amine", "Amine", "Amineamine@gmail.com",123456,null, "password", etudiantRole,
+            User etudiantUser1 = new User(null, "Amine", "Amine", "Amineamine@gmail.com",123456,null, new BCryptPasswordEncoder().encode("password"), etudiantRole,
                     false,LocalDateTime.now());
-            User etudiantUser2 = new User(null, "Mahdi", "Mahdi", "Mahdimahdi@gmail.com",123456,null, "password", etudiantRole,
+            User etudiantUser2 = new User(null, "Mahdi", "Mahdi", "Mahdimahdi@gmail.com",123456,null, new BCryptPasswordEncoder().encode("password"), etudiantRole,
                     false,LocalDateTime.now());
-            User etudiantUser3 = new User(null, "Sabrine", "Sabrine", "Sabrinesabroucha@gmail.com",123456,null, "password", etudiantRole,
+            User etudiantUser3 = new User(null, "Sabrine", "Sabrine", "Sabrinesabroucha@gmail.com",123456,null, new BCryptPasswordEncoder().encode("password"), etudiantRole,
                     false,LocalDateTime.now());
-            User etudiantUser4 = new User(null, "Salhi", "Hama", "HamaSalhi@gmail.com",123456,null, "password", etudiantRole,
+            User etudiantUser4 = new User(null, "Salhi", "Hama", "HamaSalhi@gmail.com",123456,null, new BCryptPasswordEncoder().encode("password"), etudiantRole,
                     false,LocalDateTime.now());
 
             userRepository.save(superAdminUser);
