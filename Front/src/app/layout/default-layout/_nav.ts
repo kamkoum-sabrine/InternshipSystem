@@ -1,6 +1,13 @@
 import { INavData } from '@coreui/angular-pro';
 
-export const navItems: INavData[] = [
+
+export interface INavDataExtended extends INavData {
+  roles?: string[];
+}
+
+
+
+export const navItems: INavDataExtended[] = [
   {
     name: 'Dashboard',
     url: '/dashboard',
@@ -8,7 +15,8 @@ export const navItems: INavData[] = [
     badge: {
       color: 'info',
       text: 'NEW'
-    }
+    },
+    roles: ['SUPER_ADMINISTRATEUR']
   },
   {
     name: 'Utilisateurs',
@@ -17,7 +25,9 @@ export const navItems: INavData[] = [
     badge: {
       color: 'danger-gradient',
       text: 'PRO'
-    }
+    },
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     name: 'Entreprises',
@@ -26,35 +36,45 @@ export const navItems: INavData[] = [
     badge: {
       color: 'danger-gradient',
       text: 'PRO'
-    }
+    },
+    roles: ['SERVICE_STAGE', 'DIRECTION_STAGE']
   },
   {
     name: 'Soutenances',
     url: '/soutenances',
-    iconComponent: { name: 'cil-graduation' },
+    iconComponent: { name: 'fa', icon: 'trash' },
     badge: {
       color: 'danger-gradient',
       text: 'PRO'
-    }
+    },
+    roles: ['SERVICE_STAGE', 'DIRECTION_STAGE']
   },
   {
     title: true,
-    name: 'Theme'
+    name: 'Theme',
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     name: 'Colors',
     url: '/theme/colors',
-    iconComponent: { name: 'cil-drop' }
+    iconComponent: { name: 'cil-drop' },
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     name: 'Typography',
     url: '/theme/typography',
     linkProps: { fragment: 'headings' },
-    iconComponent: { name: 'cil-pencil' }
+    iconComponent: { name: 'cil-pencil' },
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     name: 'Components',
-    title: true
+    title: true,
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     name: 'Base',
@@ -136,7 +156,9 @@ export const navItems: INavData[] = [
         url: '/base/tooltips',
         icon: 'nav-icon-bullet'
       }
-    ]
+    ],
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     name: 'Buttons',
@@ -167,7 +189,9 @@ export const navItems: INavData[] = [
           text: 'PRO'
         }
       }
-    ]
+    ],
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     name: 'Forms',
@@ -250,7 +274,9 @@ export const navItems: INavData[] = [
         url: '/forms/validation',
         icon: 'nav-icon-bullet'
       }
-    ]
+    ],
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     name: 'Icons',
@@ -276,7 +302,9 @@ export const navItems: INavData[] = [
         url: '/icons/brands',
         icon: 'nav-icon-bullet'
       }
-    ]
+    ],
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     name: 'Notifications',
@@ -303,7 +331,9 @@ export const navItems: INavData[] = [
         url: '/notifications/toasts',
         icon: 'nav-icon-bullet'
       }
-    ]
+    ],
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     name: 'Widgets',
@@ -312,7 +342,9 @@ export const navItems: INavData[] = [
     badge: {
       color: 'info',
       text: 'NEW'
-    }
+    },
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     name: 'Smart Table',
@@ -321,30 +353,42 @@ export const navItems: INavData[] = [
     badge: {
       color: 'danger-gradient',
       text: 'PRO'
-    }
+    },
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     title: true,
-    name: 'Plugins'
+    name: 'Plugins',
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     name: 'Calendar',
     iconComponent: { name: 'cil-calendar' },
-    url: '/plugins/calendar'
+    url: '/plugins/calendar',
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     name: 'Charts',
     iconComponent: { name: 'cil-chart' },
-    url: '/plugins/charts'
+    url: '/plugins/charts',
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     name: 'Google Maps',
     iconComponent: { name: 'cil-map' },
-    url: '/plugins/google-maps'
+    url: '/plugins/google-maps',
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     title: true,
-    name: 'Extras'
+    name: 'Extras',
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     name: 'Pages',
@@ -371,7 +415,9 @@ export const navItems: INavData[] = [
         url: '/500',
         icon: 'nav-icon-bullet'
       }
-    ]
+    ],
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     name: 'Apps',
@@ -428,17 +474,23 @@ export const navItems: INavData[] = [
           }
         ]
       }
-    ]
+    ],
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     title: true,
     name: 'Links',
-    class: 'mt-auto'
+    class: 'mt-auto',
+    roles: ['SUPER_ADMINISTRATEUR']
+
   },
   {
     name: 'Docs',
     url: 'https://coreui.io/angular/docs/5.x/',
     iconComponent: { name: 'cil-description' },
-    attributes: { target: '_blank' }
+    attributes: { target: '_blank' },
+    roles: ['SUPER_ADMINISTRATEUR']
+
   }
 ];

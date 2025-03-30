@@ -59,6 +59,7 @@ export class DefaultHeaderComponent extends HeaderComponent {
   }
 
   logout() {
+    console.log("logouuuuuuuuuuuuuuut")
     localStorage.removeItem('token');
     localStorage.removeItem('user');
   }
