@@ -26,6 +26,10 @@ public class EnseignantService {
         return enseignantRepository.findAll();
     }
 
+    public Enseignant getEnseignantsById (Long id) {
+        return enseignantRepository.findEnseignantById(id);
+    }
+
     public Enseignant addEnseignant(Enseignant enseignant) {
         // Valider les champs obligatoires
         if (enseignant.getNom() == null || enseignant.getPrenom() == null || enseignant.getEmail() == null ) {
@@ -52,21 +56,21 @@ public class EnseignantService {
     }
 
     @Transactional
-    public Enseignant editEnseignant(Long id, String nom, String prenom, String email) {
+    public Enseignant editEnseignant(Long id, Enseignant newenseignant) {
         Enseignant enseignant = enseignantRepository.findById(id)
                 .orElseThrow(() -> new IllegalStateException("L'enseignant n'existe pas"));
 
         // Mettre à jour les champs si fournis
-        if (nom != null && !nom.trim().isEmpty() && !nom.equals(enseignant.getNom())) {
-            enseignant.setNom(nom);
+        if (newenseignant.getNom() != null && !newenseignant.getNom().trim().isEmpty() && !newenseignant.getNom().equals(enseignant.getNom())) {
+            enseignant.setNom(newenseignant.getNom());
         }
 
-        if (prenom != null && !prenom.trim().isEmpty() && !prenom.equals(enseignant.getPrenom())) {
-            enseignant.setPrenom(prenom);
+        if (newenseignant.getPrenom() != null && !newenseignant.getPrenom().trim().isEmpty() && !newenseignant.getPrenom().equals(enseignant.getPrenom())) {
+            enseignant.setPrenom(newenseignant.getPrenom());
         }
 
-        if (email != null && !email.trim().isEmpty() && !email.equals(enseignant.getEmail())) {
-            enseignant.setEmail(email);
+        if (newenseignant.getEmail() != null && !newenseignant.getEmail().trim().isEmpty() && !newenseignant.getEmail().equals(enseignant.getEmail())) {
+            enseignant.setEmail(newenseignant.getEmail());
         }
 
 

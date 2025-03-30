@@ -50,6 +50,12 @@ export const navItems: INavDataExtended[] = [
     roles: ['SERVICE_STAGE', 'DIRECTION_STAGE']
   },
   {
+    name: 'Enseignants',
+    url: '/enseignants',
+    iconComponent: { name: 'cil-graduation' },
+
+  },
+  {
     title: true,
     name: 'Theme',
     roles: ['SUPER_ADMINISTRATEUR']

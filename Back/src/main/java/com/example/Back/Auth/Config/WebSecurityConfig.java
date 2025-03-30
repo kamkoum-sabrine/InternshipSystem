@@ -56,6 +56,7 @@ public class WebSecurityConfig {
                 .sessionManagement(management -> management
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
+
                         .requestMatchers("/api/login").permitAll()
                         .requestMatchers("/api/roles/all").hasRole("SUPER_ADMINISTRATEUR")
                         .requestMatchers("/api/users/register").hasRole("SUPER_ADMINISTRATEUR")
@@ -71,13 +72,22 @@ public class WebSecurityConfig {
                         //.requestMatchers( "/api/soutenance/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
                         //.requestMatchers( "/api/soutenance/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/entreprises").hasAnyAuthority("ROLE_SERVICE_STAGE")
-
+                        //.requestMatchers( "/api/enseignant/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                       // .requestMatchers("/api/enseignant/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                       // .requestMatchers("/api/enseignant/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/enseignant/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/enseignant").hasAnyAuthority("ROLE_SERVICE_STAGE")
 
                         .anyRequest().authenticated())
                        /** .requestMatchers("/api/login", "/api/admin/register", "/api/admin/activate",
 
                                 "/api/auth/desactivate","/api/entreprises","/api/auth/users",
                                 "/api/auth/etudiants","/api/soutenance","api/enseingnant")
+
+
+                         .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/activate",
+                                "/api/auth/desactivate","/api/entreprises/**","/api/auth/users","/api/roles/all","/api/auth/etudiants","/api/soutenance")
+
                        
                              
                         .permitAll()
@@ -86,9 +96,17 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/soutenance/{id}").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/soutenance/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/auth/userId/{id}").permitAll()
+
                         // publiques**/
 
                         // Routes protégées en fonction des rôles
+
+
+                       
+
+
+                        // publiques
+                        .anyRequest().authenticated())
 
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Ajout du
                                                                                                        // filtre JWT

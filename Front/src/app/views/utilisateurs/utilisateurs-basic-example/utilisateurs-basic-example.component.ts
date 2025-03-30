@@ -107,6 +107,9 @@ export class UtilisateursBasicExampleComponent implements OnInit {
         if (result.isConfirmed) {
           // L'événement est confirmé
           this.gererUtilisateurService.desactiverCompte(itemId).subscribe(data => {
+            this.utilisateursService.getUtilisateurs().subscribe(data => {
+              this.users = data
+            });
             console.log(data);
 
           });
