@@ -15,6 +15,7 @@ import { GererSoutenancesService } from './gerer-soutenances.service';
 import { UpdateSoutenanceDialogComponent } from '../update-soutenance-dialog/update-soutenance-dialog.component';
 import { AfficherJuryDialogComponent } from '../afficher-jury-dialog/afficher-jury-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.component';
 
 
 @Component({
@@ -138,6 +139,20 @@ export class SoutenancesBasicExampleComponent implements OnInit {
       }
     });
 
+  }
+  openDialog(): void {
+    const dialogRef = this.dialog.open(AddUserDialogComponent, {
+      width: '600px',
+      minWidth: '600px',  // Largeur minimale de 400px
+      maxWidth: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Nouvelle soutenance:', result);
+        // Logic to add the user
+      }
+    });
   }
 
   AfficherJury(id: number): void {

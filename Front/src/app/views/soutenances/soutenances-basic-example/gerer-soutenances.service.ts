@@ -14,11 +14,11 @@ export class GererSoutenancesService {
 
 
   getEncadrants(): Observable<any> {
-    return this.http.get(`http://localhost:8081/api/enseingnant`);
+    return this.http.get(`http://localhost:8081/api/enseignant`);
   }
 
   getEtudiants(): Observable<any> {
-    return this.http.get(`http://localhost:8081/api/auth/etudiants`);
+    return this.http.get(`http://localhost:8081/api/users/etudiants`);
   }
 
   getSoutenanceById(id: number): Observable<any> {

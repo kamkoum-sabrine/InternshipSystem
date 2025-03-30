@@ -1,3 +1,5 @@
+<button class="btn btn-primary mb-3" (click)="openDialog()">Ajouter une soutenance</button>
+
 <c-smart-table *ngIf="soutenances && soutenances.length > 0" [activePage]="1" [columnSorter]="true" [columns]="columns"
   [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="10" [items]="soutenances"
   [sorterValue]="{ column: 'name', state: 'asc' }" [tableFilter]="true"
@@ -11,10 +13,12 @@
 
       <!-- Vérifier si la colonne est 'encadrant' et afficher son nom -->
       <ng-container *ngIf="columnName === 'encadrant'">
-        {{ item.encadrant?.nom }} {{ item.encadrant?.prenom }} <!-- Accéder au nom de l'encadrant -->
+        {{ item.encadrant?.nom }} {{ item.encadrant?.prenom }}
+        <!-- Accéder au nom de l'encadrant -->
       </ng-container>
       <ng-container *ngIf="columnName === 'etudiant'">
-        {{ item.etudiant?.nom }} {{ item.etudiant?.prenom }} <!-- Accéder au nom de l'encadrant -->
+        {{ item.etudiant?.nom }} {{ item.etudiant?.prenom }}
+        <!-- Accéder au nom de l'encadrant -->
       </ng-container>
 
       <!-- Pour les autres colonnes, afficher la valeur par défaut -->

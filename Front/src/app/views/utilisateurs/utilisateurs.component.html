@@ -4,7 +4,8 @@
       <c-card-header ngPreserveWhitespaces>
         <strong>Gérer </strong> <small>Les utilisateurs</small>
       </c-card-header>
-      <button mat-raised-button (click)="openDialog()">Ajouter un utilisateur</button>
+      <!-- <button mat-raised-button (click)="openDialog()">Ajouter un utilisateur</button> -->
+      <button class="btn btn-primary mb-3" (click)="openDialog()">Ajouter un utilisateur</button>
 
       <c-card-body>
         <div *ngIf="users">
