@@ -1,4 +1,4 @@
-<button class="btn btn-primary mb-3" (click)="openDialog()">Ajouter une soutenance</button>
+<button class="btn btn-warning text-white mb-3" (click)="openDialog()">Ajouter une soutenance</button>
 
 <c-smart-table *ngIf="soutenances && soutenances.length > 0" [activePage]="1" [columnSorter]="true" [columns]="columns"
   [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="10" [items]="soutenances"

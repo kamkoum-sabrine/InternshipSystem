@@ -16,6 +16,7 @@ import { GererEnseignatService } from './gerer-enseignant-service.service';
 import { UpdateEnseignantDialogComponent } from '../update-enseignant-dialog/update-enseignant-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { EnseignantService } from '../enseignant-service.service';
+import { AddEnseignantDialogComponent } from '../add-enseignant-dialog/add-enseignant-dialog.component';
 
 @Component({
   selector: 'app-enseignant-basic-example',
@@ -57,7 +58,7 @@ export class EnseignantBasicExampleComponent implements OnInit {
     }
   ];
 
-  constructor(private gererEnseignatService: GererEnseignatService, private dialog: MatDialog, private cdr: ChangeDetectorRef,private enseignantService : EnseignantService) { }
+  constructor(private gererEnseignatService: GererEnseignatService, private dialog: MatDialog, private cdr: ChangeDetectorRef, private enseignantService: EnseignantService) { }
 
   ngOnInit() {
     console.log('Valeur reçue du parent:', this.Enseignants);
@@ -117,6 +118,21 @@ export class EnseignantBasicExampleComponent implements OnInit {
       }
     });
 
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(AddEnseignantDialogComponent, {
+      width: '600px',
+      minWidth: '600px',  // Largeur minimale de 400px
+      maxWidth: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Nouvelle soutenance:', result);
+        // Logic to add the user
+      }
+    });
   }
 
 

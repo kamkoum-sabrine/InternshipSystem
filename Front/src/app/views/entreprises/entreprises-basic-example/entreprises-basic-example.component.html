@@ -1,14 +1,11 @@
-<button class="btn btn-primary mb-3" (click)="ouvrirModal()">Ajouter Entreprise</button>
+<button class="btn btn-warning text-white mb-3" (click)="ouvrirModal()">Ajouter Entreprise</button>
 
 <!-- Smart Table -->
-<c-smart-table *ngIf="entreprises && entreprises.length > 0"
-  (rowClick)="ouvrirModalActions($event)"
-  [activePage]="1" [columnSorter]="true" 
-  [columns]="columns" [columnFilter]="true" [itemsPerPageSelect]="true" 
-  [itemsPerPage]="5" [items]="entreprises" 
-  [sorterValue]="{ column: 'nom', state: 'asc' }"
-  [tableFilter]="true" [tableProps]="{ hover: true, striped: true, responsive: true }" 
-  [tableBodyProps]="{ align: 'middle' }" cleaner footer header pagination>
+<c-smart-table *ngIf="entreprises && entreprises.length > 0" (rowClick)="ouvrirModalActions($event)" [activePage]="1"
+  [columnSorter]="true" [columns]="columns" [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="5"
+  [items]="entreprises" [sorterValue]="{ column: 'nom', state: 'asc' }" [tableFilter]="true"
+  [tableProps]="{ hover: true, striped: true, responsive: true }" [tableBodyProps]="{ align: 'middle' }" cleaner footer
+  header pagination>
 </c-smart-table>
 
 <!-- Modal d'ajout -->
@@ -17,7 +14,8 @@
     <h3>Ajouter une entreprise</h3>
     <form #entrepriseForm="ngForm">
       <label>Nom:</label>
-      <input type="text" [(ngModel)]="newEntreprise.nom" name="nom" required minlength="2" maxlength="50" #nom="ngModel" />
+      <input type="text" [(ngModel)]="newEntreprise.nom" name="nom" required minlength="2" maxlength="50"
+        #nom="ngModel" />
       <div *ngIf="nom.invalid && (nom.dirty || nom.touched)" class="text-danger">
         <div *ngIf="nom.errors?.['required']">Le nom est obligatoire</div>
         <div *ngIf="nom.errors?.['minlength']">Le nom doit avoir au moins 2 caractères</div>
@@ -25,7 +23,8 @@
       </div>
 
       <label>Adresse:</label>
-      <input type="text" [(ngModel)]="newEntreprise.adresse" name="adresse" required minlength="5" maxlength="100" #adresse="ngModel" />
+      <input type="text" [(ngModel)]="newEntreprise.adresse" name="adresse" required minlength="5" maxlength="100"
+        #adresse="ngModel" />
       <div *ngIf="adresse.invalid && (adresse.dirty || adresse.touched)" class="text-danger">
         <div *ngIf="adresse.errors?.['required']">L'adresse est obligatoire</div>
         <div *ngIf="adresse.errors?.['minlength']">L'adresse doit avoir au moins 5 caractères</div>
@@ -33,7 +32,8 @@
       </div>
 
       <label>Email:</label>
-      <input type="email" [(ngModel)]="newEntreprise.email" name="email" required email #email="ngModel" (blur)="email.touched = true" />
+      <input type="email" [(ngModel)]="newEntreprise.email" name="email" required email #email="ngModel"
+        (blur)="email.touched = true" />
       <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
         <div *ngIf="email.errors?.['required']">L'email est obligatoire</div>
         <div *ngIf="email.errors?.['email']">Veuillez entrer un email valide</div>
@@ -43,18 +43,20 @@
       </div>
 
       <label>Téléphone:</label>
-      <input type="text" [(ngModel)]="newEntreprise.telephone" name="telephone" required pattern="[0-9]{8,}" #telephone="ngModel" (blur)="telephone.touched = true" />
+      <input type="text" [(ngModel)]="newEntreprise.telephone" name="telephone" required pattern="[0-9]{8,}"
+        #telephone="ngModel" (blur)="telephone.touched = true" />
       <div *ngIf="telephone.invalid && (telephone.dirty || telephone.touched)" class="text-danger">
         <div *ngIf="telephone.errors?.['required']">Le téléphone est obligatoire</div>
         <div *ngIf="telephone.errors?.['pattern']">Le téléphone doit contenir au moins 8 chiffres</div>
       </div>
-      <div *ngIf="telephone.valid && telephone.touched && telephoneExisteDeja(newEntreprise.telephone)" class="text-danger">
+      <div *ngIf="telephone.valid && telephone.touched && telephoneExisteDeja(newEntreprise.telephone)"
+        class="text-danger">
         Ce numéro de téléphone est déjà utilisé
       </div>
 
       <div class="modal-actions">
-        <button type="button" (click)="ajouterEntreprise()" class="btn btn-success" 
-                [disabled]="entrepriseForm.invalid || emailExisteDeja(newEntreprise.email) || telephoneExisteDeja(newEntreprise.telephone)">
+        <button type="button" (click)="ajouterEntreprise()" class="btn btn-success"
+          [disabled]="entrepriseForm.invalid || emailExisteDeja(newEntreprise.email) || telephoneExisteDeja(newEntreprise.telephone)">
           Ajouter
         </button>
         <button type="button" (click)="fermerModal()" class="btn btn-secondary">Annuler</button>
@@ -83,7 +85,8 @@
     <h3>Éditer l'entreprise</h3>
     <form #editForm="ngForm">
       <label>Nom:</label>
-      <input type="text" [(ngModel)]="editedEntreprise.nom" name="nom" required minlength="2" maxlength="50" #editNom="ngModel" />
+      <input type="text" [(ngModel)]="editedEntreprise.nom" name="nom" required minlength="2" maxlength="50"
+        #editNom="ngModel" />
       <div *ngIf="editNom.invalid && (editNom.dirty || editNom.touched)" class="text-danger">
         <div *ngIf="editNom.errors?.['required']">Le nom est obligatoire</div>
         <div *ngIf="editNom.errors?.['minlength']">Le nom doit avoir au moins 2 caractères</div>
@@ -91,7 +94,8 @@
       </div>
 
       <label>Adresse:</label>
-      <input type="text" [(ngModel)]="editedEntreprise.adresse" name="adresse" required minlength="5" maxlength="100" #editAdresse="ngModel" />
+      <input type="text" [(ngModel)]="editedEntreprise.adresse" name="adresse" required minlength="5" maxlength="100"
+        #editAdresse="ngModel" />
       <div *ngIf="editAdresse.invalid && (editAdresse.dirty || editAdresse.touched)" class="text-danger">
         <div *ngIf="editAdresse.errors?.['required']">L'adresse est obligatoire</div>
         <div *ngIf="editAdresse.errors?.['minlength']">L'adresse doit avoir au moins 5 caractères</div>
@@ -99,37 +103,39 @@
       </div>
 
       <label>Email:</label>
-      <input type="email" [(ngModel)]="editedEntreprise.email" name="email" required email #editEmail="ngModel" (blur)="editEmail.touched = true" />
+      <input type="email" [(ngModel)]="editedEntreprise.email" name="email" required email #editEmail="ngModel"
+        (blur)="editEmail.touched = true" />
       <div *ngIf="editEmail.invalid && (editEmail.dirty || editEmail.touched)" class="text-danger">
         <div *ngIf="editEmail.errors?.['required']">L'email est obligatoire</div>
         <div *ngIf="editEmail.errors?.['email']">Veuillez entrer un email valide</div>
       </div>
-      <div *ngIf="editEmail.valid && editEmail.touched && emailExisteDejaPourAutreEntreprise(editedEntreprise.id, editedEntreprise.email)" class="text-danger">
+      <div
+        *ngIf="editEmail.valid && editEmail.touched && emailExisteDejaPourAutreEntreprise(editedEntreprise.id, editedEntreprise.email)"
+        class="text-danger">
         Cette adresse email est déjà utilisée
       </div>
 
       <label>Téléphone:</label>
-      <input type="text" [(ngModel)]="editedEntreprise.telephone" name="telephone" 
-             required pattern="[0-9]{8,}" #editTelephone="ngModel"
-             (blur)="editTelephone.control.markAsTouched()" />
-             
+      <input type="text" [(ngModel)]="editedEntreprise.telephone" name="telephone" required pattern="[0-9]{8,}"
+        #editTelephone="ngModel" (blur)="editTelephone.control.markAsTouched()" />
+
       <div *ngIf="editTelephone.invalid && (editTelephone.dirty || editTelephone.touched)" class="text-danger">
         <div *ngIf="editTelephone.errors?.['required']">Le téléphone est obligatoire</div>
         <div *ngIf="editTelephone.errors?.['pattern']">Le téléphone doit contenir au moins 8 chiffres</div>
       </div>
-      
-      <div *ngIf="editTelephone.valid && editTelephone.touched && telephoneExisteDejaPourAutreEntreprise(editedEntreprise.id, editedEntreprise.telephone)" 
-           class="text-danger">
+
+      <div
+        *ngIf="editTelephone.valid && editTelephone.touched && telephoneExisteDejaPourAutreEntreprise(editedEntreprise.id, editedEntreprise.telephone)"
+        class="text-danger">
         Ce numéro de téléphone est déjà utilisé par une autre entreprise
       </div>
 
       <div class="modal-actions">
-        <button type="button" (click)="mettreAJourEntreprise()" class="btn btn-success" 
-        [disabled]="editForm.invalid || 
+        <button type="button" (click)="mettreAJourEntreprise()" class="btn btn-success" [disabled]="editForm.invalid || 
                    emailExisteDejaPourAutreEntreprise(editedEntreprise.id, editedEntreprise.email) ||
                    telephoneExisteDejaPourAutreEntreprise(editedEntreprise.id, editedEntreprise.telephone)">
-  Mettre à jour
-</button>
+          Mettre à jour
+        </button>
         <button type="button" (click)="fermerModalEdition()" class="btn btn-secondary">Annuler</button>
       </div>
     </form>
