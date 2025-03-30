@@ -106,7 +106,7 @@ public class WebSecurityConfig {
 
 
                         // publiques
-                        .anyRequest().authenticated())
+                       // .anyRequest().authenticated())
 
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Ajout du
                                                                                                        // filtre JWT

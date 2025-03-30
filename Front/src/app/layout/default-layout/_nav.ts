@@ -53,6 +53,7 @@ export const navItems: INavDataExtended[] = [
     name: 'Enseignants',
     url: '/enseignants',
     iconComponent: { name: 'cil-graduation' },
+    roles: ['SERVICE_STAGE', 'DIRECTION_STAGE']
 
   },
   {
