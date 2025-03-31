@@ -53,6 +53,18 @@ export class EntreprisesBasicExampleComponent implements OnInit {
     console.log('Entreprises reçues du parent:', this.entreprises);
   }
 
+  onTelephoneInput(event: any) {
+    // Nettoyer la valeur en ne gardant que les chiffres
+    const cleanedValue = event.target.value.replace(/\D/g, '');
+    this.newEntreprise.telephone = cleanedValue;
+  }
+
+  onEditTelephoneInput(event: any) {
+    // Nettoyer la valeur en ne gardant que les chiffres
+    const cleanedValue = event.target.value.replace(/\D/g, '');
+    this.editedEntreprise.telephone = cleanedValue;
+  }
+
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (!file) return;
@@ -441,4 +453,5 @@ export class EntreprisesBasicExampleComponent implements OnInit {
       entreprise.id !== id && 
       entreprise.email.toLowerCase() === email.toLowerCase()
     );
-  }}
+  }
+}

@@ -55,7 +55,7 @@
       <label>Téléphone:</label>
       <input type="text" [(ngModel)]="newEntreprise.telephone" name="telephone" 
       required pattern="[0-9]{8,}" #telephone="ngModel"
-      (blur)="telephone.touched = true" />
+      (input)="onTelephoneInput($event)" (blur)="telephone.touched = true" />
       
 <div *ngIf="telephone.invalid && (telephone.dirty || telephone.touched)" class="text-danger">
  <div *ngIf="telephone.errors?.['required']">Le téléphone est obligatoire</div>
@@ -125,7 +125,7 @@
       <label>Téléphone:</label>
       <input type="text" [(ngModel)]="editedEntreprise.telephone" name="telephone" 
              required pattern="[0-9]{8,}" #editTelephone="ngModel"
-             (blur)="editTelephone.control.markAsTouched()" />
+             (input)="onEditTelephoneInput($event)" (blur)="editTelephone.control.markAsTouched()" />
              
       <div *ngIf="editTelephone.invalid && (editTelephone.dirty || editTelephone.touched)" class="text-danger">
         <div *ngIf="editTelephone.errors?.['required']">Le téléphone est obligatoire</div>
