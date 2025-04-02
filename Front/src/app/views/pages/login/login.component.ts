@@ -31,12 +31,10 @@ export class LoginComponent {
     console.log("to dash")
     this.authService.login(this.email, this.password).subscribe({
       next: (response) => {
-        // Si la connexion est réussie, vous pouvez faire ce que vous voulez avec la réponse
         console.log('Connexion réussie:', response);
         localStorage.setItem('token', response.token);
         localStorage.setItem('user', JSON.stringify(response.user));
         window.location.replace('/#/dashboard');
-        // Par exemple, rediriger vers une autre page après la connexion
         // this.router.navigate(['/dashboard']);
       },
       error: (error) => {
