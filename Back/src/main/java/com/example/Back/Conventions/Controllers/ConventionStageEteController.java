@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -20,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -96,6 +94,15 @@ public class ConventionStageEteController {
         } catch (IOException e) {
             return ResponseEntity.internalServerError().body("Erreur lors du téléchargement du fichier.");
         }
+    }
+
+    @GetMapping("/getMyConventions/{id}")
+    public List<ConventionStageEte> getConventionsByEtudiant(@PathVariable("id" ) Long etudiantId) {
+        User etudiant = userRepository.findById(etudiantId).orElse(null);
+        if (etudiant == null) {
+            throw new RuntimeException("Étudiant non trouvé !");
+        }
+        return conventionStageEteRepository.findByEtudiant(etudiant);
     }
 
 }
