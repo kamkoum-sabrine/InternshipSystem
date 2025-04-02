@@ -36,7 +36,8 @@ export class AddUserDialogComponent {
     email: '',
     cin: '',
     filiere: '',
-    role: ''
+    role: '',
+    niveau: ''
   };
   userId: any;
   edit: any;

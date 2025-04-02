@@ -71,22 +71,22 @@ public class DataInitializer implements CommandLineRunner {
             roleRepository.save(directionRole);
             roleRepository.save(etudiantRole);
 
-            User superAdminUser = new User(null, "Kamkoum", "Sabrine", "kamkoumsabrine@gmail.com",123456,null, new BCryptPasswordEncoder().encode("password"),
+            User superAdminUser = new User(null, "Kamkoum", "Sabrine", "kamkoumsabrine@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"),
                     adminRole, false, LocalDateTime.now());
-            User directionStageUser = new User(null, "Salhi", "Houssem", "salhihoussem@gmail.com",21212,null, new BCryptPasswordEncoder().encode("password"),
+            User directionStageUser = new User(null, "Salhi", "Houssem", "salhihoussem@gmail.com",21212,null,null, new BCryptPasswordEncoder().encode("password"),
                     directionRole,
                     false,LocalDateTime.now());
-            User serviceStageUser = new User(null, "Toumi", "Mahdi", "toumimahdi@gmail.com",2145412,null, new BCryptPasswordEncoder().encode("password"), serviceRole,
+            User serviceStageUser = new User(null, "Toumi", "Mahdi", "toumimahdi@gmail.com",2145412,null,null, new BCryptPasswordEncoder().encode("password"), serviceRole,
                     false,LocalDateTime.now());
-            User etudiantUser = new User(null, "Ahmed", "Ahmed", "ahmedahmed@gmail.com",5656565,"Genie informatique", new BCryptPasswordEncoder().encode("password"), etudiantRole,
+            User etudiantUser = new User(null, "Ahmed", "Ahmed", "ahmedahmed@gmail.com",5656565,"Genie informatique","2eme", new BCryptPasswordEncoder().encode("password"), etudiantRole,
                     false,LocalDateTime.now());
-            User etudiantUser1 = new User(null, "Amine", "Amine", "Amineamine@gmail.com",123456,null, new BCryptPasswordEncoder().encode("password"), etudiantRole,
+            User etudiantUser1 = new User(null, "Amine", "Amine", "Amineamine@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"), etudiantRole,
                     false,LocalDateTime.now());
-            User etudiantUser2 = new User(null, "Mahdi", "Mahdi", "Mahdimahdi@gmail.com",123456,null, new BCryptPasswordEncoder().encode("password"), etudiantRole,
+            User etudiantUser2 = new User(null, "Mahdi", "Mahdi", "Mahdimahdi@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"), etudiantRole,
                     false,LocalDateTime.now());
-            User etudiantUser3 = new User(null, "Sabrine", "Sabrine", "Sabrinesabroucha@gmail.com",123456,null, new BCryptPasswordEncoder().encode("password"), etudiantRole,
+            User etudiantUser3 = new User(null, "Sabrine", "Sabrine", "Sabrinesabroucha@gmail.com",123456,null, null,new BCryptPasswordEncoder().encode("password"), etudiantRole,
                     false,LocalDateTime.now());
-            User etudiantUser4 = new User(null, "Salhi", "Hama", "HamaSalhi@gmail.com",123456,null, new BCryptPasswordEncoder().encode("password"), etudiantRole,
+            User etudiantUser4 = new User(null, "Salhi", "Hama", "HamaSalhi@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"), etudiantRole,
                     false,LocalDateTime.now());
 
             userRepository.save(superAdminUser);

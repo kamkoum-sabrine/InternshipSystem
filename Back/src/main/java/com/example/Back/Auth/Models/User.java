@@ -30,6 +30,8 @@ public class User {
     private Integer cin;
     @Column(nullable = true)
     private String filiere;
+    @Column(nullable = true)
+    private String niveau;
     private String password;
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
@@ -86,6 +88,30 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Integer getCin() {
+        return cin;
+    }
+
+    public String getFiliere() {
+        return filiere;
+    }
+
+    public String getNiveau() {
+        return niveau;
+    }
+
+    public void setCin(Integer cin) {
+        this.cin = cin;
+    }
+
+    public void setFiliere(String filiere) {
+        this.filiere = filiere;
+    }
+
+    public void setNiveau(String niveau) {
+        this.niveau = niveau;
     }
 
     public String getPassword() {
