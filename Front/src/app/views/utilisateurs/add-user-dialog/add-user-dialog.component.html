@@ -49,8 +49,8 @@
                             </select>
                         </c-col>
                     </c-row>
-                    <c-row class="mb-3" *ngIf="utilisateur.role === 'Etudiant'">
-                        <label cLabel class="col-sm-2 col-form-label" for="filiere">filiere</label>
+                    <c-row class="mb-3" *ngIf="utilisateur.role === 'ETUDIANT'">
+                        <label cLabel class="col-sm-2 col-form-label" for="filiere">Filiére</label>
                         <c-col sm="10">
                             <select [(ngModel)]="utilisateur.filiere" name="filiereId" id="filiere"
                                 aria-label="Default select example" cSelect required>
@@ -59,6 +59,17 @@
                                 <option>Génie industrielle</option>
                                 <option>Génie mécatronique</option>
                                 <option>Génie infotronique</option>
+
+                            </select>
+                        </c-col>
+                        <label cLabel class="col-sm-2 col-form-label" for="niveau">Niveau</label>
+                        <c-col sm="10">
+                            <select [(ngModel)]="utilisateur.niveau" name="niveauId" id="niveau"
+                                aria-label="Default select example" cSelect required>
+                                <option></option>
+                                <option>1ére année</option>
+                                <option>2éme année</option>
+                                <option>2éme année</option>
 
                             </select>
                         </c-col>

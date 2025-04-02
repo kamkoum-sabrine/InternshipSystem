@@ -1,3 +1,5 @@
+<button class="btn btn-warning text-white mb-3" (click)="openDialog()">Ajouter un utilisateur</button>
+
 <c-smart-table *ngIf="users && users.length > 0" [activePage]="1" [columnSorter]="true" [columns]="columns"
   [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="5" [items]="users"
   [sorterValue]="{ column: 'name', state: 'asc' }" [tableFilter]="true"

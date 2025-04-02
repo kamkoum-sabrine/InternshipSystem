@@ -12,10 +12,10 @@ export class GererUtilisateurService {
   constructor(private http: HttpClient) { }
 
   desactiverCompte(id: number): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/auth/desactivate`, id);
+    return this.http.post<any>(`${this.apiUrl}/users/desactivate`, id);
   }
   activerCompte(id: number): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/auth/activate`, id);
+    return this.http.post<any>(`${this.apiUrl}/users/activate`, id);
   }
 
   getAllRoles(): Observable<any> {
@@ -23,10 +23,10 @@ export class GererUtilisateurService {
   }
 
   creerUtilisateur(utilisateur: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/auth/register`, utilisateur);
+    return this.http.post<any>(`${this.apiUrl}/users/register`, utilisateur);
   }
 
   getUserById(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/auth/userId/${id}`);
+    return this.http.get<any>(`${this.apiUrl}/users/userId/${id}`);
   }
 }

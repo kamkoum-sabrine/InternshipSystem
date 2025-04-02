@@ -69,6 +69,21 @@ export class UtilisateursBasicExampleComponent implements OnInit {
     console.log('Valeur reçue du parent:', this.users);
 
   }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(AddUserDialogComponent, {
+      width: '600px',
+      minWidth: '600px',  // Largeur minimale de 400px
+      maxWidth: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Nouvelle soutenance:', result);
+        // Logic to add the user
+      }
+    });
+  }
   getItem(item: any) {
     console.log("item " + item)
   }

@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import {
@@ -15,7 +15,7 @@ import { DropdownModule, SidebarModule } from '@coreui/angular-pro';
 import { IconSetService } from '@coreui/icons-angular';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-
+import { authInterceptor } from './views/pages/login/auth.interceptor'
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes,
@@ -28,11 +28,16 @@ export const appConfig: ApplicationConfig = {
       }),
       withEnabledBlockingInitialNavigation(),
       withViewTransitions(),
-      withHashLocation()
+      withHashLocation(),
+
     ),
+
     importProvidersFrom(HttpClientModule),
     importProvidersFrom(SidebarModule, DropdownModule),
     IconSetService,
-    provideAnimations(), provideAnimationsAsync()
+    provideAnimations(), provideAnimationsAsync(),
+    provideHttpClient(
+      withInterceptors([authInterceptor]) // Ajout de l'intercepteur pour gérer les tokens
+    ),
   ]
 };

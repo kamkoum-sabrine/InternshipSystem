@@ -19,7 +19,7 @@ import com.example.Back.Auth.Services.MailService;
 import com.example.Back.Auth.Services.UserService;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
@@ -71,6 +71,9 @@ public class UserController {
         appUser.setNom(userDTO.getNom());
         appUser.setPrenom(userDTO.getPrenom());
         appUser.setEmail(userDTO.getEmail());
+        appUser.setCin(userDTO.getCin());
+        appUser.setNiveau(userDTO.getNiveau());
+        appUser.setFiliere(userDTO.getFiliere());
         String randomPassword = UUID.randomUUID().toString().replace("-",
                 "").substring(0, 8);
 
@@ -160,7 +163,7 @@ public class UserController {
         }
 
     }
-    @GetMapping("/users")
+    @GetMapping("/getAll")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }

@@ -7,11 +7,11 @@ import { Observable } from 'rxjs';
 })
 export class UtilisateursService {
 
-  private apiUrl = 'http://localhost:8081/api/auth';
+  private apiUrl = 'http://localhost:8081/api';
 
   constructor(private http: HttpClient) { }
 
   getUtilisateurs(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/users`);
+    return this.http.get<any>(`${this.apiUrl}/users/getAll`, { withCredentials: true });
   }
 }

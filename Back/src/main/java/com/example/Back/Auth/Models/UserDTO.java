@@ -1,11 +1,16 @@
 package com.example.Back.Auth.Models;
 
+import jakarta.persistence.Column;
+
 public class UserDTO {
     private String email;
     private String nom;
     private String prenom;
     private String password;
     private String role;
+    private Integer cin;
+    private String filiere;
+    private String niveau;
 
     // Getters et setters obligatoires
     public String getEmail() {
@@ -46,5 +51,24 @@ public class UserDTO {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Integer getCin() {
+        return cin;
+    }
+    public void setCin(Integer cin) {
+        this.cin = cin;
+    }
+    public String getFiliere() {
+        return filiere;
+    }
+    public void setFiliere(String filiere) {
+        this.filiere = filiere;
+    }
+    public String getNiveau() {
+        return niveau;
+    }
+    public void setNiveau(String niveau) {
+        this.niveau = niveau;
     }
 }

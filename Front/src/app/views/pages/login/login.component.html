@@ -1,61 +1,115 @@
-<div class="bg-light dark:bg-transparent min-vh-100 d-flex flex-row align-items-center">
+<div class="body login-wrap">
+  <div class="login-html">
+    <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Se
+      connecter</label>
+    <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"></label>
+    <div class="login-form">
+      <div class="sign-in-htm">
+        <div class="group">
+          <label for="user" class="label">Email</label>
+          <input id="user" type="text" class="input" name="email" [(ngModel)]="email">
+        </div>
+        <div class="group">
+          <label for="pass" class="label">Mot de passe</label>
+          <input id="pass" type="password" class="input" data-type="password" name="password" [(ngModel)]="password">
+        </div>
+        <!-- <div class="group">
+          <input id="check" type="checkbox" class="check" checked>
+          <label for="check"><span class="icon"></span> Keep me Signed in</label>
+        </div> -->
+        <div class="group">
+          <input type="submit" class="button" value="Connexion" (click)="login()">
+        </div>
+        <div class="hr"></div>
+        <div class="foot-lnk">
+          <a href="#forgot">Mot de passe oublié ?</a>
+        </div>
+      </div>
+      <div class="sign-up-htm">
+        <div class="group">
+          <label for="user" class="label">Username</label>
+          <input id="user" type="text" class="input">
+        </div>
+        <div class="group">
+          <label for="pass" class="label">Password</label>
+          <input id="pass" type="password" class="input" data-type="password">
+        </div>
+        <div class="group">
+          <label for="pass" class="label">Repeat Password</label>
+          <input id="pass" type="password" class="input" data-type="password">
+        </div>
+        <div class="group">
+          <label for="pass" class="label">Email Address</label>
+          <input id="pass" type="text" class="input">
+        </div>
+        <div class="group">
+          <input type="submit" class="button" value="Sign Up">
+        </div>
+        <div class="hr"></div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <div class="bg-light dark:bg-transparent min-vh-100 d-flex flex-row align-items-center">
   <c-container breakpoint="md">
     <c-row class="justify-content-center">
       <c-col lg="10" xl="8">
         <c-card-group>
           <c-card class="p-4">
             <c-card-body>
+
               <form cForm>
                 <h1>Login</h1>
-                <p class="text-body-secondary">Sign In to your account</p>
+                <p class="text-body-secondary">Se connecter</p>
                 <c-input-group class="mb-3">
                   <span cInputGroupText>
                     <svg cIcon name="cilUser"></svg>
                   </span>
-                  <input autoComplete="username" cFormControl placeholder="Username" />
+                  <input autoComplete="email" cFormControl placeholder="email" name="email" [(ngModel)]="email"
+                    required />
+
                 </c-input-group>
                 <c-input-group class="mb-4">
                   <span cInputGroupText>
                     <svg cIcon name="cilLockLocked"></svg>
                   </span>
-                  <input
-                    autoComplete="current-password"
-                    cFormControl
-                    placeholder="Password"
-                    type="password"
-                  />
+                  <input autoComplete="current-password" cFormControl placeholder="Password" name="password"
+                    [(ngModel)]="password" type="password" required />
                 </c-input-group>
                 <c-row>
                   <c-col xs="6">
-                    <button cButton class="px-4" color="primary">
+                    <button cButton class="px-4" color="primary" (click)="login()">
                       Login
                     </button>
                   </c-col>
-                  <c-col class="text-right" xs="6">
+                  <!-- <c-col class="text-right" xs="6">
                     <button cButton class="px-0" color="link">
                       Forgot password?
                     </button>
-                  </c-col>
-                </c-row>
-              </form>
-            </c-card-body>
-          </c-card>
-          <c-card [ngStyle]="{'minWidth.%': 44}" class="text-white bg-primary py-5">
-            <c-card-body class="text-center">
-              <div>
-                <h2>Sign up</h2>
+                  </c-col> -->
+<!-- </c-row>
+</form>
+</c-card-body>
+</c-card>
+<c-card [ngStyle]="{'minWidth.%': 44}" class="text-white bg-primary py-5">
+  <c-card-body class="text-center">
+    <div>
+      <img src="../../../../assets/images/Logo_ENICarthage.jpg" height="100px" cIcon class="sidebar-brand-full" /> -->
+
+<!-- <h2>Sign up</h2>
                 <p>
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                   tempor incididunt ut labore et dolore magna aliqua.
                 </p>
                 <button [active]="true" cButton class="mt-3" color="primary" routerLink="/register">
                   Register Now!
-                </button>
-              </div>
-            </c-card-body>
-          </c-card>
-        </c-card-group>
-      </c-col>
-    </c-row>
-  </c-container>
-</div>
+                </button> -->
+<!-- </div>
+  </c-card-body>
+</c-card>
+</c-card-group>
+</c-col>
+</c-row>
+</c-container>
+</div> --> -->
