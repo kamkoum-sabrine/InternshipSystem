@@ -45,6 +45,10 @@ export class UtilisateursBasicExampleComponent implements OnInit {
     //   _props: { class: 'text-truncate' }
     // },
     { key: 'role', _style: { width: '20%' } },
+    { key: 'filiere', label: 'Filiére', _style: { width: '20%' } },
+
+    { key: 'niveau', label: 'Niveau', _style: { width: '20%' } },
+
     { key: 'active', _style: { width: '15%' } },
     {
       key: 'show',

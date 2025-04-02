@@ -1,0 +1,90 @@
+<c-row>
+    <c-col xs="12">
+        <c-card class="mb-4">
+            <c-card-header ngPreserveWhitespaces>
+                <strong>Dépot d'une convention de stage</strong>
+            </c-card-header>
+            <c-card-body>
+                <form (ngSubmit)="onSubmit()" cForm>
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="nom">nom</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="utilisateur.nom" name="nom" cFormControl id="nom" type="text"
+                                placeholder="Nom" required />
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="prenom">prenom</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="utilisateur.prenom" name="prenom" cFormControl id="prenom" type="text"
+                                placeholder="Prenom" required />
+                        </c-col>
+                    </c-row>
+                    <!-- Salle Field -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="cin">CIN</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="utilisateur.cin" name="cin" cFormControl id="cin" type="text"
+                                placeholder="CIN" required />
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="email">Email</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="utilisateur.email" name="email" cFormControl id="email" type="text"
+                                placeholder="Email" required />
+                        </c-col>
+                    </c-row>
+
+
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="role">Role</label>
+                        <c-col sm="10">
+                            <select [(ngModel)]="utilisateur.role" name="role" id="role"
+                                aria-label="Default select example" cSelect required>
+                                <option></option>
+                                <option *ngFor="let role of roles" [value]="role.nom">{{ role.nom }}
+                                </option>
+                            </select>
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-3" *ngIf="utilisateur.role === 'ETUDIANT'">
+                        <label cLabel class="col-sm-2 col-form-label" for="filiere">Filiére</label>
+                        <c-col sm="10">
+                            <select [(ngModel)]="utilisateur.filiere" name="filiereId" id="filiere"
+                                aria-label="Default select example" cSelect required>
+                                <option></option>
+                                <option>Génie informatique</option>
+                                <option>Génie industrielle</option>
+                                <option>Génie mécatronique</option>
+                                <option>Génie infotronique</option>
+
+                            </select>
+                        </c-col>
+                        <label cLabel class="col-sm-2 col-form-label" for="niveau">Niveau</label>
+                        <c-col sm="10">
+                            <select [(ngModel)]="utilisateur.niveau" name="niveauId" id="niveau"
+                                aria-label="Default select example" cSelect required>
+                                <option></option>
+                                <option>1ére année</option>
+                                <option>2éme année</option>
+                                <option>2éme année</option>
+
+                            </select>
+                        </c-col>
+                    </c-row>
+                    <!-- Action Buttons -->
+                    <c-row class="mb-3">
+                        <c-col sm="12" class="d-flex justify-content-end">
+                            <button cButton class="me-3" color="danger" type="button" style="color: #ffffff;"
+                                (click)="onNoClick()">Annuler</button>
+                            <button cButton color="info" style="color: #ffffff;" type="submit">Soumettre</button>
+                        </c-col>
+                    </c-row>
+
+                </form>
+            </c-card-body>
+        </c-card>
+    </c-col>
+</c-row>

@@ -1,0 +1,11 @@
+package com.example.Back.Conventions.Repositories;
+
+import com.example.Back.Auth.Models.User;
+import com.example.Back.Conventions.Models.ConventionStageEte;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface ConventionStageEteRepository extends JpaRepository<ConventionStageEte, Long> {
+    List<ConventionStageEte> findByEtudiant(User etudiant);
+}

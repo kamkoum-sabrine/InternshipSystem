@@ -40,6 +40,16 @@ export const navItems: INavDataExtended[] = [
     roles: ['SERVICE_STAGE', 'DIRECTION_STAGE']
   },
   {
+    name: 'Mes conventions',
+    url: '/conventionsEtudiant',
+    iconComponent: { name: 'cil-home' },
+    badge: {
+      color: 'danger-gradient',
+      text: 'PRO'
+    },
+    roles: ['ETUDIANT']
+  },
+  {
     name: 'Soutenances',
     url: '/soutenances',
     iconComponent: { name: 'fa', icon: 'trash' },
