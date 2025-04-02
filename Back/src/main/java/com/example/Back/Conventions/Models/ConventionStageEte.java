@@ -36,6 +36,8 @@ public class ConventionStageEte {
     private Boolean valideeService;
     private Boolean valideeDirection;
     private Boolean annulee;
+    @Column(nullable = true)
     private String preuveAnnulationNom;
+    @Column(nullable = true)
     private String preuveAnnulationChemin;
 }

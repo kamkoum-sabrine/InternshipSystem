@@ -78,6 +78,9 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/enseignant/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/enseignant").hasAnyAuthority("ROLE_SERVICE_STAGE")
 
+                        .requestMatchers("/api/conventionStagEte/create").hasAnyAuthority("ROLE_SERVICE_STAGE", "ROLE_ETUDIANT")
+
+
                         .anyRequest().authenticated())
                        /** .requestMatchers("/api/login", "/api/admin/register", "/api/admin/activate",
 
