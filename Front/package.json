@@ -48,6 +48,7 @@
     "@fullcalendar/timegrid": "^6.1.15",
     "@googlemaps/js-api-loader": "^1.16.8",
     "@googlemaps/markerclustererplus": "^1.2.10",
+    "@types/xlsx": "^0.0.35",
     "chart.js": "^4.4.4",
     "date-fns": "^3.6.0",
     "lodash-es": "^4.17.21",
@@ -55,6 +56,7 @@
     "rxjs": "~7.8.1",
     "sweetalert2": "^11.17.2",
     "tslib": "^2.7.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
