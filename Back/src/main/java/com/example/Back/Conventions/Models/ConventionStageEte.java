@@ -38,6 +38,4 @@ public class ConventionStageEte {
     private Boolean annulee;
     private String preuveAnnulationNom;
     private String preuveAnnulationChemin;
-
-
 }
