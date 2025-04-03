@@ -24,15 +24,23 @@ public class TelechargerConventionService {
             PdfPage page = pdfDoc.getFirstPage();
             PdfCanvas canvas = new PdfCanvas(page);
             String Departement = "Génie Informatique" ;
+            String Numtel = "98578525" ;
+            String Formation = "Mastère" ;
+
 
             // 🖊 Ajouter les champs aux positions spécifiques
-            drawText(canvas, font, "x", 93, 508); //Ingenieurie
+            if (Formation.equals("Ingénierie")){
+            drawText(canvas, font, "x", 93, 508); }//Ingénierie
+            else if (Formation.equals("Mastère")){
+                drawText(canvas, font, "x", 153, 508);
+            }
+
             drawText(canvas, font, formData.getOrDefault("Prénom", ""), 140, 521); // Prénom
             drawText(canvas, font, formData.getOrDefault("Nom", ""), 350, 521);   // Nom
             drawText(canvas, font, formData.getOrDefault("N° CIN", ""), 110, 467); // N° CIN
             drawText(canvas, font, formData.getOrDefault("E-mail", ""), 380, 467); // E-mail
-            drawText(canvas, font, formData.getOrDefault("Ntéléphone", ""), 250, 467); // N° téléphone
-            drawText(canvas, font, formData.getOrDefault("Filière", ""), 110, 480); // Filière
+            drawText(canvas, font, Numtel, 250, 467); // N° téléphone
+            drawText(canvas, font, formData.getOrDefault("Filière", ""), 110, 481); // Filière
             if (formData.get("Niveau").equals("2eme")){
                 drawText(canvas, font, "x", 396, 481); // Filière
             }
