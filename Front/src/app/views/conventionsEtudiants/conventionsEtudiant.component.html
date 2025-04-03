@@ -8,11 +8,12 @@
       <!-- <button class="btn btn-primary mb-3" (click)="openDialog()">Ajouter un utilisateur</button> -->
 
       <c-card-body>
-        <div *ngIf="users">
+        <div *ngIf="myConventions">
           <!-- <app-docs-example href="components/smart-table" [users]="users"> -->
-          <app-utilisateurs-basic-example [users]="users" />
+          <app-conventionsEtudiant-basic-example [myConventions]="myConventions" />
           <!-- </app-docs-example> -->
         </div>
+
         <!-- <app-docs-example href="components/smart-table">
           <app-utilisateurs-basic-example [users]="users" />
         </app-docs-example> -->
