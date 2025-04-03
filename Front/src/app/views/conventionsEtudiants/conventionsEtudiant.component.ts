@@ -41,7 +41,7 @@ export class ConventionsEtudiantComponent implements OnInit {
   }
 
   openDialog(): void {
-<<<<<<< Updated upstream
+
     // const dialogRef = this.dialog.open(AddConventionDialogComponent, {
     //   width: '600px',
     //   minWidth: '600px',  // Largeur minimale de 400px
@@ -54,7 +54,7 @@ export class ConventionsEtudiantComponent implements OnInit {
     //     // Logic to add the user
     //   }
     // });
-=======
+
     const dialogRef = this.dialog.open(AddConventionDialogComponent, {
       width: '600px',
       minWidth: '600px',  // Largeur minimale de 400px
@@ -127,14 +127,9 @@ export class ConventionsEtudiantComponent implements OnInit {
 
     // 5. Si tout est valide, lancer le téléchargement
     this.conventionsEtudiantsService.downloadPdf(user.id);
->>>>>>> Stashed changes
-  }
-
-  downloadPdf() {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    this.conventionsEtudiantsService.downloadPdf(user.id);
-    console.log(user.id);
 
   }
+
+
 
 }
