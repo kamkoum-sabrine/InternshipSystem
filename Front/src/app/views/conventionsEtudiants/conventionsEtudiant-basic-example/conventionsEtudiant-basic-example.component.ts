@@ -27,16 +27,30 @@ import { GererConventionsEtudiantService } from './gerer-conventionsEtudiant.ser
 export class ConventionsEtudiantBasicExampleComponent implements OnInit {
 
   usersData = usersData;
-  @Input() users: any[] = [];;
+  @Input() myConventions: any[] = [];;
 
   columns: IColumn[] = [
+    {
+      key: 'fichierPDFNom',
+      label: 'Conventions déposées'
+    },
 
     {
-      key: 'nom',
-      label: 'Nom',
+      key: 'dateDepot',
+      label: 'Date de dépot',
+    },
+
+    {
+      key: 'valideeService',
+      label: 'Validée par le service de stage'
     },
     {
-      key: 'prenom'
+      key: 'valideeDirection',
+      label: 'Validée par la direction de stage'
+    },
+    {
+      key: 'annulee',
+      label: 'Annuler'
     },
 
     // {
@@ -44,19 +58,19 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
     //   label: 'Date Registered',
     //   _props: { class: 'text-truncate' }
     // },
-    { key: 'role', _style: { width: '20%' } },
-    { key: 'filiere', label: 'Filiére', _style: { width: '20%' } },
+    // { key: 'role', _style: { width: '20%' } },
+    // { key: 'filiere', label: 'Filiére', _style: { width: '20%' } },
 
-    { key: 'niveau', label: 'Niveau', _style: { width: '20%' } },
+    // { key: 'niveau', label: 'Niveau', _style: { width: '20%' } },
 
-    { key: 'active', _style: { width: '15%' } },
-    {
-      key: 'show',
-      label: '',
-      _style: { width: '5%' },
-      filter: false,
-      sorter: false
-    }
+    // { key: 'active', _style: { width: '15%' } },
+    // {
+    //   key: 'show',
+    //   label: '',
+    //   _style: { width: '5%' },
+    //   filter: false,
+    //   sorter: false
+    // }
   ];
   details_visible = Object.create({});
 
@@ -64,13 +78,13 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['users']) {
-      console.log('Nouvelle valeur de users :', this.users);
+    if (changes['myConventions']) {
+      console.log('Nouvelle valeur de myConventions :', this.myConventions);
       this.cdr.detectChanges(); // Force la mise à jour de la vue
     }
   }
   ngOnInit() {
-    console.log('Valeur reçue du parent:', this.users);
+    console.log('Valeur reçue du parent:', this.myConventions);
 
   }
 
@@ -88,15 +102,48 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
       }
     });
   }
+  downloadPDF(nomFichier: string) {
+    // console.log("nomFichier", nomFichier)
+    // // const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
+    const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
+
+    // const link = document.createElement("a");
+    // link.href = fileUrl;
+    // link.download = nomFichier;
+    // link.target = "_blank";
+    // document.body.appendChild(link);
+    // link.click();
+    // document.body.removeChild(link);
+    fetch(fileUrl, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`, // Récupère le token si JWT est utilisé
+      },
+    })
+      .then(response => {
+        if (!response.ok) throw new Error("Accès refusé !");
+        return response.blob();
+      })
+      .then(blob => {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = nomFichier;
+        link.click();
+      })
+      .catch(error => console.error("Erreur lors du téléchargement :", error));
+  }
+
   getItem(item: any) {
     console.log("item " + item)
   }
-  getBadge(status: boolean) {
+  getBadge(status: number) {
     switch (status) {
-      case true:
+      case 1:
         return 'success';
-      case false:
+      case -1:
         return 'danger';
+      case 0:
+        return 'warning';
       default:
         return 'primary';
     }
@@ -109,6 +156,14 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
     this.details_visible[itemId] = !this.details_visible[itemId];
 
     console.log("Après :", this.details_visible[itemId]);
+  }
+  getDate(dateDepot: any) {
+    const formattedDate = dateDepot.split("T")[0] + " " + dateDepot.split("T")[1].split(".")[0];
+    console.log(formattedDate);
+    return formattedDate;
+  }
+  annulerDemande(id: any) {
+    console.log("Id de la convention à annuler ", id);
   }
   // changerEtatCompte(itemId: number, active: boolean) {
 
