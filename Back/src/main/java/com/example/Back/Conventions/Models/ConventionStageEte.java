@@ -33,9 +33,9 @@ public class ConventionStageEte {
     private String fichierPDFNom;
     private String fichierPDFChemin;
 
-    private Boolean valideeService;
-    private Boolean valideeDirection;
-    private Boolean annulee;
+    private Integer valideeService;
+    private Integer valideeDirection;
+    private Integer annulee;
     @Column(nullable = true)
     private String preuveAnnulationNom;
     @Column(nullable = true)

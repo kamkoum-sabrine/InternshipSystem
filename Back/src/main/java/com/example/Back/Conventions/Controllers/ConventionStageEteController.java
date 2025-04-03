@@ -85,9 +85,9 @@ public class ConventionStageEteController {
             convention.setDateDepot(new Date());
             convention.setFichierPDFNom(fileName);
             convention.setFichierPDFChemin(filePath.toString());
-            convention.setValideeService(false);
-            convention.setValideeDirection(false);
-            convention.setAnnulee(false);
+            convention.setValideeService(0);
+            convention.setValideeDirection(0);
+            convention.setAnnulee(0);
 
             ConventionStageEte savedConvention = conventionStageEteRepository.save(convention);
             return ResponseEntity.ok(savedConvention);
