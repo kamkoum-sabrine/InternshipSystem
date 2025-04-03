@@ -11,6 +11,17 @@ export class GererConventionsEtudiantService {
 
   constructor(private http: HttpClient) { }
 
+  downloadPdf(studentId: number) {
+    this.http.get(`http://localhost:8081/api/pdf/convention/${studentId}`, { responseType: 'blob' }).subscribe((response: Blob) => {
+      const url = window.URL.createObjectURL(response);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'convention_stage.pdf';
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
+  }
+
   // desactiverCompte(id: number): Observable<any> {
   //   return this.http.post<any>(`${this.apiUrl}/users/desactivate`, id);
   // }

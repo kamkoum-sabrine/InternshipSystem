@@ -247,4 +247,67 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
   }
 
 
+  downloadPdf() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+    // 1. Vérifier si l'objet user est vide
+    if (Object.keys(user).length === 0) {
+      Swal.fire('Erreur', 'Aucune donnée utilisateur trouvée.', 'error');
+      return;
+    }
+
+    // 2. Liste de TOUS les attributs (obligatoires + optionnels)
+    const allAttributes = [
+      'id', 'nom', 'prenom', 'email', 'cin', 'filiere', 'niveau',
+    ];
+
+    // 3. Vérifier chaque attribut (même les optionnels)
+    const invalidAttributes = allAttributes.filter(attr => {
+      const value = user[attr];
+      // Vérifie si null, undefined, chaîne vide, ou objet role sans ID
+      return (
+        value === null ||
+        value === undefined ||
+        value === "" ||
+        (attr === 'role' && !user.role?.id) ||
+        (attr === 'cin' && isNaN(value))
+      );
+    });
+
+    // 4. Si au moins un attribut est invalide
+    if (invalidAttributes.length > 0) {
+      Swal.fire({
+        title: 'Profil incomplet',
+        html: `
+          <div>
+            <p>Vous ne pouvez pas télécharger votre convention.</p>
+            <p class="text-danger">Attributs invalides ou manquants :</p>
+            <p>${invalidAttributes.join(', ')}</p>
+          </div>
+        `,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Mettre à jour mon profil',
+        cancelButtonText: 'Annuler',
+        reverseButtons: true,
+        customClass: {
+          popup: 'swal2-popup-custom' // Optionnel : pour du CSS personnalisé
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          //gerermonprfil();
+        } else {
+          Swal.fire('Annulé', 'Action annulée.', 'info');
+        }
+      });
+      return;
+    }
+
+    // 5. Si tout est valide, lancer le téléchargement
+    this.gererConventionsEtudiantService.downloadPdf(user.id);
+
+  }
+
+
+
 }
