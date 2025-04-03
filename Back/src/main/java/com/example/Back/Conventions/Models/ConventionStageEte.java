@@ -33,9 +33,9 @@ public class ConventionStageEte {
     private String fichierPDFNom;
     private String fichierPDFChemin;
 
-    private Integer valideeService;
-    private Integer valideeDirection;
-    private Integer annulee;
+    private Integer valideeService; // 0 : en attente , 1: validée , -1 : non validée
+    private Integer valideeDirection;// 0 : en attente , 1: validée , -1 : non validée
+    private Integer annulee; // par defaut 0 (en attente et si preuve annulation <> null)
     @Column(nullable = true)
     private String preuveAnnulationNom;
     @Column(nullable = true)
