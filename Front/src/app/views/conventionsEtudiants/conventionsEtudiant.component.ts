@@ -8,7 +8,7 @@ import {
   RowComponent,
   TextColorDirective
 } from '@coreui/angular-pro';
-import { DocsExampleComponent } from '@docs-components/public-api';
+//import { DocsExampleComponent } from '@docs-components/public-api';
 
 import { ConventionsEtudiantService } from './conventionsEtudiant-service.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -23,10 +23,12 @@ import Swal from 'sweetalert2';
   templateUrl: './conventionsEtudiant.component.html',
   styleUrls: ['./conventionsEtudiant.component.scss'],
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, DocsExampleComponent, ConventionsEtudiantBasicExampleComponent, MatDialogModule, MatButtonModule]
+  imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, ConventionsEtudiantBasicExampleComponent, MatDialogModule, MatButtonModule]
 })
 export class ConventionsEtudiantComponent implements OnInit {
   myConventions: any;
+
+
 
   constructor(private conventionsEtudiantsService: ConventionsEtudiantService, public dialog: MatDialog) { }
   ngOnInit(): void {
@@ -126,6 +128,13 @@ export class ConventionsEtudiantComponent implements OnInit {
     // 5. Si tout est valide, lancer le téléchargement
     this.conventionsEtudiantsService.downloadPdf(user.id);
 >>>>>>> Stashed changes
+  }
+
+  downloadPdf() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.conventionsEtudiantsService.downloadPdf(user.id);
+    console.log(user.id);
+
   }
 
 }
