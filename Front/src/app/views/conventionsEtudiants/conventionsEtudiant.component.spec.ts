@@ -12,7 +12,7 @@ import {
 import { IconSetService } from '@coreui/icons-angular';
 import { iconSubset } from '../../icons/icon-subset';
 import { ConventionsEtudiantComponent } from './conventionsEtudiant.component';
-import { ConventionsEtudiantBasicExampleComponent } from './ConventionsEtudiant-basic-example/ConventionsEtudiant-basic-example.component';
+import { ConventionsEtudiantBasicExampleComponent } from './conventionsEtudiant-basic-example/conventionsEtudiant-basic-example.component';
 
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 

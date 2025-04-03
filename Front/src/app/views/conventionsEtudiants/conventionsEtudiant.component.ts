@@ -25,31 +25,33 @@ import { MatDialogModule } from '@angular/material/dialog';
   imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, ConventionsEtudiantBasicExampleComponent, MatDialogModule, MatButtonModule]
 })
 export class ConventionsEtudiantComponent implements OnInit {
-  users: any;
+  myConventions: any;
 
 
 
   constructor(private conventionsEtudiantsService: ConventionsEtudiantService, public dialog: MatDialog) { }
   ngOnInit(): void {
-    this.conventionsEtudiantsService.getMesConventions().subscribe(data => {
-      this.users = data;
-      console.log(this.users);
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+    this.conventionsEtudiantsService.getMesConventions(user.id).subscribe(data => {
+      this.myConventions = data;
+      console.log(this.myConventions);
     });
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(AddConventionDialogComponent, {
-      width: '600px',
-      minWidth: '600px',  // Largeur minimale de 400px
-      maxWidth: '600px',
-    });
+    // const dialogRef = this.dialog.open(AddConventionDialogComponent, {
+    //   width: '600px',
+    //   minWidth: '600px',  // Largeur minimale de 400px
+    //   maxWidth: '600px',
+    // });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log('Nouvelle soutenance:', result);
-        // Logic to add the user
-      }
-    });
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result) {
+    //     console.log('Nouvelle soutenance:', result);
+    //     // Logic to add the user
+    //   }
+    // });
   }
 
   downloadPdf() {
