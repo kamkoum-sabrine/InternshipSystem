@@ -8,7 +8,7 @@ import {
   RowComponent,
   TextColorDirective
 } from '@coreui/angular-pro';
-import { DocsExampleComponent } from '@docs-components/public-api';
+//import { DocsExampleComponent } from '@docs-components/public-api';
 
 import { ConventionsEtudiantService } from './conventionsEtudiant-service.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -22,10 +22,12 @@ import { MatDialogModule } from '@angular/material/dialog';
   templateUrl: './conventionsEtudiant.component.html',
   styleUrls: ['./conventionsEtudiant.component.scss'],
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, DocsExampleComponent, ConventionsEtudiantBasicExampleComponent, MatDialogModule, MatButtonModule]
+  imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, ConventionsEtudiantBasicExampleComponent, MatDialogModule, MatButtonModule]
 })
 export class ConventionsEtudiantComponent implements OnInit {
   users: any;
+
+
 
   constructor(private conventionsEtudiantsService: ConventionsEtudiantService, public dialog: MatDialog) { }
   ngOnInit(): void {
@@ -48,6 +50,13 @@ export class ConventionsEtudiantComponent implements OnInit {
         // Logic to add the user
       }
     });
+  }
+
+  downloadPdf() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.conventionsEtudiantsService.downloadPdf(user.id);
+    console.log(user.id);
+
   }
 
 }
