@@ -33,6 +33,16 @@ public class User {
     @Column(nullable = true)
     private String niveau;
     private String password;
+    @Column(nullable = true)
+    private String adresse;
+    @Column(nullable = true)
+    private String option;
+    @Column(nullable = true)
+    private String fax;
+    @Column(nullable = true)
+    private String sexe;
+    @Column(nullable = true)
+    private String lieuNaissance;
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;

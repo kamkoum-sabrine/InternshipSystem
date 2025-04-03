@@ -11,6 +11,51 @@ public class UserDTO {
     private Integer cin;
     private String filiere;
     private String niveau;
+    private String adresse;
+    private String option;
+    private String fax;
+    private String sexe;
+    private String lieuNaissance;
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
+    }
+
+    public void setOption(String option) {
+        this.option = option;
+    }
+
+    public void setFax(String fax) {
+        this.fax = fax;
+    }
+
+    public void setSexe(String sexe) {
+        this.sexe = sexe;
+    }
+
+    public void setLieuNaissance(String lieuNaissance) {
+        this.lieuNaissance = lieuNaissance;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public String getOption() {
+        return option;
+    }
+
+    public String getFax() {
+        return fax;
+    }
+
+    public String getSexe() {
+        return sexe;
+    }
+
+    public String getLieuNaissance() {
+        return lieuNaissance;
+    }
 
     // Getters et setters obligatoires
     public String getEmail() {

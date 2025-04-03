@@ -74,6 +74,11 @@ public class UserController {
         appUser.setCin(userDTO.getCin());
         appUser.setNiveau(userDTO.getNiveau());
         appUser.setFiliere(userDTO.getFiliere());
+        appUser.setAdresse(userDTO.getAdresse());
+        appUser.setSexe(userDTO.getSexe());
+        appUser.setLieuNaissance(userDTO.getLieuNaissance());
+        appUser.setOption(userDTO.getOption());
+        appUser.setFax(userDTO.getFax());
         String randomPassword = UUID.randomUUID().toString().replace("-",
                 "").substring(0, 8);
 
