@@ -159,7 +159,6 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
   }
   getDate(dateDepot: any) {
     const formattedDate = dateDepot.split("T")[0] + " " + dateDepot.split("T")[1].split(".")[0];
-    console.log(formattedDate);
     return formattedDate;
   }
   annulerDemande(id: any) {

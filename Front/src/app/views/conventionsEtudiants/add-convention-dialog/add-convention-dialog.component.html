@@ -1,4 +1,4 @@
-<c-row>
+<c-row class="fixed-dialog">
     <c-col xs="12">
         <c-card class="mb-4">
             <c-card-header ngPreserveWhitespaces>
@@ -37,19 +37,166 @@
                         </c-col>
                     </c-row>
 
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="filiere">filiere</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="utilisateur.filiere" name="filiere" cFormControl id="filiere"
+                                type="text" placeholder="filiere" required />
+                        </c-col>
+                    </c-row>
 
                     <c-row class="mb-3">
-                        <label cLabel class="col-sm-2 col-form-label" for="role">Role</label>
+                        <label cLabel class="col-sm-2 col-form-label" for="niveau">niveau</label>
                         <c-col sm="10">
-                            <select [(ngModel)]="utilisateur.role" name="role" id="role"
+                            <input [(ngModel)]="utilisateur.niveau" name="niveau" cFormControl id="niveau" type="text"
+                                placeholder="niveau" required />
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="adresse">adresse</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="utilisateur.adresse" name="adresse" cFormControl id="adresse"
+                                type="text" placeholder="adresse" required />
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="dateNaissance">dateNaissance</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="utilisateur.dateNaissance" name="dateNaissance" cFormControl
+                                id="dateNaissance" type="date" placeholder="dateNaissance" required />
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="lieuNaissance">lieuNaissance</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="utilisateur.lieuNaissance" name="lieuNaissance" cFormControl
+                                id="lieuNaissance" type="text" placeholder="lieuNaissance" required />
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="telephone">telephone</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="utilisateur.telephone" name="telephone" cFormControl
+                                id="telephoneEtudiant" type="text" placeholder="telephone" required />
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="fax">fax</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="utilisateur.fax" name="fax" cFormControl id="fax" type="text"
+                                placeholder="fax" required />
+                        </c-col>
+                    </c-row>
+
+
+
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="lieuNaissance">lieuNaissance</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="utilisateur.lieuNaissance" name="lieuNaissance" cFormControl
+                                id="lieuNaissance" type="text" placeholder="lieuNaissance" required />
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="option">option</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="utilisateur.option" name="option" cFormControl id="option" type="text"
+                                placeholder="option" required />
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="sexe">Sexe</label>
+                        <c-col sm="10">
+                            <select [(ngModel)]="utilisateur.sexe" name="sexeId" id="sexe"
                                 aria-label="Default select example" cSelect required>
                                 <option></option>
-                                <option *ngFor="let role of roles" [value]="role.nom">{{ role.nom }}
-                                </option>
+                                <option>Féminin</option>
+                                <option>Masculin</option>
                             </select>
                         </c-col>
                     </c-row>
-                    <c-row class="mb-3" *ngIf="utilisateur.role === 'ETUDIANT'">
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="dateDebut">dateDebut</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="convention.dateDebut" name="dateDebut" cFormControl id="dateDebut"
+                                type="date" placeholder="dateDebut" required />
+                        </c-col>
+                    </c-row>
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="dateFin">dateFin</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="convention.dateFin" name="dateFin" cFormControl id="dateFin" type="date"
+                                placeholder="dateFin" required />
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="etablissement">etablissement</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="convention.etablissement" name="etablissement" cFormControl
+                                id="etablissement" type="text" placeholder="etablissement" required />
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="adresse">adresse établissement</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="convention.adresse" name="adresse" cFormControl id="adresse" type="text"
+                                placeholder="adresse" required />
+                        </c-col>
+                    </c-row>
+
+
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="email">email établissement</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="convention.email" name="email" cFormControl id="email" type="text"
+                                placeholder="email" required />
+                        </c-col>
+                    </c-row>
+
+
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="telephone">telephone établissement</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="convention.telephone" name="telephone" cFormControl id="telephone"
+                                type="text" placeholder="telephone" required />
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="representePar">representePar</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="convention.representePar" name="representePar" cFormControl
+                                id="representePar" type="text" placeholder="representePar" required />
+                        </c-col>
+                    </c-row>
+
+
+
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="tuteurStage">tuteurStage</label>
+                        <c-col sm="10">
+                            <input [(ngModel)]="convention.tuteurStage" name="tuteurStage" cFormControl id="tuteurStage"
+                                type="text" placeholder="tuteurStage" required />
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="fichierPDF">fichierPDF</label>
+                        <c-col sm="10">
+                            <!-- <input [(ngModel)]="convention.fichierPDF" name="fichierPDF" cFormControl id="fichierPDF"
+                                type="file" placeholder="fichierPDF" required /> -->
+                            <input [(ngModel)]="convention.fichierPDF" name="fichierPDF" cFormControl id="fichierPDF"
+                                type="file" (change)="onFileChange($event)" placeholder="Choisir un fichier PDF"
+                                required />
+                        </c-col>
+                    </c-row>
+                    <!-- <c-row class="mb-3">
                         <label cLabel class="col-sm-2 col-form-label" for="filiere">Filiére</label>
                         <c-col sm="10">
                             <select [(ngModel)]="utilisateur.filiere" name="filiereId" id="filiere"
@@ -61,8 +208,8 @@
                                 <option>Génie infotronique</option>
 
                             </select>
-                        </c-col>
-                        <label cLabel class="col-sm-2 col-form-label" for="niveau">Niveau</label>
+                        </c-col> -->
+                    <!-- <label cLabel class="col-sm-2 col-form-label" for="niveau">Niveau</label>
                         <c-col sm="10">
                             <select [(ngModel)]="utilisateur.niveau" name="niveauId" id="niveau"
                                 aria-label="Default select example" cSelect required>
@@ -72,8 +219,8 @@
                                 <option>2éme année</option>
 
                             </select>
-                        </c-col>
-                    </c-row>
+                        </c-col> -->
+                    <!-- </c-row> -->
                     <!-- Action Buttons -->
                     <c-row class="mb-3">
                         <c-col sm="12" class="d-flex justify-content-end">

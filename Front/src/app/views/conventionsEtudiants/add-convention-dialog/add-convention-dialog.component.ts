@@ -31,14 +31,33 @@ export class AddConventionDialogComponent {
   roles: any[] = [];
 
   utilisateur = {
+    id: '',
     nom: '',
     prenom: '',
     email: '',
     cin: '',
     filiere: '',
-    role: '',
-    niveau: ''
+    niveau: '',
+    adresse: '',
+    fax: '',
+    lieuNaissance: '',
+    dateNaissance: '',
+    option: '',
+    sexe: '',
+    telephone: ''
   };
+  convention = {
+    etudiantId: '',
+    etablissement: '',
+    adresse: '',
+    email: '',
+    representePar: '',
+    telephone: '',
+    tuteurStage: '',
+    dateDebut: '',
+    dateFin: '',
+    fichierPDF: null as File | null
+  }
   userId: any;
   edit: any;
   constructor(private gererConventionsEtudiantService: GererConventionsEtudiantService,
@@ -73,7 +92,9 @@ export class AddConventionDialogComponent {
   }
 
   ngOnInit() {
-
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.utilisateur = user
+    console.log("utilisateur", user);
 
     console.log("userID", this.userId)
 
@@ -90,6 +111,30 @@ export class AddConventionDialogComponent {
 
   // Soumettre le formulaire
   onSubmit(): void {
+    this.convention.etudiantId = this.utilisateur.id
+    console.log("conventionnnnnnnnnnnnnnnnnnnnn ", this.convention)
+    const formData = new FormData();
+    formData.append('etudiantId', this.convention.etudiantId);
+    formData.append('etablissement', this.convention.etablissement);
+    formData.append('adresse', this.convention.adresse);
+    formData.append('representePar', this.convention.representePar);
+    formData.append('tuteurStage', this.convention.tuteurStage);
+    formData.append('email', this.convention.email);
+    formData.append('telephone', this.convention.telephone);
+    formData.append('dateDebut', this.convention.dateDebut);
+    formData.append('dateFin', this.convention.dateFin);
+    if (this.convention.fichierPDF instanceof File) {
+      formData.append('fichierPDF', this.convention.fichierPDF, this.convention.fichierPDF.name);
+    } else {
+      console.error('Aucun fichier sélectionné');
+      return;
+    }
+    console.log("formData: " + formData)
+    this.gererConventionsEtudiantService.deposerConventionEtudiant(formData).subscribe(
+      response => {
+        console.log('Convention crée avec succès:', response);
+        // this.dialogRef.close(this.utilisateur);
+      })
     // console.log('Utilisateur créée:', this.utilisateur);
     // if (this.edit != true) {
     //   // Enregistrer la soutenance via le service
@@ -109,5 +154,13 @@ export class AddConventionDialogComponent {
     // }
 
   }
+  onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input?.files?.length) {
+      // Le fichier sélectionné est stocké dans `fichierPDF`
+      this.convention.fichierPDF = input.files[0];
+    }
+  }
+
 
 }

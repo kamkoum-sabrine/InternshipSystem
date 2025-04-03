@@ -12,7 +12,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -43,6 +45,12 @@ public class User {
     private String sexe;
     @Column(nullable = true)
     private String lieuNaissance;
+    @Column(nullable = true)
+    private LocalDate dateNaissance;
+
+    @Column(nullable = true)
+    private Integer telephone;
+
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;

@@ -2,6 +2,9 @@ package com.example.Back.Auth.Models;
 
 import jakarta.persistence.Column;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 public class UserDTO {
     private String email;
     private String nom;
@@ -16,6 +19,15 @@ public class UserDTO {
     private String fax;
     private String sexe;
     private String lieuNaissance;
+    private LocalDate dateNaissance;
+
+    public LocalDate getDateNaissance() {
+        return dateNaissance;
+    }
+
+    public void setDateNaissance(LocalDate dateNaissance) {
+        this.dateNaissance = dateNaissance;
+    }
 
     public void setAdresse(String adresse) {
         this.adresse = adresse;
