@@ -7,6 +7,8 @@ import com.example.Back.Conventions.Models.ConventionStageEte;
 import com.example.Back.Conventions.Repositories.ConventionStageEteRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ConventionStageEteService {
 
@@ -19,5 +21,7 @@ public class ConventionStageEteService {
     public void saveConvetionStageEte(ConventionStageEte conventionStageEte) {
         conventionStageEteRepository.save(conventionStageEte);
     }
-
+    public List<ConventionStageEte> getConventionsAvecPreuveMaisNonAnnulees() {
+        return conventionStageEteRepository.findConventionsAvecPreuveMaisNonAnnulees();
+    }
 }

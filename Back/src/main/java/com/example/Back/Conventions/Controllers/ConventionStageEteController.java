@@ -239,5 +239,45 @@ public class ConventionStageEteController {
         }
         return conventionStageEteRepository.findByEtudiant(etudiant);
     }
-
+    @PutMapping("/ValiderConvention/{id}")
+    public ResponseEntity<?> ValiderConvention(@PathVariable Long id)
+    {
+        Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(id);
+        if (conventionOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Convention non trouvée");
+        }
+        ConventionStageEte convention = conventionOptional.get();
+        if (convention.getValideeService() == -1) {
+            return ResponseEntity.badRequest().body("Cette convention n'est pas validée.");
+        }
+        if (convention.getValideeService() ==1 ) {
+          return ResponseEntity.badRequest().body("Cette convention est déja validée");
+        }
+        convention.setValideeService(1);
+        conventionStageEteRepository.save(convention);
+        return ResponseEntity.ok("Convention validée avec succes");
+    }
+    @PutMapping("/RefuserConvention/{id}")
+    public ResponseEntity<?> RefuserConvention(@PathVariable Long id)
+    {
+        Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(id);
+        if (conventionOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Convention non trouvée");
+        }
+        ConventionStageEte convention = conventionOptional.get();
+        if (convention.getValideeService() == 1) {
+            return ResponseEntity.badRequest().body("Cette convention a été validée précedemment");
+        }
+        if (convention.getValideeService() ==-1 ) {
+            return ResponseEntity.badRequest().body("Cette convention est déja refusée");
+        }
+        convention.setValideeService(-1);
+        conventionStageEteRepository.save(convention);
+        return ResponseEntity.ok("Convention refusée avec succes");
+    }
+    @GetMapping("/ConventionsAvecPreuveNonAnnulees")
+    public ResponseEntity<List<ConventionStageEte>> getConventionsAvecPreuveNonAnnulees() {
+        List<ConventionStageEte> conventions = conventionStageEteService.getConventionsAvecPreuveMaisNonAnnulees();
+        return ResponseEntity.ok(conventions);
+    }
 }
