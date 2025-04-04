@@ -1,5 +1,9 @@
 package com.example.Back.Auth.Models;
 
+import com.example.Back.enums.Filiere;
+import com.example.Back.enums.Formation;
+import com.example.Back.enums.Niveau;
+import com.example.Back.enums.Sexe;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,11 +11,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -29,9 +35,9 @@ public class User {
     private String email;
     private Integer cin;
     @Column(nullable = true)
-    private String filiere;
+    private Filiere filiere;
     @Column(nullable = true)
-    private String niveau;
+    private Niveau niveau ;
     private String password;
     @Column(nullable = true)
     private String adresse;
@@ -40,9 +46,19 @@ public class User {
     @Column(nullable = true)
     private String fax;
     @Column(nullable = true)
-    private String sexe;
+    private Sexe sexe;
     @Column(nullable = true)
     private String lieuNaissance;
+    @Column(nullable = true)
+    private String tel;
+    @Column(nullable = true)
+    private Formation formation;
+
+
+
+    @Column(nullable = true)
+    private LocalDate dateDeNaissance;
+
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
@@ -104,11 +120,11 @@ public class User {
         return cin;
     }
 
-    public String getFiliere() {
+    public Filiere getFiliere() {
         return filiere;
     }
 
-    public String getNiveau() {
+    public Niveau getNiveau() {
         return niveau;
     }
 
@@ -116,11 +132,11 @@ public class User {
         this.cin = cin;
     }
 
-    public void setFiliere(String filiere) {
+    public void setFiliere(Filiere filiere) {
         this.filiere = filiere;
     }
 
-    public void setNiveau(String niveau) {
+    public void setNiveau(Niveau niveau) {
         this.niveau = niveau;
     }
 
@@ -154,5 +170,29 @@ public class User {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Sexe getSexe() {
+        return sexe;
+    }
+
+    public void setSexe(Sexe sexe) {
+        this.sexe = sexe;
+    }
+
+    public Formation getFormation() {
+        return formation;
+    }
+
+    public void setFormation(Formation formation) {
+        this.formation = formation;
+    }
+
+    public LocalDate getDateDeNaissance() {
+        return dateDeNaissance;
+    }
+
+    public void setDateDeNaissance(LocalDate dateDeNaissance) {
+        this.dateDeNaissance = dateDeNaissance;
     }
 }

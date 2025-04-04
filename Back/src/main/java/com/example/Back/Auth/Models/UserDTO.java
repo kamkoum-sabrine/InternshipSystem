@@ -1,6 +1,11 @@
 package com.example.Back.Auth.Models;
 
+import com.example.Back.enums.Filiere;
+import com.example.Back.enums.Niveau;
+import com.example.Back.enums.Sexe;
 import jakarta.persistence.Column;
+
+import java.time.LocalDate;
 
 public class UserDTO {
     private String email;
@@ -9,13 +14,18 @@ public class UserDTO {
     private String password;
     private String role;
     private Integer cin;
-    private String filiere;
-    private String niveau;
+    private Filiere filiere;
+    private Niveau niveau;
     private String adresse;
     private String option;
+
+
+
     private String fax;
-    private String sexe;
+    private Sexe sexe;
     private String lieuNaissance;
+    private String tel;
+    private LocalDate dateDeNaissance;
 
     public void setAdresse(String adresse) {
         this.adresse = adresse;
@@ -29,7 +39,7 @@ public class UserDTO {
         this.fax = fax;
     }
 
-    public void setSexe(String sexe) {
+    public void setSexe(Sexe sexe) {
         this.sexe = sexe;
     }
 
@@ -49,7 +59,7 @@ public class UserDTO {
         return fax;
     }
 
-    public String getSexe() {
+    public Sexe getSexe() {
         return sexe;
     }
 
@@ -104,16 +114,30 @@ public class UserDTO {
     public void setCin(Integer cin) {
         this.cin = cin;
     }
-    public String getFiliere() {
+    public Filiere getFiliere() {
         return filiere;
     }
-    public void setFiliere(String filiere) {
+    public void setFiliere(Filiere filiere) {
         this.filiere = filiere;
     }
-    public String getNiveau() {
+    public Niveau getNiveau() {
         return niveau;
     }
-    public void setNiveau(String niveau) {
+    public void setNiveau(Niveau niveau) {
         this.niveau = niveau;
+    }
+    public LocalDate getDateDeNaissance() {
+        return dateDeNaissance;
+    }
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public void setDateDeNaissance(LocalDate dateDeNaissance) {
+        this.dateDeNaissance = dateDeNaissance;
     }
 }
