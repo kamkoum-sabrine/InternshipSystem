@@ -196,6 +196,9 @@
                                 required />
                         </c-col>
                     </c-row>
+                    <input type="file" (change)="onFileSelected($event)" accept="application/pdf">
+                    <p>Texte extrait :</p>
+                    <pre>{{ extractedText }}</pre>
                     <!-- <c-row class="mb-3">
                         <label cLabel class="col-sm-2 col-form-label" for="filiere">Filiére</label>
                         <c-col sm="10">

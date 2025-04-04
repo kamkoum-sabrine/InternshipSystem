@@ -11,6 +11,9 @@ import { FormControlDirective, FormsModule, ReactiveFormsModule } from '@angular
 import { ButtonDirective, CardBodyComponent, CardComponent, CardHeaderComponent, ColComponent, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, FormDirective, FormFeedbackComponent, FormLabelDirective, FormSelectDirective, InputGroupComponent, InputGroupTextDirective, ListGroupDirective, ListGroupItemDirective, RowComponent, TextColorDirective } from '@coreui/angular-pro';
 import { DocsExampleComponent } from '@docs-components/public-api';
 import { GererConventionsEtudiantService } from '../conventionsEtudiant-basic-example/gerer-conventionsEtudiant.service';
+import { PdfService } from '../conventionsEtudiant-basic-example/pdf.service'
+import { OcrService } from '../conventionsEtudiant-basic-example/ocr.service'
+
 @Component({
   selector: 'app-add-convention-dialog',
   standalone: true,
@@ -60,9 +63,11 @@ export class AddConventionDialogComponent {
   }
   userId: any;
   edit: any;
+
+  extractedText: string = '';
   constructor(private gererConventionsEtudiantService: GererConventionsEtudiantService,
     public dialogRef: MatDialogRef<AddConventionDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any, private pdfService: PdfService, private ocrService: OcrService
   ) {
     // this.userId = data.utilisateur
     // this.edit = data.edit
@@ -90,6 +95,39 @@ export class AddConventionDialogComponent {
     // }
 
   }
+  async onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const images = await this.pdfService.extractImagesFromPdf(file);
+    if (images.length > 0) {
+      const blob = await this.canvasToBlob(images[0]);
+      const extractedText = await this.ocrService.extractText(new File([blob], "image.png"));
+      this.extractedText = extractedText;
+    }
+  }
+
+  canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
+    return new Promise((resolve) => canvas.toBlob((blob) => resolve(blob!), 'image/png'));
+  }
+  async preprocessImage(canvas: HTMLCanvasElement): Promise<Blob> {
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return this.canvasToBlob(canvas);
+
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+
+    // Convertir en niveaux de gris et augmenter le contraste
+    for (let i = 0; i < data.length; i += 4) {
+      let avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+      avg = avg > 128 ? 255 : 0; // Binarisation
+      data[i] = data[i + 1] = data[i + 2] = avg;
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+    return this.canvasToBlob(canvas);
+  }
+
 
   ngOnInit() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
