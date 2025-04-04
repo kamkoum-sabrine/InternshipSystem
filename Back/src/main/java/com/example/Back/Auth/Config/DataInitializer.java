@@ -81,6 +81,11 @@ public class DataInitializer implements CommandLineRunner {
             User etudiantUser = new User(null, "Ahmed", "Ahmed", "ahmedahmed@gmail.com",5656565,"Genie informatique","2eme", new BCryptPasswordEncoder().encode("password"),null,null,null,null,null,LocalDate.of(2001, 4, 30),null, etudiantRole,
                     false,LocalDateTime.now());
             User etudiantUser1 = new User(null, "Amine", "Amine", "Amineamine@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"),null,null,null,null,null,LocalDate.of(2001, 4, 30),60545210, etudiantRole,
+
+        //     User etudiantUser = new User(null, "Ahmed", "Ahmed", "ahmedahmed@gmail.com",5656565,"Informatique","1er", new BCryptPasswordEncoder().encode("password"),"mourouj","info","8888","M","98578525", etudiantRole,
+        //             false,LocalDateTime.now());
+        //     User etudiantUser1 = new User(null, "Amine", "Amine", "Amineamine@gmail.com",123456,"info",null, new BCryptPasswordEncoder().encode("password"),null,null,null,null,null, etudiantRole,
+
                     false,LocalDateTime.now());
             User etudiantUser2 = new User(null, "Mahdi", "Mahdi", "Mahdimahdi@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"),null,null,null,null,null,LocalDate.of(2001, 4, 30),45542011, etudiantRole,
                     false,LocalDateTime.now());

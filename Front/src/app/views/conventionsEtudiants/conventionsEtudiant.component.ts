@@ -8,7 +8,7 @@ import {
   RowComponent,
   TextColorDirective
 } from '@coreui/angular-pro';
-import { DocsExampleComponent } from '@docs-components/public-api';
+//import { DocsExampleComponent } from '@docs-components/public-api';
 
 import { ConventionsEtudiantService } from './conventionsEtudiant-service.service';
 import { HttpClientModule } from '@angular/common/http';
@@ -17,15 +17,18 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddConventionDialogComponent } from './add-convention-dialog/add-convention-dialog.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-conventionsEtudiant',
   templateUrl: './conventionsEtudiant.component.html',
   styleUrls: ['./conventionsEtudiant.component.scss'],
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, DocsExampleComponent, ConventionsEtudiantBasicExampleComponent, MatDialogModule, MatButtonModule]
+  imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, ConventionsEtudiantBasicExampleComponent, MatDialogModule, MatButtonModule]
 })
 export class ConventionsEtudiantComponent implements OnInit {
   myConventions: any;
+
+
 
   constructor(private conventionsEtudiantsService: ConventionsEtudiantService, public dialog: MatDialog) { }
   ngOnInit(): void {
@@ -38,6 +41,7 @@ export class ConventionsEtudiantComponent implements OnInit {
   }
 
   openDialog(): void {
+
     // const dialogRef = this.dialog.open(AddConventionDialogComponent, {
     //   width: '600px',
     //   minWidth: '600px',  // Largeur minimale de 400px
@@ -50,6 +54,23 @@ export class ConventionsEtudiantComponent implements OnInit {
     //     // Logic to add the user
     //   }
     // });
+
+    const dialogRef = this.dialog.open(AddConventionDialogComponent, {
+      width: '600px',
+      minWidth: '600px',  // Largeur minimale de 400px
+      maxWidth: '600px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Nouvelle soutenance:', result);
+        // Logic to add the user
+      }
+    });
   }
+
+
+
+
 
 }

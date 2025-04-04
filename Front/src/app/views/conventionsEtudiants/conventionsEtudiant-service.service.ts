@@ -15,4 +15,6 @@ export class ConventionsEtudiantService {
   getMesConventions(id: any): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/conventionStagEte/getMyConventions/${id}`, { withCredentials: true });
   }
+
+
 }

@@ -49,6 +49,7 @@
     "@google-cloud/vision": "^5.1.0",
     "@googlemaps/js-api-loader": "^1.16.8",
     "@googlemaps/markerclustererplus": "^1.2.10",
+    "@types/xlsx": "^0.0.35",
     "axios": "^1.8.4",
     "chart.js": "^4.4.4",
     "date-fns": "^3.6.0",
@@ -59,6 +60,7 @@
     "sweetalert2": "^11.17.2",
     "tesseract.js": "^6.0.0",
     "tslib": "^2.7.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {
