@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import {
   BadgeComponent,
   ButtonDirective,
@@ -74,7 +75,7 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
   ];
   details_visible = Object.create({});
 
-  constructor(private cdr: ChangeDetectorRef, private gererConventionsEtudiantService: GererConventionsEtudiantService, public dialog: MatDialog, private conventionsEtudiantService: ConventionsEtudiantService) { }
+  constructor(private cdr: ChangeDetectorRef, private gererConventionsEtudiantService: GererConventionsEtudiantService, public dialog: MatDialog, private conventionsEtudiantService: ConventionsEtudiantService, private router: Router) { }
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -258,7 +259,7 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
 
     // 2. Liste de TOUS les attributs (obligatoires + optionnels)
     const allAttributes = [
-      'id', 'nom', 'prenom', 'email', 'cin', 'filiere', 'niveau',
+      'id', 'nom', 'prenom', 'email', 'cin', 'filiere', 'niveau', 'formation', 'tel'
     ];
 
     // 3. Vérifier chaque attribut (même les optionnels)
@@ -295,7 +296,7 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
         }
       }).then((result) => {
         if (result.isConfirmed) {
-          //gerermonprfil();
+          this.router.navigate(['/profile']);
         } else {
           Swal.fire('Annulé', 'Action annulée.', 'info');
         }
