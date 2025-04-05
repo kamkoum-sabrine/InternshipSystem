@@ -48,6 +48,7 @@
     "@fullcalendar/timegrid": "^6.1.15",
     "@googlemaps/js-api-loader": "^1.16.8",
     "@googlemaps/markerclustererplus": "^1.2.10",
+    "@ng-bootstrap/ng-bootstrap": "^18.0.0",
     "@types/xlsx": "^0.0.35",
     "chart.js": "^4.4.4",
     "date-fns": "^3.6.0",
