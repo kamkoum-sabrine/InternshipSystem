@@ -201,8 +201,8 @@ public class TelechargerConventionController {
                                 is,
                                 XWPFDocument.PICTURE_TYPE_PNG,
                                 "logo_enic",
-                                Units.toEMU(80),  // Largeur
-                                Units.toEMU(40)   // Hauteur
+                                Units.toEMU(160),  // Largeur
+                                Units.toEMU(60)   // Hauteur
                         );
                     }
                     return; // Sortir après insertion

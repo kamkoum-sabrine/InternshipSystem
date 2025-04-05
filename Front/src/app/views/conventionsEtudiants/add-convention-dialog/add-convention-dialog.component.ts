@@ -33,6 +33,9 @@ export class AddConventionDialogComponent {
 
   roles: any[] = [];
 
+  isLoading = false; // Contrôle l'affichage du loader
+  isSubmitDisabled = true; // Désactive le bouton "Soumettre" initialement
+
   utilisateur = {
     id: '',
     nom: '',
@@ -61,6 +64,12 @@ export class AddConventionDialogComponent {
     dateFin: '',
     fichierPDF: null as File | null
   }
+  entreprise = {
+    nom: '',
+    adresse: '',
+    tuteur: '',
+    email: ''
+  }
   userId: any;
   edit: any;
 
@@ -68,43 +77,30 @@ export class AddConventionDialogComponent {
   constructor(private gererConventionsEtudiantService: GererConventionsEtudiantService,
     public dialogRef: MatDialogRef<AddConventionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, private pdfService: PdfService, private ocrService: OcrService
-  ) {
-    // this.userId = data.utilisateur
-    // this.edit = data.edit
-    // console.log("TYPE de userId:", typeof this.userId);
-    // console.log("VALEUR de userId:", this.userId);
-    // if (data.utilisateur) {
-    //   console.log("undefiiiineeeeeed", this.userId)
-    //   this.userId = data.utilisateur
-    //   this.gererUtilisateurService.getUserById(this.userId).subscribe(data => {
-    //     this.utilisateur = data;
-    //     console.log('data', data)
-    //     console.log(this.utilisateur)
-    //   })
-
-    // }
-    // else {
-    //   this.utilisateur = {
-    //     nom: '',
-    //     prenom: '',
-    //     email: '',
-    //     cin: '',
-    //     filiere: '',
-    //     role: ''
-    //   };
-    // }
-
-  }
+  ) { }
   async onFileSelected(event: any) {
     const file = event.target.files[0];
     if (!file) return;
 
+    this.isLoading = true; // Active le loader
+    this.isSubmitDisabled = true; // Désactive le bouton
     const images = await this.pdfService.extractImagesFromPdf(file);
     if (images.length > 0) {
       const blob = await this.canvasToBlob(images[0]);
       const extractedText = await this.ocrService.extractText(new File([blob], "image.png"));
       this.extractedText = extractedText;
+      // Traitement terminé
+      this.isLoading = false;
+      this.isSubmitDisabled = false; // Réactive le bouton
     }
+  }
+  // Méthode factice pour simuler l'extraction (à remplacer par votre code)
+  private simulatePdfExtraction(file: File): Promise<string> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve("Texte extrait du PDF...");
+      }, 2000); // Simule un délai de 2 secondes
+    });
   }
 
   canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
@@ -128,6 +124,26 @@ export class AddConventionDialogComponent {
     return this.canvasToBlob(canvas);
   }
 
+  // Fonction pour extraire une valeur entre deux clés
+  extractValue(text: string, startKey: string, endKey: string): string {
+    const startIndex = text.indexOf(startKey) + startKey.length;
+    const endIndex = text.indexOf(endKey, startIndex);
+    return text.substring(startIndex, endIndex).trim();
+  }
+
+  // Fonction pour parser TOUTES les données de l'entreprise
+  parseEntrepriseData(text: string) {
+    return {
+      nom: this.extractValue(text, "L’établissement d’accueil :", "Adresse :"),
+      adresse: this.extractValue(text, "Adresse :", "Représenté par :"),
+      representant: this.extractValue(text, "Représenté par :", "Tuteur du Stage :"),
+      tuteur: this.extractValue(text, "Tuteur du Stage :", "E-mail :"),
+      email: this.extractValue(text, "E-mail :", "-Tél:"),
+      telephone: this.extractValue(text, "-Tél:", "-Fax :"),
+      fax: this.extractValue(text, "-Fax :", "Concernant I’étudiant Stagiaire"),
+    };
+  }
+
 
   ngOnInit() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -149,6 +165,9 @@ export class AddConventionDialogComponent {
 
   // Soumettre le formulaire
   onSubmit(): void {
+    if (this.isSubmitDisabled) return; // Empêche la soumission si désactivé
+    this.entreprise = this.parseEntrepriseData(this.extractedText);
+    console.log(this.entreprise); // Vérifiez les données extraites
     this.convention.etudiantId = this.utilisateur.id
     console.log("conventionnnnnnnnnnnnnnnnnnnnn ", this.convention)
     const formData = new FormData();

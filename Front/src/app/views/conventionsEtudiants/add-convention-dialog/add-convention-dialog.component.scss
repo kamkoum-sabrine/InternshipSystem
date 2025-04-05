@@ -1,6 +1,32 @@
-.fixed-dialog {
-    max-height: 80vh;
-    /* Fixe la hauteur maximale à 80% de la hauteur de la fenêtre */
-    overflow-y: auto;
-    /* Permet le défilement vertical */
+.spinner-border {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 0.15em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border 0.75s linear infinite;
 }
+
+@keyframes spinner-border {
+    to {
+        transform: rotate(360deg);
+    }
+}
+.custom-file-input {
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    padding: 8px 12px;
+    background-color: #f8f9fa;
+    transition: border-color 0.3s ease;
+  }
+  
+  .custom-file-input:hover {
+    border-color: #86b7fe;
+    background-color: #f1f3f5;
+  }
+  
+  .fw-semibold {
+    font-weight: 600;
+  }
+  

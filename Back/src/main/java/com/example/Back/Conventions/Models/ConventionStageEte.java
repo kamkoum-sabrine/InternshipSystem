@@ -1,6 +1,7 @@
 package com.example.Back.Conventions.Models;
 
 import com.example.Back.Auth.Models.User;
+import com.example.Back.Entreprises.Models.Entreprise;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,13 +21,17 @@ public class ConventionStageEte {
     @JoinColumn(name = "etudiant", nullable = false)
     private User etudiant;
 
-    private String etablissement;
+    /*private String etablissement;
     private String adresse;
     private String representePar;
     private String tuteurStage;
     private String email;
-    private String telephone;
+    private String telephone;*/
 
+    @ManyToOne
+    @JoinColumn(name = "entreprise", nullable = false)
+    private Entreprise entreprise;
+    private String tuteurStage;
     private Date dateDebut;
     private Date dateFin;
     private Date dateDepot;

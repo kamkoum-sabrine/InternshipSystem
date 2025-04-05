@@ -161,8 +161,8 @@ public class DataInitializer implements CommandLineRunner {
 
             System.out.println("Données initiales insérées !");
             if (entreprisesRepository.count() == 0) {
-                Entreprise entreprise1 = new Entreprise(null, "TechCorp", "123 Rue de la Technologie", "contact@techcorp.com", 123456789L);
-                Entreprise entreprise2 = new Entreprise(null, "InnoSoft", "456 Avenue de l'Innovation", "contact@innosoft.com", 987654321L);
+                Entreprise entreprise1 = new Entreprise(null, "TechCorp", "123 Rue de la Technologie", "contact@techcorp.com", 123456789L,"Mr Hama");
+                Entreprise entreprise2 = new Entreprise(null, "InnoSoft", "456 Avenue de l'Innovation", "contact@innosoft.com", 987654321L,"Mr Mahdi");
 
                 entreprisesRepository.save(entreprise1);
                 entreprisesRepository.save(entreprise2);
