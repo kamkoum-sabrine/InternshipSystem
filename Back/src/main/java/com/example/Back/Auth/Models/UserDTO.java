@@ -20,6 +20,15 @@ public class UserDTO {
     private String sexe;
     private String lieuNaissance;
     private LocalDate dateNaissance;
+    private String formation;
+    private String departement;
+
+    public String getFormation() {
+        return formation;
+    }
+    public void setFormation(String formation) {
+        this.formation = formation;
+    }
 
     public LocalDate getDateNaissance() {
         return dateNaissance;

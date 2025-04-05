@@ -109,6 +109,77 @@ public class TelechargerConventionController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdfBytes);
     }
+    private void handleCheckboxesDepartement(XWPFDocument doc, User etudiant) {
+        // Déterminez l'état des cases
+        boolean isInformatique = "Génie informatique".equals(etudiant.getDepartement());
+        boolean isElectrique = "Génie électrique".equals(etudiant.getDepartement());
+        boolean isIndustriel = "Génie industriel".equals(etudiant.getDepartement());
+        final String CHECKED = "✓"; // ou "🗹" pour un style plus carré
+        final String UNCHECKED = "□"; // ou "☐" si vous préférez
+        // Map des replacements spécifiques aux cases
+        Map<String, String> checkboxes = new HashMap<>();
+        checkboxes.put("${INFORMATIQUE}", isInformatique ? CHECKED : UNCHECKED);
+        checkboxes.put("${ELECTRIQUE}", isElectrique ? CHECKED : UNCHECKED);
+        checkboxes.put("${INDUSTRIEL}", isIndustriel ? CHECKED : UNCHECKED);
+
+        // Appliquez aux paragraphes
+        for (XWPFParagraph p : doc.getParagraphs()) {
+            String text = p.getText();
+            if (text != null) {
+                for (Map.Entry<String, String> entry : checkboxes.entrySet()) {
+                    if (text.contains(entry.getKey())) {
+                        replaceTextInParagraphDepartement(p, entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+        }
+    }
+
+    private void replaceTextInParagraphDepartement(XWPFParagraph p, String placeholder, String value) {
+        // Fusionne les runs si nécessaire
+        String mergedText = p.getText();
+        for (int i = p.getRuns().size() - 1; i >= 0; i--) {
+            p.removeRun(i);
+        }
+
+        XWPFRun newRun = p.createRun();
+        newRun.setText(mergedText.replace(placeholder, value));
+    }
+    private void handleCheckboxesFormation(XWPFDocument doc, User etudiant) {
+        // Déterminez l'état des cases
+        boolean isIngenieur = "Ingénieur".equals(etudiant.getFormation());
+        boolean isMaster = "Master".equals(etudiant.getFormation());
+
+         final String CHECKED = "✓"; // ou "🗹" pour un style plus carré
+         final String UNCHECKED = "□"; // ou "☐" si vous préférez
+        // Map des replacements spécifiques aux cases
+        Map<String, String> checkboxes = new HashMap<>();
+        checkboxes.put("${INGENIEUR}", isIngenieur ? CHECKED : UNCHECKED);
+        checkboxes.put("${MASTER}", isMaster ? CHECKED : UNCHECKED);
+
+        // Appliquez aux paragraphes
+        for (XWPFParagraph p : doc.getParagraphs()) {
+            String text = p.getText();
+            if (text != null) {
+                for (Map.Entry<String, String> entry : checkboxes.entrySet()) {
+                    if (text.contains(entry.getKey())) {
+                        replaceTextInParagraph(p, entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+        }
+    }
+
+    private void replaceTextInParagraph(XWPFParagraph p, String placeholder, String value) {
+        // Fusionne les runs si nécessaire
+        String mergedText = p.getText();
+        for (int i = p.getRuns().size() - 1; i >= 0; i--) {
+            p.removeRun(i);
+        }
+
+        XWPFRun newRun = p.createRun();
+        newRun.setText(mergedText.replace(placeholder, value));
+    }
     @GetMapping("/convention/word/{id}")
     public ResponseEntity<byte[]> generateConvention(@PathVariable Long id) throws Exception  {
         // 1. Charger le template
@@ -126,6 +197,11 @@ public class TelechargerConventionController {
         replacements.put("${cin}", String.valueOf(etudiant.getCin()));
         replacements.put("${telephone}",String.valueOf(etudiant.getTelephone()));
         replacements.put("${email}",etudiant.getEmail());
+
+        // 3. Gérer les cases à cocher
+        handleCheckboxesFormation(document, etudiant); // Ou handleWordCheckboxes()
+        handleCheckboxesDepartement(document, etudiant); // Ou handleWordCheckboxes()
+
         //replacements.put("${option}",etudiant.getOption());
       /**  // 4. Parcourir et remplacer les textes
         for (XWPFParagraph p : document.getParagraphs()) {
