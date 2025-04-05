@@ -84,7 +84,7 @@ export class AddUserDialogComponent {
         window.location.reload(); // Recharge la page
       },
       (error) => {
-        this.errorMessage = 'Une erreur est survenue lors de l\'enregistrement de la soutenance.';
+        this.errorMessage = 'Une conflit est survenue lors de l\'enregistrement de la soutenance.';
         if (error.error && error.error.message) {
           this.errorMessage = error.error.message; // Récupère le message d'erreur du backend
         }

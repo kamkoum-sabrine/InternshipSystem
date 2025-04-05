@@ -42,4 +42,24 @@ public interface SoutenanceRepository extends JpaRepository<Soutenance,Long> {
                                            @Param("heure") LocalTime heure,
                                            @Param("salle") Integer salle);
 
+    @Query("SELECT s FROM Soutenance s " +
+            "WHERE s.date = :date " +
+            "AND s.heure = :heure " +
+            "AND s.id != COALESCE(:excludeId, -1) " + // Exclure une soutenance existante (pour l'update)
+            "AND (" +
+            "   s.etudiant.id = :etudiantId OR " +
+            "   s.encadrant.id = :encadrantId OR " +
+            "   EXISTS (SELECT 1 FROM s.jury j WHERE j.id IN :juryIds) OR " +
+            "   s.salle = :salle" +
+            ")")
+    List<Soutenance> findConflicts(
+            @Param("date") LocalDate date,
+            @Param("heure") LocalTime heure,
+            @Param("etudiantId") Long etudiantId,
+            @Param("encadrantId") Long encadrantId,
+            @Param("juryIds") List<Long> juryIds,
+            @Param("salle") Integer salle,
+            @Param("excludeId") Long excludeId
+    );
+
 }

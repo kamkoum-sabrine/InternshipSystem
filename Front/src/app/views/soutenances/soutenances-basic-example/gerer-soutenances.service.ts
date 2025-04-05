@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +28,6 @@ export class GererSoutenancesService {
   // Méthode pour créer une soutenance
   addSoutenance(soutenance: any): Observable<any> {
     return this.http.post<any>(this.apiUrl, soutenance);
-
   }
 
   updateSoutenance(soutenance: any): Observable<any> {
@@ -38,6 +37,9 @@ export class GererSoutenancesService {
   supprimerSoutenance(id: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
+
+
+
 
 
 

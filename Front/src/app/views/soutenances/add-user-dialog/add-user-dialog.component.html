@@ -87,9 +87,18 @@
                     </c-row>
 
 
-                    <div *ngIf="errorMessage" class="alert alert-danger">
-                        <p>{{ errorMessage }}</p>
-                    </div>
+                    <!-- Afficher l'erreur en haut du formulaire -->
+                    <c-row *ngIf="errorMessage" class="mb-3">
+                        <c-col xs="12">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Erreur :</strong> {{ errorMessage }}
+                                <button type="button" class="btn-close" (click)="errorMessage = null"
+                                    aria-label="Close"></button>
+                            </div>
+                        </c-col>
+                    </c-row>
+
+                    <!-- ... reste de votre formulaire ... -->
 
 
                     <!-- Action Buttons -->

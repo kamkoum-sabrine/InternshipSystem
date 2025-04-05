@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,26 +35,33 @@ public class SoutenanceService {
 
     @Transactional
     public Soutenance addSoutenance(SoutenanceDTO soutenanceDTO) {
-        // Fetch the encadrant
-        Enseignant encadrant = enseignantRepository.findById(soutenanceDTO.getEncadrantId())
-                .orElseThrow(() -> new IllegalArgumentException("Encadrant not found with ID: " + soutenanceDTO.getEncadrantId()));
-
-        User etudiant = userRepository.findUserById(soutenanceDTO.getEtudiantId())
-                .orElseThrow(() -> new IllegalArgumentException("Etudiant not found with ID: " + soutenanceDTO.getEtudiantId()));
-
-        // Fetch the jury members
-        List<Enseignant> jury = soutenanceDTO.getJuryIds().stream()
-                .map(id -> enseignantRepository.findById(id)
-                        .orElseThrow(() -> new IllegalArgumentException("Jury member not found with ID: " + id)))
-                .collect(Collectors.toList());
-
-        // Vérification des conflits avant l'ajout
-        List<String> conflicts = findConflictsFromAdd(soutenanceDTO, etudiant, encadrant, jury);
-        if (!conflicts.isEmpty()) {
-            throw new IllegalStateException("Conflits détectés : " + String.join(", ", conflicts));
+        // Validation des champs obligatoires
+        if (soutenanceDTO.getDate() == null || soutenanceDTO.getHeure() == null ||
+                soutenanceDTO.getSalle() == 0 || soutenanceDTO.getEtudiantId() == null ||
+                soutenanceDTO.getEncadrantId() == null) {
+            throw new IllegalArgumentException("Tous les champs obligatoires doivent être renseignés");
         }
 
-        // Créer l'entité Soutenance
+        // Récupération des entités
+        Enseignant encadrant = enseignantRepository.findById(soutenanceDTO.getEncadrantId())
+                .orElseThrow(() -> new IllegalArgumentException("Encadrant non trouvé"));
+
+        User etudiant = userRepository.findUserById(soutenanceDTO.getEtudiantId())
+                .orElseThrow(() -> new IllegalArgumentException("Étudiant non trouvé"));
+
+        // Récupération du jury
+        List<Enseignant> jury = soutenanceDTO.getJuryIds().stream()
+                .map(id -> enseignantRepository.findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("Membre du jury non trouvé: " + id)))
+                .collect(Collectors.toList());
+
+        // Vérification des conflits
+        List<String> conflicts = findConflictsFromAdd(soutenanceDTO, etudiant, encadrant, jury);
+        if (!conflicts.isEmpty()) {
+            throw new IllegalStateException("Conflits détectés:\n" + String.join("\n", conflicts));
+        }
+
+        // Création et sauvegarde
         Soutenance soutenance = new Soutenance(
                 soutenanceDTO.getDate(),
                 soutenanceDTO.getSalle(),
@@ -64,7 +72,6 @@ public class SoutenanceService {
                 soutenanceDTO.getSujet()
         );
 
-        // Sauvegarder et retourner l'entité
         return soutenanceRepository.save(soutenance);
     }
 
@@ -72,44 +79,33 @@ public class SoutenanceService {
     private List<String> findConflictsFromAdd(SoutenanceDTO soutenanceDTO, User etudiant, Enseignant encadrant, List<Enseignant> jury) {
         List<String> conflicts = new ArrayList<>();
 
-        // Recherche des soutenances conflictuelles pour l'étudiant, l'encadrant, la salle et la date
-        List<Soutenance> conflictingSoutenances = soutenanceRepository.rechercherSoutenances(
-                soutenanceDTO.getEtudiantId(), soutenanceDTO.getEncadrantId(), soutenanceDTO.getDate(), soutenanceDTO.getHeure(),soutenanceDTO.getSalle());
+        List<Long> juryIds = jury.stream()
+                .map(Enseignant::getId)
+                .collect(Collectors.toList());
 
-        for (Soutenance existingSoutenance : conflictingSoutenances) {
-            boolean sameDateAndTime = existingSoutenance.getDate().equals(soutenanceDTO.getDate())
-                    && existingSoutenance.getHeure().equals(soutenanceDTO.getHeure());
+        List<Soutenance> existing = soutenanceRepository.findConflicts(
+                soutenanceDTO.getDate(),
+                soutenanceDTO.getHeure(),
+                etudiant.getId(),
+                encadrant.getId(),
+                juryIds,
+                soutenanceDTO.getSalle(),
+                null // Pas d'ID à exclure pour une nouvelle soutenance
+        );
 
-            // Vérification des conflits sur la date et l'heure
-            if (sameDateAndTime) {
-                conflicts.add("Conflit sur l'heure : une soutenance est déjà prévue à " + soutenanceDTO.getHeure());
+        for (Soutenance s : existing) {
+            if (s.getSalle()==(soutenanceDTO.getSalle())) {
+                conflicts.add("Conflit de salle: " + s.getSalle() + " déjà réservée");
             }
-
-            // Vérification des conflits sur la salle
-            if (sameDateAndTime && existingSoutenance.getSalle() == (soutenanceDTO.getSalle())) {
-                conflicts.add("Conflit sur la salle : la salle " + soutenanceDTO.getSalle() + " est déjà réservée");
+            if (s.getEtudiant().getId().equals(etudiant.getId())) {
+                conflicts.add("Étudiant déjà en soutenance à cette heure");
             }
-
-            // Vérification des conflits avec l'étudiant
-            if (existingSoutenance.getEtudiant().getId().equals(soutenanceDTO.getEtudiantId())
-                    && existingSoutenance.getDate().equals(soutenanceDTO.getDate())) {
-                conflicts.add("Conflit avec l'étudiant : l'étudiant avec l'ID " + soutenanceDTO.getEtudiantId() + " a déjà une soutenance prévue");
+            if (s.getEncadrant().getId().equals(encadrant.getId())) {
+                conflicts.add("Encadrant déjà occupé à cette heure");
             }
-
-            // Vérification des conflits avec l'encadrant
-            if (existingSoutenance.getEncadrant().getId().equals(soutenanceDTO.getEncadrantId())
-                    && sameDateAndTime) {
-                conflicts.add("Conflit avec l'encadrant : l'encadrant avec l'ID " + soutenanceDTO.getEncadrantId() + " est déjà pris");
-            }
-
-            // Vérification des conflits avec les membres du jury
-            for (Enseignant juryMember : existingSoutenance.getJury()) {
-                for (Enseignant newJuryMember : jury) {
-                    if (juryMember.getId().equals(newJuryMember.getId()) && sameDateAndTime) {
-                        conflicts.add("Conflit avec un membre du jury : " + juryMember.getNom() + " fait déjà partie du jury d'une soutenance à cette date/heure");
-                    }
-                }
-            }
+            s.getJury().stream()
+                    .filter(j -> juryIds.contains(j.getId()))
+                    .forEach(j -> conflicts.add("Jury " + j.getNom() + " déjà pris"));
         }
 
         return conflicts;
