@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class EntreprisesServiceService {
   private apiUrl = 'http://localhost:8081/api/entreprises';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getEntreprises(): Observable<any> {
     return this.http.get<any>(this.apiUrl);
@@ -20,6 +20,14 @@ export class EntreprisesServiceService {
 
   addEntreprise(entreprise: any): Observable<any> {
     return this.http.post<any>(this.apiUrl, entreprise);
+  }
+  checkExistenceEntreprise(entreprise: any): Observable<any> {
+    console.log("taay ", entreprise)
+    return this.http.post<any>(`${this.apiUrl}/check-existence`,
+      entreprise, // Assurez-vous que c'est bien l'objet JSON
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+      });
   }
 
   updateEntreprise(id: number, entreprise: any): Observable<any> {

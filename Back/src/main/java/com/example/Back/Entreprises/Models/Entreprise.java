@@ -26,7 +26,7 @@ public class Entreprise {
     @Column(nullable = false , unique = true)
     private Long telephone;
 
-    @Column(nullable = false , unique = true)
+    @Column(nullable = false )
     private String representePar;
 
     public Entreprise() {

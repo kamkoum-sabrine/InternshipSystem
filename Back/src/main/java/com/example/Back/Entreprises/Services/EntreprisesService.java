@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 @Service
@@ -17,7 +18,7 @@ public class EntreprisesService {
         this.entrepriseRepository = entrepriseRepository;
     }
 
-    public void addEntreprise(Entreprise entreprise) {
+    public Entreprise addEntreprise(Entreprise entreprise) {
         // Vérification que les champs obligatoires ne sont pas vides
         if (entreprise.getNom() == null || entreprise.getNom().trim().isEmpty() ||
                 entreprise.getAdresse() == null || entreprise.getAdresse().trim().isEmpty() ||
@@ -32,9 +33,9 @@ public class EntreprisesService {
         }
 
         // Vérification de la longueur de l'adresse (au moins 5 caractères)
-        if (entreprise.getAdresse().trim().length() < 5) {
+      /*  if (entreprise.getAdresse().trim().length() < 5) {
             throw new IllegalArgumentException("L'adresse doit contenir au moins 5 caractères !");
-        }
+        }*/
 
         // Vérification du format de l'email et de son unicité
         String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
@@ -55,7 +56,10 @@ public class EntreprisesService {
         }
 
         // Sauvegarde de l'entreprise
-        entrepriseRepository.save(entreprise);
+        return entrepriseRepository.save(entreprise);
+    }
+    public Optional<Entreprise> checkIfEntrepriseExists(String nom, String adresse, String email) {
+        return entrepriseRepository.findByNomAndAdresseAndEmail(nom, adresse, email);
     }
 
     public List<Entreprise> getAllEntreprises() {

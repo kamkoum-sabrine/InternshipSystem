@@ -6,14 +6,15 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormControlDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonDirective, CardBodyComponent, CardComponent, CardHeaderComponent, ColComponent, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, FormDirective, FormFeedbackComponent, FormLabelDirective, FormSelectDirective, InputGroupComponent, InputGroupTextDirective, ListGroupDirective, ListGroupItemDirective, RowComponent, TextColorDirective } from '@coreui/angular-pro';
 import { DocsExampleComponent } from '@docs-components/public-api';
 import { GererConventionsEtudiantService } from '../conventionsEtudiant-basic-example/gerer-conventionsEtudiant.service';
 import { PdfService } from '../conventionsEtudiant-basic-example/pdf.service'
 import { OcrService } from '../conventionsEtudiant-basic-example/ocr.service'
-
+import { EntreprisesServiceService } from '../../entreprises/entreprises-service.service'
+import { formatDate } from '@angular/common';
 @Component({
   selector: 'app-add-convention-dialog',
   standalone: true,
@@ -68,7 +69,10 @@ export class AddConventionDialogComponent {
     nom: '',
     adresse: '',
     tuteur: '',
-    email: ''
+    email: '',
+    telephone: '',
+    representePar: ''
+
   }
   userId: any;
   edit: any;
@@ -76,7 +80,8 @@ export class AddConventionDialogComponent {
   extractedText: string = '';
   constructor(private gererConventionsEtudiantService: GererConventionsEtudiantService,
     public dialogRef: MatDialogRef<AddConventionDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, private pdfService: PdfService, private ocrService: OcrService
+    @Inject(MAT_DIALOG_DATA) public data: any, private pdfService: PdfService, private ocrService: OcrService,
+    private entrepriseService: EntreprisesServiceService
   ) { }
   async onFileSelected(event: any) {
     const file = event.target.files[0];
@@ -136,15 +141,62 @@ export class AddConventionDialogComponent {
     return {
       nom: this.extractValue(text, "L’établissement d’accueil :", "Adresse :"),
       adresse: this.extractValue(text, "Adresse :", "Représenté par :"),
-      representant: this.extractValue(text, "Représenté par :", "Tuteur du Stage :"),
+      representePar: this.extractValue(text, "Représenté par :", "Tuteur du Stage :"),
       tuteur: this.extractValue(text, "Tuteur du Stage :", "E-mail :"),
       email: this.extractValue(text, "E-mail :", "-Tél:"),
       telephone: this.extractValue(text, "-Tél:", "-Fax :"),
       fax: this.extractValue(text, "-Fax :", "Concernant I’étudiant Stagiaire"),
     };
   }
+  parseDureeData(text: string): { dateDebut: string, dateFin: string } {
+    // Nettoyage du texte pour uniformiser les sauts de ligne
+    const cleanText = text.replace(/\r?\n|\r/g, ' ');
 
+    // Pattern amélioré pour capturer spécifiquement les dates
+    const pattern = /Pour la durée\s*:\s*Du\s*:\s*([0-9\/]+)\s*au\s*:\s*([0-9\/]+)/i;
+    const match = cleanText.match(pattern);
 
+    if (match && match.length >= 3) {
+      return {
+        dateDebut: match[1].trim(),
+        dateFin: match[2].trim()
+      };
+    }
+
+    // Fallback si le premier pattern ne fonctionne pas
+    const fallbackPattern = /Du\s*:\s*([0-9\/]+)\s*au\s*:\s*([0-9\/]+)/i;
+    const fallbackMatch = cleanText.match(fallbackPattern);
+
+    return fallbackMatch && fallbackMatch.length >= 3
+      ? { dateDebut: fallbackMatch[1].trim(), dateFin: fallbackMatch[2].trim() }
+      : { dateDebut: '', dateFin: '' };
+  }
+
+  // Dans votre composant/service
+  prepareConventionData() {
+    const rawData = this.parseDureeData(this.extractedText);
+
+    // Conversion des dates au format ISO (yyyy-MM-dd)
+    const conventionData = {
+      dateDebut: this.convertToJavaDate(rawData.dateDebut),
+      dateFin: this.convertToJavaDate(rawData.dateFin)
+    };
+
+    return conventionData;
+  }
+
+  private convertToJavaDate(dateString: string): string {
+    if (!dateString) return '';
+
+    // Formatage pour Java (yyyy-MM-dd)
+    const [day, month, year] = dateString.split('/');
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+  }
+
+  // Alternative avec DatePipe si disponible
+  // private convertWithDatePipe(dateString: string): string {
+  //   return this.datePipe.transform(dateString, 'yyyy-MM-dd');
+  // }
   ngOnInit() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.utilisateur = user
@@ -168,6 +220,26 @@ export class AddConventionDialogComponent {
     if (this.isSubmitDisabled) return; // Empêche la soumission si désactivé
     this.entreprise = this.parseEntrepriseData(this.extractedText);
     console.log(this.entreprise); // Vérifiez les données extraites
+
+    this.entrepriseService.checkExistenceEntreprise(this.entreprise).subscribe((data) => {
+      console.log("eeeee")
+      if (data.exists == false) {
+        this.entrepriseService.addEntreprise(this.entreprise).subscribe((data) => {
+          console.log("entreprise insére " + data.id)
+        });
+      }
+      else {
+        console.log("entreprise id ", data.entreprise.id)
+      }
+      let dureeStage;
+      dureeStage = this.parseDureeData(this.extractedText);
+      console.log("Duree stage ", dureeStage)
+      let dureeStageCorrect = this.prepareConventionData();
+
+      console.log("Duree correct (date)" + dureeStageCorrect.dateDebut)
+
+    })
+
     this.convention.etudiantId = this.utilisateur.id
     console.log("conventionnnnnnnnnnnnnnnnnnnnn ", this.convention)
     const formData = new FormData();

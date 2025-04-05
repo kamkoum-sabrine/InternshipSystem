@@ -4,9 +4,12 @@ import com.example.Back.Entreprises.Models.Entreprise;
 import com.example.Back.Entreprises.Repositories.EntreprisesRepository;
 import com.example.Back.Entreprises.Services.EntreprisesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/entreprises")
@@ -18,8 +21,9 @@ public class EntreprisesController {
         this.entreprisesService = entreprisesService;
     }
     @PostMapping
-    public void createEntreprise(@RequestBody Entreprise entreprise) {
-       this.entreprisesService.addEntreprise(entreprise);
+    public ResponseEntity<Entreprise> createEntreprise(@RequestBody Entreprise entreprise) {
+       Entreprise savedEntreprise = this.entreprisesService.addEntreprise(entreprise);
+       return ResponseEntity.ok(savedEntreprise);
     }
 
     @GetMapping
@@ -34,7 +38,26 @@ public class EntreprisesController {
     public void updateEntreprise(@PathVariable Long id, @RequestBody Entreprise entreprise) {
         this.entreprisesService.updateEntreprise(id, entreprise);
     }
-   
+
+    @PostMapping("/check-existence")
+    public ResponseEntity<?> checkEntrepriseExistence(
+            @RequestBody Entreprise request) {
+
+        Optional<Entreprise> existingEntreprise = entreprisesService.checkIfEntrepriseExists(
+                request.getNom(),
+                request.getAdresse(),
+                request.getEmail()
+        );
+
+        if (existingEntreprise.isPresent()) {
+            return ResponseEntity.ok().body(Map.of(
+                    "exists", true,
+                    "entreprise", existingEntreprise.get()
+            ));
+        }
+        return ResponseEntity.ok(Map.of("exists", false));
+    }
+
 
 }
 
