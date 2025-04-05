@@ -4,26 +4,44 @@
     object-fit: cover;
 }
 
-.avatar-upload-btn {
+.avatar-edit {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    width: 36px;
-    height: 36px;
-    background: #3c4b64;
+    bottom: 0;
+    right: 0;
+    background-color: white;
     border-radius: 50%;
+    width: 35px; // Taille du cercle
+    height: 35px; // Taille du cercle
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     cursor: pointer;
-    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); // Ombre légère pour l'icône
 
+    // Lorsque l'on survole l'icône
     &:hover {
-        background: darken(#3c4b64, 10%);
+        background-color: #f1f1f1; // Change la couleur de fond sur hover
     }
+
+    // Appliquer une transition douce à la couleur de fond
+    transition: background-color 0.3s ease;
 }
 
-.avatar-upload-icon {
-    color: white;
-    font-size: 16px;
+.avatar-edit c-icon {
+    font-size: 18px; // Taille de l'icône du crayon
+    color: #555; // Couleur de l'icône par défaut
+}
+
+.avatar-edit:hover c-icon {
+    color: #007bff; // Couleur de l'icône au survol (par exemple bleu)
+}
+
+
+/* Cibler un autre c-select avec un id spécifique */
+#formation,
+#niveau,
+#sexe,
+#filiere,
+input[type="date"] {
+    width: 160px;
 }

@@ -28,6 +28,7 @@ export class GererSoutenancesService {
   // Méthode pour créer une soutenance
   addSoutenance(soutenance: any): Observable<any> {
     return this.http.post<any>(this.apiUrl, soutenance);
+
   }
 
   updateSoutenance(soutenance: any): Observable<any> {

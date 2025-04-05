@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,11 +28,18 @@ public interface SoutenanceRepository extends JpaRepository<Soutenance,Long> {
     Optional<Soutenance> findSoutenanceByJuryExists(@Param("enseignant") Enseignant enseignant);
 
 
+
+
     @Query("SELECT s FROM Soutenance s " +
             "WHERE (:etudiantId IS NULL OR s.etudiant.id = :etudiantId) " +
             "AND (:encadrantId IS NULL OR s.encadrant.id = :encadrantId) " +
-            "AND (:date IS NULL OR s.date = :date)")
+            "AND (:date IS NULL OR s.date = :date) " +
+            "AND (:heure IS NULL OR s.heure = :heure) " +
+            "AND (:salle IS NULL OR s.salle = :salle)")
     List<Soutenance> rechercherSoutenances(@Param("etudiantId") Long etudiantId,
                                            @Param("encadrantId") Long encadrantId,
-                                           @Param("date") LocalDate date);
+                                           @Param("date") LocalDate date,
+                                           @Param("heure") LocalTime heure,
+                                           @Param("salle") Integer salle);
+
 }

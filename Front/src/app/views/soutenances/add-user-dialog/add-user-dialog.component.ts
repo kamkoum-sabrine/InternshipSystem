@@ -38,6 +38,7 @@ import { GererSoutenancesService } from '../soutenances-basic-example/gerer-sout
 })
 export class AddUserDialogComponent {
 
+  errorMessage: string | null = null;
   etudiants: any[] = [];
   encadrants: any[] = [];
   jurys: any[] = [null];
@@ -76,18 +77,22 @@ export class AddUserDialogComponent {
   onSubmit(): void {
     console.log('Soutenance créée:', this.soutenance);
 
-    // Enregistrer la soutenance via le service
     this.gererSoutenancesService.addSoutenance(this.soutenance).subscribe(
-      response => {
+      (response) => {
         console.log('Soutenance enregistrée avec succès:', response);
-        this.dialogRef.close(this.soutenance);
-        window.location.reload();
+        this.dialogRef.close(this.soutenance); // Ferme le modal et retourne l'objet soutenance
+        window.location.reload(); // Recharge la page
       },
-      error => {
+      (error) => {
+        this.errorMessage = 'Une erreur est survenue lors de l\'enregistrement de la soutenance.';
+        if (error.error && error.error.message) {
+          this.errorMessage = error.error.message; // Récupère le message d'erreur du backend
+        }
         console.error('Erreur lors de l\'enregistrement de la soutenance:', error);
       }
     );
   }
+
 
 
 

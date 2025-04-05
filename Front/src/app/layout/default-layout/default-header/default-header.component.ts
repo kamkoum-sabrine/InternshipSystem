@@ -45,6 +45,7 @@ export class DefaultHeaderComponent extends HeaderComponent {
     { name: 'dark', text: 'Dark', icon: 'cilMoon' },
     { name: 'auto', text: 'Auto', icon: 'cilContrast' }
   ];
+  user: any;
 
   readonly icons = computed(() => {
     const currentMode = this.colorMode();
@@ -54,6 +55,17 @@ export class DefaultHeaderComponent extends HeaderComponent {
   constructor(public authService: AuthService) {
     super();
   }
+
+  ngOnInit(): void {
+    this.loadCurrentUser();
+  }
+
+  loadCurrentUser(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.user = user;  // Récupérer l'utilisateur depuis localStorage
+  }
+
+
   isLogged() {
     return this.authService.isLoggedIn();
   }

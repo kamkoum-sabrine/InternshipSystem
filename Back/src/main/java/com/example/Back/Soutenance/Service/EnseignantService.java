@@ -9,12 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 public class EnseignantService {
 
-    private EnseignantRepository enseignantRepository;
-    private SoutenanceRepository soutenanceRepository;
+    private final EnseignantRepository enseignantRepository;
+    private final SoutenanceRepository soutenanceRepository;
 
     @Autowired
     public EnseignantService(EnseignantRepository enseignantRepository, SoutenanceRepository soutenanceRepository ) {
@@ -32,9 +33,26 @@ public class EnseignantService {
 
     public Enseignant addEnseignant(Enseignant enseignant) {
         // Valider les champs obligatoires
-        if (enseignant.getNom() == null || enseignant.getPrenom() == null || enseignant.getEmail() == null ) {
-            throw new IllegalArgumentException("Les champs obligatoires (Nom, Prenom, Email) ne doivent pas être nuls");
+
+        if (enseignant.getNom() == null || enseignant.getNom().trim().isEmpty() ||
+                enseignant.getPrenom() == null || enseignant.getPrenom().trim().isEmpty() ||
+                enseignant.getEmail() == null || enseignant.getEmail().trim().isEmpty()
+                ) {
+            throw new IllegalArgumentException("Tous les champs sont obligatoires !");
         }
+
+        if (enseignant.getNom().trim().length() < 2) {
+            throw new IllegalArgumentException("Le nom doit contenir au moins 2 caractères !");
+        }
+        if (enseignant.getPrenom().trim().length() < 2) {
+            throw new IllegalArgumentException("Le prenom doit contenir au moins 2 caractères !");
+        }
+
+        String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+        if (!Pattern.matches(emailRegex, enseignant.getEmail())) {
+            throw new IllegalArgumentException("L'email doit être au format valide (example@domaine.com) !");
+        }
+
         // Sauvegarder et retourner l'entité
         return enseignantRepository.save(enseignant);
     }
@@ -61,20 +79,25 @@ public class EnseignantService {
                 .orElseThrow(() -> new IllegalStateException("L'enseignant n'existe pas"));
 
         // Mettre à jour les champs si fournis
-        if (newenseignant.getNom() != null && !newenseignant.getNom().trim().isEmpty() && !newenseignant.getNom().equals(enseignant.getNom())) {
-            enseignant.setNom(newenseignant.getNom());
+
+        if (newenseignant.getNom().trim().length() < 2) {
+            throw new IllegalArgumentException("Le nom doit contenir au moins 2 caractères !");
+        }
+        if (newenseignant.getPrenom().trim().length() < 2) {
+            throw new IllegalArgumentException("Le prenom doit contenir au moins 2 caractères !");
         }
 
-        if (newenseignant.getPrenom() != null && !newenseignant.getPrenom().trim().isEmpty() && !newenseignant.getPrenom().equals(enseignant.getPrenom())) {
-            enseignant.setPrenom(newenseignant.getPrenom());
+        String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+        if (!Pattern.matches(emailRegex, newenseignant.getEmail())) {
+            throw new IllegalArgumentException("L'email doit être au format valide (example@domaine.com) !");
+        }
+        if (enseignantRepository.existsByEmail(newenseignant.getEmail())) {
+            throw new IllegalArgumentException("Cet email est déjà utilisé par une autre entreprise !");
         }
 
-        if (newenseignant.getEmail() != null && !newenseignant.getEmail().trim().isEmpty() && !newenseignant.getEmail().equals(enseignant.getEmail())) {
-            enseignant.setEmail(newenseignant.getEmail());
-        }
-
-
-
+        enseignant.setNom(newenseignant.getNom());
+        enseignant.setPrenom(newenseignant.getPrenom());
+        enseignant.setEmail(newenseignant.getEmail());
         // Sauvegarder et retourner l'entité mise à jour
         return enseignantRepository.save(enseignant);
     }

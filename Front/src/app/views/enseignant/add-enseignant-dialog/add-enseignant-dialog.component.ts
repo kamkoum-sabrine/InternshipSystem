@@ -10,14 +10,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, FormControlDirective, FormDirective, FormLabelDirective, FormSelectDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, ButtonDirective, ColDirective, InputGroupComponent, InputGroupTextDirective } from '@coreui/angular-pro';
-import {
-
-  MultiSelectComponent as MultiSelectComponent_1,
-  MultiSelectOptgroupComponent,
-  MultiSelectOptionComponent,
-
-} from '@coreui/angular-pro';
-
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-add-enseignant-dialog',
@@ -29,42 +22,47 @@ import {
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, FormControlDirective, ReactiveFormsModule, FormsModule, FormDirective, FormLabelDirective, FormSelectDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, ButtonDirective, ColDirective, InputGroupComponent, InputGroupTextDirective,
-    RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, MultiSelectComponent_1, MultiSelectOptionComponent, MultiSelectOptgroupComponent
+    RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, FormControlDirective, ReactiveFormsModule, FormsModule, FormDirective, FormLabelDirective, FormSelectDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, ButtonDirective, ColDirective, InputGroupComponent, InputGroupTextDirective
   ],
   templateUrl: './add-enseignant-dialog.component.html',
   styleUrl: './add-enseignant-dialog.component.scss'
 })
 export class AddEnseignantDialogComponent {
 
-  enseignant = {
-    nom: '',
-    prenom: '',
-    email: '',
-  };
+  enseignantForm: FormGroup;
 
-  constructor(private GererEnseignatService: GererEnseignatService,
+  constructor(private fb: FormBuilder, private GererEnseignatService: GererEnseignatService,
     public dialogRef: MatDialogRef<AddEnseignantDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) { }
+  ) {
+    this.enseignantForm = this.fb.group({
+      nom: ['', [Validators.required, Validators.minLength(2)]],
+      prenom: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.required, Validators.email]],
+    });
+  }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
   onSubmit(): void {
-    console.log('Soutenance créée:', this.enseignant);
+    if (this.enseignantForm.valid) {
+      const enseignantData = this.enseignantForm.value; // Récupérer les données du formulaire
+      console.log('Soutenance créée:', enseignantData);
 
-    // Enregistrer la soutenance via le service
-    this.GererEnseignatService.addEnseignant(this.enseignant).subscribe(
-      response => {
-        console.log('Soutenance enregistrée avec succès:', response);
-        this.dialogRef.close(this.enseignant);
-        window.location.reload();
-      },
-      error => {
-        console.error('Erreur lors de l\'enregistrement de la soutenance:', error);
-      }
-    );
+      this.GererEnseignatService.addEnseignant(enseignantData).subscribe(
+        response => {
+          console.log('Soutenance enregistrée avec succès:', response);
+          this.dialogRef.close(enseignantData);
+          window.location.reload();
+        },
+        error => {
+          console.error('Erreur lors de l\'enregistrement de la soutenance:', error);
+        }
+      );
+    } else {
+      console.log("Le formulaire est invalide");
+    }
   }
 }

@@ -104,6 +104,11 @@ public class UserService {
             }
         }
 
+        if (updatedUser.getPhoto() != null && updatedUser.getPhoto().trim().isEmpty()) {
+            throw new IllegalArgumentException("La photo est présente mais est vide !");
+        }
+
+
         // Mise à jour des champs
         existingUser.setNom(updatedUser.getNom().trim());
         existingUser.setPrenom(updatedUser.getPrenom().trim());
@@ -119,6 +124,7 @@ public class UserService {
         existingUser.setLieuNaissance(updatedUser.getLieuNaissance());
         existingUser.setFormation(updatedUser.getFormation());
         existingUser.setDateDeNaissance(updatedUser.getDateDeNaissance());
+        existingUser.setPhoto(updatedUser.getPhoto());
 
         // Ne pas mettre à jour le mot de passe ici (doit être géré séparément avec encodage)
 

@@ -86,6 +86,12 @@
                         </c-col>
                     </c-row>
 
+
+                    <div *ngIf="errorMessage" class="alert alert-danger">
+                        <p>{{ errorMessage }}</p>
+                    </div>
+
+
                     <!-- Action Buttons -->
                     <c-row class="mb-3">
                         <c-col sm="12" class="d-flex justify-content-end">

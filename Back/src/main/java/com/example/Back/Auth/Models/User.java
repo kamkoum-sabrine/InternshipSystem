@@ -4,13 +4,7 @@ import com.example.Back.enums.Filiere;
 import com.example.Back.enums.Formation;
 import com.example.Back.enums.Niveau;
 import com.example.Back.enums.Sexe;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -56,8 +50,14 @@ public class User {
 
 
 
+
+
     @Column(nullable = true)
     private LocalDate dateDeNaissance;
+
+    @Lob
+    @Column(name = "photo", columnDefinition = "LONGTEXT",nullable = true)
+    private String photo;
 
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
@@ -195,4 +195,13 @@ public class User {
     public void setDateDeNaissance(LocalDate dateDeNaissance) {
         this.dateDeNaissance = dateDeNaissance;
     }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
 }
