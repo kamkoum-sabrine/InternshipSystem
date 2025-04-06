@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EnseignantRepository extends JpaRepository<Enseignant, Long> {
     Enseignant findEnseignantById (Long id);
+
+    Boolean existsByEmail (String email);
 }

@@ -1,5 +1,8 @@
 package com.example.Back.Conventions.Services;
 
+import com.example.Back.enums.Filiere;
+import com.example.Back.enums.Formation;
+import com.example.Back.enums.Niveau;
 import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -21,36 +24,37 @@ public class TelechargerConventionService {
             PdfFont font = PdfFontFactory.createFont(StandardFonts.TIMES_ROMAN);
             PdfPage page = pdfDoc.getFirstPage();
             PdfCanvas canvas = new PdfCanvas(page);
-            String Departement = "Génie Informatique";
-            String Numtel = "98578525";
-            String Formation = "Mastère";
+
 
             // 🖊 Ajouter les champs aux positions spécifiques
-            if (Formation.equals("Ingénierie")) {
+
+
+
+
+            if (formData.get("Formation").equals(String.valueOf(Formation.INGENIERIE))) {
                 drawText(canvas, font, "x", 93, 508);
             }//Ingénierie
-            else if (Formation.equals("Mastère")) {
+            else if (formData.get("Formation").equals(String.valueOf(Formation.MASTERE))) {
                 drawText(canvas, font, "x", 154, 508);
-
             }
 
             drawText(canvas, font, formData.getOrDefault("Prénom", ""), 140, 521); // Prénom
             drawText(canvas, font, formData.getOrDefault("Nom", ""), 350, 521);   // Nom
             drawText(canvas, font, formData.getOrDefault("N° CIN", ""), 110, 467); // N° CIN
             drawText(canvas, font, formData.getOrDefault("E-mail", ""), 380, 467); // E-mail
-            drawText(canvas, font, Numtel, 250, 467); // N° téléphone
+            drawText(canvas, font, formData.getOrDefault("Ntéléphone", ""), 250, 467); // N° téléphone
             drawText(canvas, font, formData.getOrDefault("Filière", ""), 110, 481); // Filière
-            if (formData.get("Niveau").equals("2eme")) {
+            if (formData.get("Niveau").equals(String.valueOf(Niveau.DEUXIEME))) {
                 drawText(canvas, font, "x", 396, 481); // Filière
-            } else if (formData.get("Niveau").equals("1er")) {
+            } else if (formData.get("Niveau").equals(String.valueOf(Niveau.PREMIERE))) {
                 drawText(canvas, font, "x", 309, 481); // Filière
             }
 
-            if (Departement.equals("Génie Informatique")) {
+            if (formData.get("Filière").equals(String.valueOf(Filiere.Informatique))) {
                 drawText(canvas, font, "X", 172, 493); // Filière
-            } else if (Departement.equals("Génie Electrique")) {
+            } else if (formData.get("Filière").equals(String.valueOf(Filiere.Infotronique)) || formData.get("Filière").equals(String.valueOf(Filiere.Mecatronique))) {
                 drawText(canvas, font, "X", 252, 493); // Filière
-            } else if (Departement.equals("Génie Industriel")) {
+            } else if (formData.get("Filière").equals(String.valueOf(Filiere.GSIL))) {
                 drawText(canvas, font, "X", 337, 493); // Filière
             }
 
@@ -61,10 +65,27 @@ public class TelechargerConventionService {
 
     // 📌 Fonction pour écrire le texte à une position donnée
     private void drawText(PdfCanvas canvas, PdfFont font, String text, float x, float y) {
+        if (text == null || text.isEmpty()) return; // Évite d'écrire du texte vide
+
+        // Ne pas ajouter de fond blanc si le texte est "X"
+        if (!text.equalsIgnoreCase("X")) {
+            float textWidth = font.getWidth(text, 11); // Largeur du texte
+            float textHeight = 12; // Hauteur estimée du texte
+
+            // 🎨 Dessiner un rectangle blanc derrière le texte (pas pour "X")
+            canvas.saveState()
+                    .setFillColorRgb(1, 1, 1) // Blanc
+                    .rectangle(x - 3, y - 2, textWidth + 5, textHeight) // Ajuster le padding
+                    .fill()
+                    .restoreState();
+        }
+
+        // 📝 Écrire le texte normalement
         canvas.beginText()
-                .setFontAndSize(font, 10)
+                .setFontAndSize(font, 11)
                 .moveText(x, y)
                 .showText(text)
                 .endText();
     }
+
 }

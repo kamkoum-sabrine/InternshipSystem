@@ -5,23 +5,36 @@
                 <strong>Modification de l'enseignant</strong>
             </c-card-header>
             <c-card-body>
-                <form (ngSubmit)="onSubmit()" cForm>
+                <form [formGroup]="enseignantForm" (ngSubmit)="onSubmit()" cForm>
 
                     <!-- Name Field -->
                     <c-row class="mb-3">
-                        <label cLabel class="col-sm-2 col-form-label" for="nom">Nom</label>
+                        <label cLabel class="col-sm-2 col-form-label" cFormControl for="nom">Nom</label>
                         <c-col sm="10">
-                            <input [(ngModel)]="enseignant.nom" name="nom" cFormControl id="nom" type="text"
-                                placeholder="Nom de l'enseignant" required />
+                            <input formControlName="nom" id="nom" type="text" cFormControl
+                                placeholder="Nom de l'enseignant" />
+                            <div *ngIf="enseignantForm.get('nom')?.invalid && (enseignantForm.get('nom')?.dirty || enseignantForm.get('nom')?.touched)"
+                                class="text-danger">
+                                <div *ngIf="enseignantForm.get('nom')?.errors?.['required']">Le nom est requis.</div>
+                                <div *ngIf="enseignantForm.get('nom')?.errors?.['minlength']">Le nom doit contenir au
+                                    moins 2 caractères.</div>
+                            </div>
                         </c-col>
                     </c-row>
 
-                    <!-- Name Field -->
+                    <!-- Prenom Field -->
                     <c-row class="mb-3">
-                        <label cLabel class="col-sm-2 col-form-label" for="prenom">Preom</label>
+                        <label cLabel class="col-sm-2 col-form-label" for="prenom">Prénom</label>
                         <c-col sm="10">
-                            <input [(ngModel)]="enseignant.prenom" name="prenom" cFormControl id="prenom" type="text"
-                                placeholder="Prenom de l'enseignant" required />
+                            <input formControlName="prenom" cFormControl id="prenom" type="text"
+                                placeholder="Prénom de l'enseignant" />
+                            <div *ngIf="enseignantForm.get('prenom')?.invalid && (enseignantForm.get('prenom')?.dirty || enseignantForm.get('prenom')?.touched)"
+                                class="text-danger">
+                                <div *ngIf="enseignantForm.get('prenom')?.errors?.['required']">Le prénom est requis.
+                                </div>
+                                <div *ngIf="enseignantForm.get('prenom')?.errors?.['minlength']">Le prénom doit contenir
+                                    au moins 2 caractères.</div>
+                            </div>
                         </c-col>
                     </c-row>
 
@@ -29,8 +42,14 @@
                     <c-row class="mb-3">
                         <label cLabel class="col-sm-2 col-form-label" for="email">Email</label>
                         <c-col sm="10">
-                            <input [(ngModel)]="enseignant.email" name="email" cFormControl id="email" type="text"
-                                placeholder="Email de l'enseignant" required />
+                            <input formControlName="email" id="email" type="text" cFormControl
+                                placeholder="Email de l'enseignant" />
+                            <div *ngIf="enseignantForm.get('email')?.invalid && (enseignantForm.get('email')?.dirty || enseignantForm.get('email')?.touched)"
+                                class="text-danger">
+                                <div *ngIf="enseignantForm.get('email')?.errors?.['required']">L'email est requis.</div>
+                                <div *ngIf="enseignantForm.get('email')?.errors?.['email']">L'email doit être valide.
+                                </div>
+                            </div>
                         </c-col>
                     </c-row>
 
@@ -39,7 +58,8 @@
                         <c-col sm="12" class="d-flex justify-content-end">
                             <button cButton class="me-3" color="danger" style="color: #ffffff;" type="button"
                                 (click)="onCancel()">Annuler</button>
-                            <button cButton color="info" style="color: #ffffff;" type="submit">Modifier</button>
+                            <button cButton color="info" style="color: #ffffff;" type="submit"
+                                [disabled]="enseignantForm.invalid">Modifier</button>
                         </c-col>
                     </c-row>
 

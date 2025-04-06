@@ -19,6 +19,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -123,7 +124,107 @@ public class ConventionStageEteController {
             return ResponseEntity.internalServerError().body("Erreur lors du téléchargement du fichier.");
         }
     }
+    @PostMapping("/uploadPreuveAnnulation/{conventionId}")
+    public ResponseEntity<?> uploadPreuveAnnulation(
+                    @PathVariable Long conventionId,
+            @RequestParam("preuveAnnulation") MultipartFile preuveAnnulation) {
 
+        // Trouver la convention
+        Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(conventionId);
+        if (conventionOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Convention non trouvée");
+        }
+        ConventionStageEte convention = conventionOptional.get();
+
+        try {
+            // Vérifier et créer le dossier d'upload si nécessaire
+            Path uploadPath = Paths.get(uploadDir);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            // Générer un nom de fichier unique pour éviter les collisions
+            String fileName = "preuve_annulation_" + conventionId + "_" +
+                    System.currentTimeMillis() +
+                    "." + getFileExtension(preuveAnnulation.getOriginalFilename());
+
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(preuveAnnulation.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            // Mettre à jour la convention avec les infos de la preuve
+            convention.setPreuveAnnulationNom(fileName);
+            convention.setPreuveAnnulationChemin(filePath.toString());
+            // Note: On ne change pas annulee ici (reste à 0)
+
+            conventionStageEteRepository.save(convention);
+
+            return ResponseEntity.ok("Preuve d'annulation uploadée avec succès");
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().body("Erreur lors du téléchargement du fichier.");
+        }
+    }
+
+    @PutMapping("/annuler/{conventionId}")
+    public ResponseEntity<?> annulerConvention(@PathVariable Long conventionId) {
+        Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(conventionId);
+        if (conventionOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Convention non trouvée");
+        }
+        ConventionStageEte convention = conventionOptional.get();
+        // 2. Vérifier si une preuve existe déjà
+        if (convention.getPreuveAnnulationNom() == null || convention.getPreuveAnnulationNom().isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body("Annulation impossible : aucune preuve d'annulation n'a été uploadée pour cette convention ");
+        }
+
+        // 3. Vérifier si la convention n'est pas déjà annulée
+        if (convention.getAnnulee() == 1) {
+            return ResponseEntity.badRequest()
+                    .body("La convention est déjà annulée");
+        }
+
+        // 4. Mettre à jour le statut
+        convention.setAnnulee(1); // 1 = annulée
+        conventionStageEteRepository.save(convention);
+
+        return ResponseEntity.ok("Convention annulée avec succès");
+    }
+    @PutMapping("/refuserAnnulation/{conventionId}")
+    public ResponseEntity<?> refuserAnnulation(@PathVariable Long conventionId) {
+        Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(conventionId);
+        if (conventionOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Convention non trouvée");
+        }
+        ConventionStageEte convention = conventionOptional.get();
+        // 2. Vérifier si une preuve existe déjà
+        if (convention.getPreuveAnnulationNom() == null || convention.getPreuveAnnulationNom().isEmpty()) {
+            return ResponseEntity.badRequest()
+                    .body("Annulation impossible : aucune preuve d'annulation n'a été uploadée pour cette convention ");
+        }
+
+        // 3. Vérifier si la convention n'est pas annulée
+        if (convention.getAnnulee() == 1) {
+            return ResponseEntity.badRequest()
+                    .body("Cette convention est annulée");
+        }
+        if (convention.getAnnulee() == -1) {
+            return ResponseEntity.badRequest()
+                    .body("Annulation déja réfusée");
+        }
+
+        // 4. Mettre à jour le statut
+        convention.setAnnulee(-1); //
+        conventionStageEteRepository.save(convention);
+
+        return ResponseEntity.ok("Annulation refusée avec succes (preuve non acceptée)");
+    }
+    // Méthode utilitaire pour extraire l'extension du fichier
+    private String getFileExtension(String filename) {
+        if (filename == null || filename.lastIndexOf(".") == -1) {
+            return "";
+        }
+        return filename.substring(filename.lastIndexOf(".") + 1);
+    }
     @GetMapping("/uploads/{fileName:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String fileName) {
         try {
@@ -152,5 +253,45 @@ public class ConventionStageEteController {
         }
         return conventionStageEteRepository.findByEtudiant(etudiant);
     }
-
+    @PutMapping("/ValiderConvention/{id}")
+    public ResponseEntity<?> ValiderConvention(@PathVariable Long id)
+    {
+        Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(id);
+        if (conventionOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Convention non trouvée");
+        }
+        ConventionStageEte convention = conventionOptional.get();
+        if (convention.getValideeService() == -1) {
+            return ResponseEntity.badRequest().body("Cette convention n'est pas validée.");
+        }
+        if (convention.getValideeService() ==1 ) {
+          return ResponseEntity.badRequest().body("Cette convention est déja validée");
+        }
+        convention.setValideeService(1);
+        conventionStageEteRepository.save(convention);
+        return ResponseEntity.ok("Convention validée avec succes");
+    }
+    @PutMapping("/RefuserConvention/{id}")
+    public ResponseEntity<?> RefuserConvention(@PathVariable Long id)
+    {
+        Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(id);
+        if (conventionOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Convention non trouvée");
+        }
+        ConventionStageEte convention = conventionOptional.get();
+        if (convention.getValideeService() == 1) {
+            return ResponseEntity.badRequest().body("Cette convention a été validée précedemment");
+        }
+        if (convention.getValideeService() ==-1 ) {
+            return ResponseEntity.badRequest().body("Cette convention est déja refusée");
+        }
+        convention.setValideeService(-1);
+        conventionStageEteRepository.save(convention);
+        return ResponseEntity.ok("Convention refusée avec succes");
+    }
+    @GetMapping("/ConventionsAvecPreuveNonAnnulees")
+    public ResponseEntity<List<ConventionStageEte>> getConventionsAvecPreuveNonAnnulees() {
+        List<ConventionStageEte> conventions = conventionStageEteService.getConventionsAvecPreuveMaisNonAnnulees();
+        return ResponseEntity.ok(conventions);
+    }
 }

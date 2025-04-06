@@ -3,7 +3,7 @@ package com.example.Back.Auth.Controllers;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import com.example.Back.Soutenance.Model.Enseignant;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -182,6 +182,17 @@ public class UserController {
     @GetMapping("/etudiants")
     public List<User> getAllEtudiants() {
         return userService.getAlletudiants();
-
     }
+
+    @PutMapping("/etudiants/{id}")
+    public void updateUser(@PathVariable Long id, @RequestBody User user) {
+        this.userService.updateUser(id, user);
+    }
+
+
+
+
+
+
+
 }
