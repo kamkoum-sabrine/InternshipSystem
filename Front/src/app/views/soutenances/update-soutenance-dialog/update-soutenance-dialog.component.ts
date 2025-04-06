@@ -43,7 +43,9 @@ import {
   styleUrl: './update-soutenance-dialog.component.scss'
 })
 export class UpdateSoutenanceDialogComponent implements OnInit {
-  soutenance: any = {};
+  soutenance: any = {
+
+  };
   etudiants: any[] = [];
   encadrants: any[] = [];
   jurySelectionnes: any[] = [];
@@ -53,18 +55,24 @@ export class UpdateSoutenanceDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<UpdateSoutenanceDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { soutenanceId: number },
     private GererSoutenancesService: GererSoutenancesService
-  ) { }
+  ) {
+
+  }
 
   ngOnInit(): void {
-    this.chargerSoutenance();
     this.chargerEtudiants();
     this.chargerEncadrants();
+    this.chargerSoutenance();
+
+
+
   }
 
   getJuryIds(): void {
-    for (let juryid of this.jurySelectionnes) {
-      this.juryMember.push(juryid.id);
+    for (let jury of this.jurySelectionnes) {
+      this.juryMember.push(jury.id);
     }
+    console.log(this.juryMember);
   }
 
   chargerSoutenance(): void {
@@ -72,7 +80,12 @@ export class UpdateSoutenanceDialogComponent implements OnInit {
       (data) => {
         this.soutenance = data;
         this.jurySelectionnes = data.jury;
-        this.getJuryIds();
+        console.log(this.jurySelectionnes);
+        for (let juryid of this.jurySelectionnes) {
+          this.juryMember.push(juryid.id);
+        }
+        console.log(this.juryMember);
+
 
       },
       (error) => {

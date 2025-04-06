@@ -22,47 +22,37 @@ export const navItems: INavDataExtended[] = [
     name: 'Utilisateurs',
     url: '/utilisateurs',
     iconComponent: { name: 'cil-user' },
-    badge: {
-      color: 'danger-gradient',
-      text: 'PRO'
-    },
+
     roles: ['SUPER_ADMINISTRATEUR']
 
   },
   {
     name: 'Entreprises',
     url: '/entreprises',
-    iconComponent: { name: 'cil-home' },
-    badge: {
-      color: 'danger-gradient',
-      text: 'PRO'
-    },
+    iconComponent: { name: 'cil-LocationPin' },
+
     roles: ['SERVICE_STAGE', 'DIRECTION_STAGE']
   },
   {
     name: 'Mes conventions',
     url: '/conventionsEtudiant',
-    iconComponent: { name: 'cil-home' },
-    badge: {
-      color: 'danger-gradient',
-      text: 'PRO'
-    },
+    iconComponent: { name: 'cil-file' },
+
+
     roles: ['ETUDIANT']
   },
   {
     name: 'Soutenances',
     url: '/soutenances',
-    iconComponent: { name: 'fa', icon: 'trash' },
-    badge: {
-      color: 'danger-gradient',
-      text: 'PRO'
-    },
+    iconComponent: { name: 'cil-calendar' },
+
+
     roles: ['SERVICE_STAGE', 'DIRECTION_STAGE']
   },
   {
     name: 'Enseignants',
     url: '/enseignants',
-    iconComponent: { name: 'cil-graduation' },
+    iconComponent: { name: 'cil-people' },
     roles: ['SERVICE_STAGE', 'DIRECTION_STAGE']
 
   },

@@ -37,13 +37,7 @@ public class SoutenanceController {
         return soutenanceService.getSoutenanceById(id);
     }
 
-    @GetMapping("/search")
-    public List<Soutenance> rechercherSoutenances(
-            @RequestParam(required = false) Long idEtudiant,
-            @RequestParam(required = false) Long idEncadrant,
-            @RequestParam(required = false) LocalDate date) {
-        return soutenanceService.rechercherSoutenances(idEtudiant, idEncadrant, date);
-    }
+
 
     @PostMapping
     public ResponseEntity<Soutenance> createSoutenance(@Valid @RequestBody SoutenanceDTO soutenanceDTO) {

@@ -33,6 +33,10 @@ export class GererUtilisateurService {
   updateProfile(user: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/users/etudiants/${user.id}`, user);
   }
+
+
+
+
 }
 
 
