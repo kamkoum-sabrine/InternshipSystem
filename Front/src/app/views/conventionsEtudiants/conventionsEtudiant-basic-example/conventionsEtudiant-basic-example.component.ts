@@ -173,7 +173,6 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
   }
   getDate(dateDepot: any) {
     const formattedDate = dateDepot.split("T")[0] + " " + dateDepot.split("T")[1].split(".")[0];
-    console.log(formattedDate);
     return formattedDate;
   }
   annulerDemande(id: any) {
@@ -261,7 +260,7 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
   }
 
 
-  downloadPdf() {
+  telechargerConvention() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
 
     // 1. Vérifier si l'objet user est vide
@@ -319,6 +318,8 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
 
     // 5. Si tout est valide, lancer le téléchargement
     this.gererConventionsEtudiantService.downloadPdf(user.id);
+    this.gererConventionsEtudiantService.downloadWord(user.id);
+
 
   }
   downloadPreuveAnnulation(nomFichier: string) {

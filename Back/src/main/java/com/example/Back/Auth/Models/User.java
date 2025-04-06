@@ -13,6 +13,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -47,25 +48,20 @@ public class User {
     private String tel;
     @Column(nullable = true)
     private Formation formation;
-
-
-
-
-
     @Column(nullable = true)
     private LocalDate dateDeNaissance;
-
     @Lob
     @Column(name = "photo", columnDefinition = "LONGTEXT",nullable = true)
     private String photo;
-
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
     @Column(nullable = false)
     private Boolean active = true;
-
+    
+    @Column(nullable = true)
+    private String departement;
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

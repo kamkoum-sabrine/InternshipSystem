@@ -5,6 +5,8 @@ import com.example.Back.Auth.Repositories.UserRepository;
 import com.example.Back.Conventions.Models.ConventionStageEte;
 import com.example.Back.Conventions.Repositories.ConventionStageEteRepository;
 import com.example.Back.Conventions.Services.ConventionStageEteService;
+import com.example.Back.Entreprises.Models.Entreprise;
+import com.example.Back.Entreprises.Repositories.EntreprisesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -43,26 +45,30 @@ public class ConventionStageEteController {
     private final ConventionStageEteService conventionStageEteService;
     private final ConventionStageEteRepository conventionStageEteRepository;
     private final UserRepository userRepository;
+    private final EntreprisesRepository entreprisesRepository;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
 
     @Autowired
-    public ConventionStageEteController(ConventionStageEteService conventionStageEteService,ConventionStageEteRepository conventionRepository, UserRepository userRepository ) {
+    public ConventionStageEteController(ConventionStageEteService conventionStageEteService, ConventionStageEteRepository conventionRepository, UserRepository userRepository, EntreprisesRepository entreprisesRepository) {
         this.conventionStageEteService = conventionStageEteService;
         this.conventionStageEteRepository = conventionRepository;
         this.userRepository = userRepository;
+        this.entreprisesRepository = entreprisesRepository;
     }
 
     @PostMapping("/create")
     public ResponseEntity<?> createConvention(
             @RequestParam("etudiantId") Long etudiantId,
-            @RequestParam("etablissement") String etablissement,
+            @RequestParam("tuteurStage") String tuteurStage,
+            @RequestParam("entrepriseId") Long entrepriseId,
+
+           /* @RequestParam("etablissement") String etablissement,
             @RequestParam("adresse") String adresse,
             @RequestParam("representePar") String representePar,
-            @RequestParam("tuteurStage") String tuteurStage,
             @RequestParam("email") String email,
-            @RequestParam("telephone") String telephone,
+            @RequestParam("telephone") String telephone,**/
             @RequestParam("dateDebut")  @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateDebut,
             @RequestParam("dateFin")  @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFin,
             @RequestParam("fichierPDF") MultipartFile fichierPDF) {
@@ -73,6 +79,12 @@ public class ConventionStageEteController {
             return ResponseEntity.badRequest().body("Utilisateur non trouvé");
         }
         User etudiant = etudiantOptional.get();
+        // Vérifier si l'entreprise existe
+        Optional<Entreprise> entrepriseOptional = entreprisesRepository.findById(entrepriseId);
+        if (entrepriseOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Entreprise non trouvée");
+        }
+        Entreprise entreprise = entrepriseOptional.get();
 
         try {
             // Vérifier et créer le dossier d'upload si nécessaire
@@ -89,12 +101,14 @@ public class ConventionStageEteController {
             // Créer et sauvegarder la convention
             ConventionStageEte convention = new ConventionStageEte();
             convention.setEtudiant(etudiant);
-            convention.setEtablissement(etablissement);
+            convention.setEntreprise(entreprise);
+          /**  convention.setEtablissement(etablissement);
             convention.setAdresse(adresse);
             convention.setRepresentePar(representePar);
-            convention.setTuteurStage(tuteurStage);
             convention.setEmail(email);
-            convention.setTelephone(telephone);
+            convention.setTelephone(telephone);**/
+            convention.setTuteurStage(tuteurStage);
+
             convention.setDateDebut(dateDebut);
             convention.setDateFin(dateFin);
             convention.setDateDepot(new Date());

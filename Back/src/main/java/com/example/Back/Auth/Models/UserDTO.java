@@ -7,6 +7,8 @@ import jakarta.persistence.Column;
 
 import java.time.LocalDate;
 
+import java.util.Date;
+
 public class UserDTO {
     private String email;
     private String nom;
@@ -23,9 +25,20 @@ public class UserDTO {
 
     private String fax;
     private Sexe sexe;
-    private String lieuNaissance;
-    private String tel;
+    private String lieuNaissance;  
+    private Formation formation;
+    private String departement;
+   private String tel;
     private LocalDate dateDeNaissance;
+  
+    public Formation getFormation() {
+        return formation;
+    }
+    public void setFormation(Formation formation) {
+        this.formation = formation;
+    }
+
+
 
     public void setAdresse(String adresse) {
         this.adresse = adresse;

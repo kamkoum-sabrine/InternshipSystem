@@ -2,6 +2,8 @@ package com.example.Back.Entreprises.Repositories;
 
 import com.example.Back.Entreprises.Models.Entreprise;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
@@ -18,4 +20,6 @@ public interface EntreprisesRepository extends JpaRepository<Entreprise, Long> {
     // Vérifie si un email existe (insensible à la casse)
     boolean existsByEmailIgnoreCase(String email);
     boolean existsByEmail(String email);
+
+    Optional<Entreprise> findByNomAndAdresseAndEmail(String nom, String adresse, String email);
 }
