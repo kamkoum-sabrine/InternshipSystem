@@ -112,7 +112,7 @@ public class ConventionStageEteController {
     }
     @PostMapping("/uploadPreuveAnnulation/{conventionId}")
     public ResponseEntity<?> uploadPreuveAnnulation(
-            @PathVariable Long conventionId,
+                    @PathVariable Long conventionId,
             @RequestParam("preuveAnnulation") MultipartFile preuveAnnulation) {
 
         // Trouver la convention
