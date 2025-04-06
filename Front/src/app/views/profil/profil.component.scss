@@ -1,0 +1,29 @@
+.avatar-xl {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.avatar-upload-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    background: #3c4b64;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+        background: darken(#3c4b64, 10%);
+    }
+}
+
+.avatar-upload-icon {
+    color: white;
+    font-size: 16px;
+}

@@ -46,11 +46,12 @@ public class TelechargerConventionController {
         Map<String, String> formData = new HashMap<>();
         formData.put("Nom", etudiant.get().getNom());
         formData.put("Prénom", etudiant.get().getPrenom());
-        formData.put("Filière", etudiant.get().getFiliere());
+        formData.put("Filière", String.valueOf(etudiant.get().getFiliere()));
         formData.put("N° CIN", String.valueOf(etudiant.get().getCin()));
-        formData.put("Ntéléphone", etudiant.get().getLieuNaissance());
+        formData.put("Ntéléphone", etudiant.get().getTel());
         formData.put("E-mail", etudiant.get().getEmail());
-        formData.put("Niveau", etudiant.get().getNiveau());
+        formData.put("Niveau", String.valueOf(etudiant.get().getNiveau()));
+        formData.put("Formation", String.valueOf(etudiant.get().getFormation()));
 
         byte[] pdfBytes = telechargerConventionService.generateConventionPdf(formData);
 

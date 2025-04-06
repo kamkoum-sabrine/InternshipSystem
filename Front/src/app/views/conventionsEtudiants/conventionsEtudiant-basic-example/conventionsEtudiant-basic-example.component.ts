@@ -3,6 +3,7 @@ import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@ang
 import { MatDialog } from '@angular/material/dialog';
 import {  TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'; // Ajoutez cet import
+import { Router } from '@angular/router';
 import {
   BadgeComponent,
   ButtonDirective,
@@ -86,7 +87,8 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
   ];
   details_visible = Object.create({});
 
-  constructor(private cdr: ChangeDetectorRef, private gererConventionsEtudiantService: GererConventionsEtudiantService, public dialog: MatDialog, private modalService: NgbModal, private conventionsEtudiantService: ConventionsEtudiantService) { }
+  constructor(private cdr: ChangeDetectorRef,private router: Router, private gererConventionsEtudiantService: GererConventionsEtudiantService, public dialog: MatDialog, private modalService: NgbModal, private conventionsEtudiantService: ConventionsEtudiantService) { }
+
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -270,7 +272,7 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
 
     // 2. Liste de TOUS les attributs (obligatoires + optionnels)
     const allAttributes = [
-      'id', 'nom', 'prenom', 'email', 'cin', 'filiere', 'niveau',
+      'id', 'nom', 'prenom', 'email', 'cin', 'filiere', 'niveau', 'formation', 'tel'
     ];
 
     // 3. Vérifier chaque attribut (même les optionnels)
@@ -307,7 +309,7 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
         }
       }).then((result) => {
         if (result.isConfirmed) {
-          //gerermonprfil();
+          this.router.navigate(['/profile']);
         } else {
           Swal.fire('Annulé', 'Action annulée.', 'info');
         }
