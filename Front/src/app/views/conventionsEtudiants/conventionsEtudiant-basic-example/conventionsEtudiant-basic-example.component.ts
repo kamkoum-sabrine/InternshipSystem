@@ -365,6 +365,7 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
         next: (response) => {
           modal.close();
           Swal.fire('Succès', 'Preuve d\'annulation uploadée avec succès', 'success');
+          window.location.reload(); // Rafraîchir la page pour voir les changements
           // Rafraîchir les données si nécessaire
         },
         error: (error) => {
