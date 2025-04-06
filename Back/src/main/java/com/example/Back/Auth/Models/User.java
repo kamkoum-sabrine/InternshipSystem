@@ -59,9 +59,7 @@ public class User {
 
     @Column(nullable = false)
     private Boolean active = true;
-    
-    @Column(nullable = true)
-    private String departement;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

@@ -1,6 +1,7 @@
 package com.example.Back.Auth.Models;
 
 import com.example.Back.enums.Filiere;
+import com.example.Back.enums.Formation;
 import com.example.Back.enums.Niveau;
 import com.example.Back.enums.Sexe;
 import jakarta.persistence.Column;
@@ -27,7 +28,6 @@ public class UserDTO {
     private Sexe sexe;
     private String lieuNaissance;  
     private Formation formation;
-    private String departement;
    private String tel;
     private LocalDate dateDeNaissance;
   

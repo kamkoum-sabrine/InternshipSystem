@@ -3,6 +3,8 @@ package com.example.Back.Conventions.Controllers;
 import com.example.Back.Auth.Models.User;
 import com.example.Back.Auth.Services.UserService;
 import com.example.Back.Conventions.Services.TelechargerConventionService;
+import com.example.Back.enums.Filiere;
+import com.example.Back.enums.Formation;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.*;
@@ -115,9 +117,9 @@ public class TelechargerConventionController {
     }
     private void handleCheckboxesDepartement(XWPFDocument doc, User etudiant) {
         // Déterminez l'état des cases
-        boolean isInformatique = "Génie informatique".equals(etudiant.getDepartement());
-        boolean isElectrique = "Génie électrique".equals(etudiant.getDepartement());
-        boolean isIndustriel = "Génie industriel".equals(etudiant.getDepartement());
+        boolean isInformatique = Filiere.Informatique.equals(etudiant.getFiliere());
+        boolean isElectrique = Filiere.Infotronique.equals(etudiant.getFiliere() ) || Filiere.Mecatronique.equals(etudiant.getFiliere() ) ;
+        boolean isIndustriel = Filiere.GSIL.equals(etudiant.getFiliere());
         final String CHECKED = "✓"; // ou "🗹" pour un style plus carré
         final String UNCHECKED = "□"; // ou "☐" si vous préférez
         // Map des replacements spécifiques aux cases
@@ -151,9 +153,8 @@ public class TelechargerConventionController {
     }
     private void handleCheckboxesFormation(XWPFDocument doc, User etudiant) {
         // Déterminez l'état des cases
-        boolean isIngenieur = "Ingénieur".equals(etudiant.getFormation());
-        boolean isMaster = "Master".equals(etudiant.getFormation());
-
+        boolean isIngenieur = Formation.INGENIERIE.equals(etudiant.getFormation());
+        boolean isMaster = Formation.MASTERE.equals(etudiant.getFormation());
          final String CHECKED = "✓"; // ou "🗹" pour un style plus carré
          final String UNCHECKED = "□"; // ou "☐" si vous préférez
         // Map des replacements spécifiques aux cases
@@ -226,9 +227,9 @@ public class TelechargerConventionController {
         Map<String, String> replacements = new HashMap<>();
         replacements.put("${nom}", etudiant.getNom());
         replacements.put("${prenom}", etudiant.getPrenom());
-        replacements.put("${filiere}", etudiant.getFiliere());
+        replacements.put("${filiere}", String.valueOf(etudiant.getFiliere()));
         replacements.put("${cin}", String.valueOf(etudiant.getCin()));
-        replacements.put("${telephone}",String.valueOf(etudiant.getTelephone()));
+        replacements.put("${telephone}",String.valueOf(etudiant.getTel()));
         replacements.put("${email}",etudiant.getEmail());
 
         // 3. Gérer les cases à cocher
@@ -389,11 +390,11 @@ public class TelechargerConventionController {
         Map<String, String> formData = new HashMap<>();
         formData.put("Nom", etudiant.get().getNom());
         formData.put("Prénom", etudiant.get().getPrenom());
-        formData.put("Filière", etudiant.get().getFiliere());
+        formData.put("Filière", String.valueOf(etudiant.get().getFiliere()));
         formData.put("N° CIN", String.valueOf(etudiant.get().getCin()));
         formData.put("Téléphone", etudiant.get().getLieuNaissance());
         formData.put("E-mail", etudiant.get().getEmail());
-        formData.put("Niveau", etudiant.get().getNiveau());
+        formData.put("Niveau", String.valueOf(etudiant.get().getNiveau()));
 
         byte[] wordBytes = generateProfessionalConvention(formData);
 

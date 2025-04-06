@@ -79,7 +79,7 @@ public class UserController {
         appUser.setLieuNaissance(userDTO.getLieuNaissance());
         appUser.setOption(userDTO.getOption());
         appUser.setFax(userDTO.getFax());
-        appUser.setDateNaissance(userDTO.getDateNaissance());
+        appUser.setDateDeNaissance(userDTO.getDateDeNaissance());
         String randomPassword = UUID.randomUUID().toString().replace("-",
                 "").substring(0, 8);
 
