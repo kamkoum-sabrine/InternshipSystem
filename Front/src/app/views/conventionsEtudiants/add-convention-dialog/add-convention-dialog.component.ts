@@ -15,6 +15,8 @@ import { PdfService } from '../conventionsEtudiant-basic-example/pdf.service'
 import { OcrService } from '../conventionsEtudiant-basic-example/ocr.service'
 import { EntreprisesServiceService } from '../../entreprises/entreprises-service.service'
 import { formatDate } from '@angular/common';
+import Swal from 'sweetalert2';
+import { ConventionsEtudiantService } from '../conventionsEtudiant-service.service';
 @Component({
   selector: 'app-add-convention-dialog',
   standalone: true,
@@ -33,7 +35,7 @@ import { formatDate } from '@angular/common';
 export class AddConventionDialogComponent {
 
   roles: any[] = [];
-
+  myConventions: any;
   isLoading = false; // Contrôle l'affichage du loader
   isSubmitDisabled = true; // Désactive le bouton "Soumettre" initialement
 
@@ -81,9 +83,10 @@ export class AddConventionDialogComponent {
   constructor(private gererConventionsEtudiantService: GererConventionsEtudiantService,
     public dialogRef: MatDialogRef<AddConventionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, private pdfService: PdfService, private ocrService: OcrService,
-    private entrepriseService: EntreprisesServiceService
+    private entrepriseService: EntreprisesServiceService, private conventionsEtudiantsService: ConventionsEtudiantService
   ) { }
   async onFileSelected(event: any) {
+    this.onFileChange(event)
     const file = event.target.files[0];
     if (!file) return;
 
@@ -203,7 +206,10 @@ export class AddConventionDialogComponent {
     console.log("utilisateur", user);
 
     console.log("userID", this.userId)
-
+    this.conventionsEtudiantsService.getMesConventions(user.id).subscribe(data => {
+      this.myConventions = data;
+      console.log(this.myConventions);
+    });
     // this.gererConventionsEtudiantService.getAllRoles().subscribe((data) => {
     //   this.roles = data;
     // });
@@ -218,70 +224,97 @@ export class AddConventionDialogComponent {
   // Soumettre le formulaire
   onSubmit(): void {
     if (this.isSubmitDisabled) return; // Empêche la soumission si désactivé
+
     this.entreprise = this.parseEntrepriseData(this.extractedText);
     console.log(this.entreprise); // Vérifiez les données extraites
 
     this.entrepriseService.checkExistenceEntreprise(this.entreprise).subscribe((data) => {
       console.log("eeeee")
+
       if (data.exists == false) {
         this.entrepriseService.addEntreprise(this.entreprise).subscribe((data) => {
           console.log("entreprise insére " + data.id)
+          this.continuerSoumission(data.id);
         });
       }
       else {
         console.log("entreprise id ", data.entreprise.id)
+        this.continuerSoumission(data.entreprise.id);
       }
-      let dureeStage;
-      dureeStage = this.parseDureeData(this.extractedText);
-      console.log("Duree stage ", dureeStage)
-      let dureeStageCorrect = this.prepareConventionData();
 
-      console.log("Duree correct (date)" + dureeStageCorrect.dateDebut)
+
+      // console.log('Utilisateur créée:', this.utilisateur);
+      // if (this.edit != true) {
+      //   // Enregistrer la soutenance via le service
+      //   this.gererUtilisateurService.creerUtilisateur(this.utilisateur).subscribe(
+      //     response => {
+      //       console.log('Utilisateur crée avec succès:', response);
+      //       this.dialogRef.close(this.utilisateur);
+      //       window.location.reload();
+      //     },
+      //     error => {
+      //       console.error('Erreur lors de l\'enregistrement de l\'utilisateur: ', error);
+      //     }
+      //   );
+      // }
+      // else {
+      //   console.log("Ediiiiiiiiiiiiiit")
+      // }
 
     })
+  }
 
-    this.convention.etudiantId = this.utilisateur.id
-    console.log("conventionnnnnnnnnnnnnnnnnnnnn ", this.convention)
+  continuerSoumission(idEntreprise: any): void {
+    let dureeStage = this.parseDureeData(this.extractedText);
+    console.log("Durée stage extraite: ", dureeStage);
+
+    let dureeStageCorrect = this.prepareConventionData();
+    this.convention.etudiantId = this.utilisateur.id;
+
+    console.log("Durée correcte (date): " + dureeStageCorrect.dateDebut);
+
     const formData = new FormData();
     formData.append('etudiantId', this.convention.etudiantId);
-    formData.append('etablissement', this.convention.etablissement);
-    formData.append('adresse', this.convention.adresse);
-    formData.append('representePar', this.convention.representePar);
-    formData.append('tuteurStage', this.convention.tuteurStage);
-    formData.append('email', this.convention.email);
-    formData.append('telephone', this.convention.telephone);
-    formData.append('dateDebut', this.convention.dateDebut);
-    formData.append('dateFin', this.convention.dateFin);
+    formData.append('entrepriseId', idEntreprise);
+    // formData.append('adresse', this.convention.adresse);
+    // formData.append('representePar', this.convention.representePar);
+    formData.append('tuteurStage', this.entreprise.tuteur);
+    // formData.append('email', this.convention.email);
+    // formData.append('telephone', this.convention.telephone);
+    formData.append('dateDebut', dureeStageCorrect.dateDebut);
+    formData.append('dateFin', dureeStageCorrect.dateFin);
+
     if (this.convention.fichierPDF instanceof File) {
       formData.append('fichierPDF', this.convention.fichierPDF, this.convention.fichierPDF.name);
     } else {
       console.error('Aucun fichier sélectionné');
       return;
     }
-    console.log("formData: " + formData)
+
+    console.log("formData: ", formData);
+
     this.gererConventionsEtudiantService.deposerConventionEtudiant(formData).subscribe(
       response => {
-        console.log('Convention crée avec succès:', response);
+        console.log('Convention créée avec succès:', response);
+        Swal.fire({
+          icon: 'success',
+          title: 'Succès',
+          text: 'La convention a été créée avec succès !',
+          confirmButtonText: 'OK'
+        });
+        // this.conventionsEtudiantsService.getMesConventions(this.convention.etudiantId).subscribe(data => {
+        //   this.myConventions = data;
+        //   console.log(this.myConventions);
+        // });
+        this.dialogRef.close();
+        window.location.reload();
+        // this.conventionsEtudiantsService.getMesConventions(user.id).subscribe(data => {
+        //   this.myConventions = data;
+        //   console.log(this.myConventions);
+        // });
         // this.dialogRef.close(this.utilisateur);
-      })
-    // console.log('Utilisateur créée:', this.utilisateur);
-    // if (this.edit != true) {
-    //   // Enregistrer la soutenance via le service
-    //   this.gererUtilisateurService.creerUtilisateur(this.utilisateur).subscribe(
-    //     response => {
-    //       console.log('Utilisateur crée avec succès:', response);
-    //       this.dialogRef.close(this.utilisateur);
-    //       window.location.reload();
-    //     },
-    //     error => {
-    //       console.error('Erreur lors de l\'enregistrement de l\'utilisateur: ', error);
-    //     }
-    //   );
-    // }
-    // else {
-    //   console.log("Ediiiiiiiiiiiiiit")
-    // }
-
+      }
+    );
   }
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
