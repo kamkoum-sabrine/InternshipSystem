@@ -227,41 +227,39 @@ export class AddConventionDialogComponent {
 
     this.entreprise = this.parseEntrepriseData(this.extractedText);
     console.log(this.entreprise); // Vérifiez les données extraites
+    this.entrepriseService.checkExistenceEntreprise(this.entreprise).subscribe({
+      next: (data) => {
+        if (data.exists == false) {
+          this.entrepriseService.addEntreprise(this.entreprise).subscribe((data) => {
+            console.log("entreprise insére " + data.id)
+            this.continuerSoumission(data.id);
+          });
+        }
+        else {
+          console.log("entreprise id ", data.entreprise.id)
+          this.continuerSoumission(data.entreprise.id);
+        }
+      },
+      error: (err) => {
+        if (err.error?.error === 'INVALID_JSON_FORMAT') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Format invalide',
+            text: 'Les données de l\'entreprise sont mal formatées. Veuillez vérifier les champs saisis.'
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: 'Les données de l\'entreprise sont mal formatées. Veuillez vérifier les champs saisis.'
+          });
+        }
 
-    this.entrepriseService.checkExistenceEntreprise(this.entreprise).subscribe((data) => {
-      console.log("eeeee")
-
-      if (data.exists == false) {
-        this.entrepriseService.addEntreprise(this.entreprise).subscribe((data) => {
-          console.log("entreprise insére " + data.id)
-          this.continuerSoumission(data.id);
-        });
       }
-      else {
-        console.log("entreprise id ", data.entreprise.id)
-        this.continuerSoumission(data.entreprise.id);
-      }
-
-
-      // console.log('Utilisateur créée:', this.utilisateur);
-      // if (this.edit != true) {
-      //   // Enregistrer la soutenance via le service
-      //   this.gererUtilisateurService.creerUtilisateur(this.utilisateur).subscribe(
-      //     response => {
-      //       console.log('Utilisateur crée avec succès:', response);
-      //       this.dialogRef.close(this.utilisateur);
-      //       window.location.reload();
-      //     },
-      //     error => {
-      //       console.error('Erreur lors de l\'enregistrement de l\'utilisateur: ', error);
-      //     }
-      //   );
-      // }
-      // else {
-      //   console.log("Ediiiiiiiiiiiiiit")
-      // }
-
     })
+
+
+
   }
 
   continuerSoumission(idEntreprise: any): void {
