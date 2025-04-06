@@ -73,13 +73,19 @@ public class WebSecurityConfig {
                         //.requestMatchers( "/api/soutenance/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/entreprises").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
                         //.requestMatchers( "/api/enseignant/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
-                       // .requestMatchers("/api/enseignant/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
-                       // .requestMatchers("/api/enseignant/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        // .requestMatchers("/api/enseignant/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        // .requestMatchers("/api/enseignant/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/enseignant/{id}").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/enseignant").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
 
                         .requestMatchers("/api/conventionStagEte/create").hasAnyAuthority("ROLE_SERVICE_STAGE", "ROLE_ETUDIANT")
                         .requestMatchers("/api/conventionStagEte/getMyConventions/{id}").hasAnyAuthority("ROLE_ETUDIANT")
+                        .requestMatchers("/api/conventionStagEte/uploadPreuveAnnulation/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT")
+                        .requestMatchers("/api/conventionStagEte/annuler/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT")
+                        .requestMatchers("/api/conventionStagEte/refuserAnnulation/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT")
+                        .requestMatchers("/api/conventionStagEte/ValiderConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagEte/RefuserConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagEte/ConventionsAvecPreuveNonAnnulees").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
 
                         .requestMatchers("/api/pdf/convention/{id}","/api/users/etudiants/**").hasAnyAuthority("ROLE_ETUDIANT")
                         .requestMatchers("/api/conventionStagEte/uploads/**").permitAll()//hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
@@ -87,37 +93,37 @@ public class WebSecurityConfig {
 
 
                         .anyRequest().authenticated())
-                       /** .requestMatchers("/api/login", "/api/admin/register", "/api/admin/activate",
+                /** .requestMatchers("/api/login", "/api/admin/register", "/api/admin/activate",
 
-                                "/api/auth/desactivate","/api/entreprises","/api/auth/users",
-                                "/api/auth/etudiants","/api/soutenance","api/enseingnant")
-
-
-                         .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/activate",
-                                "/api/auth/desactivate","/api/entreprises/**","/api/auth/users","/api/roles/all","/api/auth/etudiants","/api/soutenance")
-
-                       
-                             
-                        .permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/soutenance/{id}").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/soutenance").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/soutenance/{id}").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/soutenance/{id}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/auth/userId/{id}").permitAll()
-
-                        // publiques**/
-
-                        // Routes protégées en fonction des rôles
+                 "/api/auth/desactivate","/api/entreprises","/api/auth/users",
+                 "/api/auth/etudiants","/api/soutenance","api/enseingnant")
 
 
-                       
+                 .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/activate",
+                 "/api/auth/desactivate","/api/entreprises/**","/api/auth/users","/api/roles/all","/api/auth/etudiants","/api/soutenance")
 
 
-                        // publiques
-                       // .anyRequest().authenticated())
+
+                 .permitAll()
+                 .requestMatchers(HttpMethod.DELETE, "/api/soutenance/{id}").permitAll()
+                 .requestMatchers(HttpMethod.POST, "/api/soutenance").permitAll()
+                 .requestMatchers(HttpMethod.GET, "/api/soutenance/{id}").permitAll()
+                 .requestMatchers(HttpMethod.PUT, "/api/soutenance/{id}").permitAll()
+                 .requestMatchers(HttpMethod.GET, "/api/auth/userId/{id}").permitAll()
+
+                 // publiques**/
+
+                // Routes protégées en fonction des rôles
+
+
+
+
+
+                // publiques
+                // .anyRequest().authenticated())
 
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Ajout du
-                                                                                                       // filtre JWT
+        // filtre JWT
 
         return http.build();
     }

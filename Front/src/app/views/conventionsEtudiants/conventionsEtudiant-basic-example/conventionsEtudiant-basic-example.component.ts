@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import {  TemplateRef, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'; // Ajoutez cet import
 import { Router } from '@angular/router';
 import {
   BadgeComponent,
@@ -29,6 +31,10 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
 
   usersData = usersData;
   @Input() myConventions: any[] = [];;
+  @ViewChild('annulationModal') annulationModal!: TemplateRef<any>; // Ajoutez cette ligne
+  
+  selectedFile: File | null = null;
+  currentConventionId: number | null = null;
 
   columns: IColumn[] = [
     {
@@ -53,7 +59,13 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
       key: 'annulee',
       label: 'Annuler'
     },
-
+    {
+      key: 'preuveAnnulation',
+      label: 'Preuve Annulation',
+      _style: { width: '15%' },
+      filter: false,
+      sorter: false
+    },
     // {
     //   key: 'createdAt',
     //   label: 'Date Registered',
@@ -75,7 +87,8 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
   ];
   details_visible = Object.create({});
 
-  constructor(private cdr: ChangeDetectorRef, private gererConventionsEtudiantService: GererConventionsEtudiantService, public dialog: MatDialog, private conventionsEtudiantService: ConventionsEtudiantService, private router: Router) { }
+  constructor(private cdr: ChangeDetectorRef,private router: Router, private gererConventionsEtudiantService: GererConventionsEtudiantService, public dialog: MatDialog, private modalService: NgbModal, private conventionsEtudiantService: ConventionsEtudiantService) { }
+
 
 
   ngOnChanges(changes: SimpleChanges) {
@@ -308,7 +321,60 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
     this.gererConventionsEtudiantService.downloadPdf(user.id);
 
   }
+  downloadPreuveAnnulation(nomFichier: string) {
+    const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
+    
+    fetch(fileUrl, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then(response => {
+        if (!response.ok) throw new Error("Accès refusé !");
+        return response.blob();
+      })
+      .then(blob => {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = nomFichier;
+        link.click();
+      })
+      .catch(error => {
+        console.error("Erreur lors du téléchargement :", error);
+        Swal.fire('Erreur', 'Impossible de télécharger le fichier', 'error');
+      });
+  }
+  openAnnulationModal(conventionId: number) {
+    this.currentConventionId = conventionId;
+    this.modalService.open(this.annulationModal);
+  }
 
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+  }
+
+  uploadPreuveAnnulation(modal: any) {
+    if (!this.selectedFile || !this.currentConventionId) {
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append('preuveAnnulation', this.selectedFile);
+  
+    this.conventionsEtudiantService.uploadPreuveAnnulation(this.currentConventionId, formData)
+      .subscribe({
+        next: (response) => {
+          modal.close();
+          Swal.fire('Succès', 'Preuve d\'annulation uploadée avec succès', 'success');
+          // Rafraîchir les données si nécessaire
+        },
+        error: (error) => {
+          console.error('Erreur lors de l\'upload', error);
+          Swal.fire('Erreur', 'Une erreur est survenue lors de l\'upload', 'error');
+        }
+      });
+  }
 
 
 }
