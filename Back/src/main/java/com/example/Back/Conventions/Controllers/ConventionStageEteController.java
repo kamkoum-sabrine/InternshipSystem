@@ -294,4 +294,9 @@ public class ConventionStageEteController {
         List<ConventionStageEte> conventions = conventionStageEteService.getConventionsAvecPreuveMaisNonAnnulees();
         return ResponseEntity.ok(conventions);
     }
+    @GetMapping("/getConventions")
+    public ResponseEntity<List<ConventionStageEte>> getConventions() {
+        List<ConventionStageEte> conventions = conventionStageEteRepository.findAll();
+        return ResponseEntity.ok(conventions);
+    }
 }

@@ -78,6 +78,10 @@ export const routes: Routes = [
         loadChildren: () => import('./views/conventionsEtudiants/routes').then((m) => m.routes)
       },
       {
+        path: 'conventionsService',
+        loadChildren: () => import('./views/conventions-service/routes').then((m) => m.routes)
+      },
+      {
         path: 'profile',
         loadChildren: () => import('./views/profil/routes').then(m => m.routes)
       },

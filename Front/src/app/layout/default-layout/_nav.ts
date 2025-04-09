@@ -42,6 +42,14 @@ export const navItems: INavDataExtended[] = [
     roles: ['ETUDIANT']
   },
   {
+    name: 'Les conventions',
+    url: '/conventionsService',
+    iconComponent: { name: 'cil-file' },
+
+
+    roles: ['SERVICE_STAGE']
+  },
+  {
     name: 'Soutenances',
     url: '/soutenances',
     iconComponent: { name: 'cil-calendar' },
