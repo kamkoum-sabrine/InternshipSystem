@@ -8,8 +8,7 @@ import {
   ColComponent, 
   RowComponent 
 } from '@coreui/angular-pro';
-import { SmartTableConventionsComponent } from './smart-table-conventions/smart-table-conventions.component'; // Chemin correct
-
+import { SmartTableConventionsComponent } from './smart-table-conventions/smart-table-conventions.component';
 @Component({
   selector: 'app-conventions-service-stage',
   standalone: true,

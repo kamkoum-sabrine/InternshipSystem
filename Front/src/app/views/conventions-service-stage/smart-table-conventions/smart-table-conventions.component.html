@@ -1,4 +1,4 @@
-<!-- smart-table-conventions.component.html -->
+<!-- smart-table-convention.component.html -->
 <c-smart-table
   [items]="conventions"
   [columns]="columns"
@@ -8,36 +8,33 @@
   [itemsPerPage]="10"
   header
   pagination
+  tableProps="{ hover: true, striped: true }"
 >
   <ng-template cTemplateId="tableData" let-item="item" let-columnName="columnName">
     <td>
       @switch (columnName) {
-        @case ('valideeService') {
-          <c-badge [color]="getBadge(item.valideeService)">
-            {{ item.valideeService === 1 ? 'Validée' : (item.valideeService === -1 ? 'Refusée' : 'En attente') }}
-          </c-badge>
-        }
-        @case ('valideeDirection') {
-          <c-badge [color]="getBadge(item.valideeDirection)">
-            {{ item.valideeDirection === 1 ? 'Validée' : (item.valideeDirection === -1 ? 'Refusée' : 'En attente') }}
-          </c-badge>
+        @case ('fichierPDFNom') {
+          <a (click)="downloadConvention(item.fichierPDFNom)" 
+             class="text-primary text-decoration-underline" 
+             style="cursor: pointer;">
+            <i class="cil-cloud-download me-2"></i>
+            {{ item.fichierPDFNom || 'Aucun fichier' }}
+          </a>
         }
         @case ('dateDepot') {
-          {{ item.dateDepot | date:'dd/MM/yyyy' }}
-        }
-        @case ('etudiant.nom') {
-          {{ item.etudiant?.nom }} {{ item.etudiant?.prenom }}
+          {{ getDate(item.dateDepot) }}
         }
         @case ('actions') {
-          <button cButton color="success" size="sm" class="me-2">
-            Valider
-          </button>
-          <button cButton color="danger" size="sm">
-            Refuser
-          </button>
-        }
-        @default {
-          {{ item[columnName] }}
+          <div class="d-flex gap-2">
+            <button (click)="validerConvention(item.id)" 
+                    cButton color="success" size="sm" class="text-white">
+              Valider
+            </button>
+            <button (click)="refuserConvention(item.id)" 
+                    cButton color="danger" size="sm" class="text-white">
+              Refuser
+            </button>
+          </div>
         }
       }
     </td>
