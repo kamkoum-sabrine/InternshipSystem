@@ -79,7 +79,7 @@ export const routes: Routes = [
       },
       {
         path: 'conventionsService',
-        loadChildren: () => import('./views/conventions-service/routes').then((m) => m.routes)
+        loadChildren: () => import('./views/conventions-service-stage/routes').then((m) => m.routes)
       },
       {
         path: 'profile',
