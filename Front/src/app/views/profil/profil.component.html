@@ -101,7 +101,7 @@
                                 #email="ngModel">
                             <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
                                 <div *ngIf="email.errors?.['required']">L'email est requis.</div>
-                                <div *ngIf="email.errors?.['email']">L'email n'est pas valide.</div>
+                                <div *ngIf="email.errors?.['pattern']">L'email n'est pas valide.</div>
                             </div>
                         </c-col>
                     </c-row>

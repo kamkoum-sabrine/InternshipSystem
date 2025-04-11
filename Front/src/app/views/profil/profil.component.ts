@@ -46,7 +46,7 @@ export class profil {
       sexe: ['', Validators.required],
       dateDeNaissance: ['', Validators.required],
       lieuNaissance: [''],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
       tel: ['', [Validators.pattern('[0-9]{8,15}'), Validators.required]],
       adresse: [''],
       fax: ['', Validators.pattern('[0-9]+')],
