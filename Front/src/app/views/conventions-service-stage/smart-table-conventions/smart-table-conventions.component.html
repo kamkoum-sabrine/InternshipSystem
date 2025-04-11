@@ -1,4 +1,3 @@
-<!-- smart-table-convention.component.html -->
 <c-smart-table
   [items]="conventions"
   [columns]="columns"
@@ -11,32 +10,73 @@
   tableProps="{ hover: true, striped: true }"
 >
   <ng-template cTemplateId="tableData" let-item="item" let-columnName="columnName">
-    <td>
-      @switch (columnName) {
-        @case ('fichierPDFNom') {
-          <a (click)="downloadConvention(item.fichierPDFNom)" 
-             class="text-primary text-decoration-underline" 
-             style="cursor: pointer;">
-            <i class="cil-cloud-download me-2"></i>
-            {{ item.fichierPDFNom || 'Aucun fichier' }}
-          </a>
-        }
-        @case ('dateDepot') {
-          {{ getDate(item.dateDepot) }}
-        }
-        @case ('actions') {
-          <div class="d-flex gap-2">
-            <button (click)="validerConvention(item.id)" 
-                    cButton color="success" size="sm" class="text-white">
-              Valider
-            </button>
-            <button (click)="refuserConvention(item.id)" 
-                    cButton color="danger" size="sm" class="text-white">
-              Refuser
-            </button>
-          </div>
-        }
-      }
-    </td>
-  </ng-template>
-</c-smart-table>
+    {{ console.log('Item dans le template:', item) }}
+    
+    <ng-template cTemplateId="tableData" let-item="item" let-columnName="columnName">
+        <td>
+          @if (columnName === 'actions') {
+            <div class="debug-actions" style="border: 2px solid red; padding: 5px;">
+              <button (click)="validerConvention(item.id)" 
+                      cButton color="success" size="sm">
+                VALIDER (DEBUG)
+              </button>
+              <button (click)="refuserConvention(item.id)" 
+                      cButton color="danger" size="sm">
+                REFUSER (DEBUG)
+              </button>
+              <div>ID: {{item.id}}</div>
+            </div>
+          }
+          @else {
+            <td>
+                @switch (columnName) {
+                  @case ('fichierPDFNom') {
+                    <a (click)="downloadConvention(item.fichierPDFNom)" 
+                       class="text-primary text-decoration-underline" 
+                       style="cursor: pointer;">
+                      <i class="cil-cloud-download me-2"></i>
+                      {{ item.fichierPDFNom || 'Aucun fichier' }}
+                    </a>
+                  }
+                  @case ('dateDepot') {
+                    {{ getDate(item.dateDepot) }}
+                  }
+                  @case ('actions') {
+                    <div class="d-flex gap-2">
+                      <button (click)="validerConvention(item.id)" 
+                              cButton color="success" size="sm" class="text-white">
+                        Valider
+                      </button>
+                      <button (click)="refuserConvention(item.id)" 
+                              cButton color="danger" size="sm" class="text-white">
+                        Refuser
+                      </button>
+                    </div>
+                  }
+                }}
+              </td>
+            </ng-template>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   
