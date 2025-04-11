@@ -98,10 +98,11 @@ public class WebSecurityConfig {
 
                         .requestMatchers("/api/conventionStagEte/uploads/**").permitAll()//hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
                         .requestMatchers("/api/conventionStagEte/getConventions").hasAnyAuthority( "ROLE_SERVICE_STAGE")
+                                .requestMatchers("/api/conventionStagEte/ConventionsAvecPreuveNonAnnulees").hasAnyAuthority( "ROLE_SERVICE_STAGE")
 
 
 
-                        .anyRequest().authenticated())
+                                .anyRequest().authenticated())
                 /** .requestMatchers("/api/login", "/api/admin/register", "/api/admin/activate",
 
                  "/api/auth/desactivate","/api/entreprises","/api/auth/users",

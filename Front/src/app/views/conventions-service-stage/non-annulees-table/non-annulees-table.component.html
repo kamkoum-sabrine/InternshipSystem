@@ -1,0 +1,47 @@
+<div class="card">
+  <div class="card-body">
+    @if (isLoading) {
+      <div class="text-center py-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+      </div>
+    } @else {
+      <c-smart-table
+        [items]="conventions"
+        [columns]="columns"
+        [tableFilter]="true"
+        [columnFilter]="true"
+        [columnSorter]="true"
+        [itemsPerPage]="10"
+        header
+        pagination
+        tableProps="{ hover: true, striped: true }"
+      >
+        <ng-template cTemplateId="tableData" let-item="item" let-columnName="columnName">
+          <td>
+            @switch (columnName) {
+              @case ('etudiant') {
+                {{ item.etudiant?.nom }} {{ item.etudiant?.prenom }}
+              }
+              @case ('preuve') {
+                @if (item.preuveAnnulationNom) {
+                  <a 
+                    href="http://localhost:8081/api/conventionStagEte/uploads/{{item.preuveAnnulationNom}}" 
+                    target="_blank"
+                    class="text-primary text-decoration-underline"
+                  >
+                    <i class="cil-cloud-download me-2"></i>
+                    Télécharger ({{item.preuveAnnulationNom}})
+                  </a>
+                } @else {
+                  <span class="text-muted">-</span>
+                }
+              }
+            }
+          </td>
+        </ng-template>
+      </c-smart-table>
+    }
+  </div>
+</div>

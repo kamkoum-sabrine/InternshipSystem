@@ -79,7 +79,16 @@ export const routes: Routes = [
       },
       {
         path: 'conventionsService',
-        loadChildren: () => import('./views/conventions-service-stage/routes').then((m) => m.routes)
+        loadChildren: () => {
+          console.log('[Route] Chargement des routes conventionsService');
+          return import('./views/conventions-service-stage/routes').then((m) => {
+            console.log('[Route] Routes conventionsService chargées avec succès');
+            return m.routes;
+          }).catch(err => {
+            console.error('[Route] Erreur chargement routes conventionsService', err);
+            throw err;
+          });
+        }
       },
       {
         path: 'profile',
