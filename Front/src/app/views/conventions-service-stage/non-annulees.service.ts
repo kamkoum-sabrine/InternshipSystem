@@ -11,7 +11,21 @@ export class NonAnnuleesService {
   constructor(private http: HttpClient) {
     console.log('Service initialisé avec URL:', this.apiUrl);
   }
-
+  downloadPDF(fileName: string): void {
+    const url = `http://localhost:8081/api/conventionStagEte/downloadPreuve/${encodeURIComponent(fileName)}`;
+    
+    this.http.get(url, { responseType: 'blob' }).subscribe((response: Blob) => {
+      const blobUrl = window.URL.createObjectURL(response);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = fileName;
+      a.click();
+      window.URL.revokeObjectURL(blobUrl);
+    }, error => {
+      console.error('Erreur lors du téléchargement du fichier :', error);
+    });
+  }
+  
   getConventionsNonAnnulees(): Observable<any[]> {
     console.log('Requête envoyée vers:', `${this.apiUrl}/ConventionsAvecPreuveNonAnnulees`);
     return this.http.get<any[]>(`${this.apiUrl}/ConventionsAvecPreuveNonAnnulees`).pipe(

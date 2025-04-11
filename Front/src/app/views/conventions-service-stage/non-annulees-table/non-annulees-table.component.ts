@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NonAnnuleesService } from '../non-annulees.service';
 import { SmartTableComponent } from '@coreui/angular-pro';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http'; // N'oublie pas si ce n'était pas déjà importé
 
 @Component({
   selector: 'app-non-annulees-table',
@@ -14,20 +15,36 @@ export class NonAnnuleesTableComponent implements OnInit {
   isLoading = true;
   columns = [
     { 
-      key: 'etudiant', 
+      key: 'etudiantFullName', 
       label: 'Étudiant',
-      _style: { width: '50%' },
-      _value: (item: any) => `${item.etudiant?.nom} ${item.etudiant?.prenom}`
+      _style: { width: '50%' }
     },
     { 
-      key: 'preuve', 
+      key: 'preuveNom', 
       label: 'Preuve d\'annulation',
-      _style: { width: '50%' },
-      _value: (item: any) => item.preuveAnnulationNom
+      _style: { width: '50%' }
     }
   ];
 
-  constructor(private service: NonAnnuleesService) {}
+  downloadProof(fileName: string, event: Event): void {
+    event.preventDefault();
+    const url = `http://localhost:8081/api/conventionStagEte/uploads/${fileName}`;
+    this.http.get(url, { responseType: 'blob' }).subscribe({
+      next: (blob: Blob) => {
+        const a = document.createElement('a');
+        const objectUrl = URL.createObjectURL(blob);
+        a.href = objectUrl;
+        a.download = fileName;
+        a.click();
+        URL.revokeObjectURL(objectUrl);
+      },
+      error: (err) => {
+        console.error('Erreur lors du téléchargement :', err);
+      }
+    });
+  }
+
+  constructor(private service: NonAnnuleesService, private http: HttpClient) {}
 
   ngOnInit(): void {
     this.loadConventions();
@@ -50,8 +67,8 @@ export class NonAnnuleesTableComponent implements OnInit {
   private transformData(data: any[]): any[] {
     return data.map(item => ({
       ...item,
-      // Transformation explicite des données si nécessaire
-      etudiantFullName: `${item.etudiant?.nom} ${item.etudiant?.prenom}`
+      etudiantFullName: `${item.etudiant?.nom} ${item.etudiant?.prenom}`,
+      preuveNom: item.preuveAnnulationNom
     }));
   }
 }

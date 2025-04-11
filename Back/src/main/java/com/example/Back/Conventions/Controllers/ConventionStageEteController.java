@@ -299,4 +299,28 @@ public class ConventionStageEteController {
         List<ConventionStageEte> conventions = conventionStageEteRepository.findAll();
         return ResponseEntity.ok(conventions);
     }
+    @GetMapping("/downloadPreuve/{fileName:.+}")
+    public ResponseEntity<Resource> downloadPreuveAnnulation(@PathVariable String fileName) {
+        try {
+            Path filePath = Paths.get(uploadDir).resolve(fileName);
+            if (!Files.exists(filePath)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
+            Resource resource = new UrlResource(filePath.toUri());
+            if (!resource.exists() || !resource.isReadable()) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                    .body(resource);
+        } catch (MalformedURLException e) {
+            return ResponseEntity.internalServerError().body(null);
+        }
+    }
+
+
+
 }

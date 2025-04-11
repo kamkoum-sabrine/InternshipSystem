@@ -18,29 +18,34 @@
         pagination
         tableProps="{ hover: true, striped: true }"
       >
-        <ng-template cTemplateId="tableData" let-item="item" let-columnName="columnName">
-          <td>
-            @switch (columnName) {
-              @case ('etudiant') {
-                {{ item.etudiant?.nom }} {{ item.etudiant?.prenom }}
-              }
-              @case ('preuve') {
-                @if (item.preuveAnnulationNom) {
-                  <a 
-                    href="http://localhost:8081/api/conventionStagEte/uploads/{{item.preuveAnnulationNom}}" 
-                    target="_blank"
-                    class="text-primary text-decoration-underline"
-                  >
-                    <i class="cil-cloud-download me-2"></i>
-                    Télécharger ({{item.preuveAnnulationNom}})
-                  </a>
-                } @else {
-                  <span class="text-muted">-</span>
-                }
+      <ng-template cTemplateId="tableData" let-item="item" let-columnName="columnName">
+        <td>
+          @switch (columnName) {
+            @case ('etudiantFullName') {
+              {{ item.etudiantFullName }}
+            }
+            @case ('preuveNom') {
+              @if (item.preuveNom) {
+                <a 
+                href="#" 
+                (click)="downloadPDF(item.preuveAnnulationNom); $event.preventDefault()"
+                class="text-primary text-decoration-underline"
+              >
+                <i class="cil-cloud-download me-2"></i>
+                Télécharger ({{item.preuveAnnulationNom}})
+              </a>
+              
+              
+              
+              
+              } @else {
+                <span class="text-muted">-</span>
               }
             }
-          </td>
-        </ng-template>
+          }
+        </td>
+      </ng-template>
+      
       </c-smart-table>
     }
   </div>

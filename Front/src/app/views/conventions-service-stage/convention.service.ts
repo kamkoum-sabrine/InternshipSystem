@@ -19,9 +19,9 @@ export class ConventionService {
   }
 
   downloadPDF(nomFichier: string): Observable<Blob> {
-    const url = `${this.apiUrl}/uploads/${encodeURIComponent(nomFichier)}`;
+    const url = `${this.apiUrl}/downloadPreuve/${encodeURIComponent(nomFichier)}`;
     console.log('Tentative de téléchargement:', url);
-    
+  
     return this.http.get(url, {
       responseType: 'blob',
       headers: {
@@ -30,6 +30,7 @@ export class ConventionService {
       }
     });
   }
+  
 
   validerConvention(id: number): Observable<any> {
     const url = `${this.apiUrl}/ValiderConvention/${id}`;
