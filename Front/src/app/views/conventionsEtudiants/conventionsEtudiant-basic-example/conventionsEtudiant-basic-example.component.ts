@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import {  TemplateRef, ViewChild } from '@angular/core';
+import { TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'; // Ajoutez cet import
 import { Router } from '@angular/router';
 import {
@@ -32,7 +32,7 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
   usersData = usersData;
   @Input() myConventions: any[] = [];;
   @ViewChild('annulationModal') annulationModal!: TemplateRef<any>; // Ajoutez cette ligne
-  
+
   selectedFile: File | null = null;
   currentConventionId: number | null = null;
 
@@ -87,7 +87,7 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
   ];
   details_visible = Object.create({});
 
-  constructor(private cdr: ChangeDetectorRef,private router: Router, private gererConventionsEtudiantService: GererConventionsEtudiantService, public dialog: MatDialog, private modalService: NgbModal, private conventionsEtudiantService: ConventionsEtudiantService) { }
+  constructor(private cdr: ChangeDetectorRef, private router: Router, private gererConventionsEtudiantService: GererConventionsEtudiantService, public dialog: MatDialog, private modalService: NgbModal, private conventionsEtudiantService: ConventionsEtudiantService) { }
 
 
 
@@ -316,15 +316,25 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
       return;
     }
 
+    console.log("niveaauuuu ", user.niveau)
     // 5. Si tout est valide, lancer le téléchargement
-    this.gererConventionsEtudiantService.downloadPdf(user.id);
-    this.gererConventionsEtudiantService.downloadWord(user.id);
+    if (user.niveau == "TROISIEME") {
+      this.gererConventionsEtudiantService.downloadWordPFE(user.id);
+
+    }
+    else {
+      this.gererConventionsEtudiantService.downloadPdf(user.id);
+      this.gererConventionsEtudiantService.downloadWord(user.id);
+
+    }
+
+
 
 
   }
   downloadPreuveAnnulation(nomFichier: string) {
     const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
-    
+
     fetch(fileUrl, {
       method: "GET",
       headers: {
@@ -359,10 +369,10 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
     if (!this.selectedFile || !this.currentConventionId) {
       return;
     }
-  
+
     const formData = new FormData();
     formData.append('preuveAnnulation', this.selectedFile);
-  
+
     this.conventionsEtudiantService.uploadPreuveAnnulation(this.currentConventionId, formData)
       .subscribe({
         next: (response) => {

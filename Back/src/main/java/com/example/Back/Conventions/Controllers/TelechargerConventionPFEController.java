@@ -3,11 +3,12 @@ package com.example.Back.Conventions.Controllers;
 import com.example.Back.Auth.Models.User;
 import com.example.Back.Auth.Services.UserService;
 import com.example.Back.Conventions.Services.TelechargerConventionService;
+import com.example.Back.enums.Filiere;
+import com.example.Back.enums.Formation;
+import com.example.Back.enums.Sexe;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.util.Units;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
@@ -21,18 +22,21 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/pdf/PFE")
-public class TelechargerConventionPFE {
+public class TelechargerConventionPFEController {
     private final TelechargerConventionService telechargerConventionService;
     private final UserService userService;
 
     @Autowired
-    public TelechargerConventionPFE(TelechargerConventionService telechargerConventionService , UserService userService) {
+    public TelechargerConventionPFEController(TelechargerConventionService telechargerConventionService , UserService userService) {
         this.telechargerConventionService = telechargerConventionService;
         this.userService = userService;
     }
@@ -63,6 +67,141 @@ public class TelechargerConventionPFE {
         }
         throw new IOException("Placeholder [LOGO_ENICARTHAGE] non trouvé");
     }
+    private void replaceTextInParagraph(XWPFParagraph p, String placeholder, String value) {
+        // Fusionne les runs si nécessaire
+        String mergedText = p.getText();
+        for (int i = p.getRuns().size() - 1; i >= 0; i--) {
+            p.removeRun(i);
+        }
+
+        XWPFRun newRun = p.createRun();
+        newRun.setText(mergedText.replace(placeholder, value));
+    }
+    private void replaceTextInParagraphDepartement(XWPFParagraph p, String placeholder, String value) {
+        // Fusionne les runs si nécessaire
+        String mergedText = p.getText();
+        for (int i = p.getRuns().size() - 1; i >= 0; i--) {
+            p.removeRun(i);
+        }
+
+        XWPFRun newRun = p.createRun();
+        newRun.setText(mergedText.replace(placeholder, value));
+    }
+    private void handleCheckboxesFormation(XWPFDocument doc, User etudiant) {
+        // Déterminez l'état des cases
+        boolean isIngenieur = Formation.INGENIERIE.equals(etudiant.getFormation());
+        boolean isMaster = Formation.MASTERE.equals(etudiant.getFormation());
+        final String CHECKED = "✓"; // ou "🗹" pour un style plus carré
+        final String UNCHECKED = "□"; // ou "☐" si vous préférez
+        // Map des replacements spécifiques aux cases
+        Map<String, String> checkboxes = new HashMap<>();
+        checkboxes.put("${INGENIEUR}", isIngenieur ? CHECKED : UNCHECKED);
+        checkboxes.put("${MASTER}", isMaster ? CHECKED : UNCHECKED);
+
+        // Appliquez aux paragraphes
+        for (XWPFParagraph p : doc.getParagraphs()) {
+            String text = p.getText();
+            if (text != null) {
+                for (Map.Entry<String, String> entry : checkboxes.entrySet()) {
+                    if (text.contains(entry.getKey())) {
+                        replaceTextInParagraph(p, entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+        }
+    }
+    private void handleCheckboxesDepartement(XWPFDocument doc, User etudiant) {
+        // Déterminez l'état des cases
+        boolean isInformatique = Filiere.Informatique.equals(etudiant.getFiliere());
+        boolean isElectrique = Filiere.Infotronique.equals(etudiant.getFiliere() ) || Filiere.Mecatronique.equals(etudiant.getFiliere() ) ;
+        boolean isIndustriel = Filiere.GSIL.equals(etudiant.getFiliere());
+        final String CHECKED = "✓"; // ou "🗹" pour un style plus carré
+        final String UNCHECKED = "□"; // ou "☐" si vous préférez
+        // Map des replacements spécifiques aux cases
+        Map<String, String> checkboxes = new HashMap<>();
+        checkboxes.put("${INFORMATIQUE}", isInformatique ? CHECKED : UNCHECKED);
+        checkboxes.put("${ELECTRIQUE}", isElectrique ? CHECKED : UNCHECKED);
+        checkboxes.put("${INDUSTRIEL}", isIndustriel ? CHECKED : UNCHECKED);
+
+        // Appliquez aux paragraphes
+        for (XWPFParagraph p : doc.getParagraphs()) {
+            String text = p.getText();
+            if (text != null) {
+                for (Map.Entry<String, String> entry : checkboxes.entrySet()) {
+                    if (text.contains(entry.getKey())) {
+                        replaceTextInParagraphDepartement(p, entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+        }
+    }
+
+    private void handleCheckboxesSexe(XWPFDocument doc, User etudiant) {
+        // Déterminez l'état des cases
+        boolean isFeminin = Sexe.FEMME.equals(etudiant.getSexe());
+        boolean isMasculin = Sexe.HOMME.equals(etudiant.getSexe() );
+        final String CHECKED = "✓"; // ou "🗹" pour un style plus carré
+        final String UNCHECKED = "□"; // ou "☐" si vous préférez
+        // Map des replacements spécifiques aux cases
+        Map<String, String> checkboxes = new HashMap<>();
+        checkboxes.put("${FEMININ}", isFeminin ? CHECKED : UNCHECKED);
+        checkboxes.put("${MASCULIN}", isMasculin ? CHECKED : UNCHECKED);
+
+        // Appliquez aux paragraphes
+        for (XWPFParagraph p : doc.getParagraphs()) {
+            String text = p.getText();
+            if (text != null) {
+                for (Map.Entry<String, String> entry : checkboxes.entrySet()) {
+                    if (text.contains(entry.getKey())) {
+                        replaceTextInParagraphDepartement(p, entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+        }
+    }
+    private void replaceInParagraph(XWPFParagraph paragraph, Map<String, String> replacements) {
+        // Fusionner les runs si nécessaire (évite les fragments)
+        if (paragraph.getRuns().size() > 3) {
+            String fullText = paragraph.getText();
+            for (int i = paragraph.getRuns().size() - 1; i >= 0; i--) {
+                paragraph.removeRun(i);
+            }
+            XWPFRun newRun = paragraph.createRun();
+            newRun.setText(fullText);
+        }
+
+        // Remplacer les placeholders
+        for (XWPFRun run : paragraph.getRuns()) {
+            String text = run.getText(0);
+            if (text != null && !text.isEmpty()) {
+                for (Map.Entry<String, String> entry : replacements.entrySet()) {
+                    if (text.contains(entry.getKey())) {
+                        text = text.replace(entry.getKey(), entry.getValue());
+                        run.setText(text, 0);
+                        run.setFontSize(10); // Maintenir une taille cohérente
+                    }
+                }
+            }
+        }
+    }
+
+    private void replacePlaceholders(XWPFDocument doc, Map<String, String> replacements) {
+        // 1. Traiter tous les paragraphes principaux
+        for (XWPFParagraph p : doc.getParagraphs()) {
+            replaceInParagraph(p, replacements);
+        }
+
+        // 2. Traiter tous les tableaux et leurs cellules
+        for (XWPFTable tbl : doc.getTables()) {
+            for (XWPFTableRow row : tbl.getRows()) {
+                for (XWPFTableCell cell : row.getTableCells()) {
+                    for (XWPFParagraph p : cell.getParagraphs()) {
+                        replaceInParagraph(p, replacements);
+                    }
+                }
+            }
+        }
+    }
 
     @GetMapping("/convention/word/{id}")
     public ResponseEntity<byte[]> generateConvention(@PathVariable Long id) throws Exception  {
@@ -70,39 +209,44 @@ public class TelechargerConventionPFE {
         ClassPathResource resource = new ClassPathResource("templates/stage_pfe_template.docx");
         XWPFDocument document = new XWPFDocument(OPCPackage.open(resource.getInputStream()));
         // 2. Insérer le logo
-        insertLogo(document);
+       // insertLogo(document);
         // 2. Récupérer les données de l'étudiant
         User etudiant = userService.findUserById(id).orElseThrow();
+        System.out.println(etudiant.toString());
 
         // 3. Map des données à remplacer
         Map<String, String> replacements = new HashMap<>();
         replacements.put("${nom}", etudiant.getNom());
         replacements.put("${prenom}", etudiant.getPrenom());
         replacements.put("${filiere}", String.valueOf(etudiant.getFiliere()));
+        replacements.put("${option}", etudiant.getOption());
+
+        // Supposons que getDateDeNaissance() renvoie un LocalDate
+        LocalDate dateNaissance = etudiant.getDateDeNaissance();
+
+        // Créer un formatteur pour LocalDate
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+
+        // Formater la date en chaîne
+                String formattedDate = dateNaissance.format(formatter);
+
+        // Remplacer dans les données de remplacement
+        replacements.put("${dateDeNaissance}", formattedDate);
+
+       // replacements.put("${dateDeNaissance}", sdf.format(etudiant.getDateDeNaissance()));
+        replacements.put("${lieuNaissance}", etudiant.getLieuNaissance());
         replacements.put("${cin}", String.valueOf(etudiant.getCin()));
-        replacements.put("${telephone}",String.valueOf(etudiant.getTel()));
+        replacements.put("${telephone}", String.valueOf(etudiant.getTel()));
+        replacements.put("${adresse}", etudiant.getAdresse());
+        replacements.put("${nom}", etudiant.getNom());
+        replacements.put("${fax}",String.valueOf(etudiant.getFax()));
         replacements.put("${email}",etudiant.getEmail());
 
         // 3. Gérer les cases à cocher
         handleCheckboxesFormation(document, etudiant); // Ou handleWordCheckboxes()
         handleCheckboxesDepartement(document, etudiant); // Ou handleWordCheckboxes()
+        handleCheckboxesSexe(document, etudiant); // Ou handleWordCheckboxes()
 
-        //replacements.put("${option}",etudiant.getOption());
-        /**  // 4. Parcourir et remplacer les textes
-         for (XWPFParagraph p : document.getParagraphs()) {
-         replaceText(p, replacements);
-         }
-
-         for (XWPFTable tbl : document.getTables()) {
-         for (XWPFTableRow row : tbl.getRows()) {
-         for (XWPFTableCell cell : row.getTableCells()) {
-         for (XWPFParagraph p : cell.getParagraphs()) {
-         replaceText(p, replacements);
-         }
-         }
-         }
-         }
-         **/
         replacePlaceholders(document, replacements);
         // 5. Générer le fichier de sortie
         ByteArrayOutputStream out = new ByteArrayOutputStream();

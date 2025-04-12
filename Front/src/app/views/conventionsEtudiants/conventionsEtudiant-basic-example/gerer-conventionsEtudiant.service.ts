@@ -29,12 +29,22 @@ export class GererConventionsEtudiantService {
       const url = window.URL.createObjectURL(response);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'convention_stage.docx'; // Nom du fichier Word
+      a.download = 'convention_stage_ete.docx'; // Nom du fichier Word
       a.click();
       window.URL.revokeObjectURL(url);
     });
   }
 
+  downloadWordPFE(studentId: number) {
+    this.http.get(`http://localhost:8081/api/pdf/PFE/convention/word/${studentId}`, { responseType: 'blob' }).subscribe((response: Blob) => {
+      const url = window.URL.createObjectURL(response);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'convention_stage_pfe.docx'; // Nom du fichier Word
+      a.click();
+      window.URL.revokeObjectURL(url);
+    });
+  }
 
   // desactiverCompte(id: number): Observable<any> {
   //   return this.http.post<any>(`${this.apiUrl}/users/desactivate`, id);

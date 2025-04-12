@@ -86,6 +86,7 @@ public class WebSecurityConfig {
 
                         .requestMatchers("/api/pdf/convention/{id}").hasAnyAuthority("ROLE_ETUDIANT")
                         .requestMatchers("/api/pdf//convention/word/{id}").hasAnyAuthority("ROLE_ETUDIANT")
+                        .requestMatchers("/api/pdf/PFE/convention/word/{id}").hasAnyAuthority("ROLE_ETUDIANT")
 
                         .requestMatchers("/api/conventionStagEte/uploadPreuveAnnulation/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT")
                         .requestMatchers("/api/conventionStagEte/annuler/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT")
@@ -132,8 +133,8 @@ public class WebSecurityConfig {
 
                 // publiques
                 // .anyRequest().authenticated())
-                .exceptionHandling(exception ->
-                        exception.accessDeniedHandler(customAccessDeniedHandler))
+               .exceptionHandling(exception ->
+                       exception.accessDeniedHandler(customAccessDeniedHandler))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Ajout du
         // filtre JWT
 
