@@ -99,6 +99,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/conventionStagPFE/create").hasAnyAuthority("ROLE_ETUDIANT","ROLE_SERVICE_STAGE")
 
                         .requestMatchers("/api/conventionStagEte/uploads/**").permitAll()//hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
+                        .requestMatchers("/api/conventionStagPFE/uploads/**").permitAll()//hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
 
 
 
