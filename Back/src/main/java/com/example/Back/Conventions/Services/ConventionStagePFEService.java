@@ -12,7 +12,8 @@ public class ConventionStagePFEService {
         this.conventionStagePFERepository = conventionStagePFERepository;
     }
 
-    public void saveConvetionStagePFE(ConventionStagePFE conventionStagePFE) {
+    public ConventionStagePFE saveConvetionStagePFE(ConventionStagePFE conventionStagePFE) {
         conventionStagePFERepository.save(conventionStagePFE);
+        return conventionStagePFE;
     }
 }

@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -30,14 +32,22 @@ public class ConventionStagePFE {
     private String materielDeRealisation;
 
     @Column(nullable = true)
-    private Boolean favorable; // equivaut à validée direction stage
+    private Integer favorable; // 0 : en attente , 1: favorable , -1 : non favorable
     @Column(nullable = true)
     private String remarques;
 
     private String fichierPDFNom;
     private String fichierPDFChemin;
 
-    private Integer valideeService; // 0 : en attente , 1: validée , -1 : non validée
+    private Date dateDebut;
+    private Date dateFin;
+    private Date dateDepot;
 
+    private Integer valideeService; // 0 : en attente , 1: validée , -1 : non validée
+    private Integer annulee; // par defaut 0 (en attente et si preuve annulation <> null)
+    @Column(nullable = true)
+    private String preuveAnnulationNom;
+    @Column(nullable = true)
+    private String preuveAnnulationChemin;
 
 }
