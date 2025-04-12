@@ -17,6 +17,10 @@ export class NonAnnuleesTableComponent implements OnInit {
   isProcessing = false;
   selectedItem: any = null;
 
+  // Ajout des variables pour afficher le message utilisateur
+  userMessage: string = '';  // Contenu du message
+  showUserMessage: boolean = false;  // Contrôle l'affichage du message
+
   columns = [
     { 
       key: 'etudiantFullName', 
@@ -52,20 +56,15 @@ export class NonAnnuleesTableComponent implements OnInit {
 
   private transformData(data: any[]): any[] {
     return data.map(item => {
-      console.log('🔍 Transform item:', item); // ← Ajoute ce log pour chaque item
+      console.log('🔍 Transform item:', item);
       return {
         ...item,
-        id: item.idConvention || item.id, // Utiliser idConvention ou item.id comme ID
+        id: item.idConvention || item.id,  // Utiliser idConvention ou item.id comme ID
         etudiantFullName: `${item.etudiant?.nom} ${item.etudiant?.prenom}`,
         preuveNom: item.preuveAnnulationNom
       };
     });
   }
-  
-  
-  
-  
-  
 
   downloadPDF(fileName: string): void {
     const url = `http://localhost:8081/api/conventionStagEte/uploads/${fileName}`;
@@ -85,14 +84,10 @@ export class NonAnnuleesTableComponent implements OnInit {
   }
 
   onRowClick(event: any): void {
-    console.log('🧪 selectedItem:', event.item);  // Vérifie ici le contenu de l'élément
-    this.selectedItem = event.item; // Assure-toi que l'élément est bien récupéré
+    console.log('🧪 selectedItem:', event.item);
+    this.selectedItem = event.item;  // Assure-toi que l'élément est bien récupéré
     this.showModal = true;
   }
-  
-  
-  
-  
 
   closeModal(): void {
     this.showModal = false;
@@ -105,20 +100,25 @@ export class NonAnnuleesTableComponent implements OnInit {
       console.warn('⚠️ Aucun élément sélectionné !');
       return;
     }
-  
+
     const conventionId = this.selectedItem?.id;
     if (!conventionId) {
       console.error('❌ ID convention introuvable dans selectedItem');
       return;
     }
-  
+
     this.isProcessing = true;
-  
+
     this.service.annulerConvention(conventionId).subscribe({
       next: (response: string) => {
         console.log('✅ Convention annulée avec succès:', response);
+        this.userMessage = 'Preuve validée avec succès.';  // Message pour l'utilisateur
+        this.showUserMessage = true;  // Affiche le message
         this.closeModal();
         this.loadConventions();
+        setTimeout(() => {
+          this.showUserMessage = false;  // Masque le message après 3 secondes
+        }, 3000);
       },
       error: (err) => {
         console.error('❌ Erreur validation:', err);
@@ -126,32 +126,31 @@ export class NonAnnuleesTableComponent implements OnInit {
       }
     });
   }
-  
-  
-  
-  
-  
-  
 
   refuserConvention(): void {
     if (!this.selectedItem) {
       console.warn('⚠️ Aucun élément sélectionné !');
       return;
     }
-  
+
     const conventionId = this.selectedItem?.id;
     if (!conventionId) {
       console.error('❌ ID convention introuvable dans selectedItem');
       return;
     }
-  
+
     this.isProcessing = true;
-  
+
     this.service.refuserAnnulation(conventionId).subscribe({
       next: (response: string) => {
         console.log('✅ Annulation refusée avec succès:', response);
+        this.userMessage = 'Preuve refusée.';  // Message pour l'utilisateur
+        this.showUserMessage = true;  // Affiche le message
         this.closeModal();
         this.loadConventions();
+        setTimeout(() => {
+          this.showUserMessage = false;  // Masque le message après 3 secondes
+        }, 3000);
       },
       error: (err) => {
         console.error('❌ Erreur refus:', err);
@@ -159,5 +158,4 @@ export class NonAnnuleesTableComponent implements OnInit {
       }
     });
   }
-  
 }
