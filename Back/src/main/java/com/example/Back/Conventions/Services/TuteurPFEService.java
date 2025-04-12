@@ -16,8 +16,9 @@ public class TuteurPFEService {
         this.tuteurPFERepository = tuteurPFERepository;
     }
 
-    public void saveTuteurPFE(TuteurPFE tuteurPFE) {
+    public TuteurPFE saveTuteurPFE(TuteurPFE tuteurPFE) {
         tuteurPFERepository.save(tuteurPFE);
+        return tuteurPFE;
     }
 
     public List<TuteurPFE> getAllTuteurPFEs() {
