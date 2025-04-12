@@ -1,6 +1,7 @@
 package com.example.Back.Conventions.Models;
 
 import com.example.Back.Auth.Models.User;
+import com.example.Back.Entreprises.Models.Entreprise;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,8 @@ public class TuteurPFE {
     private String nom;
     private String prenom;
     @Column(nullable = true)
+    private Integer telephone;
+    @Column(nullable = true)
     private String fonction;
     @Column(nullable = true)
     private String grade;
@@ -25,4 +28,7 @@ public class TuteurPFE {
     private String email;
     @Column(nullable = true)
     private String sitePerso;
+    @ManyToOne
+    @JoinColumn(name = "entreprise", nullable = false)
+    private Entreprise entreprise;
 }
