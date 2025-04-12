@@ -47,7 +47,7 @@ public class ConventionStageEteController {
     private final UserRepository userRepository;
     private final EntreprisesRepository entreprisesRepository;
 
-    @Value("${file.upload-dir}")
+    @Value("${file.upload-dir}/conventionsStageEte")
     private String uploadDir;
 
     @Autowired
