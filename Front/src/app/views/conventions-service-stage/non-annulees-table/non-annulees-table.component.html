@@ -18,30 +18,32 @@
         [itemsPerPage]="10"
         header
         pagination
-        tableProps="{ hover: true, striped: true }"
+        tableProps="{ hover: true, striped: true, class: 'custom-table' }"
         (rowClick)="onRowClick($event)"
+        tableBodyProps="{ class: 'pointer-rows' }"
       >
         <ng-template cTemplateId="tableData" let-item="item" let-columnName="columnName">
           <td>
-            @switch (columnName) {
-              @case ('etudiantFullName') {
+            <ng-container [ngSwitch]="columnName">
+              <ng-container *ngSwitchCase="'etudiantFullName'">
                 {{ item.etudiantFullName }}
-              }
-              @case ('preuveNom') {
-                @if (item.preuveNom) {
-                  <a 
-                    href="#" 
+              </ng-container>
+              <ng-container *ngSwitchCase="'preuveNom'">
+                <ng-container *ngIf="item.preuveNom; else noProof">
+                  <a
+                    href="#"
                     (click)="downloadPDF(item.preuveAnnulationNom); $event.preventDefault()"
                     class="text-primary text-decoration-underline"
                   >
                     <i class="cil-cloud-download me-2"></i>
-                    Télécharger ({{item.preuveAnnulationNom}})
+                    Télécharger ({{ item.preuveAnnulationNom }})
                   </a>
-                } @else {
+                </ng-container>
+                <ng-template #noProof>
                   <span class="text-muted">-</span>
-                }
-              }
-            }
+                </ng-template>
+              </ng-container>
+            </ng-container>
           </td>
         </ng-template>
       </c-smart-table>
@@ -53,7 +55,7 @@
     </div>
 
     <!-- MODALE -->
-    <div class="modal fade show d-block" tabindex="-1" *ngIf="showModal" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal fade show d-block" tabindex="-1" *ngIf="showModal" style="background-color: rgba(0, 0, 0, 0.5);">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-lg shadow-lg">
           <div class="modal-header border-0">
@@ -64,16 +66,16 @@
             <p class="fs-5 text-dark">Souhaitez-vous accepter ou refuser cette preuve d'annulation ?</p>
           </div>
           <div class="modal-footer border-0 justify-content-center">
-            <button 
-              type="button" 
+            <button
+              type="button"
               class="btn btn-success px-4 py-2 fs-5 rounded-pill shadow-sm"
               [disabled]="isProcessing"
               (click)="validerConvention()"
             >
               Accepter
             </button>
-            <button 
-              type="button" 
+            <button
+              type="button"
               class="btn btn-danger px-4 py-2 fs-5 rounded-pill shadow-sm"
               [disabled]="isProcessing"
               (click)="refuserConvention()"
@@ -86,74 +88,3 @@
     </div>
   </div>
 </div>
-
-<style>
-  .modal-content {
-    background-color: #fff;
-    border-radius: 1rem;
-    transition: all 0.3s ease-in-out;
-  }
-
-  .modal-header {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
-    padding: 20px;
-  }
-
-  .modal-body {
-    padding: 30px;
-  }
-
-  .modal-footer {
-    padding: 20px;
-  }
-
-  .modal-footer .btn {
-    transition: transform 0.2s ease;
-  }
-
-  .modal-footer .btn:hover {
-    transform: translateY(-3px);
-  }
-
-  .btn-success {
-    background-color: #28a745;
-    border-color: #28a745;
-  }
-
-  .btn-danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
-  }
-
-  .btn {
-    font-size: 16px;
-    font-weight: bold;
-    padding: 10px 20px;
-    border-radius: 50px;
-    border: none;
-    transition: all 0.3s ease-in-out;
-  }
-
-  .btn-success:hover, .btn-danger:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-
-  .modal-dialog {
-    max-width: 500px;
-  }
-
-  .modal-body p {
-    font-size: 18px;
-    color: #495057;
-  }
-
-  .btn-close {
-    font-size: 20px;
-  }
-
-  .text-dark {
-    color: #333;
-  }
-</style>

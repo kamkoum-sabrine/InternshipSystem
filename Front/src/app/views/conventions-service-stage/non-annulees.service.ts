@@ -11,20 +11,7 @@ export class NonAnnuleesService {
   constructor(private http: HttpClient) {
     console.log('Service initialisé avec URL:', this.apiUrl);
   }
-  downloadPDF(fileName: string): void {
-    const url = `http://localhost:8081/api/conventionStagEte/downloadPreuve/${encodeURIComponent(fileName)}`;
-    
-    this.http.get(url, { responseType: 'blob' }).subscribe((response: Blob) => {
-      const blobUrl = window.URL.createObjectURL(response);
-      const a = document.createElement('a');
-      a.href = blobUrl;
-      a.download = fileName;
-      a.click();
-      window.URL.revokeObjectURL(blobUrl);
-    }, error => {
-      console.error('Erreur lors du téléchargement du fichier :', error);
-    });
-  }
+  
   
   getConventionsNonAnnulees(): Observable<any[]> {
     console.log('Requête envoyée vers:', `${this.apiUrl}/ConventionsAvecPreuveNonAnnulees`);
@@ -42,6 +29,17 @@ export class NonAnnuleesService {
   
   refuserAnnulation(conventionId: number): Observable<string> {
     return this.http.put(`${this.apiUrl}/refuserAnnulation/${conventionId}`, {}, { responseType: 'text' });
+  }
+  telechargerPreuveAnnulation(conventionId: number): Observable<Blob> {
+    const url = `${this.apiUrl}/telechargerPreuveAnnulation/${conventionId}`;
+    console.log('🌐 Téléchargement via URL:', url);
+  
+    return this.http.get(url, { responseType: 'blob' }).pipe(
+      tap({
+        next: () => console.log('📦 PDF téléchargé avec succès depuis le backend'),
+        error: (err) => console.error('❌ Erreur lors de la récupération du PDF:', err)
+      })
+    );
   }
   
   

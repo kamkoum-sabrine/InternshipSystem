@@ -1,18 +1,99 @@
-.modal {
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-  
-  .modal.show {
-    display: block;
-  }
-  
-  .modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1040;
-    width: 100vw;
-    height: 100vh;
-    background-color: #000;
-    opacity: 0.5;
-  }
+/* Applique le curseur pointer et l'effet hover à toutes les lignes de la table */
+.smart-table tbody tr {
+  cursor: pointer !important;  // Assurer que le curseur est un pointeur
+}
+
+/* Applique un fond gris clair lorsque l'on survole les lignes */
+.smart-table tbody tr:hover {
+  background-color: #f2f2f2 !important;  // Gris clair lors du survol
+  transition: background-color 0.3s ease;  // Transition douce
+}
+
+/* Cibler la classe pointer-rows si utilisée */
+.pointer-rows tr {
+  cursor: pointer !important;  // Assurer que le curseur est un pointeur
+}
+
+.pointer-rows tr:hover {
+  background-color: #f2f2f2 !important;  // Gris clair lors du survol
+  transition: background-color 0.3s ease;  // Transition douce
+}
+
+/* Sélectionner les tables qui utilisent un hover ou striped */
+.table-hover tbody tr {
+  cursor: pointer !important;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;  // Gris clair sur le survol
+}
+
+/* Style des boutons dans la modale */
+.modal-content {
+  background-color: #fff;
+  border-radius: 1rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  padding: 20px;
+}
+
+.modal-body {
+  padding: 30px;
+}
+
+.modal-footer {
+  padding: 20px;
+}
+
+.modal-footer .btn {
+  transition: transform 0.2s ease;
+}
+
+.modal-footer .btn:hover {
+  transform: translateY(-3px);
+}
+
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn {
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 50px;
+  border: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-success:hover, .btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal-dialog {
+  max-width: 500px;
+}
+
+.modal-body p {
+  font-size: 18px;
+  color: #495057;
+}
+
+.btn-close {
+  font-size: 20px;
+}
+
+.text-dark {
+  color: #333;
+}

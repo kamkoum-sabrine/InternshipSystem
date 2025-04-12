@@ -299,25 +299,34 @@ public class ConventionStageEteController {
         List<ConventionStageEte> conventions = conventionStageEteRepository.findAll();
         return ResponseEntity.ok(conventions);
     }
-    @GetMapping("/downloadPreuve/{fileName:.+}")
-    public ResponseEntity<Resource> downloadPreuveAnnulation(@PathVariable String fileName) {
-        try {
-            Path filePath = Paths.get(uploadDir).resolve(fileName);
-            if (!Files.exists(filePath)) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
+    @GetMapping("/downloadPreuveAnnulation/{conventionId}")
+    public ResponseEntity<Resource> downloadPreuveAnnulation(@PathVariable Long conventionId) {
+        Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(conventionId);
+        if (conventionOptional.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
 
+        ConventionStageEte convention = conventionOptional.get();
+
+        String fileName = convention.getPreuveAnnulationNom();
+        if (fileName == null || fileName.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        try {
+            Path filePath = Paths.get(uploadDir).resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());
+
             if (!resource.exists() || !resource.isReadable()) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
 
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_PDF)
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                     .body(resource);
         } catch (MalformedURLException e) {
-            return ResponseEntity.internalServerError().body(null);
+            return ResponseEntity.internalServerError().build();
         }
     }
 

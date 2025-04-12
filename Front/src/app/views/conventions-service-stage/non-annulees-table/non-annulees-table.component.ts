@@ -16,7 +16,8 @@ export class NonAnnuleesTableComponent implements OnInit {
   showModal = false;
   isProcessing = false;
   selectedItem: any = null;
-
+  private lastClickedId: number | null = null;
+private doubleClickTimeout: any = null;
   // Ajout des variables pour afficher le message utilisateur
   userMessage: string = '';  // Contenu du message
   showUserMessage: boolean = false;  // Contrôle l'affichage du message
@@ -66,27 +67,30 @@ export class NonAnnuleesTableComponent implements OnInit {
     });
   }
 
-  downloadPDF(fileName: string): void {
-    const url = `http://localhost:8081/api/conventionStagEte/uploads/${fileName}`;
-    this.http.get(url, { responseType: 'blob' }).subscribe({
-      next: (blob: Blob) => {
-        const a = document.createElement('a');
-        const objectUrl = URL.createObjectURL(blob);
-        a.href = objectUrl;
-        a.download = fileName;
-        a.click();
-        URL.revokeObjectURL(objectUrl);
-      },
-      error: (err) => {
-        console.error('Erreur lors du téléchargement :', err);
-      }
-    });
-  }
-
+  
   onRowClick(event: any): void {
-    console.log('🧪 selectedItem:', event.item);
-    this.selectedItem = event.item;  // Assure-toi que l'élément est bien récupéré
-    this.showModal = true;
+    const conventionId = event.item.id; // Assurez-vous que votre item a bien un id
+    
+    if (this.lastClickedId === conventionId) {
+      // Double-clic détecté
+      console.log('Double-clic détecté sur la convention:', event.item);
+      this.selectedItem = event.item;
+      this.showModal = true;
+      this.lastClickedId = null;
+      clearTimeout(this.doubleClickTimeout);
+    } else {
+      // Premier clic
+      this.lastClickedId = conventionId;
+      
+      // On set un timeout pour réinitialiser après un délai
+      if (this.doubleClickTimeout) {
+        clearTimeout(this.doubleClickTimeout);
+      }
+      
+      this.doubleClickTimeout = setTimeout(() => {
+        this.lastClickedId = null;
+      }, 300); // Délai de 300ms pour considérer un double-clic
+    }
   }
 
   closeModal(): void {
@@ -158,4 +162,29 @@ export class NonAnnuleesTableComponent implements OnInit {
       }
     });
   }
+  downloadPDF(fileName: string): void {
+    if (!fileName) return;
+  
+    const url = `http://localhost:8081/api/conventionStagEte/downloadPreuve/${fileName}`;
+  
+    this.http.get(url, { responseType: 'blob' }).subscribe({
+      next: (blob) => {
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(blobUrl);
+      },
+      error: (err) => {
+        console.error('Erreur lors du téléchargement de la preuve :', err);
+      }
+    });
+  }
+  
+  
+  
+  
 }
