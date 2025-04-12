@@ -3,7 +3,6 @@ package com.example.Back.Conventions.Controllers;
 import com.example.Back.Conventions.Models.TuteurPFE;
 import com.example.Back.Conventions.Services.TuteurPFEService;
 
-import com.example.Back.Entreprises.Models.Entreprise;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
