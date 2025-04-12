@@ -35,4 +35,14 @@ export class NonAnnuleesService {
       })
     );
   }
+  annulerConvention(conventionId: number): Observable<string> {
+    return this.http.put(`${this.apiUrl}/annuler/${conventionId}`, {}, { responseType: 'text' });
+  }
+  
+  
+  refuserAnnulation(conventionId: number): Observable<string> {
+    return this.http.put(`${this.apiUrl}/refuserAnnulation/${conventionId}`, {}, { responseType: 'text' });
+  }
+  
+  
 }

@@ -88,8 +88,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/pdf//convention/word/{id}").hasAnyAuthority("ROLE_ETUDIANT")
 
                         .requestMatchers("/api/conventionStagEte/uploadPreuveAnnulation/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT")
-                        .requestMatchers("/api/conventionStagEte/annuler/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT")
-                        .requestMatchers("/api/conventionStagEte/refuserAnnulation/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT")
+                        .requestMatchers("/api/conventionStagEte/annuler/{conventionId}").hasAnyAuthority( "ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagEte/refuserAnnulation/{conventionId}").hasAnyAuthority( "ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/conventionStagEte/ValiderConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/conventionStagEte/RefuserConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/conventionStagEte/ConventionsAvecPreuveNonAnnulees").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")

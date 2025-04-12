@@ -1,12 +1,14 @@
 <div class="card">
   <div class="card-body">
-    @if (isLoading) {
+    <div *ngIf="isLoading; else content">
       <div class="text-center py-4">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Chargement...</span>
         </div>
       </div>
-    } @else {
+    </div>
+
+    <ng-template #content>
       <c-smart-table
         [items]="conventions"
         [columns]="columns"
@@ -17,36 +19,65 @@
         header
         pagination
         tableProps="{ hover: true, striped: true }"
+        (rowClick)="onRowClick($event)"
       >
-      <ng-template cTemplateId="tableData" let-item="item" let-columnName="columnName">
-        <td>
-          @switch (columnName) {
-            @case ('etudiantFullName') {
-              {{ item.etudiantFullName }}
-            }
-            @case ('preuveNom') {
-              @if (item.preuveNom) {
-                <a 
-                href="#" 
-                (click)="downloadPDF(item.preuveAnnulationNom); $event.preventDefault()"
-                class="text-primary text-decoration-underline"
-              >
-                <i class="cil-cloud-download me-2"></i>
-                Télécharger ({{item.preuveAnnulationNom}})
-              </a>
-              
-              
-              
-              
-              } @else {
-                <span class="text-muted">-</span>
+        <ng-template cTemplateId="tableData" let-item="item" let-columnName="columnName">
+          <td>
+            @switch (columnName) {
+              @case ('etudiantFullName') {
+                {{ item.etudiantFullName }}
+              }
+              @case ('preuveNom') {
+                @if (item.preuveNom) {
+                  <a 
+                    href="#" 
+                    (click)="downloadPDF(item.preuveAnnulationNom); $event.preventDefault()"
+                    class="text-primary text-decoration-underline"
+                  >
+                    <i class="cil-cloud-download me-2"></i>
+                    Télécharger ({{item.preuveAnnulationNom}})
+                  </a>
+                } @else {
+                  <span class="text-muted">-</span>
+                }
               }
             }
-          }
-        </td>
-      </ng-template>
-      
+          </td>
+        </ng-template>
       </c-smart-table>
-    }
+    </ng-template>
+
+    <!-- MODALE -->
+    <div class="modal fade show d-block" tabindex="-1" *ngIf="showModal" style="background-color: rgba(0,0,0,0.5);">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Action sur la convention</h5>
+            <button type="button" class="btn-close" (click)="closeModal()"></button>
+          </div>
+          <div class="modal-body">
+            <p>Souhaitez-vous valider ou refuser cette convention ?</p>
+          </div>
+          <div class="modal-footer">
+            <button 
+              type="button" 
+              class="btn btn-success" 
+              [disabled]="isProcessing"
+              (click)="validerConvention()"
+            >
+              Valider
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-danger"
+              [disabled]="isProcessing"
+              (click)="refuserConvention()"
+            >
+              Refuser
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
