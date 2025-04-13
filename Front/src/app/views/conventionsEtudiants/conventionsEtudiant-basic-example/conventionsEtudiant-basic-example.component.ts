@@ -327,10 +327,6 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
       this.gererConventionsEtudiantService.downloadWord(user.id);
 
     }
-
-
-
-
   }
   downloadPreuveAnnulation(nomFichier: string) {
     const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
