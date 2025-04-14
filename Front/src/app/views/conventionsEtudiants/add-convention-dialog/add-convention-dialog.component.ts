@@ -17,6 +17,8 @@ import { EntreprisesServiceService } from '../../entreprises/entreprises-service
 import { formatDate } from '@angular/common';
 import Swal from 'sweetalert2';
 import { ConventionsEtudiantService } from '../conventionsEtudiant-service.service';
+import { TuteurPFEServiceService } from './tuteur-pfeservice.service';
+
 @Component({
   selector: 'app-add-convention-dialog',
   standalone: true,
@@ -76,6 +78,18 @@ export class AddConventionDialogComponent {
     representePar: ''
 
   }
+
+  tuteurPFE = {
+    nom: '',
+    prenom: '',
+    sitePerso: '',
+    grade: '',
+    fonction: '',
+    email: '',
+    // entreprise: '',
+    telephone: '',
+    fax: ''
+  }
   userId: any;
   edit: any;
 
@@ -83,7 +97,7 @@ export class AddConventionDialogComponent {
   constructor(private gererConventionsEtudiantService: GererConventionsEtudiantService,
     public dialogRef: MatDialogRef<AddConventionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, private pdfService: PdfService, private ocrService: OcrService,
-    private entrepriseService: EntreprisesServiceService, private conventionsEtudiantsService: ConventionsEtudiantService
+    private entrepriseService: EntreprisesServiceService, private conventionsEtudiantsService: ConventionsEtudiantService, private tuteurPFEService: TuteurPFEServiceService
   ) { }
   async onFileSelected(event: any) {
     this.onFileChange(event)
@@ -188,8 +202,8 @@ export class AddConventionDialogComponent {
     // D'abord, isoler la section de l'entreprise d'accueil
     const entrepriseSection = this.extractValue(
       text,
-      "Et I’établissement d’accueil ci-dessous désigné :",
-      "Concernant l'étudiant stagiaire :"
+      "Et I’établissement d accueil ci-dessous désigné :",
+      "Concernant I’ étudiant stagiaire :"
     );
     console.log(text)
     console.log("Entreprise Section", entrepriseSection)
@@ -213,19 +227,20 @@ export class AddConventionDialogComponent {
   parseTuteurDataPFE(text: string) {
     const tuteurSection = this.extractValue(
       text,
-      "Tuteur encadrant l'étudiant dans l'établissement d'accueil :",
-      "Avis du responsable pédagogique"
+      "Tuteur encadrant I’étudiant dans I’établissement d accueil :",
+      "Avis du responsable pédagogique de la formation (réservé a 'ENICarthage):"
     );
+    console.log("Tuteurr ", tuteurSection)
 
     return {
       prenom: this.extractValue(tuteurSection, "Prénom :", "Nom :"),
       nom: this.extractValue(tuteurSection, "Nom :", "Fonction :"),
       fonction: this.extractValue(tuteurSection, "Fonction :", "Grade :"),
-      grade: this.extractValue(tuteurSection, "Grade :", "N° téléphone :"),
-      telephone: this.extractValue(tuteurSection, "N° téléphone :", "Fax :"),
+      grade: this.extractValue(tuteurSection, "Grade :", "Ne téléphone :"),
+      telephone: this.extractValue(tuteurSection, "Ne téléphone :", "Fax :"),
       fax: this.extractValue(tuteurSection, "Fax :", "E-mail :"),
       email: this.extractValue(tuteurSection, "E-mail :", "Site perso :"),
-      sitePerso: this.extractValue(tuteurSection, "Site perso :", "Avis du responsable")
+      sitePerso: this.extractValue(tuteurSection, "Site perso :", "3/4")
     };
   }
 
@@ -329,17 +344,24 @@ export class AddConventionDialogComponent {
       alert("Vous etes en " + user.niveau)
       console.log(this.extractedText)
       this.entreprise = this.parseEntrepriseDataPFE(this.extractedText);
+      this.tuteurPFE = this.parseTuteurDataPFE(this.extractedText);
+      console.log("Tuteeeuuuurrrrrrr ", this.tuteurPFE)
     }
     this.entrepriseService.checkExistenceEntreprise(this.entreprise).subscribe({
       next: (data) => {
         if (data.exists == false) {
           this.entrepriseService.addEntreprise(this.entreprise).subscribe((data) => {
             console.log("entreprise insére " + data.id)
+            // this.tuteurPFE.entreprise = data.id
+            this.checkExistenceTuteurPFE(data.id)
             // this.continuerSoumission(data.id);
           });
         }
         else {
+
           console.log("entreprise id ", data.entreprise.id)
+          // this.tuteurPFE.entreprise = data.tuteur.id
+          this.checkExistenceTuteurPFE(data.entreprise.id)
           // this.continuerSoumission(data.entreprise.id);
         }
       },
@@ -362,10 +384,45 @@ export class AddConventionDialogComponent {
     })
 
 
-
-
   }
 
+  checkExistenceTuteurPFE(idEntreprise: any): void {
+    //  this.tuteurPFE.entreprise = idEntreprise
+    this.tuteurPFEService.checkExistenceTuteur(this.tuteurPFE).subscribe({
+      next: (data) => {
+        if (data.exists == false) {
+          let idEntrepriseTuteur = idEntreprise;
+          console.log("exiiiiiiiiiiisttt = faalseeee")
+          this.tuteurPFEService.addTuteur(this.tuteurPFE, idEntrepriseTuteur).subscribe((data) => {
+            console.log("tuteur insére " + data.id)
+            // this.continuerSoumission(data.id);
+          });
+        }
+        else {
+          console.log("exiiiiiiiiiiisttt = truuueee")
+
+          console.log("tuteur id ", data.tuteur.id)
+          // this.continuerSoumission(data.entreprise.id);
+        }
+      },
+      error: (err) => {
+        if (err.error?.error === 'INVALID_JSON_FORMAT') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Format invalide',
+            text: 'Les données du tuteur sont mal formatées. Veuillez vérifier les champs saisis.'
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: 'Les données de tuteur sont mal formatées. Veuillez vérifier les champs saisis.'
+          });
+        }
+
+      }
+    })
+  }
   continuerSoumission(idEntreprise: any): void {
     let dureeStage = this.parseDureeData(this.extractedText);
     console.log("Durée stage extraite: ", dureeStage);
