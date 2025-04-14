@@ -93,14 +93,31 @@ export class AddConventionDialogComponent {
     this.isLoading = true; // Active le loader
     this.isSubmitDisabled = true; // Désactive le bouton
     const images = await this.pdfService.extractImagesFromPdf(file);
-    if (images.length > 0) {
-      const blob = await this.canvasToBlob(images[0]);
-      const extractedText = await this.ocrService.extractText(new File([blob], "image.png"));
-      this.extractedText = extractedText;
-      // Traitement terminé
-      this.isLoading = false;
-      this.isSubmitDisabled = false; // Réactive le bouton
+    let fullText = '';
+    let i = 0;
+    for (const image of images) {
+      if (i != 1) {
+        const blob = await this.canvasToBlob(image);
+        const pageText = await this.ocrService.extractText(new File([blob], "image.png"));
+        fullText += pageText + '\n\n'; // Ajouter un séparateur entre les pages
+      }
+      i++;
+
+
     }
+
+    this.extractedText = fullText;
+    this.isLoading = false;
+    this.isSubmitDisabled = false; // Réactive le bouton
+    console.log("extractedText ", this.extractedText)
+    // if (images.length > 0) {
+    //   const blob = await this.canvasToBlob(images[0]);
+    //   const extractedText = await this.ocrService.extractText(new File([blob], "image.png"));
+    //   this.extractedText = extractedText;
+    //   // Traitement terminé
+    //   this.isLoading = false;
+    //   this.isSubmitDisabled = false; // Réactive le bouton
+    // }
   }
   // Méthode factice pour simuler l'extraction (à remplacer par votre code)
   private simulatePdfExtraction(file: File): Promise<string> {
