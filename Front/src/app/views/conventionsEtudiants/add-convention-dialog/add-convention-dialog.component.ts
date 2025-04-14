@@ -133,14 +133,14 @@ export class AddConventionDialogComponent {
   }
 
   // Fonction pour extraire une valeur entre deux clés
-  extractValue(text: string, startKey: string, endKey: string): string {
-    const startIndex = text.indexOf(startKey) + startKey.length;
-    const endIndex = text.indexOf(endKey, startIndex);
-    return text.substring(startIndex, endIndex).trim();
-  }
+  // extractValue(text: string, startKey: string, endKey: string): string {
+  //   const startIndex = text.indexOf(startKey) + startKey.length;
+  //   const endIndex = text.indexOf(endKey, startIndex);
+  //   return text.substring(startIndex, endIndex).trim();
+  // }
 
   // Fonction pour parser TOUTES les données de l'entreprise
-  parseEntrepriseData(text: string) {
+  parseEntrepriseDataEte(text: string) {
     return {
       nom: this.extractValue(text, "L’établissement d’accueil :", "Adresse :"),
       adresse: this.extractValue(text, "Adresse :", "Représenté par :"),
@@ -150,6 +150,83 @@ export class AddConventionDialogComponent {
       telephone: this.extractValue(text, "-Tél:", "-Fax :"),
       fax: this.extractValue(text, "-Fax :", "Concernant I’étudiant Stagiaire"),
     };
+  }
+
+
+  // parseEntrepriseDataPFE(text: string) {
+
+  //   return {
+  //     nom: this.extractValue(text, "Dénomination sociale :", "Adresse :"),
+  //     adresse: this.extractValue(text, "Adresse :", "Représenté par :"),
+  //     representePar: this.extractValue(text, "Représenté par :", "En qualité de : "),
+  //     tuteur: "",
+  //     email: this.extractValue(text, "E-mail : ", "Site Web :"),
+  //     telephone: this.extractValue(text, "N° téléphone : ", "Fax : "),
+  //     fax: this.extractValue(text, "Fax : ", "E-mail : "),
+  //     siteWeb: this.extractValue(text, "Site Web :", "Concernant l’étudiant stagiaire :"),
+  //     domaineActivites: this.extractValue(text, "Domaine d’activités :", "N° téléphone : ")
+  //   };
+  // }
+  parseEntrepriseDataPFE(text: string) {
+    // D'abord, isoler la section de l'entreprise d'accueil
+    const entrepriseSection = this.extractValue(
+      text,
+      "Et I’établissement d’accueil ci-dessous désigné :",
+      "Concernant l'étudiant stagiaire :"
+    );
+    console.log(text)
+    console.log("Entreprise Section", entrepriseSection)
+
+    // Ensuite extraire chaque champ précisément
+    return {
+      nom: this.extractValue(entrepriseSection, "Dénomination sociale :", "Adresse :"),
+      adresse: this.extractValue(entrepriseSection, "Adresse :", "Représenté par :"),
+      representePar: this.extractValue(entrepriseSection, "Représenté par :", "En qualité de :"),
+      // qualite: this.extractValue(entrepriseSection, "En qualité de :", "Domaine d'activités :"),
+      domaineActivites: this.extractValue(entrepriseSection, "Domaine d’activités :", "Ne téléphone :"),
+      telephone: this.extractValue(entrepriseSection, "Ne téléphone :", "Fax :"),
+      fax: this.extractValue(entrepriseSection, "Fax :", "E-mail :"),
+      email: this.extractValue(entrepriseSection, "E-mail :", "Site Web :"),
+      siteWeb: this.extractValue(entrepriseSection, "Site Web :", "Concernant I’étudiant stagiaire :"),
+      // tuteur: this.parseTuteurDataPFE(text) // Extraction séparée du tuteur
+      tuteur: ''
+    };
+  }
+
+  parseTuteurDataPFE(text: string) {
+    const tuteurSection = this.extractValue(
+      text,
+      "Tuteur encadrant l'étudiant dans l'établissement d'accueil :",
+      "Avis du responsable pédagogique"
+    );
+
+    return {
+      prenom: this.extractValue(tuteurSection, "Prénom :", "Nom :"),
+      nom: this.extractValue(tuteurSection, "Nom :", "Fonction :"),
+      fonction: this.extractValue(tuteurSection, "Fonction :", "Grade :"),
+      grade: this.extractValue(tuteurSection, "Grade :", "N° téléphone :"),
+      telephone: this.extractValue(tuteurSection, "N° téléphone :", "Fax :"),
+      fax: this.extractValue(tuteurSection, "Fax :", "E-mail :"),
+      email: this.extractValue(tuteurSection, "E-mail :", "Site perso :"),
+      sitePerso: this.extractValue(tuteurSection, "Site perso :", "Avis du responsable")
+    };
+  }
+
+  // Version améliorée de extractValue
+  extractValue(text: string, startKey: string, endKey: string): string {
+    if (!text) return '';
+
+    const startIndex = text.indexOf(startKey);
+    if (startIndex === -1) return '';
+
+    const valueStart = startIndex + startKey.length;
+    const endIndex = endKey ? text.indexOf(endKey, valueStart) : -1;
+
+    if (endIndex === -1) {
+      return text.substring(valueStart).trim();
+    }
+
+    return text.substring(valueStart, endIndex).trim();
   }
   parseDureeData(text: string): { dateDebut: string, dateFin: string } {
     // Nettoyage du texte pour uniformiser les sauts de ligne
@@ -224,20 +301,29 @@ export class AddConventionDialogComponent {
   // Soumettre le formulaire
   onSubmit(): void {
     if (this.isSubmitDisabled) return; // Empêche la soumission si désactivé
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-    this.entreprise = this.parseEntrepriseData(this.extractedText);
-    console.log(this.entreprise); // Vérifiez les données extraites
+    if (user.niveau == "DEUXIEME") {
+      this.entreprise = this.parseEntrepriseDataEte(this.extractedText);
+      console.log(this.entreprise); // Vérifiez les données extraites
+
+    }
+    else {
+      alert("Vous etes en " + user.niveau)
+      console.log(this.extractedText)
+      this.entreprise = this.parseEntrepriseDataPFE(this.extractedText);
+    }
     this.entrepriseService.checkExistenceEntreprise(this.entreprise).subscribe({
       next: (data) => {
         if (data.exists == false) {
           this.entrepriseService.addEntreprise(this.entreprise).subscribe((data) => {
             console.log("entreprise insére " + data.id)
-            this.continuerSoumission(data.id);
+            // this.continuerSoumission(data.id);
           });
         }
         else {
           console.log("entreprise id ", data.entreprise.id)
-          this.continuerSoumission(data.entreprise.id);
+          // this.continuerSoumission(data.entreprise.id);
         }
       },
       error: (err) => {
@@ -257,6 +343,7 @@ export class AddConventionDialogComponent {
 
       }
     })
+
 
 
 

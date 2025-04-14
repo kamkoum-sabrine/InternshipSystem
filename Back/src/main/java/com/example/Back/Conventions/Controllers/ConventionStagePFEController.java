@@ -63,8 +63,8 @@ public class ConventionStagePFEController {
             @RequestParam("cahierDeCharge") String cahierDeCharge,
             @RequestParam("materielALaDispositionEtudiant") String materielALaDispositionEtudiant,
             @RequestParam("materielDeRealisation") String materielDeRealisation,
-            @RequestParam("dateDebut")  @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateDebut,
-            @RequestParam("dateFin")  @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFin,
+         //   @RequestParam("dateDebut")  @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateDebut,
+           // @RequestParam("dateFin")  @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFin,
             @RequestParam("fichierPDF") MultipartFile fichierPDF) {
 
         // Vérifier si l'étudiant existe
@@ -111,8 +111,8 @@ public class ConventionStagePFEController {
 
             convention.setFavorable(0);
 
-            convention.setDateDebut(dateDebut);
-            convention.setDateFin(dateFin);
+           // convention.setDateDebut(dateDebut);
+           // convention.setDateFin(dateFin);
             convention.setDateDepot(new Date());
             convention.setFichierPDFNom(fileName);
             convention.setFichierPDFChemin(filePath.toString());

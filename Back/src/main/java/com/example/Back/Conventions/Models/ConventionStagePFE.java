@@ -39,8 +39,8 @@ public class ConventionStagePFE {
     private String fichierPDFNom;
     private String fichierPDFChemin;
 
-    private Date dateDebut;
-    private Date dateFin;
+    //private Date dateDebut;
+  //  private Date dateFin;
     private Date dateDepot;
 
     private Integer valideeService; // 0 : en attente , 1: validée , -1 : non validée
