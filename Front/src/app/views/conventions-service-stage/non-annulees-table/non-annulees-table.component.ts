@@ -3,6 +3,7 @@ import { NonAnnuleesService } from '../non-annulees.service';
 import { SmartTableComponent } from '@coreui/angular-pro';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import {  ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'app-non-annulees-table',

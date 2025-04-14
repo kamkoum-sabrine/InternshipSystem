@@ -9,6 +9,14 @@
     </div>
 
     <ng-template #content>
+      <!-- Indication professionnelle pour double clic -->
+      <div class="alert alert-warning d-flex align-items-center mb-3 small-instruction">
+        <i class="cil-info me-2 fs-5 text-primary"></i>
+        <div>
+          <strong>Indication:</strong> double-cliquez sur une ligne contenant une preuve pour la traiter.
+        </div>
+      </div>
+
       <c-smart-table
         [items]="conventions"
         [columns]="columns"
