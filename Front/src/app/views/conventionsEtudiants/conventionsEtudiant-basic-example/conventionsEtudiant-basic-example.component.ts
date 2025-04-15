@@ -31,6 +31,7 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
 
   usersData = usersData;
   @Input() myConventions: any[] = [];;
+
   @ViewChild('annulationModal') annulationModal!: TemplateRef<any>; // Ajoutez cette ligne
 
   selectedFile: File | null = null;

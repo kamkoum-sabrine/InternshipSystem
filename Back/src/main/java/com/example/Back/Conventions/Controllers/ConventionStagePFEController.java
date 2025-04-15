@@ -6,6 +6,7 @@ import com.example.Back.Conventions.Models.ConventionStageEte;
 import com.example.Back.Conventions.Models.ConventionStagePFE;
 import com.example.Back.Conventions.Models.TuteurPFE;
 import com.example.Back.Conventions.Repositories.ConventionStageEteRepository;
+import com.example.Back.Conventions.Repositories.ConventionStagePFERepository;
 import com.example.Back.Conventions.Repositories.TuteurPFERepository;
 import com.example.Back.Conventions.Services.ConventionStageEteService;
 import com.example.Back.Conventions.Services.ConventionStagePFEService;
@@ -30,6 +31,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -39,6 +41,7 @@ public class ConventionStagePFEController {
     private final UserRepository userRepository;
     private final EntreprisesRepository entreprisesRepository;
     private final TuteurPFERepository tuteurPFERepository;
+    private final ConventionStagePFERepository conventionStagePFERepository;
 
 
     @Value("${file.upload-dir}/conventionsPFE")
@@ -47,11 +50,12 @@ public class ConventionStagePFEController {
     @Autowired
     public ConventionStagePFEController(ConventionStagePFEService conventionStagePFEService,
                                         UserRepository userRepository, EntreprisesRepository entreprisesRepository,
-                                        TuteurPFERepository tuteurPFERepository) {
+                                        TuteurPFERepository tuteurPFERepository, ConventionStagePFERepository conventionStagePFERepository) {
         this.conventionStagePFEService = conventionStagePFEService;
         this.userRepository = userRepository;
         this.entreprisesRepository = entreprisesRepository;
         this.tuteurPFERepository = tuteurPFERepository;
+        this.conventionStagePFERepository = conventionStagePFERepository;
     }
 
     @PostMapping("/create")
@@ -60,6 +64,7 @@ public class ConventionStagePFEController {
             @RequestParam("tuteurStage") Long tuteurStage,
             @RequestParam("entrepriseId") Long entrepriseId,
             @RequestParam("lieu") String lieu,
+            @RequestParam("intituleSujet") String intituleSujet,
             @RequestParam("cahierDeCharge") String cahierDeCharge,
             @RequestParam("materielALaDispositionEtudiant") String materielALaDispositionEtudiant,
             @RequestParam("materielDeRealisation") String materielDeRealisation,
@@ -105,6 +110,7 @@ public class ConventionStagePFEController {
 
             convention.setTuteurPFE(tuteurPFE);
 
+            convention.setIntituleSujet(intituleSujet);
             convention.setCahierDeCharge(cahierDeCharge);
             convention.setMaterielDeRealisation(materielDeRealisation);
             convention.setMaterielALaDispositionEtudiant(materielALaDispositionEtudiant);
@@ -145,6 +151,14 @@ public class ConventionStagePFEController {
         }
     }
 
+    @GetMapping("/getMyConventions/{id}")
+    public List<ConventionStagePFE> getConventionsByEtudiant(@PathVariable("id" ) Long etudiantId) {
+        User etudiant = userRepository.findById(etudiantId).orElse(null);
+        if (etudiant == null) {
+            throw new RuntimeException("Étudiant non trouvé !");
+        }
+        return conventionStagePFERepository.findByEtudiant(etudiant);
+    }
 
 
 }

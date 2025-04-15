@@ -1,6 +1,7 @@
 package com.example.Back.Conventions.Repositories;
 
 import com.example.Back.Auth.Models.User;
+import com.example.Back.Conventions.Models.ConventionStageEte;
 import com.example.Back.Conventions.Models.ConventionStagePFE;
 import org.springframework.data.jpa.repository.JpaRepository;
 

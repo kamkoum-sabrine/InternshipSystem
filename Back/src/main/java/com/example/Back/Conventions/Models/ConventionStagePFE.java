@@ -27,7 +27,9 @@ public class ConventionStagePFE {
     @JoinColumn(name = "tuteurPFE", nullable = false)
     private TuteurPFE tuteurPFE;
     private String Lieu; //Tunisie ou à l'étranger
+    @Column(length = 5000)
     private String cahierDeCharge;
+    private String intituleSujet;
     private String materielALaDispositionEtudiant;
     private String materielDeRealisation;
 

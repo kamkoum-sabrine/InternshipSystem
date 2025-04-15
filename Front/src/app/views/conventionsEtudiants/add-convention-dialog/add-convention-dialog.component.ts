@@ -90,9 +90,24 @@ export class AddConventionDialogComponent {
     telephone: '',
     fax: ''
   }
+
+  conventionPFE = {
+    etudiantId: '',
+    intituleSujet: '',
+    tuteurStage: '',
+    entrepriseId: '',
+    lieu: '',
+    cahierDeCharge: '',
+    materielALaDispositionEtudiant: '',
+    materielDeRealisation: '',
+    // fichierPDF: null as File | null
+
+  }
   userId: any;
   edit: any;
+  idTuteurInserted: any
 
+  fichierPDFPFE: File | null = null;
   extractedText: string = '';
   constructor(private gererConventionsEtudiantService: GererConventionsEtudiantService,
     public dialogRef: MatDialogRef<AddConventionDialogComponent>,
@@ -244,6 +259,30 @@ export class AddConventionDialogComponent {
     };
   }
 
+  parseConventionDataPFE(text: string) {
+    // D'abord, isoler la section de l'entreprise d'accueil
+    const conventionPFESection = this.extractValue(
+      text,
+      "Description détaillée du stage (réservée a I’établissement d’accueil) :",
+      "Tuteur encadrant I’étudiant dans I’établissement d accueil :"
+    );
+    console.log(text)
+    console.log("Convention PFE Section", conventionPFESection)
+
+    // Ensuite extraire chaque champ précisément
+    return {
+      lieu: this.extractValue(conventionPFESection, "Lieu (En Tunisie ou a I’étranger) :", "Intitulé du sujet :"),
+      intituleSujet: this.extractValue(conventionPFESection, "Intitulé du sujet :", "Cahier des charges :"),
+      materielALaDispositionEtudiant: this.extractValue(conventionPFESection, "Matériel mis a la disposition de I’étudiant stagiaire :", "Matériel nécessaire a la réalisation :"),
+      cahierDeCharge: this.extractValue(conventionPFESection, "Cahier des charges :", "Matériel mis a la disposition de I’étudiant stagiaire :"),
+      materielDeRealisation: this.extractValue(conventionPFESection, "Matériel nécessaire a la réalisation :", "Tuteur encadrant I’étudiant dans I’établissement d accueil :"),
+      // fichierPDF: null,
+      tuteurStage: '',
+      entrepriseId: '',
+      etudiantId: ''
+    };
+
+  }
   // Version améliorée de extractValue
   extractValue(text: string, startKey: string, endKey: string): string {
     if (!text) return '';
@@ -354,7 +393,7 @@ export class AddConventionDialogComponent {
             console.log("entreprise insére " + data.id)
             // this.tuteurPFE.entreprise = data.id
             this.checkExistenceTuteurPFE(data.id)
-            // this.continuerSoumission(data.id);
+            // this.continuerSoumission(data.id, user.niveau);
           });
         }
         else {
@@ -362,7 +401,7 @@ export class AddConventionDialogComponent {
           console.log("entreprise id ", data.entreprise.id)
           // this.tuteurPFE.entreprise = data.tuteur.id
           this.checkExistenceTuteurPFE(data.entreprise.id)
-          // this.continuerSoumission(data.entreprise.id);
+          // this.continuerSoumission(data.entreprise.id, user.niveau,);
         }
       },
       error: (err) => {
@@ -387,6 +426,8 @@ export class AddConventionDialogComponent {
   }
 
   checkExistenceTuteurPFE(idEntreprise: any): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+
     //  this.tuteurPFE.entreprise = idEntreprise
     this.tuteurPFEService.checkExistenceTuteur(this.tuteurPFE).subscribe({
       next: (data) => {
@@ -395,13 +436,19 @@ export class AddConventionDialogComponent {
           console.log("exiiiiiiiiiiisttt = faalseeee")
           this.tuteurPFEService.addTuteur(this.tuteurPFE, idEntrepriseTuteur).subscribe((data) => {
             console.log("tuteur insére " + data.id)
-            // this.continuerSoumission(data.id);
+            this.idTuteurInserted = data.id
+            // this.continuerSoumission(data.entreprise.id, user.niveau);
+
+            this.continuerSoumission(data.id, user.niveau);
           });
         }
         else {
           console.log("exiiiiiiiiiiisttt = truuueee")
 
           console.log("tuteur id ", data.tuteur.id)
+          this.idTuteurInserted = data.tuteur.id
+          this.continuerSoumission(data.tuteur.id, user.niveau);
+
           // this.continuerSoumission(data.entreprise.id);
         }
       },
@@ -423,63 +470,125 @@ export class AddConventionDialogComponent {
       }
     })
   }
-  continuerSoumission(idEntreprise: any): void {
-    let dureeStage = this.parseDureeData(this.extractedText);
-    console.log("Durée stage extraite: ", dureeStage);
+  continuerSoumission(idEntreprise: any, niveau: any): void {
+    if ((niveau == "DEUXIEME") || (niveau == "PREMIERE")) {
+      let dureeStage = this.parseDureeData(this.extractedText);
+      console.log("Durée stage extraite: ", dureeStage);
 
-    let dureeStageCorrect = this.prepareConventionData();
-    this.convention.etudiantId = this.utilisateur.id;
+      let dureeStageCorrect = this.prepareConventionData();
+      this.convention.etudiantId = this.utilisateur.id;
 
-    console.log("Durée correcte (date): " + dureeStageCorrect.dateDebut);
+      console.log("Durée correcte (date): " + dureeStageCorrect.dateDebut);
 
-    const formData = new FormData();
-    formData.append('etudiantId', this.convention.etudiantId);
-    formData.append('entrepriseId', idEntreprise);
-    // formData.append('adresse', this.convention.adresse);
-    // formData.append('representePar', this.convention.representePar);
-    formData.append('tuteurStage', this.entreprise.tuteur);
-    // formData.append('email', this.convention.email);
-    // formData.append('telephone', this.convention.telephone);
-    formData.append('dateDebut', dureeStageCorrect.dateDebut);
-    formData.append('dateFin', dureeStageCorrect.dateFin);
+      const formData = new FormData();
+      formData.append('etudiantId', this.convention.etudiantId);
+      formData.append('entrepriseId', idEntreprise);
+      // formData.append('adresse', this.convention.adresse);
+      // formData.append('representePar', this.convention.representePar);
+      formData.append('tuteurStage', this.entreprise.tuteur);
+      // formData.append('email', this.convention.email);
+      // formData.append('telephone', this.convention.telephone);
+      formData.append('dateDebut', dureeStageCorrect.dateDebut);
+      formData.append('dateFin', dureeStageCorrect.dateFin);
 
-    if (this.convention.fichierPDF instanceof File) {
-      formData.append('fichierPDF', this.convention.fichierPDF, this.convention.fichierPDF.name);
-    } else {
-      console.error('Aucun fichier sélectionné');
-      return;
+      if (this.convention.fichierPDF instanceof File) {
+        formData.append('fichierPDF', this.convention.fichierPDF, this.convention.fichierPDF.name);
+      } else {
+        console.error('Aucun fichier sélectionné');
+        return;
+      }
+
+      console.log("formData: ", formData);
+
+      this.gererConventionsEtudiantService.deposerConventionEtudiant(formData).subscribe(
+        response => {
+          console.log('Convention créée avec succès:', response);
+          Swal.fire({
+            icon: 'success',
+            title: 'Succès',
+            text: 'La convention a été créée avec succès !',
+            confirmButtonText: 'OK'
+          });
+          // this.conventionsEtudiantsService.getMesConventions(this.convention.etudiantId).subscribe(data => {
+          //   this.myConventions = data;
+          //   console.log(this.myConventions);
+          // });
+          this.dialogRef.close();
+          window.location.reload();
+          // this.conventionsEtudiantsService.getMesConventions(user.id).subscribe(data => {
+          //   this.myConventions = data;
+          //   console.log(this.myConventions);
+          // });
+          // this.dialogRef.close(this.utilisateur);
+        }
+      );
+    }
+    else {
+      alert("Vous etes en troisieme")
+      this.conventionPFE = this.parseConventionDataPFE(this.extractedText)
+      this.conventionPFE.entrepriseId = idEntreprise
+      console.log("IDDDDDD ", this.idTuteurInserted)
+      this.conventionPFE.tuteurStage = this.idTuteurInserted
+      this.conventionPFE.etudiantId = this.utilisateur.id;
+      console.log(this.conventionPFE)
+
+      const formData = new FormData();
+      formData.append('etudiantId', this.conventionPFE.etudiantId);
+      formData.append('entrepriseId', this.conventionPFE.entrepriseId);
+      formData.append('tuteurStage', this.conventionPFE.tuteurStage);
+      formData.append('intituleSujet', this.conventionPFE.intituleSujet);
+
+      formData.append('lieu', this.conventionPFE.lieu);
+      formData.append('cahierDeCharge', this.conventionPFE.cahierDeCharge);
+      formData.append('materielALaDispositionEtudiant', this.conventionPFE.materielALaDispositionEtudiant);
+      formData.append('materielDeRealisation', this.conventionPFE.materielDeRealisation);
+      console.log("PDFFFFFFFFFFF ", this.fichierPDFPFE)
+      if (this.fichierPDFPFE instanceof File) {
+        formData.append('fichierPDF', this.fichierPDFPFE, this.fichierPDFPFE.name);
+      } else {
+        console.error('Aucun fichier sélectionné');
+        return;
+      }
+
+      console.log("formData: ", formData);
+
+      this.gererConventionsEtudiantService.deposerConventionEtudiantPFE(formData).subscribe(
+        response => {
+          console.log('Convention créée avec succès:', response);
+          Swal.fire({
+            icon: 'success',
+            title: 'Succès',
+            text: 'La convention a été créée avec succès !',
+            confirmButtonText: 'OK'
+          });
+          // this.conventionsEtudiantsService.getMesConventions(this.convention.etudiantId).subscribe(data => {
+          //   this.myConventions = data;
+          //   console.log(this.myConventions);
+          // });
+          this.dialogRef.close();
+          window.location.reload();
+          // this.conventionsEtudiantsService.getMesConventions(user.id).subscribe(data => {
+          //   this.myConventions = data;
+          //   console.log(this.myConventions);
+          // });
+          // this.dialogRef.close(this.utilisateur);
+        }
+      );
+
     }
 
-    console.log("formData: ", formData);
-
-    this.gererConventionsEtudiantService.deposerConventionEtudiant(formData).subscribe(
-      response => {
-        console.log('Convention créée avec succès:', response);
-        Swal.fire({
-          icon: 'success',
-          title: 'Succès',
-          text: 'La convention a été créée avec succès !',
-          confirmButtonText: 'OK'
-        });
-        // this.conventionsEtudiantsService.getMesConventions(this.convention.etudiantId).subscribe(data => {
-        //   this.myConventions = data;
-        //   console.log(this.myConventions);
-        // });
-        this.dialogRef.close();
-        window.location.reload();
-        // this.conventionsEtudiantsService.getMesConventions(user.id).subscribe(data => {
-        //   this.myConventions = data;
-        //   console.log(this.myConventions);
-        // });
-        // this.dialogRef.close(this.utilisateur);
-      }
-    );
   }
   onFileChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input?.files?.length) {
-      // Le fichier sélectionné est stocké dans `fichierPDF`
-      this.convention.fichierPDF = input.files[0];
+      if (this.utilisateur.niveau == "DEUXIEME") {
+        // Le fichier sélectionné est stocké dans `fichierPDF`
+        this.convention.fichierPDF = input.files[0];
+      }
+      else {
+        this.fichierPDFPFE = input.files[0];
+      }
+
     }
   }
 

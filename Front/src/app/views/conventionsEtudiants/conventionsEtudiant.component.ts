@@ -27,6 +27,7 @@ import Swal from 'sweetalert2';
 })
 export class ConventionsEtudiantComponent implements OnInit {
   myConventions: any;
+  myConventionsPFE: any;
 
 
 
@@ -38,6 +39,12 @@ export class ConventionsEtudiantComponent implements OnInit {
       this.myConventions = data;
       console.log(this.myConventions);
     });
+
+    this.conventionsEtudiantsService.getMesConventionsPFE(user.id).subscribe(data => {
+      this.myConventionsPFE = data;
+      console.log(this.myConventionsPFE);
+    });
+
   }
 
   openDialog(): void {

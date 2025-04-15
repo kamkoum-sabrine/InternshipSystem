@@ -14,6 +14,9 @@ export class GererConventionsEtudiantService {
   deposerConventionEtudiant(convention: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/conventionStagEte/create`, convention);
   }
+  deposerConventionEtudiantPFE(conventionPFE: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/conventionStagPFE/create`, conventionPFE);
+  }
   downloadPdf(studentId: number) {
     this.http.get(`http://localhost:8081/api/pdf/convention/${studentId}`, { responseType: 'blob' }).subscribe((response: Blob) => {
       const url = window.URL.createObjectURL(response);
