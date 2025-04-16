@@ -54,12 +54,17 @@
                         <c-col sm="10">
                             <select [(ngModel)]="utilisateur.filiere" name="filiereId" id="filiere"
                                 aria-label="Default select example" cSelect required>
-                                <option></option>
+                                <!-- <option></option>
                                 <option>Génie informatique</option>
                                 <option>Génie industrielle</option>
                                 <option>Génie mécatronique</option>
-                                <option>Génie infotronique</option>
+                                <option>Génie infotronique</option> -->
 
+                                <option value="" disabled selected>-- Sélectionnez une filière --</option>
+                                <option [value]="0"> GSIL</option>
+                                <option [value]="1">Mecatronique</option>
+                                <option [value]="2">Informatique</option>
+                                <option [value]="3">Infotronique</option>
                             </select>
                         </c-col>
                         <label cLabel class="col-sm-2 col-form-label" for="niveau">Niveau</label>
@@ -67,9 +72,9 @@
                             <select [(ngModel)]="utilisateur.niveau" name="niveauId" id="niveau"
                                 aria-label="Default select example" cSelect required>
                                 <option></option>
-                                <option>1ére année</option>
-                                <option>2éme année</option>
-                                <option>2éme année</option>
+                                <option [value]="0">1ére année</option>
+                                <option [value]="1">2éme année</option>
+                                <option [value]="2">2éme année</option>
 
                             </select>
                         </c-col>

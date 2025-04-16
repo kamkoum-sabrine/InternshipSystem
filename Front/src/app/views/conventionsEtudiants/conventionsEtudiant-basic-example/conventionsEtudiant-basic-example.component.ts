@@ -31,6 +31,8 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
 
   usersData = usersData;
   @Input() myConventions: any[] = [];;
+  @Input() tabs: any;
+
 
   @ViewChild('annulationModal') annulationModal!: TemplateRef<any>; // Ajoutez cette ligne
 
@@ -118,9 +120,19 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
     });
   }
   downloadPDF(nomFichier: string) {
+    console.log("Queellee page", this.tabs)
+    let fileUrl;
+    if (this.tabs == 0) {
+      fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
+
+    }
+    else {
+      fileUrl = `http://localhost:8081/api/conventionStagPFE/uploads/${nomFichier}`;
+
+    }
+
     // console.log("nomFichier", nomFichier)
     // // const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
-    const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
 
     // const link = document.createElement("a");
     // link.href = fileUrl;

@@ -33,8 +33,8 @@ public class ConventionStagePFE {
     private String materielALaDispositionEtudiant;
     private String materielDeRealisation;
 
-    @Column(nullable = true)
-    private Integer favorable; // 0 : en attente , 1: favorable , -1 : non favorable
+   /** @Column(nullable = true)
+    private Integer favorable; // 0 : en attente , 1: favorable , -1 : non favorable**/
     @Column(nullable = true)
     private String remarques;
 
@@ -46,6 +46,7 @@ public class ConventionStagePFE {
     private Date dateDepot;
 
     private Integer valideeService; // 0 : en attente , 1: validée , -1 : non validée
+    private Integer valideeDirection;// 0 : en attente , 1: validée , -1 : non validée
     private Integer annulee; // par defaut 0 (en attente et si preuve annulation <> null)
     @Column(nullable = true)
     private String preuveAnnulationNom;
