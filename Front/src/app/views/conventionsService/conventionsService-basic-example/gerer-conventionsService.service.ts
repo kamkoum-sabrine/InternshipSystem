@@ -11,7 +11,7 @@ export class GererConventionsServiceService {
 
   constructor(private http: HttpClient) { }
 
-  deposerConventionEtudiant(convention: any): Observable<any> {
+  deposerConventionService(convention: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/conventionStagEte/create`, convention);
   }
   downloadPdf(studentId: number) {
@@ -55,4 +55,3 @@ export class GererConventionsServiceService {
   //   return this.http.get<any>(`${this.apiUrl}/users/userId/${id}`);
   // }
 }
-

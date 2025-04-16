@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { ConventionService } from '../convention.service';
-import { 
+import {
   BadgeComponent,
   ButtonDirective,
   SmartTableComponent
@@ -24,21 +24,21 @@ export class SmartTableConventionsComponent {
   private _conventions: any[] = [];
   ngAfterViewInit() {
     console.log('Columns config:', this.columns);
-    console.log('Données reçues:', JSON.parse(JSON.stringify(this.conventions)));
+    console.log('Données reçues:', this.conventions);
   }
   columns = [
-    { 
-      key: 'fichierPDFNom', 
+    {
+      key: 'fichierPDFNom',
       label: 'Conventions déposées',
       _style: { width: '40%' }
     },
-    { 
-      key: 'dateDepot', 
+    {
+      key: 'dateDepot',
       label: 'Date de dépot',
       _style: { width: '30%' }
     },
-    { 
-      key: 'actions', 
+    {
+      key: 'actions',
       label: 'Actions',
       _style: { width: '30%' },
       filter: false,
@@ -53,7 +53,7 @@ export class SmartTableConventionsComponent {
   downloadConvention(nomFichier: string): void {
     console.group('[Component] Téléchargement PDF');
     console.log('Nom fichier reçu:', nomFichier);
-    
+
     if (!nomFichier) {
       console.warn('Aucun nom de fichier fourni');
       Swal.fire('Erreur', 'Aucun fichier disponible', 'error');
@@ -68,24 +68,24 @@ export class SmartTableConventionsComponent {
         const link = document.createElement('a');
         const objectUrl = URL.createObjectURL(blob);
         console.log('URL Object créée:', objectUrl);
-        
+
         link.href = objectUrl;
         link.download = nomFichier;
-        console.log('Configuration du lien:', { 
-          href: link.href, 
-          download: link.download 
+        console.log('Configuration du lien:', {
+          href: link.href,
+          download: link.download
         });
-        
+
         document.body.appendChild(link);
         console.log('Déclenchement du click...');
         link.click();
         document.body.removeChild(link);
-        
+
         setTimeout(() => {
           URL.revokeObjectURL(objectUrl);
           console.log('Nettoyage URL Object');
         }, 100);
-        
+
         console.groupEnd();
       },
       error: (err) => {
@@ -99,7 +99,7 @@ export class SmartTableConventionsComponent {
   validerConvention(id: number): void {
     console.group('[Component] Validation convention');
     console.log('ID convention à valider:', id);
-    
+
     Swal.fire({
       title: 'Confirmer la validation',
       text: 'Voulez-vous vraiment valider cette convention ?',
@@ -133,7 +133,7 @@ export class SmartTableConventionsComponent {
   refuserConvention(id: number): void {
     console.group('[Component] Refus convention');
     console.log('ID convention à refuser:', id);
-    
+
     Swal.fire({
       title: 'Confirmer le refus',
       text: 'Voulez-vous vraiment refuser cette convention ?',

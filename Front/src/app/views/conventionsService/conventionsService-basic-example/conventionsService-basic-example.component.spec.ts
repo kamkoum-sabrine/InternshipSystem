@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ConventionsServiceBasicExampleComponent } from './conventions-service-basic-example.component';
+import { ConventionsServiceBasicExampleComponent } from './conventionsService-basic-example.component';
+import { BadgeModule, ButtonModule, SmartTableModule } from '@coreui/angular-pro';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 describe('ConventionsServiceBasicExampleComponent', () => {
   let component: ConventionsServiceBasicExampleComponent;
@@ -8,10 +10,13 @@ describe('ConventionsServiceBasicExampleComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConventionsServiceBasicExampleComponent]
+      imports: [SmartTableModule, ButtonModule, BadgeModule, ConventionsServiceBasicExampleComponent],
+      providers: [provideAnimations()]
     })
-    .compileComponents();
+      .compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(ConventionsServiceBasicExampleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -1,4 +1,11 @@
-<c-smart-table
+<c-smart-table *ngIf="myConventions && myConventions.length > 0" [activePage]="1" [columnSorter]="true"
+  [columns]="columns" [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="5" [items]="conventions"
+  [sorterValue]="{ column: 'name', state: 'asc' }" [tableFilter]="true"
+  [tableProps]="{ hover: true, striped: true, responsive: true }" [tableBodyProps]="{ align: 'middle' }" cleaner
+  clickableRows footer header pagination>
+
+</c-smart-table>
+<!-- <c-smart-table
   [items]="conventions"
   [columns]="columns"
   [tableFilter]="true"
@@ -79,4 +86,4 @@
     
     
     
-   
+    -->

@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ConventionsServiceService } from './conventions-service.service';
+import { ConventionsServiceService } from './conventionsService-service.service';
 
-describe('ConventionsServiceService', () => {
+describe('ConventionsServiceServiceService', () => {
   let service: ConventionsServiceService;
 
   beforeEach(() => {
