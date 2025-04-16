@@ -40,8 +40,9 @@
             "styles": [
               "src/scss/styles.scss"
             ],
-            "scripts": [  "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
-          ],
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ],
             "allowedCommonJsDependencies": []
           },
           "configurations": {
@@ -103,7 +104,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/scss/styles.scss"
+              "src/scss/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": []
           }

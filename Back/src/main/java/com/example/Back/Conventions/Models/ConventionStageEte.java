@@ -40,7 +40,7 @@ public class ConventionStageEte {
 
     private Integer valideeService; // 0 : en attente , 1: validée , -1 : non validée
     private Integer valideeDirection;// 0 : en attente , 1: validée , -1 : non validée
-    private Integer annulee; // par defaut 0 (en attente et si preuve annulation <> null)
+    private Integer annulee; // par defaut -2 : non encore annulé, 0 : demande d'annulation en attente , 1: validée , -1 : non validée  (en attente et si preuve annulation <> null)
     @Column(nullable = true)
     private String preuveAnnulationNom;
     @Column(nullable = true)

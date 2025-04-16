@@ -116,7 +116,7 @@ public class ConventionStageEteController {
             convention.setFichierPDFChemin(filePath.toString());
             convention.setValideeService(0);
             convention.setValideeDirection(0);
-            convention.setAnnulee(0);
+            convention.setAnnulee(-2);
 
             ConventionStageEte savedConvention = conventionStageEteRepository.save(convention);
             return ResponseEntity.ok(savedConvention);
@@ -154,7 +154,8 @@ public class ConventionStageEteController {
             // Mettre à jour la convention avec les infos de la preuve
             convention.setPreuveAnnulationNom(fileName);
             convention.setPreuveAnnulationChemin(filePath.toString());
-            // Note: On ne change pas annulee ici (reste à 0)
+            convention.setAnnulee(0);
+           
 
             conventionStageEteRepository.save(convention);
 
