@@ -206,10 +206,10 @@ export class AddConventionDialogComponent {
     console.log("utilisateur", user);
 
     console.log("userID", this.userId)
-    this.conventionsServicesService.getMesConventions(user.id).subscribe(data => {
-      this.myConventions = data;
-      console.log(this.myConventions);
-    });
+    // this.conventionsServicesService.getMesConventions(user.id).subscribe(data => {
+    //   this.myConventions = data;
+    //   console.log(this.myConventions);
+    // });
     // this.gererConventionsServiceService.getAllRoles().subscribe((data) => {
     //   this.roles = data;
     // });

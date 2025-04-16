@@ -30,7 +30,7 @@ import { GererConventionsServiceService } from './gerer-conventionsService.servi
 export class ConventionsServiceBasicExampleComponent implements OnInit {
 
   usersData = usersData;
-  @Input() myConventions: any[] = [];;
+  @Input() conventions: any[] = [];;
   @ViewChild('annulationModal') annulationModal!: TemplateRef<any>; // Ajoutez cette ligne
 
   selectedFile: File | null = null;
@@ -49,41 +49,13 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
 
     {
       key: 'valideeService',
-      label: 'Validée par le service de stage'
+      label: 'Etat'
     },
-    {
-      key: 'valideeDirection',
-      label: 'Validée par la direction de stage'
-    },
-    {
-      key: 'annulee',
-      label: 'Annuler'
-    },
-    {
-      key: 'preuveAnnulation',
-      label: 'Preuve Annulation',
-      _style: { width: '15%' },
-      filter: false,
-      sorter: false
-    },
-    // {
-    //   key: 'createdAt',
-    //   label: 'Date Registered',
-    //   _props: { class: 'text-truncate' }
-    // },
-    // { key: 'role', _style: { width: '20%' } },
-    // { key: 'filiere', label: 'Filiére', _style: { width: '20%' } },
 
-    // { key: 'niveau', label: 'Niveau', _style: { width: '20%' } },
-
-    // { key: 'active', _style: { width: '15%' } },
-    // {
-    //   key: 'show',
-    //   label: '',
-    //   _style: { width: '5%' },
-    //   filter: false,
-    //   sorter: false
-    // }
+    {
+      key: 'actions',
+      label: 'Actions'
+    }
   ];
   details_visible = Object.create({});
 
@@ -92,13 +64,13 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['myConventions']) {
-      console.log('Nouvelle valeur de myConventions :', this.myConventions);
+    if (changes['conventions']) {
+      console.log('Nouvelle valeur de conventions :', this.conventions);
       this.cdr.detectChanges(); // Force la mise à jour de la vue
     }
   }
   ngOnInit() {
-    console.log('Valeur reçue du parent:', this.myConventions);
+    console.log('Valeur reçue du parent:', this.conventions);
 
   }
 
@@ -351,32 +323,9 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
     this.modalService.open(this.annulationModal);
   }
 
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
-  }
 
-  uploadPreuveAnnulation(modal: any) {
-    if (!this.selectedFile || !this.currentConventionId) {
-      return;
-    }
 
-    const formData = new FormData();
-    formData.append('preuveAnnulation', this.selectedFile);
 
-    this.conventionsServiceService.uploadPreuveAnnulation(this.currentConventionId, formData)
-      .subscribe({
-        next: (response) => {
-          modal.close();
-          Swal.fire('Succès', 'Preuve d\'annulation uploadée avec succès', 'success');
-          window.location.reload(); // Rafraîchir la page pour voir les changements
-          // Rafraîchir les données si nécessaire
-        },
-        error: (error) => {
-          console.error('Erreur lors de l\'upload', error);
-          Swal.fire('Erreur', 'Une erreur est survenue lors de l\'upload', 'error');
-        }
-      });
-  }
 
 
 }

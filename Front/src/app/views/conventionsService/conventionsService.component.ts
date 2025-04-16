@@ -26,7 +26,7 @@ import Swal from 'sweetalert2';
   imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, ConventionsServiceBasicExampleComponent, MatDialogModule, MatButtonModule]
 })
 export class ConventionsServiceComponent implements OnInit {
-  myConventions: any;
+  conventions: any;
 
 
 
@@ -34,10 +34,14 @@ export class ConventionsServiceComponent implements OnInit {
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-    this.conventionsServicesService.getMesConventions(user.id).subscribe(data => {
-      this.myConventions = data;
-      console.log(this.myConventions);
+    this.conventionsServicesService.getConventions().subscribe({
+      next: (data) => this.conventions = data,
+      error: (err) => console.error('Erreur:', err)
     });
+    // this.conventionsServicesService.getMesConventions(user.id).subscribe(data => {
+    //   this.conventions = data;
+    //   console.log(this.conventions);
+    // });
   }
 
   openDialog(): void {
