@@ -26,6 +26,12 @@ public class Entreprise {
     @Column(nullable = false , unique = true)
     private Long telephone;
 
+    @Column(nullable = true)
+    private  String siteWeb;
+
+    @Column(nullable = true)
+    private String domaineActivites;
+
     @Column(nullable = false )
     private String representePar;
 

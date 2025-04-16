@@ -49,7 +49,7 @@ public class WebSecurityConfig {
 
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource, CustomAccessDeniedHandler customAccessDeniedHandler) throws Exception {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Activer CORS
                 .csrf(csrf -> csrf.disable())  // Désactiver CSRF si nécessaire
@@ -82,10 +82,12 @@ public class WebSecurityConfig {
 
                         .requestMatchers("/api/conventionStagEte/create").hasAnyAuthority("ROLE_SERVICE_STAGE", "ROLE_ETUDIANT")
                         .requestMatchers("/api/conventionStagEte/getMyConventions/{id}").hasAnyAuthority("ROLE_ETUDIANT")
+                        .requestMatchers("/api/conventionStagPFE/getMyConventions/{id}").hasAnyAuthority("ROLE_ETUDIANT")
 
 
                         .requestMatchers("/api/pdf/convention/{id}").hasAnyAuthority("ROLE_ETUDIANT")
                         .requestMatchers("/api/pdf//convention/word/{id}").hasAnyAuthority("ROLE_ETUDIANT")
+                        .requestMatchers("/api/pdf/PFE/convention/word/{id}").hasAnyAuthority("ROLE_ETUDIANT")
 
                         .requestMatchers("/api/conventionStagEte/uploadPreuveAnnulation/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT")
                         .requestMatchers("/api/conventionStagEte/annuler/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT")
@@ -95,8 +97,19 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/conventionStagEte/ConventionsAvecPreuveNonAnnulees").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
 
                         .requestMatchers("/api/pdf/convention/{id}","/api/users/etudiants/**").hasAnyAuthority("ROLE_ETUDIANT")
+                        .requestMatchers("/api/tuteurPFE").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
+                        .requestMatchers("/api/conventionStagPFE/create").hasAnyAuthority("ROLE_ETUDIANT","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/tuteurPFE/check-existence").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
+
+                        .requestMatchers("/api/conventionStagPFE/uploadPreuveAnnulation/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagPFE/annuler/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagPFE/refuserAnnulation/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagPFE/ValiderConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagPFE/RefuserConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagPFE/ConventionsAvecPreuveNonAnnulees").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
 
                         .requestMatchers("/api/conventionStagEte/uploads/**").permitAll()//hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
+                        .requestMatchers("/api/conventionStagPFE/uploads/**").permitAll()//hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
 
 
 
@@ -129,7 +142,8 @@ public class WebSecurityConfig {
 
                 // publiques
                 // .anyRequest().authenticated())
-
+               .exceptionHandling(exception ->
+                       exception.accessDeniedHandler(customAccessDeniedHandler))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Ajout du
         // filtre JWT
 

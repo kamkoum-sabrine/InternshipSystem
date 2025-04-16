@@ -3,23 +3,26 @@ package com.example.Back.Conventions.Controllers;
 import com.example.Back.Auth.Models.User;
 import com.example.Back.Auth.Repositories.UserRepository;
 import com.example.Back.Conventions.Models.ConventionStageEte;
+import com.example.Back.Conventions.Models.ConventionStagePFE;
+import com.example.Back.Conventions.Models.TuteurPFE;
 import com.example.Back.Conventions.Repositories.ConventionStageEteRepository;
+import com.example.Back.Conventions.Repositories.ConventionStagePFERepository;
+import com.example.Back.Conventions.Repositories.TuteurPFERepository;
 import com.example.Back.Conventions.Services.ConventionStageEteService;
+import com.example.Back.Conventions.Services.ConventionStagePFEService;
 import com.example.Back.Entreprises.Models.Entreprise;
 import com.example.Back.Entreprises.Repositories.EntreprisesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -28,49 +31,45 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Date;
-import java.util.Optional;
-
-
-import java.io.IOException;
-import java.nio.file.*;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-
 @RestController
-@RequestMapping("/api/conventionStagEte")
-public class ConventionStageEteController {
-
-    private final ConventionStageEteService conventionStageEteService;
-    private final ConventionStageEteRepository conventionStageEteRepository;
+@RequestMapping("/api/conventionStagPFE")
+public class ConventionStagePFEController {
+    private final ConventionStagePFEService conventionStagePFEService;
     private final UserRepository userRepository;
     private final EntreprisesRepository entreprisesRepository;
+    private final TuteurPFERepository tuteurPFERepository;
+    private final ConventionStagePFERepository conventionStagePFERepository;
 
-    @Value("${file.upload-dir}/conventionsStageEte")
+
+    @Value("${file.upload-dir}/conventionsPFE")
     private String uploadDir;
 
     @Autowired
-    public ConventionStageEteController(ConventionStageEteService conventionStageEteService, ConventionStageEteRepository conventionRepository, UserRepository userRepository, EntreprisesRepository entreprisesRepository) {
-        this.conventionStageEteService = conventionStageEteService;
-        this.conventionStageEteRepository = conventionRepository;
+    public ConventionStagePFEController(ConventionStagePFEService conventionStagePFEService,
+                                        UserRepository userRepository, EntreprisesRepository entreprisesRepository,
+                                        TuteurPFERepository tuteurPFERepository, ConventionStagePFERepository conventionStagePFERepository) {
+        this.conventionStagePFEService = conventionStagePFEService;
         this.userRepository = userRepository;
         this.entreprisesRepository = entreprisesRepository;
+        this.tuteurPFERepository = tuteurPFERepository;
+        this.conventionStagePFERepository = conventionStagePFERepository;
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createConvention(
+    public ResponseEntity<?> createConventionPFE(
             @RequestParam("etudiantId") Long etudiantId,
-            @RequestParam("tuteurStage") String tuteurStage,
+            @RequestParam("tuteurStage") Long tuteurStage,
             @RequestParam("entrepriseId") Long entrepriseId,
-
-           /* @RequestParam("etablissement") String etablissement,
-            @RequestParam("adresse") String adresse,
-            @RequestParam("representePar") String representePar,
-            @RequestParam("email") String email,
-            @RequestParam("telephone") String telephone,**/
-            @RequestParam("dateDebut")  @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateDebut,
-            @RequestParam("dateFin")  @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFin,
+            @RequestParam("lieu") String lieu,
+            @RequestParam("intituleSujet") String intituleSujet,
+            @RequestParam("cahierDeCharge") String cahierDeCharge,
+            @RequestParam("materielALaDispositionEtudiant") String materielALaDispositionEtudiant,
+            @RequestParam("materielDeRealisation") String materielDeRealisation,
+         //   @RequestParam("dateDebut")  @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateDebut,
+           // @RequestParam("dateFin")  @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateFin,
             @RequestParam("fichierPDF") MultipartFile fichierPDF) {
 
         // Vérifier si l'étudiant existe
@@ -86,6 +85,12 @@ public class ConventionStageEteController {
         }
         Entreprise entreprise = entrepriseOptional.get();
 
+        // Vérifier si le tuteur existe
+        Optional<TuteurPFE> tuteurPFEOptional = tuteurPFERepository.findById(tuteurStage);
+        if (tuteurPFEOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Tuteur non trouvé");
+        }
+        TuteurPFE tuteurPFE = tuteurPFEOptional.get();
         try {
             // Vérifier et créer le dossier d'upload si nécessaire
             Path uploadPath = Paths.get(uploadDir);
@@ -99,42 +104,73 @@ public class ConventionStageEteController {
             Files.copy(fichierPDF.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
             // Créer et sauvegarder la convention
-            ConventionStageEte convention = new ConventionStageEte();
+            ConventionStagePFE convention = new ConventionStagePFE();
             convention.setEtudiant(etudiant);
             convention.setEntreprise(entreprise);
-          /**  convention.setEtablissement(etablissement);
-            convention.setAdresse(adresse);
-            convention.setRepresentePar(representePar);
-            convention.setEmail(email);
-            convention.setTelephone(telephone);**/
-            convention.setTuteurStage(tuteurStage);
 
-            convention.setDateDebut(dateDebut);
-            convention.setDateFin(dateFin);
+            convention.setTuteurPFE(tuteurPFE);
+
+            convention.setIntituleSujet(intituleSujet);
+            convention.setCahierDeCharge(cahierDeCharge);
+            convention.setMaterielDeRealisation(materielDeRealisation);
+            convention.setMaterielALaDispositionEtudiant(materielALaDispositionEtudiant);
+
+            convention.setValideeDirection(0);
+
+           // convention.setDateDebut(dateDebut);
+           // convention.setDateFin(dateFin);
             convention.setDateDepot(new Date());
             convention.setFichierPDFNom(fileName);
             convention.setFichierPDFChemin(filePath.toString());
             convention.setValideeService(0);
-            convention.setValideeDirection(0);
             convention.setAnnulee(0);
 
-            ConventionStageEte savedConvention = conventionStageEteRepository.save(convention);
+            ConventionStagePFE savedConvention = conventionStagePFEService.saveConvetionStagePFE(convention);
             return ResponseEntity.ok(savedConvention);
         } catch (IOException e) {
             return ResponseEntity.internalServerError().body("Erreur lors du téléchargement du fichier.");
         }
     }
+
+    @GetMapping("/uploads/{fileName:.+}")
+    public ResponseEntity<Resource> getFile(@PathVariable String fileName) {
+        try {
+            Path filePath = Paths.get(uploadDir).resolve(fileName);
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (resource.exists() || resource.isReadable()) {
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                        .contentType(MediaType.APPLICATION_PDF)
+                        .body(resource);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+        } catch (MalformedURLException e) {
+            return ResponseEntity.internalServerError().body(null);
+        }
+    }
+
+    @GetMapping("/getMyConventions/{id}")
+    public List<ConventionStagePFE> getConventionsByEtudiant(@PathVariable("id" ) Long etudiantId) {
+        User etudiant = userRepository.findById(etudiantId).orElse(null);
+        if (etudiant == null) {
+            throw new RuntimeException("Étudiant non trouvé !");
+        }
+        return conventionStagePFERepository.findByEtudiant(etudiant);
+    }
+
     @PostMapping("/uploadPreuveAnnulation/{conventionId}")
     public ResponseEntity<?> uploadPreuveAnnulation(
-                    @PathVariable Long conventionId,
+            @PathVariable Long conventionId,
             @RequestParam("preuveAnnulation") MultipartFile preuveAnnulation) {
 
         // Trouver la convention
-        Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(conventionId);
+        Optional<ConventionStagePFE> conventionOptional = conventionStagePFERepository.findById(conventionId);
         if (conventionOptional.isEmpty()) {
             return ResponseEntity.badRequest().body("Convention non trouvée");
         }
-        ConventionStageEte convention = conventionOptional.get();
+        ConventionStagePFE convention = conventionOptional.get();
 
         try {
             // Vérifier et créer le dossier d'upload si nécessaire
@@ -156,7 +192,7 @@ public class ConventionStageEteController {
             convention.setPreuveAnnulationChemin(filePath.toString());
             // Note: On ne change pas annulee ici (reste à 0)
 
-            conventionStageEteRepository.save(convention);
+            conventionStagePFERepository.save(convention);
 
             return ResponseEntity.ok("Preuve d'annulation uploadée avec succès");
         } catch (IOException e) {
@@ -166,11 +202,11 @@ public class ConventionStageEteController {
 
     @PutMapping("/annuler/{conventionId}")
     public ResponseEntity<?> annulerConvention(@PathVariable Long conventionId) {
-        Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(conventionId);
+        Optional<ConventionStagePFE> conventionOptional = conventionStagePFERepository.findById(conventionId);
         if (conventionOptional.isEmpty()) {
             return ResponseEntity.badRequest().body("Convention non trouvée");
         }
-        ConventionStageEte convention = conventionOptional.get();
+        ConventionStagePFE convention = conventionOptional.get();
         // 2. Vérifier si une preuve existe déjà
         if (convention.getPreuveAnnulationNom() == null || convention.getPreuveAnnulationNom().isEmpty()) {
             return ResponseEntity.badRequest()
@@ -185,17 +221,17 @@ public class ConventionStageEteController {
 
         // 4. Mettre à jour le statut
         convention.setAnnulee(1); // 1 = annulée
-        conventionStageEteRepository.save(convention);
+        conventionStagePFERepository.save(convention);
 
         return ResponseEntity.ok("Convention annulée avec succès");
     }
     @PutMapping("/refuserAnnulation/{conventionId}")
     public ResponseEntity<?> refuserAnnulation(@PathVariable Long conventionId) {
-        Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(conventionId);
+        Optional<ConventionStagePFE> conventionOptional = conventionStagePFERepository.findById(conventionId);
         if (conventionOptional.isEmpty()) {
             return ResponseEntity.badRequest().body("Convention non trouvée");
         }
-        ConventionStageEte convention = conventionOptional.get();
+        ConventionStagePFE convention = conventionOptional.get();
         // 2. Vérifier si une preuve existe déjà
         if (convention.getPreuveAnnulationNom() == null || convention.getPreuveAnnulationNom().isEmpty()) {
             return ResponseEntity.badRequest()
@@ -214,7 +250,7 @@ public class ConventionStageEteController {
 
         // 4. Mettre à jour le statut
         convention.setAnnulee(-1); //
-        conventionStageEteRepository.save(convention);
+        conventionStagePFERepository.save(convention);
 
         return ResponseEntity.ok("Annulation refusée avec succes (preuve non acceptée)");
     }
@@ -225,73 +261,6 @@ public class ConventionStageEteController {
         }
         return filename.substring(filename.lastIndexOf(".") + 1);
     }
-    @GetMapping("/uploads/{fileName:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String fileName) {
-        try {
-            Path filePath = Paths.get(uploadDir).resolve(fileName);
-            Resource resource = new UrlResource(filePath.toUri());
-
-            if (resource.exists() || resource.isReadable()) {
-                return ResponseEntity.ok()
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-                        .contentType(MediaType.APPLICATION_PDF)
-                        .body(resource);
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-        } catch (MalformedURLException e) {
-            return ResponseEntity.internalServerError().body(null);
-        }
-    }
 
 
-    @GetMapping("/getMyConventions/{id}")
-    public List<ConventionStageEte> getConventionsByEtudiant(@PathVariable("id" ) Long etudiantId) {
-        User etudiant = userRepository.findById(etudiantId).orElse(null);
-        if (etudiant == null) {
-            throw new RuntimeException("Étudiant non trouvé !");
-        }
-        return conventionStageEteRepository.findByEtudiant(etudiant);
-    }
-    @PutMapping("/ValiderConvention/{id}")
-    public ResponseEntity<?> ValiderConvention(@PathVariable Long id)
-    {
-        Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(id);
-        if (conventionOptional.isEmpty()) {
-            return ResponseEntity.badRequest().body("Convention non trouvée");
-        }
-        ConventionStageEte convention = conventionOptional.get();
-        if (convention.getValideeService() == -1) {
-            return ResponseEntity.badRequest().body("Cette convention n'est pas validée.");
-        }
-        if (convention.getValideeService() ==1 ) {
-          return ResponseEntity.badRequest().body("Cette convention est déja validée");
-        }
-        convention.setValideeService(1);
-        conventionStageEteRepository.save(convention);
-        return ResponseEntity.ok("Convention validée avec succes");
-    }
-    @PutMapping("/RefuserConvention/{id}")
-    public ResponseEntity<?> RefuserConvention(@PathVariable Long id)
-    {
-        Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(id);
-        if (conventionOptional.isEmpty()) {
-            return ResponseEntity.badRequest().body("Convention non trouvée");
-        }
-        ConventionStageEte convention = conventionOptional.get();
-        if (convention.getValideeService() == 1) {
-            return ResponseEntity.badRequest().body("Cette convention a été validée précedemment");
-        }
-        if (convention.getValideeService() ==-1 ) {
-            return ResponseEntity.badRequest().body("Cette convention est déja refusée");
-        }
-        convention.setValideeService(-1);
-        conventionStageEteRepository.save(convention);
-        return ResponseEntity.ok("Convention refusée avec succes");
-    }
-    @GetMapping("/ConventionsAvecPreuveNonAnnulees")
-    public ResponseEntity<List<ConventionStageEte>> getConventionsAvecPreuveNonAnnulees() {
-        List<ConventionStageEte> conventions = conventionStageEteService.getConventionsAvecPreuveMaisNonAnnulees();
-        return ResponseEntity.ok(conventions);
-    }
 }
