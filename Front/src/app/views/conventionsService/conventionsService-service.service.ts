@@ -39,9 +39,10 @@ export class ConventionsServiceService {
     });
   }
 
-  refuserConvention(id: number): Observable<any> {
+  refuserConvention(id: number, convention: any): Observable<any> {
+    console.log(convention)
     const url = `${this.apiUrl}/RefuserConvention/${id}`;
-    return this.http.put(url, {}, {
+    return this.http.put(url, convention, {
       headers: {
         'Content-Type': 'application/json'
       }

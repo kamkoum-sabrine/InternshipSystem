@@ -157,6 +157,32 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
   annulerDemande(id: any) {
     console.log("Id de la convention à annuler ", id);
   }
+  approuverConvention(id: any) {
+    Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: 'Voulez vous valider cette conventions',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Oui, valider!',
+      cancelButtonText: 'Annuler',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.conventionsServiceService.validerConvention(id).subscribe(data => {
+          console.log(data);
+          this.conventionsServiceService.getConventions().subscribe(data => {
+            this.conventions = data
+          });
+
+        });
+        Swal.fire('Covention validée !', '', 'success');
+        // Ajouter la logique de confirmation ici
+      } else if (result.isDismissed) {
+        // L'événement est annulé
+        Swal.fire('Validation annulé', '', 'info');
+      }
+    });
+  }
   // changerEtatCompte(itemId: number, active: boolean) {
 
 
@@ -221,20 +247,20 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
 
   // }
 
-  openDialogUpdate(id: number): void {
-    // const dialogRef = this.dialog.open(AddUserDialogComponent, {
-    //   width: '600px',
-    //   minWidth: '600px',  // Largeur minimale de 400px
-    //   maxWidth: '600px',
-    //   data: { utilisateur: id, edit: true }
-    // });
+  openDialogRemarque(id: number): void {
+    const dialogRef = this.dialog.open(AddConventionDialogComponent, {
+      width: '600px',
+      minWidth: '600px',  // Largeur minimale de 400px
+      maxWidth: '600px',
+      data: { id: id }
+    });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     console.log('Editer utilisateur:', result);
-    //     // Logic to add the user
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Editer utilisateur:', result);
+        // Logic to add the user
+      }
+    });
 
   }
 

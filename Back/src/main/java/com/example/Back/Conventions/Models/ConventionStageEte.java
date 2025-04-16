@@ -45,4 +45,11 @@ public class ConventionStageEte {
     private String preuveAnnulationNom;
     @Column(nullable = true)
     private String preuveAnnulationChemin;
+
+    @Column(nullable = true)
+    private String remarquesService;
+
+    @Column(nullable = true)
+    private String remarquesDirection;
+
 }

@@ -20,10 +20,10 @@
 
       <!-- Pour la colonne 'Action', afficher les boutons de suppression et de modification -->
       <ng-container *ngIf=" columnName==='actions'">
-        <button cButton color="success" size="sm" (click)="openDialogUpdate(item.id)">
+        <button cButton color="success" size="sm" (click)="approuverConvention(item.id)">
           <i class="fa fa-check" style="color: #ffffff;"></i> <!-- Icon for edit -->
         </button>
-        <button cButton class="ms-1" color="danger" size="sm" (click)="supprimerEnseignant(item.id)">
+        <button cButton class="ms-1" color="danger" size="sm" (click)="openDialogRemarque(item.id)">
           <i class="fa fa-trash" style="color: #ffffff;"></i> <!-- Icon for delete -->
         </button>
       </ng-container>
