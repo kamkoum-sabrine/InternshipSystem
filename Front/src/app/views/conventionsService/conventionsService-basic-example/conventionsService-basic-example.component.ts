@@ -38,6 +38,11 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
 
   columns: IColumn[] = [
     {
+      key: 'etudiant',
+      label: 'Etudiant'
+    },
+
+    {
       key: 'fichierPDFNom',
       label: 'Conventions déposées'
     },
@@ -73,6 +78,8 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
     console.log('Valeur reçue du parent:', this.conventions);
 
   }
+
+
 
   openDialog(): void {
     const dialogRef = this.dialog.open(AddConventionDialogComponent, {

@@ -10,15 +10,16 @@
 
   <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
     <td>
-
-
-      <!-- Pour les autres colonnes, afficher la valeur par défaut -->
-      <ng-container *ngIf="columnName !== 'action'">
+      <ng-container
+        *ngIf="columnName !== 'action' && columnName !== 'valideeService' && columnName !== 'etudiant' && columnName !== 'dateDepot'  && columnName !== 'fichierPDFNom'">
         {{ item[columnName] }}
+      </ng-container>
+      <ng-container *ngIf=" columnName==='etudiant'">
+        {{item[columnName].nom}} {{item[columnName].prenom}}
       </ng-container>
 
       <!-- Pour la colonne 'Action', afficher les boutons de suppression et de modification -->
-      <ng-container *ngIf="columnName === 'actions'">
+      <ng-container *ngIf=" columnName==='actions'">
         <button cButton color="success" size="sm" (click)="openDialogUpdate(item.id)">
           <i class="fa fa-check" style="color: #ffffff;"></i> <!-- Icon for edit -->
         </button>
@@ -27,7 +28,22 @@
         </button>
       </ng-container>
 
+      <ng-container *ngIf="columnName === 'valideeService'">
 
+        <c-badge [color]="getBadge(tdContent)">
+          {{ item.valideeService == 0 ? 'En attente' : (item.valideeService === 1 ? ' validée' : 'refusée')
+          }}
+        </c-badge>
+      </ng-container>
+      <ng-container *ngIf="columnName === 'dateDepot'">
+        {{ getDate(item.dateDepot) }}
+      </ng-container>
+      <ng-container *ngIf="columnName === 'fichierPDFNom'">
+        <a *ngIf="item.fichierPDFChemin" (click)="downloadPDF(item.fichierPDFNom)"
+          class="text-primary text-decoration-underline" style="cursor: pointer;">
+          {{item.fichierPDFNom}}
+        </a>
+      </ng-container>
 
     </td>
   </ng-template>
