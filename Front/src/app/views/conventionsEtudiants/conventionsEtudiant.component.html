@@ -6,19 +6,40 @@
       </c-card-header>
       <!-- <button mat-raised-button (click)="openDialog()">Ajouter un utilisateur</button> -->
       <!-- <button class="btn btn-primary mb-3" (click)="openDialog()">Ajouter un utilisateur</button> -->
-
-
       <c-card-body>
-        <div *ngIf="myConventions">
-          <!-- <app-docs-example href="components/smart-table" [users]="users"> -->
-          <app-conventionsEtudiant-basic-example [myConventions]="myConventions" />
-          <!-- </app-docs-example> -->
-        </div>
+        <c-tabs [activeItemKey]="0" (activeItemKeyChange)="handleActiveItemChange($event)">
+          <c-tabs-list variant="underline-border">
+            <button cTab [itemKey]="0">
+              <svg cIcon class="me-2" name="cilHome"></svg>
+              Stage été
+            </button>
+            <button cTab [itemKey]="1">
+              <svg cIcon class="me-2" name="cilUser"></svg>
+              Stage PFE
+            </button>
 
-        <!-- <app-docs-example href="components/smart-table">
-          <app-utilisateurs-basic-example [users]="users" />
-        </app-docs-example> -->
+          </c-tabs-list>
+          <c-tabs-content>
+            <c-tab-panel [itemKey]="0" class="p-3">
+              <!-- <strong class="text-info">Conventions stage d'été</strong> -->
+              <div *ngIf="myConventions">
+                <app-conventionsEtudiant-basic-example [myConventions]="myConventions" [tabs]="0" />
+              </div>
+
+              <!-- <app-utilisateurs-basic-example [users]="users" /> -->
+              <!-- </app-docs-example> -->
+            </c-tab-panel>
+            <c-tab-panel [itemKey]="1" class="p-3">
+              <div *ngIf="myConventions">
+                <app-conventionsEtudiant-basic-example [myConventions]="myConventionsPFE" [tabs]="1" />
+              </div>
+            </c-tab-panel>
+
+          </c-tabs-content>
+        </c-tabs>
       </c-card-body>
+
+
     </c-card>
   </c-col>
 

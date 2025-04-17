@@ -15,11 +15,14 @@ export class ConventionsEtudiantService {
   getMesConventions(id: any): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/conventionStagEte/getMyConventions/${id}`, { withCredentials: true });
   }
+  getMesConventionsPFE(id: any): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/conventionStagPFE/getMyConventions/${id}`, { withCredentials: true });
+  }
   uploadPreuveAnnulation(conventionId: number, formData: FormData): Observable<any> {
     return this.http.post(
-      `${this.apiUrl}/conventionStagEte/uploadPreuveAnnulation/${conventionId}`, 
+      `${this.apiUrl}/conventionStagEte/uploadPreuveAnnulation/${conventionId}`,
       formData,
-      { 
+      {
         withCredentials: true,
         responseType: 'text' // Ajoutez ceci pour accepter une réponse texte
       }
