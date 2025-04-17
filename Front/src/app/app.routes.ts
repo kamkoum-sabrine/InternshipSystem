@@ -78,6 +78,36 @@ export const routes: Routes = [
         loadChildren: () => import('./views/conventionsEtudiants/routes').then((m) => m.routes)
       },
       {
+        path: 'conventionsService',
+        loadChildren: () => import('./views/conventionsService/routes').then((m) => m.routes)
+
+        /*  loadChildren: () => {
+            console.log('[Route] Chargement des routes conventionsService');
+            return import('./views/conventions-service-stage/routes').then((m) => {
+              console.log('[Route] Routes conventionsService chargées avec succès');
+              return m.routes;
+            }).catch(err => {
+              console.error('[Route] Erreur chargement routes conventionsService', err);
+              throw err;
+            });
+          }*/
+      },
+      {
+        path: 'demandesAnnulationConvention',
+        loadChildren: () => import('./views/conventionsService/non-annulees-table/routes').then((m) => m.routes)
+
+        /*  loadChildren: () => {
+            console.log('[Route] Chargement des routes conventionsService');
+            return import('./views/conventions-service-stage/routes').then((m) => {
+              console.log('[Route] Routes conventionsService chargées avec succès');
+              return m.routes;
+            }).catch(err => {
+              console.error('[Route] Erreur chargement routes conventionsService', err);
+              throw err;
+            });
+          }*/
+      },
+      {
         path: 'profile',
         loadChildren: () => import('./views/profil/routes').then(m => m.routes)
       },

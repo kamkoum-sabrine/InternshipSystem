@@ -145,7 +145,7 @@ export class UtilisateursBasicExampleComponent implements OnInit {
 
       Swal.fire({
         title: 'Êtes-vous sûr ?',
-        text: 'Voulez vous activer ce comple',
+        text: 'Voulez vous activer ce compte',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Oui, activer!',
@@ -165,7 +165,7 @@ export class UtilisateursBasicExampleComponent implements OnInit {
           // Ajouter la logique de confirmation ici
         } else if (result.isDismissed) {
           // L'événement est annulé
-          Swal.fire('Événement annulé', '', 'info');
+          Swal.fire('Activation annulé', '', 'info');
         }
       });
 

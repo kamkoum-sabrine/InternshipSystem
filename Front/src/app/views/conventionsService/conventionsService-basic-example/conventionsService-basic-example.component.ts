@@ -15,31 +15,33 @@ import {
 } from '@coreui/angular-pro';
 import Swal from 'sweetalert2';
 import { AddConventionDialogComponent } from '../add-convention-dialog/add-convention-dialog.component';
-import { ConventionsEtudiantService } from '../conventionsEtudiant-service.service';
+import { ConventionsServiceService } from '../conventionsService-service.service';
 
 import usersData from '../_data';
-import { GererConventionsEtudiantService } from './gerer-conventionsEtudiant.service';
+import { GererConventionsServiceService } from './gerer-conventionsService.service';
 
 @Component({
-  selector: 'app-conventionsEtudiant-basic-example',
-  templateUrl: './conventionsEtudiant-basic-example.component.html',
-  styleUrls: ['./conventionsEtudiant-basic-example.component.scss'],
+  selector: 'app-conventionsService-basic-example',
+  templateUrl: './conventionsService-basic-example.component.html',
+  styleUrls: ['./conventionsService-basic-example.component.scss'],
   standalone: true,
   imports: [CommonModule, BadgeComponent, ButtonDirective, CollapseDirective, SmartTableComponent, TemplateIdDirective, TextColorDirective]
 })
-export class ConventionsEtudiantBasicExampleComponent implements OnInit {
+export class ConventionsServiceBasicExampleComponent implements OnInit {
 
   usersData = usersData;
-  @Input() myConventions: any[] = [];;
-  @Input() tabs: any;
-
-
+  @Input() conventions: any[] = [];;
   @ViewChild('annulationModal') annulationModal!: TemplateRef<any>; // Ajoutez cette ligne
 
   selectedFile: File | null = null;
   currentConventionId: number | null = null;
 
   columns: IColumn[] = [
+    {
+      key: 'etudiant',
+      label: 'Etudiant'
+    },
+
     {
       key: 'fichierPDFNom',
       label: 'Conventions déposées'
@@ -52,58 +54,32 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
 
     {
       key: 'valideeService',
-      label: 'Validée par le service de stage'
+      label: 'Etat'
     },
-    {
-      key: 'valideeDirection',
-      label: 'Validée par la direction de stage'
-    },
-    {
-      key: 'annulee',
-      label: 'Annuler'
-    },
-    {
-      key: 'preuveAnnulation',
-      label: 'Preuve Annulation',
-      _style: { width: '15%' },
-      filter: false,
-      sorter: false
-    },
-    // {
-    //   key: 'createdAt',
-    //   label: 'Date Registered',
-    //   _props: { class: 'text-truncate' }
-    // },
-    // { key: 'role', _style: { width: '20%' } },
-    // { key: 'filiere', label: 'Filiére', _style: { width: '20%' } },
 
-    // { key: 'niveau', label: 'Niveau', _style: { width: '20%' } },
-
-    // { key: 'active', _style: { width: '15%' } },
-    // {
-    //   key: 'show',
-    //   label: '',
-    //   _style: { width: '5%' },
-    //   filter: false,
-    //   sorter: false
-    // }
+    {
+      key: 'actions',
+      label: 'Actions'
+    }
   ];
   details_visible = Object.create({});
 
-  constructor(private cdr: ChangeDetectorRef, private router: Router, private gererConventionsEtudiantService: GererConventionsEtudiantService, public dialog: MatDialog, private modalService: NgbModal, private conventionsEtudiantService: ConventionsEtudiantService) { }
+  constructor(private cdr: ChangeDetectorRef, private router: Router, private gererConventionsServiceService: GererConventionsServiceService, public dialog: MatDialog, private modalService: NgbModal, private conventionsServiceService: ConventionsServiceService) { }
 
 
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['myConventions']) {
-      console.log('Nouvelle valeur de myConventions :', this.myConventions);
+    if (changes['conventions']) {
+      console.log('Nouvelle valeur de conventions :', this.conventions);
       this.cdr.detectChanges(); // Force la mise à jour de la vue
     }
   }
   ngOnInit() {
-    console.log('Valeur reçue du parent:', this.myConventions);
+    console.log('Valeur reçue du parent:', this.conventions);
 
   }
+
+
 
   openDialog(): void {
     const dialogRef = this.dialog.open(AddConventionDialogComponent, {
@@ -120,19 +96,9 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
     });
   }
   downloadPDF(nomFichier: string) {
-    console.log("Queellee page", this.tabs)
-    let fileUrl;
-    if (this.tabs == 0) {
-      fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
-
-    }
-    else {
-      fileUrl = `http://localhost:8081/api/conventionStagPFE/uploads/${nomFichier}`;
-
-    }
-
     // console.log("nomFichier", nomFichier)
     // // const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
+    const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
 
     // const link = document.createElement("a");
     // link.href = fileUrl;
@@ -191,6 +157,32 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
   annulerDemande(id: any) {
     console.log("Id de la convention à annuler ", id);
   }
+  approuverConvention(id: any) {
+    Swal.fire({
+      title: 'Êtes-vous sûr ?',
+      text: 'Voulez vous valider cette conventions',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Oui, valider!',
+      cancelButtonText: 'Annuler',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.conventionsServiceService.validerConvention(id).subscribe(data => {
+          console.log(data);
+          this.conventionsServiceService.getConventions().subscribe(data => {
+            this.conventions = data
+          });
+
+        });
+        Swal.fire('Covention validée !', '', 'success');
+        // Ajouter la logique de confirmation ici
+      } else if (result.isDismissed) {
+        // L'événement est annulé
+        Swal.fire('Validation annulé', '', 'info');
+      }
+    });
+  }
   // changerEtatCompte(itemId: number, active: boolean) {
 
 
@@ -206,8 +198,8 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
   //     }).then((result) => {
   //       if (result.isConfirmed) {
   //         // L'événement est confirmé
-  //         this.gererConventionsEtudiantService.desactiverCompte(itemId).subscribe(data => {
-  //           this.gererConventionsEtudiantService.getUtilisateurs().subscribe(data => {
+  //         this.gererConventionsServiceService.desactiverCompte(itemId).subscribe(data => {
+  //           this.gererConventionsServiceService.getUtilisateurs().subscribe(data => {
   //             this.users = data
   //           });
   //           console.log(data);
@@ -255,20 +247,20 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
 
   // }
 
-  openDialogUpdate(id: number): void {
-    // const dialogRef = this.dialog.open(AddUserDialogComponent, {
-    //   width: '600px',
-    //   minWidth: '600px',  // Largeur minimale de 400px
-    //   maxWidth: '600px',
-    //   data: { utilisateur: id, edit: true }
-    // });
+  openDialogRemarque(id: number): void {
+    const dialogRef = this.dialog.open(AddConventionDialogComponent, {
+      width: '600px',
+      minWidth: '600px',  // Largeur minimale de 400px
+      maxWidth: '600px',
+      data: { id: id }
+    });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result) {
-    //     console.log('Editer utilisateur:', result);
-    //     // Logic to add the user
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Editer utilisateur:', result);
+        // Logic to add the user
+      }
+    });
 
   }
 
@@ -329,17 +321,11 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
       return;
     }
 
-    console.log("niveaauuuu ", user.niveau)
     // 5. Si tout est valide, lancer le téléchargement
-    if (user.niveau == "TROISIEME") {
-      this.gererConventionsEtudiantService.downloadWordPFE(user.id);
+    this.gererConventionsServiceService.downloadPdf(user.id);
+    this.gererConventionsServiceService.downloadWord(user.id);
 
-    }
-    else {
-      this.gererConventionsEtudiantService.downloadPdf(user.id);
-      this.gererConventionsEtudiantService.downloadWord(user.id);
 
-    }
   }
   downloadPreuveAnnulation(nomFichier: string) {
     const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
@@ -370,32 +356,9 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
     this.modalService.open(this.annulationModal);
   }
 
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
-  }
 
-  uploadPreuveAnnulation(modal: any) {
-    if (!this.selectedFile || !this.currentConventionId) {
-      return;
-    }
 
-    const formData = new FormData();
-    formData.append('preuveAnnulation', this.selectedFile);
 
-    this.conventionsEtudiantService.uploadPreuveAnnulation(this.currentConventionId, formData)
-      .subscribe({
-        next: (response) => {
-          modal.close();
-          Swal.fire('Succès', 'Preuve d\'annulation uploadée avec succès', 'success');
-          window.location.reload(); // Rafraîchir la page pour voir les changements
-          // Rafraîchir les données si nécessaire
-        },
-        error: (error) => {
-          console.error('Erreur lors de l\'upload', error);
-          Swal.fire('Erreur', 'Une erreur est survenue lors de l\'upload', 'error');
-        }
-      });
-  }
 
 
 }

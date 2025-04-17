@@ -1,0 +1,38 @@
+<c-row class="fixed-dialog">
+    <c-col xs="12">
+        <c-card class="mb-4">
+            <c-card-header ngPreserveWhitespaces>
+                <strong>Pourquoi voulez vous refuser cette convention ?</strong>
+            </c-card-header>
+            <c-card-body>
+                <form (ngSubmit)="onSubmit()" cForm>
+
+                    <c-row class="mb-3 align-items-center">
+                        <label cLabel class="col-sm-3 col-form-label fw-semibold" for="remarquesService">
+                            Ajouter une remarque
+                        </label>
+                        <c-col sm="9">
+                            <input type="text" [(ngModel)]="convention.remarquesService" name="remarquesService"
+                                cFormControl id="remarquesService" class="form-control custom-file-input" required />
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mb-3">
+                        <c-col sm="12" class="d-flex justify-content-end">
+                            <button cButton class="me-2" color="danger" type="button" style="color: #ffffff"
+                                (click)="onNoClick()">
+                                Annuler
+                            </button>
+                            <button cButton color="info" style="color: #ffffff" type="submit">
+
+                                Soumettre
+                            </button>
+                        </c-col>
+                    </c-row>
+
+                </form>
+            </c-card-body>
+
+        </c-card>
+    </c-col>
+</c-row>
