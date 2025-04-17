@@ -262,5 +262,11 @@ public class ConventionStagePFEController {
         return filename.substring(filename.lastIndexOf(".") + 1);
     }
 
+    @GetMapping("/getConventions")
+    public ResponseEntity<List<ConventionStagePFE>> getConventions() {
+        List<ConventionStagePFE> conventions = conventionStagePFERepository.findAll();
+        return ResponseEntity.ok(conventions);
+    }
+
 
 }
