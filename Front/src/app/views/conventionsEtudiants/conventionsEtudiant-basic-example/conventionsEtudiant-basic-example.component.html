@@ -104,107 +104,108 @@
       <ng-container *ngSwitchDefault>
         {{ item[columnName] }}
       </ng-container>
+    </td>
 
 
-  <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
-    <td>
-      @switch (columnName) {
-      @case ('valideeService') {
-      <c-badge [color]="getBadge(tdContent)">
-        {{ item.valideeService == 0 ? 'En attente' : (item.valideeService === 1 ? 'Validée' : 'Refusée') }}
-      </c-badge>
-      }
-      @case ('valideeDirection') {
-      <c-badge [color]="getBadge(tdContent)">
-        {{ item.valideeDirection == 0 ? 'En attente' : (item.valideeDirection === 1 ? 'Validée' : 'Refusée') }}
-      </c-badge>
-      }
-      @case ('preuveAnnulation') {
-      @if (item.preuveAnnulationNom) {
-      <button (click)="downloadPreuveAnnulation(item.preuveAnnulationNom)" cButton color="primary" size="sm"
-        variant="ghost" class="position-relative overflow-hidden" style="border: 1px solid #6f42c1; 
+    <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
+      <td>
+        @switch (columnName) {
+        @case ('valideeService') {
+        <c-badge [color]="getBadge(tdContent)">
+          {{ item.valideeService == 0 ? 'En attente' : (item.valideeService === 1 ? 'Validée' : 'Refusée') }}
+        </c-badge>
+        }
+        @case ('valideeDirection') {
+        <c-badge [color]="getBadge(tdContent)">
+          {{ item.valideeDirection == 0 ? 'En attente' : (item.valideeDirection === 1 ? 'Validée' : 'Refusée') }}
+        </c-badge>
+        }
+        @case ('preuveAnnulation') {
+        @if (item.preuveAnnulationNom) {
+        <button (click)="downloadPreuveAnnulation(item.preuveAnnulationNom)" cButton color="primary" size="sm"
+          variant="ghost" class="position-relative overflow-hidden" style="border: 1px solid #6f42c1; 
                          min-width: 120px; 
                          font-family: 'Segoe UI', Roboto, sans-serif; 
                          font-weight: 500; 
                          letter-spacing: 0.5px;
-                         color: #6f42c1 !important;">
-        <!-- Texte violet -->
-        <i class="cil-cloud-download me-2"></i>
-        <span style="font-size: 0.85rem;">TÉLÉCHARGER</span>
-        <span class="position-absolute top-0 start-0 w-100 h-100 bg-primary"
-          style="opacity: 0; transition: opacity 0.3s;"></span>
-      </button>
-      <style>
-        .btn-primary-ghost:hover {
-          background-color: rgba(214, 205, 229, 0.582);
+                         color: #b0a1ce !important;">
+          <!-- Texte violet -->
+          <i class="cil-cloud-download me-2"></i>
+          <span style="font-size: 0.85rem;">TÉLÉCHARGER</span>
+          <span class="position-absolute top-0 start-0 w-100 h-100 bg-primary"
+            style="opacity: 0; transition: opacity 0.3s;"></span>
+        </button>
+        <style>
+          .btn-primary-ghost:hover {
+            background-color: rgba(214, 205, 229, 0.582);
+          }
+
+          .btn-primary-ghost:hover span:last-child {
+            opacity: 0.1;
+          }
+
+          /* Garantir que le texte reste violet au survol */
+          .btn-primary-ghost:hover {
+            color: #ab9dc5 !important;
+          }
+        </style>
+        } @else {
+        <span class="badge bg-light text-muted border"
+          style="font-family: 'Segoe UI', Roboto, sans-serif; font-size: 0.8rem;">
+          NON DISPONIBLE
+        </span>
+        }
+        }
+        @case ('dateDepot') {
+        {{ getDate(item.dateDepot)}}
+        }
+        @case ('annulee') {
+        <button (click)="openAnnulationModal(item.id)" cButton color="info" class="text-white" size="sm">
+          Annuler
+        </button>
+        }
+        @case ('fichierPDFNom') {
+        <a *ngIf="item.fichierPDFChemin" (click)="downloadPDF(item.fichierPDFNom)"
+          class="text-primary text-decoration-underline" style="cursor: pointer;">
+          {{item.fichierPDFNom}}
+        </a>
+
+        }
+        @case ('show') {
+        <button (click)="toggleDetails(item.id)" cButton color="primary" size="sm" variant="outline">
+          Détails
+        </button>
+        }
+        @case ('role') {
+        {{ item[columnName]?.nom }}
         }
 
-        .btn-primary-ghost:hover span:last-child {
-          opacity: 0.1;
+        @default {
+
+        {{ item[columnName] }}
+        }
         }
 
-        /* Garantir que le texte reste violet au survol */
-        .btn-primary-ghost:hover {
-          color: #ab9dc5 !important;
-        }
-      </style>
-      } @else {
-      <span class="badge bg-light text-muted border"
-        style="font-family: 'Segoe UI', Roboto, sans-serif; font-size: 0.8rem;">
-        NON DISPONIBLE
-      </span>
-      }
-      }
-      @case ('dateDepot') {
-      {{ getDate(item.dateDepot)}}
-      }
-      @case ('annulee') {
-      <button (click)="openAnnulationModal(item.id)" cButton color="info" class="text-white" size="sm">
-        Annuler
-      </button>
-      }
-      @case ('fichierPDFNom') {
-      <a *ngIf="item.fichierPDFChemin" (click)="downloadPDF(item.fichierPDFNom)"
-        class="text-primary text-decoration-underline" style="cursor: pointer;">
-        {{item.fichierPDFNom}}
-      </a>
-
-      }
-      @case ('show') {
-      <button (click)="toggleDetails(item.id)" cButton color="primary" size="sm" variant="outline">
-        Détails
-      </button>
-      }
-      @case ('role') {
-      {{ item[columnName]?.nom }}
-      }
-
-      @default {
-
-      {{ item[columnName] }}
-      }
-      }
-
-    </td>
-  </ng-template>
+      </td>
+    </ng-template>
 
 
 
-  <!-- Modal pour uploader la preuve d'annulation -->
-  <ng-template #annulationModal let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title">Déposer une preuve d'annulation</h4>
-      <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
-    </div>
-    <div class="modal-body">
-      <div class="mb-3">
-        <label for="preuveAnnulation" class="form-label">Fichier PDF de preuve d'annulation</label>
-        <input class="form-control" type="file" id="preuveAnnulation" (change)="onFileSelected($event)" accept=".pdf">
+    <!-- Modal pour uploader la preuve d'annulation -->
+    <ng-template #annulationModal let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title">Déposer une preuve d'annulation</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
       </div>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Annuler</button>
-      <button type="button" class="btn btn-primary" (click)="uploadPreuveAnnulation(modal)">Envoyer</button>
-    </div>
-  </ng-template>
-</c-smart-table>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="preuveAnnulation" class="form-label">Fichier PDF de preuve d'annulation</label>
+          <input class="form-control" type="file" id="preuveAnnulation" (change)="onFileSelected($event)" accept=".pdf">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Annuler</button>
+        <button type="button" class="btn btn-primary" (click)="uploadPreuveAnnulation(modal)">Envoyer</button>
+      </div>
+    </ng-template>
+    <!-- </c-smart-table> -->
