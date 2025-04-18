@@ -13,6 +13,7 @@ import {
   TabsListComponent,
   TextColorDirective
 } from '@coreui/angular-pro';
+
 //import { DocsExampleComponent } from '@docs-components/public-api';
 
 import { ConventionsServiceService } from './conventionsService-service.service';
@@ -38,6 +39,7 @@ import { IconDirective } from '@coreui/icons-angular';
 })
 export class ConventionsServiceComponent implements OnInit {
   conventions: any;
+  conventionsPFE: any
   public panes = [
     { name: 'Stage été', id: 'tab-01', icon: 'cilHome' },
     { name: 'Stage PFE', id: 'tab-02', icon: 'cilUser' },
@@ -55,9 +57,15 @@ export class ConventionsServiceComponent implements OnInit {
   constructor(private conventionsServicesService: ConventionsServiceService, public dialog: MatDialog) { }
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-
     this.conventionsServicesService.getConventions().subscribe({
       next: (data) => this.conventions = data,
+      error: (err) => console.error('Erreur:', err)
+    });
+    this.conventionsServicesService.getConventionsPFE().subscribe({
+      next: (data) => {
+        this.conventionsPFE = data
+        console.log("Conventionssssssssssss ", this.conventionsPFE)
+      },
       error: (err) => console.error('Erreur:', err)
     });
     // this.conventionsServicesService.getMesConventions(user.id).subscribe(data => {

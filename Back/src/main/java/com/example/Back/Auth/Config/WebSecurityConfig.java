@@ -100,6 +100,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/conventionStagEte/getConventions").hasAnyAuthority( "ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/conventionStagEte/ConventionsAvecPreuveNonAnnulees").hasAnyAuthority( "ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/conventionStagEte/downloadPreuveAnnulation/{conventionId}").hasAnyAuthority( "ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagPFE/ValiderConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagPFE/RefuserConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
 
                         .requestMatchers("/api/pdf/convention/{id}","/api/users/etudiants/**").hasAnyAuthority("ROLE_ETUDIANT")
 
@@ -113,7 +115,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/conventionStagPFE/ValiderConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/conventionStagPFE/RefuserConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/conventionStagPFE/ConventionsAvecPreuveNonAnnulees").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
-                        .requestMatchers("/api/conventionStagPFE/getConventions").hasAnyAuthority( "ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagPFE/getConventions").hasAnyAuthority( "ROLE_SERVICE_STAGE","ROLE_DIRECTION_STAGE")
 
 
                         .requestMatchers("/api/conventionStagEte/uploads/**").permitAll()//hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")

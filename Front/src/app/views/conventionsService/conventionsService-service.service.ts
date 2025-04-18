@@ -7,17 +7,23 @@ import { Observable } from 'rxjs';
 })
 export class ConventionsServiceService {
 
-  private apiUrl = 'http://localhost:8081/api/conventionStagEte';
+  private apiUrl = 'http://localhost:8081/api';
 
   constructor(private http: HttpClient) { }
 
   getConventions(): Observable<any[]> {
-    const url = `${this.apiUrl}/getConventions`;
+    const url = `${this.apiUrl}/conventionStagEte/getConventions`;
     return this.http.get<any[]>(url);
   }
 
+  getConventionsPFE(): Observable<any[]> {
+    const url = `${this.apiUrl}/conventionStagPFE/getConventions`;
+    return this.http.get<any[]>(url);
+  }
+
+
   downloadPDF(nomFichier: string): Observable<Blob> {
-    const url = `${this.apiUrl}/downloadPreuve/${encodeURIComponent(nomFichier)}`;
+    const url = `${this.apiUrl}/conventionStagEte/downloadPreuve/${encodeURIComponent(nomFichier)}`;
 
     return this.http.get(url, {
       responseType: 'blob',
@@ -30,7 +36,7 @@ export class ConventionsServiceService {
 
 
   validerConvention(id: number): Observable<any> {
-    const url = `${this.apiUrl}/ValiderConvention/${id}`;
+    const url = `${this.apiUrl}/conventionStagEte/ValiderConvention/${id}`;
     console.log('[Service] validerConvention - URL:', url);
     return this.http.put(url, {}, {
       headers: {
@@ -41,7 +47,7 @@ export class ConventionsServiceService {
 
   refuserConvention(id: number, convention: any): Observable<any> {
     console.log(convention)
-    const url = `${this.apiUrl}/RefuserConvention/${id}`;
+    const url = `${this.apiUrl}/conventionStagEte/RefuserConvention/${id}`;
     return this.http.put(url, convention, {
       headers: {
         'Content-Type': 'application/json'

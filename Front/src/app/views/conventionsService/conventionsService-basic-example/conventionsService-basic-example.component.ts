@@ -31,6 +31,8 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
 
   usersData = usersData;
   @Input() conventions: any[] = [];;
+  @Input() tabs: any;
+
   @ViewChild('annulationModal') annulationModal!: TemplateRef<any>; // Ajoutez cette ligne
 
   selectedFile: File | null = null;
@@ -98,7 +100,15 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
   downloadPDF(nomFichier: string) {
     // console.log("nomFichier", nomFichier)
     // // const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
-    const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
+    let fileUrl;
+    if (this.tabs == 0) {
+      fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
+
+    }
+    else {
+      fileUrl = `http://localhost:8081/api/conventionStagPFE/uploads/${nomFichier}`;
+
+    }
 
     // const link = document.createElement("a");
     // link.href = fileUrl;

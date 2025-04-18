@@ -24,15 +24,15 @@
             <c-tab-panel [itemKey]="0" class="p-3">
               <!-- <strong class="text-info">Conventions stage d'été</strong> -->
               <div *ngIf="conventions">
-                <app-conventionsEtudiant-basic-example [conventions]="conventions" [tabs]="0" />
+                <app-conventionsService-basic-example [conventions]="conventions" [tabs]="0" />
               </div>
 
               <!-- <app-utilisateurs-basic-example [users]="users" /> -->
               <!-- </app-docs-example> -->
             </c-tab-panel>
             <c-tab-panel [itemKey]="1" class="p-3">
-              <div *ngIf="conventions">
-                <app-conventionsEtudiant-basic-example [conventions]="conventions" [tabs]="1" />
+              <div *ngIf="conventionsPFE">
+                <app-conventionsService-basic-example [conventions]="conventionsPFE" [tabs]="1" />
               </div>
             </c-tab-panel>
 
