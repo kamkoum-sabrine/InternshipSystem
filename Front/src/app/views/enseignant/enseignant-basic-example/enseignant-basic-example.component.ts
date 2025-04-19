@@ -93,7 +93,7 @@ export class EnseignantBasicExampleComponent implements OnInit {
           console.log(data);
         });
         Swal.fire('Enseignant suprimeé !', '', 'success');
-        //window.location.reload();
+        window.location.reload();
 
         // Ajouter la logique de confirmation ici
       } else if (result.isDismissed) {

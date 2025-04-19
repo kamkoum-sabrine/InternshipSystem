@@ -33,13 +33,19 @@ export class SoutenancesBasicExampleComponent implements OnInit {
     {
       key: 'etudiant',
       label: 'Nom & Prénom',
-      _style: { width: '15%' },
+      _style: { width: '20%' },
       filter: true
     },
     {
       key: 'date',
       label: 'Date',
-      _style: { width: '15%' },
+      _style: { width: '10%' },
+      filter: true
+    },
+    {
+      key: 'heure',
+      label: 'Heure',
+      _style: { width: '10%' },
       filter: true
     },
     {
@@ -57,14 +63,14 @@ export class SoutenancesBasicExampleComponent implements OnInit {
     {
       key: 'encadrant',
       label: 'Encadrant',
-      _style: { width: '15%' },
+      _style: { width: '10%' },
       filter: true
 
     },
     {
       key: 'action',
       label: 'Action',
-      _style: { width: '25%' },
+      _style: { width: '30%' },
       filter: false,
       sorter: false
     }
