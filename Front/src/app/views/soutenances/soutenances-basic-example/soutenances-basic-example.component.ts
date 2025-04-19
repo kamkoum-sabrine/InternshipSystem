@@ -28,6 +28,9 @@ import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.compo
 export class SoutenancesBasicExampleComponent implements OnInit {
 
   @Input() soutenances: any[] = [];
+  isetudiant: any = false;
+  etudiant: any;
+  soutenance: any;
 
   columns: IColumn[] = [
     {
@@ -79,6 +82,14 @@ export class SoutenancesBasicExampleComponent implements OnInit {
   constructor(private cdr: ChangeDetectorRef, private GererSoutenancesService: GererSoutenancesService, public dialog: MatDialog) { }
 
   ngOnInit() {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (user.role.nom === 'ETUDIANT') {
+      this.isetudiant = true;
+      this.etudiant = user;
+      this.soutenances = this.soutenances.filter((soutenance: any) => soutenance.etudiant.id === this.etudiant.id);
+
+    }
+
     console.log('Valeur reçue du parent:', this.soutenances);
     // Créer une propriété combinée pour l'étudiant
     this.soutenances.forEach(item => {

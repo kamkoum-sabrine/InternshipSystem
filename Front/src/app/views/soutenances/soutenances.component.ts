@@ -28,8 +28,10 @@ export class SoutenancesComponent {
 
   soutenances: any;
 
+
   constructor(private SoutenancesServiceService: SoutenancesServiceService, public dialog: MatDialog) { }
   ngOnInit(): void {
+
     this.SoutenancesServiceService.getSoutenances().subscribe(data => {
       this.soutenances = data;
       console.log(this.soutenances);
