@@ -34,11 +34,11 @@
         <button cButton class="me-2 btn-warning" size="sm" (click)="AfficherJury(item.id)" style="color: #ffffff;">
           Jury
         </button>
-        <button *ngIf="isetudiant == false" cButton class="me-2" color="info" size="sm"
+        <button *ngIf="isetudiant === false" cButton class="me-2" color="info" size="sm"
           (click)="openDialogUpdate(item.id)">
           <i class="fa fa-edit" style="color: #ffffff;"></i> <!-- Icon for edit -->
         </button>
-        <button *ngIf="isetudiant == false" cButton class="ms-1" color="danger" size="sm"
+        <button *ngIf="isetudiant === false" cButton class="ms-1" color="danger" size="sm"
           (click)="supprimerSoutenance(item.id)">
           <i class="fa fa-trash" style="color: #ffffff;"></i> <!-- Icon for delete -->
         </button>

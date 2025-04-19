@@ -146,5 +146,10 @@ export class profil {
     });
   }
 
+  deletePhoto(): void {
+    this.user.photo = null;  // Reset the photo to null or set to default
+  }
+
+
 }
 

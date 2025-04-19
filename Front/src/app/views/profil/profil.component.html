@@ -18,6 +18,13 @@
                                     <input id="avatarUpload" type="file" (change)="onFileSelected($event)"
                                         accept="image/*" class="d-none">
                                 </label>
+                                <!-- Delete Button -->
+
+                                <label *ngIf="user.photo" for="avatarDelete" class="avatar-delete text-danger mt-2">
+                                    <c-icon name="cil-trash"></c-icon>
+                                </label>
+                                <input *ngIf="user.photo" id="avatarDelete" type="button" class="d-none"
+                                    (click)="deletePhoto()" />
                             </div>
                             <small class="text-muted d-block mt-2">Formats: JPG, PNG, GIF - Max 2MB</small>
                         </c-col>
