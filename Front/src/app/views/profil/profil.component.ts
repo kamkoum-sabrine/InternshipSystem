@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   RowComponent, ColComponent, CardComponent, CardHeaderComponent,
@@ -35,14 +35,15 @@ export class profil {
   phoneExistant: boolean = false;
   faxExistant: boolean = false;
   cinExistant: boolean = false;
+  isMastere: boolean = false;
   emailsPhonesFax: any[] = [];
 
   isEtudiant: boolean = false;
 
   filiereOptions = ['Informatique', 'GSIL', 'Mecatronique', 'Infotronique'];
-  niveauOptions = ['PREMIERE', 'DEUXIEME', 'TROISIEME'];
-  formationOptions = ['INGENIERIE', 'MASTERE'];
-  sexeOptions = ['HOMME', 'FEMME'];
+  niveauOptions = ['Première', 'Deuxième', 'Troisième'];
+  formationOptions = ['Ingénierie', 'Mastère'];
+  sexeOptions = ['Masculin', 'Féminin'];
 
   constructor(
     private fb: FormBuilder,
@@ -65,7 +66,7 @@ export class profil {
       niveau: [''],
       formation: [''],
       option: ['']
-    });
+    }, { validators: this.masterValidator });
   }
 
   ngOnInit(): void {
@@ -143,6 +144,8 @@ export class profil {
     this.emailExistant = false;
     this.phoneExistant = false;
     this.faxExistant = false;
+    this.cinExistant = false;
+    this.isMastere = false;
 
     // Normaliser les valeurs du formulaire
     const formData = {
@@ -174,9 +177,16 @@ export class profil {
     this.cinExistant = formData.cin && formData.cin !== currentUser.cin
       && this.emailsPhonesFax.some(item => item.toLowerCase()?.trim() === formData.cin);
 
+
+
+
+
     if (this.emailExistant || this.phoneExistant || this.faxExistant || this.cinExistant) {
       return;
     }
+
+
+
 
 
     Swal.fire({
@@ -225,4 +235,14 @@ export class profil {
       }
     });
   }
+
+  private masterValidator: ValidatorFn = (form: AbstractControl): ValidationErrors | null => {
+    const formation = form.get('formation')?.value;
+    const niveau = form.get('niveau')?.value;
+
+    if (formation === 'Mastère' && niveau === 'Troisième') {
+      return { masterError: true };
+    }
+    return null;
+  };
 }

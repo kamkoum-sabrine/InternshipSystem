@@ -78,7 +78,6 @@
                                 class="text-danger">*</span></label>
                         <c-col sm="10">
                             <select formControlName="sexe" id="sexe" cSelect cFormControl>
-                                <option value="">Sélectionner...</option>
                                 <option *ngFor="let f of sexeOptions" [value]="f">{{ f }}</option>
                             </select>
                             <div *ngIf="userForm.get('sexe')?.invalid && (userForm.get('sexe')?.touched || userForm.get('sexe')?.dirty)"
@@ -171,28 +170,11 @@
                                 class="text-danger">*</span></label>
                         <c-col sm="10">
                             <select formControlName="filiere" id="filiere" cSelect cFormControl>
-                                <option value="">Sélectionner...</option>
                                 <option *ngFor="let f of filiereOptions" [value]="f">{{ f }}</option>
                             </select>
                             <div *ngIf="userForm.get('filiere')?.invalid && (userForm.get('filiere')?.touched || userForm.get('filiere')?.dirty)"
                                 class="text-danger">
                                 <div *ngIf="userForm.get('filiere')?.errors?.['required']">Filière requise</div>
-                            </div>
-                        </c-col>
-                    </c-row>
-
-                    <!-- Niveau -->
-                    <c-row *ngIf="isEtudiant" class="mb-3">
-                        <label cLabel class="col-sm-2 col-form-label" for="niveau">Niveau <span
-                                class="text-danger">*</span></label>
-                        <c-col sm="10">
-                            <select formControlName="niveau" id="niveau" cSelect cFormControl>
-                                <option value="">Sélectionner...</option>
-                                <option *ngFor="let n of niveauOptions" [value]="n">{{ n }}</option>
-                            </select>
-                            <div *ngIf="userForm.get('niveau')?.invalid && (userForm.get('niveau')?.touched || userForm.get('niveau')?.dirty)"
-                                class="text-danger">
-                                <div *ngIf="userForm.get('niveau')?.errors?.['required']">Niveau requis</div>
                             </div>
                         </c-col>
                     </c-row>
@@ -203,7 +185,6 @@
                                 class="text-danger">*</span></label>
                         <c-col sm="10">
                             <select formControlName="formation" id="formation" cSelect cFormControl>
-                                <option value="">Sélectionner...</option>
                                 <option *ngFor="let f of formationOptions" [value]="f">{{ f }}</option>
                             </select>
                             <div *ngIf="userForm.get('formation')?.invalid && (userForm.get('formation')?.touched || userForm.get('formation')?.dirty)"
@@ -212,6 +193,27 @@
                             </div>
                         </c-col>
                     </c-row>
+
+                    <!-- Niveau -->
+                    <c-row *ngIf="isEtudiant" class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="niveau">Niveau <span
+                                class="text-danger">*</span></label>
+                        <c-col sm="10">
+                            <select formControlName="niveau" id="niveau" cSelect cFormControl>
+                                <option *ngFor="let n of niveauOptions" [value]="n">{{ n }} année</option>
+                            </select>
+                            <div *ngIf="userForm.errors?.['masterError'] && userForm.get('niveau')?.touched"
+                                class="text-danger">
+                                Un étudiant inscrit en Mastère ne peut pas être en troisième année
+                            </div>
+                            <div *ngIf="userForm.get('niveau')?.invalid && userForm.get('niveau')?.errors?.['required'] && userForm.get('niveau')?.touched"
+                                class="text-danger">
+                                Niveau requis
+                            </div>
+                        </c-col>
+                    </c-row>
+
+
 
                     <!-- Option -->
                     <c-row *ngIf="isEtudiant" class="mb-3">

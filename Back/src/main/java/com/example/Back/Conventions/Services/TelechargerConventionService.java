@@ -31,10 +31,10 @@ public class TelechargerConventionService {
 
 
 
-            if (formData.get("Formation").equals(String.valueOf(Formation.INGENIERIE))) {
+            if (formData.get("Formation").equals(String.valueOf(Formation.Ingénierie))) {
                 drawText(canvas, font, "x", 93, 508);
             }//Ingénierie
-            else if (formData.get("Formation").equals(String.valueOf(Formation.MASTERE))) {
+            else if (formData.get("Formation").equals(String.valueOf(Formation.Mastère))) {
                 drawText(canvas, font, "x", 154, 508);
             }
 
@@ -44,9 +44,9 @@ public class TelechargerConventionService {
             drawText(canvas, font, formData.getOrDefault("E-mail", ""), 380, 467); // E-mail
             drawText(canvas, font, formData.getOrDefault("Ntéléphone", ""), 250, 467); // N° téléphone
             drawText(canvas, font, formData.getOrDefault("Filière", ""), 110, 481); // Filière
-            if (formData.get("Niveau").equals(String.valueOf(Niveau.DEUXIEME))) {
+            if (formData.get("Niveau").equals(String.valueOf(Niveau.Deuxième))) {
                 drawText(canvas, font, "x", 396, 481); // Filière
-            } else if (formData.get("Niveau").equals(String.valueOf(Niveau.PREMIERE))) {
+            } else if (formData.get("Niveau").equals(String.valueOf(Niveau.Première))) {
                 drawText(canvas, font, "x", 309, 481); // Filière
             }
 
