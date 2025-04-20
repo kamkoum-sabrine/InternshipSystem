@@ -11,6 +11,7 @@ import {
 import { IconModule } from '@coreui/icons-angular';
 import Swal from 'sweetalert2';
 import { GererUtilisateurService } from '../utilisateurs/utilisateurs-basic-example/gerer-utilisateur.service';
+import { co } from '@fullcalendar/core/internal-common';
 
 @Component({
   standalone: true,
@@ -30,8 +31,11 @@ import { GererUtilisateurService } from '../utilisateurs/utilisateurs-basic-exam
 export class profil {
   userForm: FormGroup;
   user: any;
-  emailsExistants: string[] = [];
   emailExistant: boolean = false;
+  phoneExistant: boolean = false;
+  faxExistant: boolean = false;
+  cinExistant: boolean = false;
+  emailsPhonesFax: any[] = [];
 
   isEtudiant: boolean = false;
 
@@ -45,6 +49,7 @@ export class profil {
     private gererUtilisateurService: GererUtilisateurService,
     private router: Router
   ) {
+    // Initialiser sans validateurs requis pour les champs académiques
     this.userForm = this.fb.group({
       nom: ['', [Validators.required, Validators.minLength(2)]],
       prenom: ['', [Validators.required, Validators.minLength(2)]],
@@ -52,13 +57,13 @@ export class profil {
       sexe: ['', Validators.required],
       dateDeNaissance: ['', Validators.required],
       lieuNaissance: [''],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
       tel: ['', [Validators.pattern('[0-9]{8,15}'), Validators.required]],
       adresse: [''],
       fax: ['', [Validators.pattern('[0-9]+')]],
-      filiere: ['', Validators.required],
-      niveau: ['', Validators.required],
-      formation: ['', Validators.required],
+      filiere: [''],
+      niveau: [''],
+      formation: [''],
       option: ['']
     });
   }
@@ -66,31 +71,51 @@ export class profil {
   ngOnInit(): void {
     this.loadCurrentUser();
 
-    //this.getEmails();
+    this.gererUtilisateurService.getEmailsPhonesFax().subscribe(
+      (emailsPhonesFax: any[]) => {
+        // Filtrer les données du current user
+        this.emailsPhonesFax = emailsPhonesFax.filter(item => item).filter(item => {
+          return item.toLowerCase() !== this.user?.email?.toLowerCase() &&
+            item.toLowerCase() !== this.user?.tel?.toLowerCase() &&
+            item.toLowerCase() !== this.user?.fax?.toLowerCase() &&
+            item.toLowerCase() !== this.user?.cin;
+
+        });
+        console.log(this.emailsPhonesFax);
+      },
+      error => console.error("Erreur lors du chargement des données", error)
+    );
   }
 
   loadCurrentUser(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.user = user;
-    if (user.role.nom === 'ETUDIANT') {
+
+    if (user.role?.nom === 'ETUDIANT') {
       this.isEtudiant = true;
+      // Ajouter les validateurs requis pour les étudiants
+      this.setAcademicValidators(true);
+    } else {
+      this.setAcademicValidators(false);
     }
+
     this.userForm.patchValue(user);
   }
-  /*
-    getEmails(): void {
-      this.gererUtilisateurService.getUtilisateurs().subscribe(
-        (utilisateurs: any[]) => {
-          this.emailsExistants = utilisateurs
-            .map(u => u.email?.toLowerCase()?.trim())
-            .filter(email => !!email && email !== this.user.email);
-        },
-        error => {
-          console.error("Erreur lors du chargement des emails", error);
-        }
-      );
-    }
-  */
+
+  private setAcademicValidators(isRequired: boolean): void {
+    const academicControls = ['filiere', 'niveau', 'formation', 'option'];
+
+    academicControls.forEach(controlName => {
+      const control = this.userForm.get(controlName);
+      if (isRequired) {
+        control?.setValidators([Validators.required]);
+      } else {
+        control?.clearValidators();
+      }
+      control?.updateValueAndValidity();
+    });
+  }
+
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
@@ -115,12 +140,44 @@ export class profil {
       return;
     }
 
-    const email = this.userForm.value.email?.toLowerCase().trim();
-    if (this.emailsExistants.includes(email)) {
-      this.emailExistant = true;
+    this.emailExistant = false;
+    this.phoneExistant = false;
+    this.faxExistant = false;
+
+    // Normaliser les valeurs du formulaire
+    const formData = {
+      email: this.userForm.value.email?.toLowerCase()?.trim() || '',
+      tel: this.userForm.value.tel?.toLowerCase()?.trim() || '',
+      fax: this.userForm.value.fax?.toLowerCase()?.trim() || '',
+      cin: this.userForm.value.cin?.toLowerCase()?.trim() || ''
+    };
+    console.log('Form Data:', formData);
+
+    // Normaliser les valeurs du current user
+    const currentUser = {
+      email: this.user?.email?.toLowerCase()?.trim() || '',
+      tel: this.user?.tel?.toLowerCase()?.trim() || '',
+      fax: this.user?.fax?.toLowerCase()?.trim() || '',
+      cin: this.user?.cin || ''
+    };
+
+    // Vérifier les doublons uniquement si différent du current user
+    this.emailExistant = formData.email && formData.email !== currentUser.email
+      && this.emailsPhonesFax.some(item => item.toLowerCase()?.trim() === formData.email);
+
+    this.phoneExistant = formData.tel && formData.tel !== currentUser.tel
+      && this.emailsPhonesFax.some(item => item.toLowerCase()?.trim() === formData.tel);
+
+    this.faxExistant = formData.fax && formData.fax !== currentUser.fax
+      && this.emailsPhonesFax.some(item => item.toLowerCase()?.trim() === formData.fax);
+
+    this.cinExistant = formData.cin && formData.cin !== currentUser.cin
+      && this.emailsPhonesFax.some(item => item.toLowerCase()?.trim() === formData.cin);
+
+    if (this.emailExistant || this.phoneExistant || this.faxExistant || this.cinExistant) {
       return;
     }
-    this.emailExistant = false;
+
 
     Swal.fire({
       title: 'Êtes-vous sûr ?',
@@ -150,6 +207,9 @@ export class profil {
   onCancel(): void {
     this.loadCurrentUser();
     this.userForm.reset(this.user);
+    this.emailExistant = false;
+    this.phoneExistant = false;
+    this.faxExistant = false;
     Swal.fire('Informations', 'Modifications annulées', 'info');
   }
 

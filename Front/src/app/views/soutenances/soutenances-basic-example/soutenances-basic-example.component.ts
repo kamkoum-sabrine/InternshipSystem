@@ -16,6 +16,8 @@ import { UpdateSoutenanceDialogComponent } from '../update-soutenance-dialog/upd
 import { AfficherJuryDialogComponent } from '../afficher-jury-dialog/afficher-jury-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.component';
+import { DefaultHeaderComponent } from 'src/app/layout/default-layout/default-header/default-header.component';
+import { NotificationService } from 'src/app/layout/default-layout/default-header/notification.service';
 
 
 @Component({
@@ -79,23 +81,20 @@ export class SoutenancesBasicExampleComponent implements OnInit {
     }
   ];
 
-  constructor(private cdr: ChangeDetectorRef, private GererSoutenancesService: GererSoutenancesService, public dialog: MatDialog) { }
+  constructor(private cdr: ChangeDetectorRef, private GererSoutenancesService: GererSoutenancesService, public dialog: MatDialog
+  ) { }
 
   ngOnInit() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    if (user.role.nom === 'ETUDIANT') {
+    if (user.role?.nom === 'ETUDIANT') {
       this.isetudiant = true;
       this.etudiant = user;
       this.soutenances = this.soutenances.filter((soutenance: any) => soutenance.etudiant.id === this.etudiant.id);
 
+      this.soutenances.forEach(item => {
+        item.etudiantNomComplet = `${item.etudiant?.nom} ${item.etudiant?.prenom}`;
+      });
     }
-
-    console.log('Valeur reçue du parent:', this.soutenances);
-    // Créer une propriété combinée pour l'étudiant
-    this.soutenances.forEach(item => {
-      item.etudiantNomComplet = `${item.etudiant?.nom} ${item.etudiant?.prenom}`; // Combinaison du nom et prénom
-    });
-
   }
 
 

@@ -62,10 +62,13 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/users/register").hasRole("SUPER_ADMINISTRATEUR")
                         .requestMatchers("/api/users/activate").hasRole("SUPER_ADMINISTRATEUR")
                         .requestMatchers("/api/users/desactivate").hasRole("SUPER_ADMINISTRATEUR")
+                        .requestMatchers("/api/users/emailsphonesfax").permitAll()
 
                         .requestMatchers("/api/users/getAll").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/userId/{id}").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/users/etudiants").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/users/update/{id}").permitAll()
+
 
                         .requestMatchers( "/api/soutenance/{id}").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
                         .requestMatchers( "/api/soutenance").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")

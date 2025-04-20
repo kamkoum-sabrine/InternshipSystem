@@ -68,6 +68,7 @@
                                 <div *ngIf="userForm.get('cin')?.errors?.['required']">Le CIN est requis</div>
                                 <div *ngIf="userForm.get('cin')?.errors?.['pattern']">8 chiffres requis</div>
                             </div>
+                            <div *ngIf="cinExistant" class="text-danger">CIN est déjà utilisé</div>
                         </c-col>
                     </c-row>
 
@@ -120,6 +121,7 @@
                                 class="text-danger">
                                 <div *ngIf="userForm.get('email')?.errors?.['required']">Email requis</div>
                                 <div *ngIf="userForm.get('email')?.errors?.['email']">Format email invalide</div>
+                                <div *ngIf="userForm.get('email')?.errors?.['pattern']">Format email invalide</div>
                             </div>
                             <div *ngIf="emailExistant" class="text-danger">Cet email est déjà utilisé</div>
                         </c-col>
@@ -136,6 +138,7 @@
                                 <div *ngIf="userForm.get('tel')?.errors?.['required']">Téléphone requis</div>
                                 <div *ngIf="userForm.get('tel')?.errors?.['pattern']">8 à 15 chiffres requis</div>
                             </div>
+                            <div *ngIf="phoneExistant" class="text-danger">Ce téléphone est déjà utilisé</div>
                         </c-col>
                     </c-row>
 
@@ -156,6 +159,7 @@
                                 class="text-danger">
                                 <div *ngIf="userForm.get('fax')?.errors?.['pattern']">Chiffres uniquement</div>
                             </div>
+                            <div *ngIf="faxExistant" class="text-danger">Ce Fax est déjà utilisé</div>
                         </c-col>
                     </c-row>
 
