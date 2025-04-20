@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { FormControl } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import {
   RowComponent, ColComponent, CardComponent, CardHeaderComponent,
   CardBodyComponent, FormControlDirective, FormDirective,
@@ -17,13 +16,13 @@ import { GererUtilisateurService } from '../utilisateurs/utilisateurs-basic-exam
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
+    ReactiveFormsModule,
     RowComponent, ColComponent,
     CardComponent, CardHeaderComponent,
     CardBodyComponent, FormControlDirective,
     FormDirective, FormLabelDirective,
     FormSelectDirective, ButtonDirective,
-    IconModule,
+    IconModule
   ],
   templateUrl: './profil.component.html',
   styleUrls: ['./profil.component.scss']
@@ -31,14 +30,21 @@ import { GererUtilisateurService } from '../utilisateurs/utilisateurs-basic-exam
 export class profil {
   userForm: FormGroup;
   user: any;
+  emailsExistants: string[] = [];
+  emailExistant: boolean = false;
 
-  // Options pour les selects
+  isEtudiant: boolean = false;
+
   filiereOptions = ['Informatique', 'GSIL', 'Mecatronique', 'Infotronique'];
   niveauOptions = ['PREMIERE', 'DEUXIEME', 'TROISIEME'];
   formationOptions = ['INGENIERIE', 'MASTERE'];
-  sexeoptions = ['HOMME', 'FEMME'];
+  sexeOptions = ['HOMME', 'FEMME'];
 
-  constructor(private fb: FormBuilder, private GererUtilisateurService: GererUtilisateurService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private gererUtilisateurService: GererUtilisateurService,
+    private router: Router
+  ) {
     this.userForm = this.fb.group({
       nom: ['', [Validators.required, Validators.minLength(2)]],
       prenom: ['', [Validators.required, Validators.minLength(2)]],
@@ -49,25 +55,45 @@ export class profil {
       email: ['', [Validators.required, Validators.email]],
       tel: ['', [Validators.pattern('[0-9]{8,15}'), Validators.required]],
       adresse: [''],
-      fax: ['', Validators.pattern('[0-9]+')],
+      fax: ['', [Validators.pattern('[0-9]+')]],
       filiere: ['', Validators.required],
       niveau: ['', Validators.required],
       formation: ['', Validators.required],
       option: ['']
     });
   }
+
   ngOnInit(): void {
     this.loadCurrentUser();
-  }
-  loadCurrentUser(): void {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    this.user = user
+
+    //this.getEmails();
   }
 
+  loadCurrentUser(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.user = user;
+    if (user.role.nom === 'ETUDIANT') {
+      this.isEtudiant = true;
+    }
+    this.userForm.patchValue(user);
+  }
+  /*
+    getEmails(): void {
+      this.gererUtilisateurService.getUtilisateurs().subscribe(
+        (utilisateurs: any[]) => {
+          this.emailsExistants = utilisateurs
+            .map(u => u.email?.toLowerCase()?.trim())
+            .filter(email => !!email && email !== this.user.email);
+        },
+        error => {
+          console.error("Erreur lors du chargement des emails", error);
+        }
+      );
+    }
+  */
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      // Validation
       if (file.size > 2 * 1024 * 1024) {
         alert('La taille du fichier ne doit pas dépasser 2MB');
         return;
@@ -77,79 +103,66 @@ export class profil {
         return;
       }
 
-      // Prévisualisation
       const reader = new FileReader();
       reader.onload = () => this.user.photo = reader.result as string;
       reader.readAsDataURL(file);
     }
   }
 
-  onSubmit(form: NgForm): void {
-    if (form.valid) {
-
-
-      Swal.fire({
-        title: 'Êtes-vous sûr ?',
-        text: 'Voulez vous modifier ces informations',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Oui, Modifier!',
-        cancelButtonText: 'Annuler',
-        reverseButtons: true
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // L'événement est confirmé
-          console.log(this.user)
-          this.GererUtilisateurService.updateProfile(this.user).subscribe(
-            (response) => {
-              console.log('Donnees modifiée avec succès', response);
-              localStorage.setItem('user', JSON.stringify(this.user));
-              window.location.reload();
-            },
-            (error) => {
-              console.error('Erreur lors de la modification', error);
-            }
-          );
-          // Ajouter la logique de confirmation ici
-        } else if (result.isDismissed) {
-          // L'événement est annulé
-          Swal.fire('Événement annulé', '', 'info');
-        }
-      });
-      // Ici vous ajouteriez l'appel à votre service
-      // this.userService.updateUser(this.user).subscribe(...)
-    } else {
-      console.log("Le formulaire est invalide");
+  onSubmit(): void {
+    if (this.userForm.invalid) {
+      this.markFormGroupTouched(this.userForm);
+      return;
     }
-  }
 
-  onCancel(): void {
-    // Logique d'annulation
+    const email = this.userForm.value.email?.toLowerCase().trim();
+    if (this.emailsExistants.includes(email)) {
+      this.emailExistant = true;
+      return;
+    }
+    this.emailExistant = false;
+
     Swal.fire({
       title: 'Êtes-vous sûr ?',
-      text: 'Voulez vous annuler ces modifications',
+      text: 'Voulez-vous modifier ces informations',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Oui, annuler!',
-      cancelButtonText: 'quiter sans annuler',
+      confirmButtonText: 'Oui, Modifier!',
+      cancelButtonText: 'Annuler',
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        // L'événement est confirmé
-        this.loadCurrentUser();
-        console.log('Modifications annulées');
-        // Ajouter la logique de confirmation ici
-      } else if (result.isDismissed) {
-        // L'événement est annulé
-        Swal.fire('Événement annulé', '', 'info');
+        const updatedUser = { ...this.user, ...this.userForm.value };
+        this.gererUtilisateurService.updateProfile(updatedUser).subscribe(
+          (response) => {
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+            Swal.fire('Succès!', 'Profil mis à jour avec succès', 'success');
+            this.loadCurrentUser();
+          },
+          (error) => {
+            Swal.fire('Erreur!', 'Une erreur est survenue', 'error');
+          }
+        );
       }
     });
   }
 
-  deletePhoto(): void {
-    this.user.photo = null;  // Reset the photo to null or set to default
+  onCancel(): void {
+    this.loadCurrentUser();
+    this.userForm.reset(this.user);
+    Swal.fire('Informations', 'Modifications annulées', 'info');
   }
 
+  deletePhoto(): void {
+    this.user.photo = null;
+  }
 
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
+  }
 }
-

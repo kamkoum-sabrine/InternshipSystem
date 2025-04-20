@@ -2,6 +2,7 @@
     width: 150px;
     height: 150px;
     object-fit: cover;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .avatar-edit {
@@ -16,7 +17,7 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); // Ombre légère pour l'icône
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7); // Ombre légère pour l'icône
 
     // Lorsque l'on survole l'icône
     &:hover {
@@ -41,7 +42,7 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); // Ombre légère pour l'icône
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7); // Ombre légère pour l'icône
 
     // Lorsque l'on survole l'icône
     &:hover {

@@ -5,7 +5,7 @@
                 <strong>Modification du profil</strong>
             </c-card-header>
             <c-card-body>
-                <form #form="ngForm" (ngSubmit)="onSubmit(form)" cForm>
+                <form [formGroup]="userForm" (ngSubmit)="onSubmit()" cForm>
 
                     <!-- Section Photo -->
                     <c-row class="mb-3">
@@ -18,183 +18,215 @@
                                     <input id="avatarUpload" type="file" (change)="onFileSelected($event)"
                                         accept="image/*" class="d-none">
                                 </label>
-                                <!-- Delete Button -->
-
                                 <label *ngIf="user.photo" for="avatarDelete" class="avatar-delete text-danger mt-2">
                                     <c-icon name="cil-trash"></c-icon>
                                 </label>
-                                <input *ngIf="user.photo" id="avatarDelete" type="button" class="d-none"
-                                    (click)="deletePhoto()" />
+                                <input id="avatarDelete" type="button" class="d-none" (click)="deletePhoto()" />
                             </div>
                             <small class="text-muted d-block mt-2">Formats: JPG, PNG, GIF - Max 2MB</small>
                         </c-col>
                     </c-row>
 
-                    <!-- Informations Personnelles -->
                     <h5 class="mb-3 border-bottom pb-2">Informations Personnelles</h5>
 
+                    <!-- Nom -->
                     <c-row class="mb-3">
-                        <label cLabel class="col-sm-2 col-form-label" for="nom">Nom</label>
+                        <label cLabel class="col-sm-2 col-form-label" for="nom">Nom <span
+                                class="text-danger">*</span></label>
                         <c-col sm="10">
-                            <input [(ngModel)]="user.nom" name="nom" cFormControl id="nom" required #nom="ngModel">
-                            <div *ngIf="nom.invalid && (nom.dirty || nom.touched)" class="text-danger">
-                                <div *ngIf="nom.errors?.['required']">Le nom est requis.</div>
+                            <input formControlName="nom" id="nom" type="text" cFormControl placeholder="Votre nom">
+                            <div *ngIf="userForm.get('nom')?.invalid && (userForm.get('nom')?.touched || userForm.get('nom')?.dirty)"
+                                class="text-danger">
+                                <div *ngIf="userForm.get('nom')?.errors?.['required']">Le nom est requis</div>
+                                <div *ngIf="userForm.get('nom')?.errors?.['minlength']">Minimum 2 caractères</div>
                             </div>
                         </c-col>
                     </c-row>
 
+                    <!-- Prénom -->
                     <c-row class="mb-3">
-                        <label cLabel class="col-sm-2 col-form-label" for="prenom">Prénom</label>
+                        <label cLabel class="col-sm-2 col-form-label" for="prenom">Prénom <span
+                                class="text-danger">*</span></label>
                         <c-col sm="10">
-                            <input [(ngModel)]="user.prenom" name="prenom" cFormControl id="prenom" required
-                                #prenom="ngModel">
-                            <div *ngIf="prenom.invalid && (prenom.dirty || prenom.touched)" class="text-danger">
-                                <div *ngIf="prenom.errors?.['required']">Le prénom est requis.</div>
+                            <input formControlName="prenom" id="prenom" type="text" cFormControl>
+                            <div *ngIf="userForm.get('prenom')?.invalid && (userForm.get('prenom')?.touched || userForm.get('prenom')?.dirty)"
+                                class="text-danger">
+                                <div *ngIf="userForm.get('prenom')?.errors?.['required']">Le prénom est requis</div>
+                                <div *ngIf="userForm.get('prenom')?.errors?.['minlength']">Minimum 2 caractères</div>
                             </div>
                         </c-col>
                     </c-row>
 
+                    <!-- CIN -->
                     <c-row class="mb-3">
-                        <label cLabel class="col-sm-2 col-form-label" for="cin">CIN</label>
+                        <label cLabel class="col-sm-2 col-form-label" for="cin">CIN <span
+                                class="text-danger">*</span></label>
                         <c-col sm="10">
-                            <input [(ngModel)]="user.cin" name="cin" cFormControl id="cin" pattern="[0-9]{8}"
-                                title="8 chiffres requis" #cin="ngModel">
-                            <div *ngIf="cin.invalid && (cin.dirty || cin.touched)" class="text-danger">
-                                <div *ngIf="cin.errors?.['pattern']">Le CIN doit contenir exactement 8 chiffres.</div>
+                            <input formControlName="cin" id="cin" type="text" cFormControl>
+                            <div *ngIf="userForm.get('cin')?.invalid && (userForm.get('cin')?.touched || userForm.get('cin')?.dirty)"
+                                class="text-danger">
+                                <div *ngIf="userForm.get('cin')?.errors?.['required']">Le CIN est requis</div>
+                                <div *ngIf="userForm.get('cin')?.errors?.['pattern']">8 chiffres requis</div>
                             </div>
                         </c-col>
                     </c-row>
 
+                    <!-- Sexe -->
                     <c-row class="mb-3">
-                        <label cLabel class="col-sm-2 col-form-label" for="sexe">Sexe</label>
+                        <label cLabel class="col-sm-2 col-form-label" for="sexe">Sexe <span
+                                class="text-danger">*</span></label>
                         <c-col sm="10">
-                            <select [(ngModel)]="user.sexe" name="sexe" aria-label="Default select example" cSelect
-                                cFormControl id="sexe" #sexe="ngModel">
+                            <select formControlName="sexe" id="sexe" cSelect cFormControl>
                                 <option value="">Sélectionner...</option>
-                                <option *ngFor="let f of sexeoptions" [value]="f">{{ f }}</option>
+                                <option *ngFor="let f of sexeOptions" [value]="f">{{ f }}</option>
                             </select>
-                            <div *ngIf="sexe.invalid && (sexe.dirty || sexe.touched)" class="text-danger">
-                                <div *ngIf="sexe.errors?.['required']">Le sexe est requis.</div>
+                            <div *ngIf="userForm.get('sexe')?.invalid && (userForm.get('sexe')?.touched || userForm.get('sexe')?.dirty)"
+                                class="text-danger">
+                                <div *ngIf="userForm.get('sexe')?.errors?.['required']">Le sexe est requis</div>
                             </div>
                         </c-col>
                     </c-row>
 
+                    <!-- Date de naissance -->
                     <c-row class="mb-3">
-                        <label cLabel class="col-sm-2 col-form-label" for="date">Date de naissance</label>
+                        <label cLabel class="col-sm-2 col-form-label" for="dateDeNaissance">Date de naissance <span
+                                class="text-danger">*</span></label>
                         <c-col sm="10">
-                            <input [(ngModel)]="user.dateDeNaissance" name="date" cFormControl id="date" type="date"
-                                required #date="ngModel">
-                            <div *ngIf="date.invalid && (date.dirty || date.touched)" class="text-danger">
-                                <div *ngIf="date.errors?.['required']">La date de naissance est requise.</div>
+                            <input formControlName="dateDeNaissance" id="dateDeNaissance" type="date" cFormControl>
+                            <div *ngIf="userForm.get('dateDeNaissance')?.invalid && (userForm.get('dateDeNaissance')?.touched || userForm.get('dateDeNaissance')?.dirty)"
+                                class="text-danger">
+                                <div *ngIf="userForm.get('dateDeNaissance')?.errors?.['required']">Date requise</div>
                             </div>
                         </c-col>
                     </c-row>
 
+                    <!-- Lieu de naissance -->
                     <c-row class="mb-3">
                         <label cLabel class="col-sm-2 col-form-label" for="lieuNaissance">Lieu de naissance</label>
                         <c-col sm="10">
-                            <input [(ngModel)]="user.lieuNaissance" name="lieuNaissance" cFormControl id="lieuNaissance"
-                                #lieuNaissance="ngModel">
+                            <input formControlName="lieuNaissance" id="lieuNaissance" type="text" cFormControl>
                         </c-col>
                     </c-row>
 
-                    <!-- Coordonnées -->
                     <h5 class="mb-3 border-bottom pb-2 mt-4">Coordonnées</h5>
 
+                    <!-- Email -->
                     <c-row class="mb-3">
-                        <label cLabel class="col-sm-2 col-form-label" for="email">Email</label>
+                        <label cLabel class="col-sm-2 col-form-label" for="email">Email <span
+                                class="text-danger">*</span></label>
                         <c-col sm="10">
-                            <input [(ngModel)]="user.email" name="email" cFormControl id="email" type="email" required
-                                #email="ngModel">
-                            <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger">
-                                <div *ngIf="email.errors?.['required']">L'email est requis.</div>
-                                <div *ngIf="email.errors?.['email']">L'email n'est pas valide.</div>
+                            <input formControlName="email" id="email" type="email" cFormControl>
+                            <div *ngIf="userForm.get('email')?.invalid && (userForm.get('email')?.touched || userForm.get('email')?.dirty)"
+                                class="text-danger">
+                                <div *ngIf="userForm.get('email')?.errors?.['required']">Email requis</div>
+                                <div *ngIf="userForm.get('email')?.errors?.['email']">Format email invalide</div>
+                            </div>
+                            <div *ngIf="emailExistant" class="text-danger">Cet email est déjà utilisé</div>
+                        </c-col>
+                    </c-row>
+
+                    <!-- Téléphone -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="tel">Téléphone <span
+                                class="text-danger">*</span></label>
+                        <c-col sm="10">
+                            <input formControlName="tel" id="tel" type="tel" cFormControl>
+                            <div *ngIf="userForm.get('tel')?.invalid && (userForm.get('tel')?.touched || userForm.get('tel')?.dirty)"
+                                class="text-danger">
+                                <div *ngIf="userForm.get('tel')?.errors?.['required']">Téléphone requis</div>
+                                <div *ngIf="userForm.get('tel')?.errors?.['pattern']">8 à 15 chiffres requis</div>
                             </div>
                         </c-col>
                     </c-row>
 
-                    <c-row class="mb-3">
-                        <label cLabel class="col-sm-2 col-form-label" for="tel">Téléphone</label>
-                        <c-col sm="10">
-                            <input [(ngModel)]="user.tel" name="tel" cFormControl id="tel" type="tel"
-                                pattern="[0-9]{8,15}" #tel="ngModel">
-                            <div *ngIf="tel.invalid && (tel.dirty || tel.touched)" class="text-danger">
-                                <div *ngIf="tel.errors?.['pattern']">Le téléphone doit comporter entre 8 et 15 chiffres.
-                                </div>
-                            </div>
-                        </c-col>
-                    </c-row>
-
+                    <!-- Adresse -->
                     <c-row class="mb-3">
                         <label cLabel class="col-sm-2 col-form-label" for="adresse">Adresse</label>
                         <c-col sm="10">
-                            <input [(ngModel)]="user.adresse" name="adresse" cFormControl id="adresse"
-                                #adresse="ngModel">
+                            <input formControlName="adresse" id="adresse" type="text" cFormControl>
                         </c-col>
                     </c-row>
 
+                    <!-- Fax -->
                     <c-row class="mb-3">
                         <label cLabel class="col-sm-2 col-form-label" for="fax">Fax</label>
                         <c-col sm="10">
-                            <input [(ngModel)]="user.fax" name="fax" cFormControl id="fax" pattern="[0-9]+"
-                                #fax="ngModel">
-                            <div *ngIf="fax.invalid && (fax.dirty || fax.touched)" class="text-danger">
-                                <div *ngIf="fax.errors?.['pattern']">Le fax doit comporter uniquement des chiffres.
-                                </div>
+                            <input formControlName="fax" id="fax" type="text" cFormControl>
+                            <div *ngIf="userForm.get('fax')?.invalid && (userForm.get('fax')?.touched || userForm.get('fax')?.dirty)"
+                                class="text-danger">
+                                <div *ngIf="userForm.get('fax')?.errors?.['pattern']">Chiffres uniquement</div>
                             </div>
                         </c-col>
                     </c-row>
 
-                    <!-- Informations Académiques -->
-                    <h5 class="mb-3 border-bottom pb-2 mt-4">Informations Académiques</h5>
+                    <h5 *ngIf="isEtudiant" class="mb-3 border-bottom pb-2 mt-4">Informations Académiques</h5>
 
-                    <c-row class="mb-3">
-                        <label cLabel class="col-sm-2 col-form-label" for="filiere">Filière</label>
+                    <!-- Filière -->
+                    <c-row *ngIf="isEtudiant" class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="filiere">Filière <span
+                                class="text-danger">*</span></label>
                         <c-col sm="10">
-                            <select [(ngModel)]="user.filiere" name="filiere" aria-label="Default select example"
-                                cSelect cFormControl id="filiere" #filiere="ngModel">
+                            <select formControlName="filiere" id="filiere" cSelect cFormControl>
                                 <option value="">Sélectionner...</option>
                                 <option *ngFor="let f of filiereOptions" [value]="f">{{ f }}</option>
                             </select>
+                            <div *ngIf="userForm.get('filiere')?.invalid && (userForm.get('filiere')?.touched || userForm.get('filiere')?.dirty)"
+                                class="text-danger">
+                                <div *ngIf="userForm.get('filiere')?.errors?.['required']">Filière requise</div>
+                            </div>
                         </c-col>
                     </c-row>
 
-                    <c-row class="mb-3">
-                        <label cLabel class="col-sm-2 col-form-label" for="niveau">Niveau</label>
+                    <!-- Niveau -->
+                    <c-row *ngIf="isEtudiant" class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="niveau">Niveau <span
+                                class="text-danger">*</span></label>
                         <c-col sm="10">
-                            <select [(ngModel)]="user.niveau" name="niveau" aria-label="Default select example" cSelect
-                                cFormControl id="niveau" #niveau="ngModel">
+                            <select formControlName="niveau" id="niveau" cSelect cFormControl>
                                 <option value="">Sélectionner...</option>
                                 <option *ngFor="let n of niveauOptions" [value]="n">{{ n }}</option>
                             </select>
+                            <div *ngIf="userForm.get('niveau')?.invalid && (userForm.get('niveau')?.touched || userForm.get('niveau')?.dirty)"
+                                class="text-danger">
+                                <div *ngIf="userForm.get('niveau')?.errors?.['required']">Niveau requis</div>
+                            </div>
                         </c-col>
                     </c-row>
 
-                    <c-row class="mb-3">
-                        <label cLabel class="col-sm-2 col-form-label" for="formation">Formation</label>
+                    <!-- Formation -->
+                    <c-row *ngIf="isEtudiant" class="mb-3">
+                        <label cLabel class="col-sm-2 col-form-label" for="formation">Formation <span
+                                class="text-danger">*</span></label>
                         <c-col sm="10">
-                            <select [(ngModel)]="user.formation" name="formation" aria-label="Default select example"
-                                cSelect cFormControl id="formation" #formation="ngModel">
+                            <select formControlName="formation" id="formation" cSelect cFormControl>
                                 <option value="">Sélectionner...</option>
                                 <option *ngFor="let f of formationOptions" [value]="f">{{ f }}</option>
                             </select>
+                            <div *ngIf="userForm.get('formation')?.invalid && (userForm.get('formation')?.touched || userForm.get('formation')?.dirty)"
+                                class="text-danger">
+                                <div *ngIf="userForm.get('formation')?.errors?.['required']">Formation requise</div>
+                            </div>
                         </c-col>
                     </c-row>
 
-                    <c-row class="mb-3">
+                    <!-- Option -->
+                    <c-row *ngIf="isEtudiant" class="mb-3">
                         <label cLabel class="col-sm-2 col-form-label" for="option">Option</label>
                         <c-col sm="10">
-                            <input [(ngModel)]="user.option" name="option" cFormControl id="option" #option="ngModel">
+                            <input formControlName="option" id="option" type="text" cFormControl>
                         </c-col>
                     </c-row>
+
 
 
                     <!-- Boutons -->
                     <c-row class="mt-4">
+                        <div class="col-sm-6 text-danger">Champs obligatoires marqués d'un (<span><b>*</b></span>)</div>
                         <c-col sm="12" class="d-flex justify-content-end">
                             <button cButton color="secondary" class="me-2" type="button"
                                 (click)="onCancel()">Annuler</button>
-                            <button cButton color="primary" type="submit" [disabled]="form.invalid">Enregistrer</button>
+                            <button cButton color="primary" type="submit"
+                                [disabled]="userForm.invalid">Enregistrer</button>
                         </c-col>
                     </c-row>
                 </form>
