@@ -1,0 +1,69 @@
+<c-row>
+    <c-col xs="12">
+        <c-card class="mb-4">
+            <c-card-header ngPreserveWhitespaces>
+                <strong>Dépôt de Livrable</strong>
+            </c-card-header>
+            <c-card-body>
+                <form (ngSubmit)="onSubmit()" cForm>
+
+                    <c-row *ngIf="errorMessage" class="mb-3">
+                        <c-col xs="12">
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Erreur :</strong> {{ errorMessage }}
+                                <button type="button" class="btn-close" (click)="errorMessage = null"
+                                    aria-label="Close"></button>
+                            </div>
+                        </c-col>
+                    </c-row>
+
+                    <!-- Titre -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-3 col-form-label">Titre</label>
+                        <c-col sm="9">
+                            <input [(ngModel)]="livrable.titre" name="titre" cFormControl type="text"
+                                placeholder="Titre du livrable" required />
+                        </c-col>
+                    </c-row>
+
+                    <!-- Type -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-3 col-form-label">Type</label>
+                        <c-col sm="9">
+                            <select [(ngModel)]="livrable.type" name="type" cFormControl cSelect required>
+                                <option *ngFor="let type of types" [value]="type">
+                                    {{ type }}
+                                </option>
+                            </select>
+                        </c-col>
+                    </c-row>
+
+                    <!-- Fichier -->
+                    <c-row class="mb-3">
+                        <label cLabel class="col-sm-3 col-form-label">Fichier</label>
+                        <c-col sm="9">
+                            <input type="file" (change)="onFileSelected($event)" accept="application/pdf"
+                                class="form-control" required />
+                            <small *ngIf="selectedFile" class="text-muted">
+                                Fichier sélectionné : {{ selectedFile.name }}
+                            </small>
+                        </c-col>
+                    </c-row>
+
+                    <!-- Actions -->
+                    <c-row class="mb-3 mt-4">
+                        <c-col sm="12" class="d-flex justify-content-end">
+                            <button cButton class="me-3" color="danger" type="button" (click)="onNoClick()">
+                                Annuler
+                            </button>
+                            <button cButton color="success" type="submit" [disabled]="!selectedFile">
+                                <i class="cil-save me-2"></i>Envoyer
+                            </button>
+                        </c-col>
+                    </c-row>
+
+                </form>
+            </c-card-body>
+        </c-card>
+    </c-col>
+</c-row>

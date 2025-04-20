@@ -1,0 +1,38 @@
+<div class="d-flex justify-content-end mb-3 ">
+    <button class="btn btn-success text-white me-5 mt-4" (click)="openDialog()">
+        Deposer un livrable
+    </button>
+</div>
+
+
+<c-smart-table [items]="livrables" [columns]="columns" [activePage]="1" [columnSorter]="true" [columnFilter]="true"
+    [itemsPerPageSelect]="true" [itemsPerPage]="10" [tableProps]="{ hover: true, striped: true }">
+    <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item">
+        <td>
+            <ng-container *ngIf="columnName === 'fichier'">
+                <a [href]="item.fichierPDFChemin" target="_blank" class="btn btn-link">
+                    {{ item.fichierPDFNom }}
+                </a>
+            </ng-container>
+
+            <ng-container *ngIf="columnName === 'etat'">
+                <c-badge [color]="getEtatColor(item.etat)">
+                    {{ item.etat }}
+                </c-badge>
+            </ng-container>
+
+            <ng-container *ngIf="columnName === 'action'">
+                <button cButton color="info" size="sm" (click)="openUpdateDialog(item.id)">
+                    <i class="fa fa-edit"></i>
+                </button>
+                <button cButton color="danger" size="sm" class="ms-2" (click)="deleteLivrable(item.id)">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </ng-container>
+
+            <ng-container *ngIf="!['fichier', 'etat', 'action'].includes(columnName)">
+                {{ item[columnName] }}
+            </ng-container>
+        </td>
+    </ng-template>
+</c-smart-table>

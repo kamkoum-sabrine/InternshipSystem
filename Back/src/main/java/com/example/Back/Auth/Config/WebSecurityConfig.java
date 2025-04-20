@@ -116,7 +116,14 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/conventionStagPFE/ValiderConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/conventionStagPFE/RefuserConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/conventionStagPFE/ConventionsAvecPreuveNonAnnulees").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
-
+                        // Endpoints Livrables
+                        .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/livrable/{etudiantId}").hasAnyAuthority("ROLE_ETUDIANT")
+                        .requestMatchers(HttpMethod.GET, "/api/livrable").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers(HttpMethod.POST, "/api/livrable").hasAnyAuthority("ROLE_ETUDIANT","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers(HttpMethod.PUT, "/api/livrable/**").hasAnyAuthority("ROLE_ETUDIANT","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers(HttpMethod.DELETE, "/api/livrable/**").hasAnyAuthority("ROLE_DIRECTION_STAGE")
+                        .requestMatchers(HttpMethod.DELETE, "/api/livrable/**").hasAnyAuthority("ROLE_SERVICE_STAGE")
 
                         .requestMatchers("/api/conventionStagEte/uploads/**").permitAll()//hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
                         .requestMatchers("/api/conventionStagPFE/uploads/**").permitAll()//hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
