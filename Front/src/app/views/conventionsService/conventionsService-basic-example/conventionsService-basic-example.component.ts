@@ -290,7 +290,7 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
       width: '600px',
       minWidth: '600px',  // Largeur minimale de 400px
       maxWidth: '600px',
-      data: { id: id }
+      data: { id: id, tabs: this.tabs }
     });
 
     dialogRef.afterClosed().subscribe(result => {

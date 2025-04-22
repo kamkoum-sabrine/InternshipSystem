@@ -309,8 +309,8 @@ public class ConventionStagePFEController {
          return ResponseEntity.badRequest().body("Cette convention est déja refusée");
          }**/
         convention.setValideeService(-1);
-        //String remarques = dto.getRemarquesService();
-       // convention.setRemarquesService(remarques);
+        String remarques = dto.getRemarquesService();
+        convention.setRemarques(remarques);
         conventionStagePFERepository.save(convention);
         Map<String, Object> response = new HashMap<>();
 

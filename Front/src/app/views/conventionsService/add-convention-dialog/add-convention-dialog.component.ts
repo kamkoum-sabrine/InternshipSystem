@@ -71,6 +71,7 @@ export class AddConventionDialogComponent {
   edit: any;
   idCovention: any
   extractedText: string = '';
+  tabs: any;
   constructor(private gererConventionsServiceService: GererConventionsServiceService,
     public dialogRef: MatDialogRef<AddConventionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, private pdfService: PdfService, private ocrService: OcrService,
@@ -78,6 +79,7 @@ export class AddConventionDialogComponent {
   ) {
     console.log("daaaaaataaaaa ", data.id)
     this.idCovention = data.id;
+    this.tabs = data.tabs;
     console.log("haw hnee ", this.idCovention)
   }
   async onFileSelected(event: any) {
@@ -110,31 +112,61 @@ export class AddConventionDialogComponent {
 
   // Soumettre le formulaire
   onSubmit(): void {
-    Swal.fire({
-      title: 'Êtes-vous sûr ?',
-      text: 'Voulez vous refuser cette conventions',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Oui, valider!',
-      cancelButtonText: 'Annuler',
-      reverseButtons: true
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.conventionsServicesService.refuserConvention(this.idCovention, this.convention).subscribe(data => {
-          console.log(data);
-          this.conventionsServicesService.getConventions().subscribe(data => {
-            // this.conventions = data
-            window.location.reload()
-          });
+    if (this.tabs == 0) {
+      Swal.fire({
+        title: 'Êtes-vous sûr ?',
+        text: 'Voulez vous refuser cette conventions',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Oui, valider!',
+        cancelButtonText: 'Annuler',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.conventionsServicesService.refuserConvention(this.idCovention, this.convention).subscribe(data => {
+            console.log(data);
+            this.conventionsServicesService.getConventions().subscribe(data => {
+              // this.conventions = data
+              window.location.reload()
+            });
 
-        });
-        Swal.fire('Convention refusée !', '', 'success');
-        // Ajouter la logique de confirmation ici
-      } else if (result.isDismissed) {
-        // L'événement est annulé
-        Swal.fire('Refus annulé', '', 'info');
-      }
-    });
+          });
+          Swal.fire('Convention refusée !', '', 'success');
+          // Ajouter la logique de confirmation ici
+        } else if (result.isDismissed) {
+          // L'événement est annulé
+          Swal.fire('Refus annulé', '', 'info');
+        }
+      });
+    }
+    else {
+      Swal.fire({
+        title: 'Êtes-vous sûr ?',
+        text: 'Voulez vous refuser cette conventions',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Oui, valider!',
+        cancelButtonText: 'Annuler',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.conventionsServicesService.refuserConventionPFE(this.idCovention, this.convention).subscribe(data => {
+            console.log(data);
+            this.conventionsServicesService.getConventions().subscribe(data => {
+              // this.conventions = data
+              window.location.reload()
+            });
+
+          });
+          Swal.fire('Convention refusée !', '', 'success');
+          // Ajouter la logique de confirmation ici
+        } else if (result.isDismissed) {
+          // L'événement est annulé
+          Swal.fire('Refus annulé', '', 'info');
+        }
+      });
+    }
+
 
     // if (this.isSubmitDisabled) return; // Empêche la soumission si désactivé
 
