@@ -45,6 +45,16 @@ export class ConventionsServiceService {
     });
   }
 
+  validerConventionPFE(id: number): Observable<any> {
+    const url = `${this.apiUrl}/conventionStagPFE/ValiderConvention/${id}`;
+    console.log('[Service] validerConvention - URL:', url);
+    return this.http.put(url, {}, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+
   refuserConvention(id: number, convention: any): Observable<any> {
     console.log(convention)
     const url = `${this.apiUrl}/conventionStagEte/RefuserConvention/${id}`;
@@ -54,5 +64,7 @@ export class ConventionsServiceService {
       }
     });
   }
+
+
 
 }
