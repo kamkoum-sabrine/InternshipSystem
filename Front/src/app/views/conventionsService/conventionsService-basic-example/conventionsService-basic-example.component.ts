@@ -31,6 +31,8 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
 
   usersData = usersData;
   @Input() conventions: any[] = [];;
+  @Input() tabs: any;
+
   @ViewChild('annulationModal') annulationModal!: TemplateRef<any>; // Ajoutez cette ligne
 
   selectedFile: File | null = null;
@@ -98,7 +100,15 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
   downloadPDF(nomFichier: string) {
     // console.log("nomFichier", nomFichier)
     // // const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
-    const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
+    let fileUrl;
+    if (this.tabs == 0) {
+      fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
+
+    }
+    else {
+      fileUrl = `http://localhost:8081/api/conventionStagPFE/uploads/${nomFichier}`;
+
+    }
 
     // const link = document.createElement("a");
     // link.href = fileUrl;
@@ -158,30 +168,58 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
     console.log("Id de la convention à annuler ", id);
   }
   approuverConvention(id: any) {
-    Swal.fire({
-      title: 'Êtes-vous sûr ?',
-      text: 'Voulez vous valider cette conventions',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Oui, valider!',
-      cancelButtonText: 'Annuler',
-      reverseButtons: true
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.conventionsServiceService.validerConvention(id).subscribe(data => {
-          console.log(data);
-          this.conventionsServiceService.getConventions().subscribe(data => {
-            this.conventions = data
-          });
+    if (this.tabs[0]) {
+      Swal.fire({
+        title: 'Êtes-vous sûr ?',
+        text: 'Voulez vous valider cette conventions',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Oui, valider!',
+        cancelButtonText: 'Annuler',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.conventionsServiceService.validerConvention(id).subscribe(data => {
+            console.log(data);
+            this.conventionsServiceService.getConventions().subscribe(data => {
+              this.conventions = data
+            });
 
-        });
-        Swal.fire('Covention validée !', '', 'success');
-        // Ajouter la logique de confirmation ici
-      } else if (result.isDismissed) {
-        // L'événement est annulé
-        Swal.fire('Validation annulé', '', 'info');
-      }
-    });
+          });
+          Swal.fire('Covention validée !', '', 'success');
+          // Ajouter la logique de confirmation ici
+        } else if (result.isDismissed) {
+          // L'événement est annulé
+          Swal.fire('Validation annulé', '', 'info');
+        }
+      });
+    } else {
+      Swal.fire({
+        title: 'Êtes-vous sûr ?',
+        text: 'Voulez vous valider cette conventions',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Oui, valider!',
+        cancelButtonText: 'Annuler',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.conventionsServiceService.validerConventionPFE(id).subscribe(data => {
+            console.log(data);
+            this.conventionsServiceService.getConventionsPFE().subscribe(data => {
+              this.conventions = data
+            });
+
+          });
+          Swal.fire('Covention validée !', '', 'success');
+          // Ajouter la logique de confirmation ici
+        } else if (result.isDismissed) {
+          // L'événement est annulé
+          Swal.fire('Validation annulé', '', 'info');
+        }
+      });
+    }
+
   }
   // changerEtatCompte(itemId: number, active: boolean) {
 
@@ -252,7 +290,7 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
       width: '600px',
       minWidth: '600px',  // Largeur minimale de 400px
       maxWidth: '600px',
-      data: { id: id }
+      data: { id: id, tabs: this.tabs }
     });
 
     dialogRef.afterClosed().subscribe(result => {
