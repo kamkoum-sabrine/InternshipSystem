@@ -126,6 +126,9 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/conventionStagPFE/ValiderConventionDirectionEnicar/{id}").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
 
 
+                        .requestMatchers("/api/conventionStage/validees-chef-departementETE").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
+                        .requestMatchers("/api/conventionStage/validees-chef-departementPFE").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
+
                         .requestMatchers("/api/conventionStagEte/uploads/**").permitAll()//hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
                         .requestMatchers("/api/conventionStagPFE/uploads/**").permitAll()//hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
 
