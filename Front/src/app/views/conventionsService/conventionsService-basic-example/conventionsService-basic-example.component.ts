@@ -98,8 +98,6 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
     });
   }
   downloadPDF(nomFichier: string) {
-    // console.log("nomFichier", nomFichier)
-    // // const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
     let fileUrl;
     if (this.tabs == 0) {
       fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
@@ -109,14 +107,6 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
       fileUrl = `http://localhost:8081/api/conventionStagPFE/uploads/${nomFichier}`;
 
     }
-
-    // const link = document.createElement("a");
-    // link.href = fileUrl;
-    // link.download = nomFichier;
-    // link.target = "_blank";
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
     fetch(fileUrl, {
       method: "GET",
       headers: {
@@ -169,7 +159,7 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
   }
   approuverConvention(id: any) {
     console.log(this.tabs);
-    if (this.tabs==0) {
+    if (this.tabs == 0) {
       Swal.fire({
         title: 'Êtes-vous sûr ?',
         text: 'Voulez vous valider cette conventions',
@@ -222,70 +212,6 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
     }
 
   }
-  // changerEtatCompte(itemId: number, active: boolean) {
-
-
-  //   if (active == true) {
-  //     Swal.fire({
-  //       title: 'Êtes-vous sûr ?',
-  //       text: 'Voulez vous désactiver ce comple',
-  //       icon: 'warning',
-  //       showCancelButton: true,
-  //       confirmButtonText: 'Oui, désactiver!',
-  //       cancelButtonText: 'Annuler',
-  //       reverseButtons: true
-  //     }).then((result) => {
-  //       if (result.isConfirmed) {
-  //         // L'événement est confirmé
-  //         this.gererConventionsServiceService.desactiverCompte(itemId).subscribe(data => {
-  //           this.gererConventionsServiceService.getUtilisateurs().subscribe(data => {
-  //             this.users = data
-  //           });
-  //           console.log(data);
-
-  //         });
-  //         Swal.fire('Compte désactivé !', '', 'success');
-  //         // Ajouter la logique de confirmation ici
-  //       } else if (result.isDismissed) {
-  //         // L'événement est annulé
-  //         Swal.fire('Événement annulé', '', 'info');
-  //       }
-  //     });
-
-  //   }
-  //   else {
-
-  //     Swal.fire({
-  //       title: 'Êtes-vous sûr ?',
-  //       text: 'Voulez vous activer ce comple',
-  //       icon: 'warning',
-  //       showCancelButton: true,
-  //       confirmButtonText: 'Oui, activer!',
-  //       cancelButtonText: 'Annuler',
-  //       reverseButtons: true
-  //     }).then((result) => {
-  //       if (result.isConfirmed) {
-  //         // L'événement est confirmé
-  //         this.gererUtilisateurService.activerCompte(itemId).subscribe(data => {
-  //           console.log(data);
-  //           this.utilisateursService.getUtilisateurs().subscribe(data => {
-  //             this.users = data
-  //           });
-
-  //         });
-  //         Swal.fire('Compte activé !', '', 'success');
-  //         // Ajouter la logique de confirmation ici
-  //       } else if (result.isDismissed) {
-  //         // L'événement est annulé
-  //         Swal.fire('Événement annulé', '', 'info');
-  //       }
-  //     });
-
-  //   }
-
-
-  // }
-
   openDialogRemarque(id: number): void {
     const dialogRef = this.dialog.open(AddConventionDialogComponent, {
       width: '600px',
@@ -297,7 +223,6 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         console.log('Editer utilisateur:', result);
-        // Logic to add the user
       }
     });
 
@@ -307,21 +232,17 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
   telechargerConvention() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-    // 1. Vérifier si l'objet user est vide
     if (Object.keys(user).length === 0) {
       Swal.fire('Erreur', 'Aucune donnée utilisateur trouvée.', 'error');
       return;
     }
 
-    // 2. Liste de TOUS les attributs (obligatoires + optionnels)
     const allAttributes = [
       'id', 'nom', 'prenom', 'email', 'cin', 'filiere', 'niveau', 'formation', 'tel'
     ];
 
-    // 3. Vérifier chaque attribut (même les optionnels)
     const invalidAttributes = allAttributes.filter(attr => {
       const value = user[attr];
-      // Vérifie si null, undefined, chaîne vide, ou objet role sans ID
       return (
         value === null ||
         value === undefined ||
@@ -331,7 +252,6 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
       );
     });
 
-    // 4. Si au moins un attribut est invalide
     if (invalidAttributes.length > 0) {
       Swal.fire({
         title: 'Profil incomplet',
@@ -348,7 +268,7 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
         cancelButtonText: 'Annuler',
         reverseButtons: true,
         customClass: {
-          popup: 'swal2-popup-custom' // Optionnel : pour du CSS personnalisé
+          popup: 'swal2-popup-custom'
         }
       }).then((result) => {
         if (result.isConfirmed) {
@@ -359,8 +279,6 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
       });
       return;
     }
-
-    // 5. Si tout est valide, lancer le téléchargement
     this.gererConventionsServiceService.downloadPdf(user.id);
     this.gererConventionsServiceService.downloadWord(user.id);
 
