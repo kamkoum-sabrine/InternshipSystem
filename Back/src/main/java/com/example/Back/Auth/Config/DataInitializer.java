@@ -69,11 +69,13 @@ public class DataInitializer implements CommandLineRunner {
             Role serviceRole = new Role(null, "SERVICE_STAGE");
             Role directionRole = new Role(null, "DIRECTION_STAGE");
             Role etudiantRole = new Role(null, "ETUDIANT");
+            Role ComiteStageRole = new Role(null, "COMIE_STAGE");
 
             roleRepository.save(adminRole);
             roleRepository.save(serviceRole);
             roleRepository.save(directionRole);
             roleRepository.save(etudiantRole);
+
 
             User superAdminUser = new User(null, "Kamkoum", "Sabrine", "kamkoumsabrine@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"),
 

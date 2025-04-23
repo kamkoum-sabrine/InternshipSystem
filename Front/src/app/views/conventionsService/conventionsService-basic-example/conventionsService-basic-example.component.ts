@@ -168,7 +168,8 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
     console.log("Id de la convention à annuler ", id);
   }
   approuverConvention(id: any) {
-    if (this.tabs[0]) {
+    console.log(this.tabs);
+    if (this.tabs==0) {
       Swal.fire({
         title: 'Êtes-vous sûr ?',
         text: 'Voulez vous valider cette conventions',
