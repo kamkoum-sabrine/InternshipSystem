@@ -115,6 +115,9 @@ public class ConventionStageEteController {
             convention.setFichierPDFChemin(filePath.toString());
             convention.setValideeService(0);
             convention.setValideeDirection(0);
+            convention.setValideeDirectionEnicar(0);
+            convention.setValideeChefDepartement(0);
+            convention.setValideeComite(0);
             convention.setAnnulee(-2);
 
             ConventionStageEte savedConvention = conventionStageEteRepository.save(convention);

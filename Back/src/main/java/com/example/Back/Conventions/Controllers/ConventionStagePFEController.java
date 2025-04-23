@@ -122,6 +122,10 @@ public class ConventionStagePFEController {
             convention.setFichierPDFNom(fileName);
             convention.setFichierPDFChemin(filePath.toString());
             convention.setValideeService(0);
+            convention.setValideeDirection(0);
+            convention.setValideeDirectionEnicar(0);
+            convention.setValideeChefDepartement(0);
+            convention.setValideeComite(0);
             convention.setAnnulee(0);
 
             ConventionStagePFE savedConvention = conventionStagePFEService.saveConvetionStagePFE(convention);
