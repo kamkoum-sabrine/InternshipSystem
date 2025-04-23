@@ -155,6 +155,7 @@ export class AddConventionDialogComponent {
             this.conventionsServicesService.getConventions().subscribe(data => {
               // this.conventions = data
               window.location.reload()
+
             });
 
           });
