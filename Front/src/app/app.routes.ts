@@ -93,6 +93,10 @@ export const routes: Routes = [
           }*/
       },
       {
+        path: 'conventionsDirectionEnicar',
+        loadChildren: () => import('./views/conventionsDirectionEnicar/routes').then((m) => m.routes)
+      },
+      {
         path: 'demandesAnnulationConvention',
         loadChildren: () => import('./views/conventionsService/non-annulees-table/routes').then((m) => m.routes)
 
