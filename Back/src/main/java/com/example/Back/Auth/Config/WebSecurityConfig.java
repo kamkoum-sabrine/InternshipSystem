@@ -125,6 +125,16 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/conventionStagPFE/RefuserConventionDirectionEnicar/{id}").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
                         .requestMatchers("/api/conventionStagPFE/ValiderConventionDirectionEnicar/{id}").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
 
+                        .requestMatchers("/api/conventionStagPFE/RefuserConventionChefDepartement/{id}").hasAnyAuthority( "ROLE_CHEF_DEPARTEMENT_INFO","ROLE_CHEF_DEPARTEMENT_ELECTRIQUE","ROLE_CHEF_DEPARTEMENT_INDUS" )
+                        .requestMatchers("/api/conventionStagPFE/ValiderConventionChefDepartement/{id}").hasAnyAuthority( "ROLE_CHEF_DEPARTEMENT_INFO","ROLE_CHEF_DEPARTEMENT_ELECTRIQUE","ROLE_CHEF_DEPARTEMENT_INDUS")
+
+                        .requestMatchers("/api/conventionStagEte/RefuserConventionChefDepartement/{id}").hasAnyAuthority( "ROLE_CHEF_DEPARTEMENT_INFO","ROLE_CHEF_DEPARTEMENT_ELECTRIQUE","ROLE_CHEF_DEPARTEMENT_INDUS" )
+                        .requestMatchers("/api/conventionStagEte/ValiderConventionChefDepartement/{id}").hasAnyAuthority( "ROLE_CHEF_DEPARTEMENT_INFO","ROLE_CHEF_DEPARTEMENT_ELECTRIQUE","ROLE_CHEF_DEPARTEMENT_INDUS")
+
+
+                        .requestMatchers("/api/conventionStagPFE/RefuserConventionChefDepartement/{id}").hasAnyAuthority( "ROLE_CHEF_DEPARTEMENT_INFO","ROLE_CHEF_DEPARTEMENT_ELECTRIQUE","ROLE_CHEF_DEPARTEMENT_INDUS" )
+                        .requestMatchers("/api/conventionStagPFE/ValiderConventionChefDepartement/{id}").hasAnyAuthority( "ROLE_CHEF_DEPARTEMENT_INFO","ROLE_CHEF_DEPARTEMENT_ELECTRIQUE","ROLE_CHEF_DEPARTEMENT_INDUS")
+
 
                         .requestMatchers("/api/conventionStage/validees-chef-departementETE").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
                         .requestMatchers("/api/conventionStage/validees-chef-departementPFE").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")

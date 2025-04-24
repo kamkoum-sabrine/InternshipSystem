@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -328,8 +329,8 @@ public class ConventionStagePFEController {
     }
 
 
-    @PutMapping("/ValiderConventionDirectionEnicar/{id}")
-    public ResponseEntity<?> ValiderConventionDirectionEnicar(@PathVariable Long id)
+    @PutMapping("/ValiderConventionChefDepartement/{id}")
+    public ResponseEntity<?> ValiderConventionChefDepartement(@PathVariable Long id)
     {
         Optional<ConventionStagePFE> conventionOptional = conventionStagePFERepository.findById(id);
         if (conventionOptional.isEmpty()) {
@@ -342,7 +343,7 @@ public class ConventionStagePFEController {
          if (convention.getValideeService() ==1 ) {
          return ResponseEntity.badRequest().body("Cette convention est déja validée");
          }**/
-        convention.setValideeDirectionEnicar(1);
+        convention.setValideeChefDepartement(1);
         conventionStagePFERepository.save(convention);
         Map<String, Object> response = new HashMap<>();
 
@@ -385,6 +386,94 @@ public class ConventionStagePFEController {
         // return ResponseEntity.ok("Convention refusée avec succes");
     }
 
+
+    @PutMapping("/ValiderConventionDirectionEnicar/{id}")
+    public ResponseEntity<?> ValiderConventionDirectionEnicar(@PathVariable Long id)
+    {
+        Optional<ConventionStagePFE> conventionOptional = conventionStagePFERepository.findById(id);
+        if (conventionOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Convention non trouvée");
+        }
+        ConventionStagePFE convention = conventionOptional.get();
+        /** if (convention.getValideeService() == -1) {
+         return ResponseEntity.badRequest().body("Cette convention n'est pas validée.");
+         }
+         if (convention.getValideeService() ==1 ) {
+         return ResponseEntity.badRequest().body("Cette convention est déja validée");
+         }**/
+        try {
+            // Valider
+            convention.setValideeDirectionEnicar(1);
+
+            // Signature PDF
+            String cheminOriginal = convention.getFichierPDFChemin();
+            String nomPDF = convention.getFichierPDFNom();
+            String signaturePath = "src/main/resources/static/images/signature.png";
+            //String dossierDestination = "src/main/resources/static/images/signature_direction.png"; // À adapter
+            String dossierDestination = "uploads/conventionsSignes";
+
+            // Créer le dossier s'il n'existe pas
+            File dir = new File(dossierDestination);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            // Ajouter la signature
+            System.out.println("chemiiiiiiiiiiinnn ");
+
+            String nouveauChemin = PDFSignatureUtils.ajouterSignatureDirectionPFE(cheminOriginal, nomPDF, signaturePath, dossierDestination);
+            System.out.println("chemiiiiiiiiiiinnn "+nouveauChemin);
+            System.out.println("✅ Nouveau chemin généré : " + nouveauChemin);
+            File testFile = new File(nouveauChemin);
+            System.out.println("📁 Existe-t-il ? " + testFile.exists());
+
+            // Mise à jour de la convention
+            convention.setFichierPDFChemin(nouveauChemin);
+            convention.setFichierPDFNom("SIGNE_" + nomPDF);
+            conventionStagePFERepository.save(convention);
+            System.out.println(convention.getFichierPDFChemin());
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Convention validée et signée avec succès");
+            response.put("status", HttpStatus.ACCEPTED.value());
+
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de la signature : " + e.getMessage());
+        }
+    }
+
+
+    @PutMapping("/RefuserConventionChefDepartement/{id}")
+    public ResponseEntity<?> RefuserConventionChefDepartement(@PathVariable Long id)
+    {
+        Optional<ConventionStagePFE> conventionOptional = conventionStagePFERepository.findById(id);
+        if (conventionOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Convention non trouvée");
+        }
+        ConventionStagePFE convention = conventionOptional.get();
+        /** if (convention.getValideeService() == 1) {
+         return ResponseEntity.badRequest().body("Cette convention a été validée précedemment");
+         }
+         if (convention.getValideeService() ==-1 ) {
+         return ResponseEntity.badRequest().body("Cette convention est déja refusée");
+         }**/
+        convention.setValideeChefDepartement(-1);
+        // String remarques = dto.getRemarquesService();
+        // convention.setRemarques(remarques);
+        conventionStagePFERepository.save(convention);
+        Map<String, Object> response = new HashMap<>();
+
+
+        response.put("message", "Convention refusée avec succes");
+        response.put("status", HttpStatus.ACCEPTED.value());
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+        // return ResponseEntity.ok("Convention refusée avec succes");
+    }
 
 
 }
