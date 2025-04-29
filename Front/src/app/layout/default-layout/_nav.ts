@@ -50,6 +50,13 @@ export const navItems: INavDataExtended[] = [
     roles: ['SERVICE_STAGE']
   },
   {
+     name :'Les conventions',
+      url : '/ConventionsComiteChef',
+      iconComponent : { name : 'cil-file' },
+    roles: ['COMITE_CHEF_DEPARTEMENT']
+  },
+  
+  {
     name: 'Les conventions',
     url: '/conventionsDirectionEnicar',
     iconComponent: { name: 'cil-file' },
