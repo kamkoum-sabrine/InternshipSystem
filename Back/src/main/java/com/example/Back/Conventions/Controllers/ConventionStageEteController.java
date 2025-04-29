@@ -333,7 +333,7 @@ public class ConventionStageEteController {
             String nomPDF = convention.getFichierPDFNom();
             String signaturePath = "src/main/resources/static/images/signature.png";
             //String dossierDestination = "src/main/resources/static/images/signature_direction.png"; // À adapter
-            String dossierDestination = "uploads/conventionsSignes";
+            String dossierDestination = "uploads/conventionsStageEte";
 
             // Créer le dossier s'il n'existe pas
             File dir = new File(dossierDestination);

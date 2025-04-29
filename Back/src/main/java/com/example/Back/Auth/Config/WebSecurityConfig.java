@@ -87,10 +87,11 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/conventionStagPFE/getMyConventions/{id}").hasAnyAuthority("ROLE_ETUDIANT","ROLE_SERVICE_STAGE")
 
 
+                        .requestMatchers("/api/pdf/PFE/convention/word/{id}").permitAll()
 
-                        .requestMatchers("/api/pdf/convention/{id}").hasAnyAuthority("ROLE_ETUDIANT")
-                        .requestMatchers("/api/pdf//convention/word/{id}").hasAnyAuthority("ROLE_ETUDIANT")
-                        .requestMatchers("/api/pdf/PFE/convention/word/{id}").hasAnyAuthority("ROLE_ETUDIANT")
+                        .requestMatchers("/api/pdf/convention/word/{id}").permitAll()
+
+                        .requestMatchers("/api/pdf/convention/{id}").permitAll()
 
                         .requestMatchers("/api/conventionStagEte/uploadPreuveAnnulation/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT")
                         .requestMatchers("/api/conventionStagEte/annuler/{conventionId}").hasAnyAuthority( "ROLE_SERVICE_STAGE")

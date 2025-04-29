@@ -81,7 +81,7 @@ public class PDFSignatureUtils {
         // Ajouter image de signature
         Image signature = Image.getInstance(signaturePath);
         signature.scaleAbsolute(100, 50);
-        signature.setAbsolutePosition(370, 20); // Position bas de page
+        signature.setAbsolutePosition(370, 180); // Position bas de page
         stamper.getOverContent(pageCible).addImage(signature);
 
         // Ajouter la date de signature
