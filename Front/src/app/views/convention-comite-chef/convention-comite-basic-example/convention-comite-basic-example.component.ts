@@ -4,7 +4,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'; // Ajoutez cet import
 import { Router } from '@angular/router';
-import { ConventionsComiteChefServiceService } from '../conventions-comite-chef-service.service';
 import {
   BadgeComponent,
   ButtonDirective,
@@ -16,17 +15,19 @@ import {
 } from '@coreui/angular-pro';
 import Swal from 'sweetalert2';
 import { AddConventionDialogComponent } from '../add-convention-dialog/add-convention-dialog.component';
+import { ConventionComiteService } from '../convention-comite.service';
 import usersData from '../_data';
-import {GererConventionsService} from './gerer-conventionsService.service';
+import { GererConventionsService } from './gerer-conventions.service';
+
 @Component({
-  selector: 'app-conventions-comite-chef-basic-example',
- 
+  selector: 'app-conventionsComite-basic-example',
+  templateUrl:'convention-comite-basic-example.component.html',
+  styleUrls: ['./convention-comite-basic-example.component.scss'],
   standalone: true,
-  imports: [CommonModule, BadgeComponent, ButtonDirective, CollapseDirective, SmartTableComponent, TemplateIdDirective, TextColorDirective],
-    templateUrl: './conventions-comite-chef-basic-example.component.html',
-  styleUrl: './conventions-comite-chef-basic-example.component.scss'
+  imports: [CommonModule, BadgeComponent, ButtonDirective, CollapseDirective, SmartTableComponent, TemplateIdDirective, TextColorDirective]
 })
-export class ConventionsComiteChefBasicExampleComponent {
+export class ConventionComiteBasicExampleComponent implements OnInit {
+
   usersData = usersData;
   @Input() conventions: any[] = [];;
   @Input() tabs: any;
@@ -64,7 +65,7 @@ export class ConventionsComiteChefBasicExampleComponent {
   ];
   details_visible = Object.create({});
 
-  constructor(private cdr: ChangeDetectorRef, private router: Router, private gererconventions: GererConventionsService, public dialog: MatDialog, private modalService: NgbModal, private service: ConventionsComiteChefServiceService) { }
+  constructor(private cdr: ChangeDetectorRef, private router: Router, private gservice: GererConventionsService, public dialog: MatDialog, private modalService: NgbModal, private service: ConventionComiteService) { }
 
 
 
@@ -277,8 +278,8 @@ export class ConventionsComiteChefBasicExampleComponent {
       });
       return;
     }
-    this.gererconventions.downloadPdf(user.id);
-    this.gererconventions.downloadWord(user.id);
+    this.gservice.downloadPdf(user.id);
+    this.gservice.downloadWord(user.id);
 
 
   }
@@ -310,8 +311,10 @@ export class ConventionsComiteChefBasicExampleComponent {
     this.currentConventionId = conventionId;
     this.modalService.open(this.annulationModal);
   }
-  
-  
+
+
+
+
+
+
 }
-
-

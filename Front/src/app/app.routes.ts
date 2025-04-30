@@ -81,10 +81,14 @@ export const routes: Routes = [
         path: 'conventionsEtudiant',
         loadChildren: () => import('./views/conventionsEtudiants/routes').then((m) => m.routes)
       },
-    {
-      path: 'ConventionsComiteChef',
-      loadChildren: () => import('./views/conventions-comite-chef/routes').then((m) => m.routes)
-    },
+   
+
+     { 
+      path : 'ConventionsComiteChef',
+      loadChildren: () => import('./views/convention-comite-chef/routes').then((m) => m.routes)
+     },
+
+
       {
         path: 'conventionsService',
         loadChildren: () => import('./views/conventionsService/routes').then((m) => m.routes)

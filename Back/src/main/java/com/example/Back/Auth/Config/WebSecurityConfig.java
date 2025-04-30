@@ -103,8 +103,11 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/conventionStagEte/downloadPreuveAnnulation/{conventionId}").hasAnyAuthority( "ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
                         .requestMatchers("/api/conventionStagPFE/ValiderConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
                         .requestMatchers("/api/conventionStagPFE/RefuserConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
+
                         .requestMatchers("/api/conventionStagEte/ValiderConventionDirectionEnicar/{id}").hasAnyAuthority( "ROLE_DIRECTION_ENICAR","ROLE_COMITE_CHEF_DEPARTEMENT")
                         .requestMatchers("/api/conventionStagEte/RefuserConventionDirectionEnicar/{id}").hasAnyAuthority( "ROLE_DIRECTION_ENICAR","ROLE_COMITE_CHEF_DEPARTEMENT")
+                        .requestMatchers("/api/conventionStagEte/ValiderConventionComiteChef/{id}").hasAnyAuthority( "ROLE_COMITE_CHEF_DEPARTEMENT")
+                        .requestMatchers("/api/conventionStagEte/RefuserConventionComiteChef/{id}").hasAnyAuthority( "ROLE_COMITE_CHEF_DEPARTEMENT")
 
 
 
@@ -118,6 +121,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/conventionStagPFE/annuler/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT","ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
                         .requestMatchers("/api/conventionStagPFE/refuserAnnulation/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT","ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
                         .requestMatchers("/api/conventionStagPFE/ValiderConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
+
                         .requestMatchers("/api/conventionStagPFE/RefuserConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
                         .requestMatchers("/api/conventionStagPFE/ConventionsAvecPreuveNonAnnulees").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
                         .requestMatchers("/api/conventionStagPFE/getConventions").hasAnyAuthority( "ROLE_SERVICE_STAGE","ROLE_DIRECTION_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
