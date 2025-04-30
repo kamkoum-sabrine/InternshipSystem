@@ -82,12 +82,12 @@ export class ConventionComiteBasicExampleComponent implements OnInit {
 
 
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(AddConventionDialogComponent, {
-      width: '600px',
-      minWidth: '600px',  // Largeur minimale de 400px
-      maxWidth: '600px',
-    });
+   openDialog(): void {
+      const dialogRef = this.dialog.open(AddConventionDialogComponent, {
+        width: '600px',
+        minWidth: '600px',  // Largeur minimale de 400px
+        maxWidth: '600px',
+      });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -211,21 +211,22 @@ export class ConventionComiteBasicExampleComponent implements OnInit {
     }
 
   }
-  openDialogRemarque(id: number): void {
-    const dialogRef = this.dialog.open(AddConventionDialogComponent, {
-      width: '600px',
-      minWidth: '600px',  // Largeur minimale de 400px
-      maxWidth: '600px',
-      data: { id: id, tabs: this.tabs }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log('Editer utilisateur:', result);
-      }
-    });
-
-  }
+   
+    openDialogRemarque(id: number): void {
+      const dialogRef = this.dialog.open(AddConventionDialogComponent, {
+        width: '600px',
+        minWidth: '600px',  // Largeur minimale de 400px
+        maxWidth: '600px',
+        data: { id: id, tabs: this.tabs }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          console.log('Editer utilisateur:', result);
+        }
+      });
+  
+    }
 
 
   telechargerConvention() {
