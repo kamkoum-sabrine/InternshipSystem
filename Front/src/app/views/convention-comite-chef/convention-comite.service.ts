@@ -45,7 +45,7 @@ export class ConventionComiteService {
    }
  
    validerConventionPFE(id: number): Observable<any> {
-     const url = `${this.apiUrl}/conventionStagPFE/ValiderConvention/${id}`;
+     const url = `${this.apiUrl}/conventionStagPFE/ValiderConventionComiteChef/${id}`;
      console.log('[Service] validerConvention - URL:', url);
      return this.http.put(url, {}, {
        headers: {
@@ -66,7 +66,7 @@ export class ConventionComiteService {
  
    refuserConventionPFE(id: number, convention: any): Observable<any> {
      console.log(convention)
-     const url = `${this.apiUrl}/conventionStagPFE/RefuserConvention/${id}`;
+     const url = `${this.apiUrl}/conventionStagPFE/RefuserConventionComiteChef/${id}`;
      return this.http.put(url, convention, {
        headers: {
          'Content-Type': 'application/json'

@@ -72,44 +72,51 @@ export class ConventionComiteBasicExampleComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['conventions']) {
       console.log('Nouvelle valeur de conventions :', this.conventions);
-      this.cdr.detectChanges(); // Force la mise à jour de la vue
+      this.cdr.detectChanges();
     }
   }
+
   ngOnInit() {
     console.log('Valeur reçue du parent:', this.conventions);
+  }
 
+  getBadge(status: number) {
+    switch (status) {
+      case 1: return 'success';
+      case -1: return 'danger';
+      case 0: return 'warning';
+      default: return 'primary';
+    }
   }
 
 
 
-   openDialog(): void {
-      const dialogRef = this.dialog.open(AddConventionDialogComponent, {
-        width: '600px',
-        minWidth: '600px',  // Largeur minimale de 400px
-        maxWidth: '600px',
-      });
+  openDialog(): void {
+    const dialogRef = this.dialog.open(AddConventionDialogComponent, {
+      width: '600px',
+      minWidth: '600px',
+      maxWidth: '600px',
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         console.log('Nouvelle soutenance:', result);
-        // Logic to add the user
       }
     });
   }
+
   downloadPDF(nomFichier: string) {
     let fileUrl;
     if (this.tabs == 0) {
       fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
-
-    }
-    else {
+    } else {
       fileUrl = `http://localhost:8081/api/conventionStagPFE/uploads/${nomFichier}`;
-
     }
+    
     fetch(fileUrl, {
       method: "GET",
       headers: {
-        "Authorization": `Bearer ${localStorage.getItem("token")}`, // Récupère le token si JWT est utilisé
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
       },
     })
       .then(response => {
@@ -125,21 +132,11 @@ export class ConventionComiteBasicExampleComponent implements OnInit {
       .catch(error => console.error("Erreur lors du téléchargement :", error));
   }
 
+
   getItem(item: any) {
     console.log("item " + item)
   }
-  getBadge(status: number) {
-    switch (status) {
-      case 1:
-        return 'success';
-      case -1:
-        return 'danger';
-      case 0:
-        return 'warning';
-      default:
-        return 'primary';
-    }
-  }
+  
 
   toggleDetails(itemId: number) {
     console.log("Avant :", this.details_visible[itemId]);
@@ -149,19 +146,21 @@ export class ConventionComiteBasicExampleComponent implements OnInit {
 
     console.log("Après :", this.details_visible[itemId]);
   }
+  
+  annulerDemande(id: any) {
+    console.log("Id de la convention à annuler ", id);
+  }
   getDate(dateDepot: any) {
     const formattedDate = dateDepot.split("T")[0] + " " + dateDepot.split("T")[1].split(".")[0];
     return formattedDate;
   }
-  annulerDemande(id: any) {
-    console.log("Id de la convention à annuler ", id);
-  }
+
   approuverConvention(id: any) {
     console.log(this.tabs);
     if (this.tabs == 0) {
       Swal.fire({
         title: 'Êtes-vous sûr ?',
-        text: 'Voulez vous valider cette conventions',
+        text: 'Voulez-vous valider cette convention en tant que comité?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Oui, valider!',
@@ -172,21 +171,18 @@ export class ConventionComiteBasicExampleComponent implements OnInit {
           this.service.validerConvention(id).subscribe(data => {
             console.log(data);
             this.service.getConventions().subscribe(data => {
-              this.conventions = data
+              this.conventions = data;
             });
-
           });
-          Swal.fire('Covention validée !', '', 'success');
-          // Ajouter la logique de confirmation ici
+          Swal.fire('Convention validée par le comité !', '', 'success');
         } else if (result.isDismissed) {
-          // L'événement est annulé
-          Swal.fire('Validation annulé', '', 'info');
+          Swal.fire('Validation annulée', '', 'info');
         }
       });
     } else {
       Swal.fire({
         title: 'Êtes-vous sûr ?',
-        text: 'Voulez vous valider cette conventions',
+        text: 'Voulez-vous valider cette convention en tant que comité?',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Oui, valider!',
@@ -197,20 +193,17 @@ export class ConventionComiteBasicExampleComponent implements OnInit {
           this.service.validerConventionPFE(id).subscribe(data => {
             console.log(data);
             this.service.getConventionsPFE().subscribe(data => {
-              this.conventions = data
+              this.conventions = data;
             });
-
           });
-          Swal.fire('Covention validée !', '', 'success');
-          // Ajouter la logique de confirmation ici
+          Swal.fire('Convention validée par le comité !', '', 'success');
         } else if (result.isDismissed) {
-          // L'événement est annulé
-          Swal.fire('Validation annulé', '', 'info');
+          Swal.fire('Validation annulée', '', 'info');
         }
       });
     }
-
   }
+   
    
     openDialogRemarque(id: number): void {
       const dialogRef = this.dialog.open(AddConventionDialogComponent, {
