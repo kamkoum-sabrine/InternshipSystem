@@ -31,7 +31,7 @@ export const navItems: INavDataExtended[] = [
     url: '/entreprises',
     iconComponent: { name: 'cil-LocationPin' },
 
-    roles: ['SERVICE_STAGE', 'DIRECTION_STAGE','COMITE_CHEF_DEPARTEMENT']
+    roles: ['SERVICE_STAGE', 'DIRECTION_STAGE']
   },
   {
     name: 'Mes conventions',

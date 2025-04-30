@@ -3,57 +3,67 @@
     [sorterValue]="{ column: 'name', state: 'asc' }" [tableFilter]="true"
     [tableProps]="{ hover: true, striped: true, responsive: true }" [tableBodyProps]="{ align: 'middle' }" cleaner
     clickableRows footer header pagination>
-  
+
     <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
       <td>
         <ng-container
           *ngIf="columnName !== 'action' && columnName !== 'valideeService' && columnName !== 'etudiant' && columnName !== 'dateDepot'  && columnName !== 'fichierPDFNom'">
           {{ item[columnName] }}
         </ng-container>
-        <ng-container *ngIf=" columnName==='etudiant'">
+        
+        <ng-container *ngIf="columnName==='etudiant'">
           {{item[columnName].nom}} {{item[columnName].prenom}}
         </ng-container>
-  
-        <!-- Pour la colonne 'Action', afficher les boutons de suppression et de modification -->
+
+        <!-- Colonne Actions -->
         <ng-container *ngIf="columnName==='actions'">
-            <!-- Affiche les boutons seulement si la convention n'est pas refusée par le service -->
-            <ng-container *ngIf="item.valideeService !== -1">
-              <button cButton color="success" size="sm" (click)="approuverConvention(item.id)">
-                <i class="fa fa-check" style="color: #ffffff;"></i>
-              </button>
-              <button cButton class="ms-1" color="danger" size="sm" (click)="openDialogRemarque(item.id)">
-                <i class="fa fa-trash" style="color: #ffffff;"></i>
-              </button>
-            </ng-container>
+          <!-- Boutons uniquement si validé par le service -->
+          <ng-container *ngIf="item.valideeService === 1">
+            <button cButton color="success" size="sm" (click)="approuverConvention(item.id)">
+              <i class="fa fa-check" style="color: #ffffff;"></i>
+            </button>
+            <button cButton class="ms-1" color="danger" size="sm" (click)="openDialogRemarque(item.id)">
+              <i class="fa fa-trash" style="color: #ffffff;"></i>
+            </button>
+          </ng-container>
           
-            <!-- Affiche un message si refusée par le service -->
-            <span *ngIf="item.valideeService === -1" class="text-muted">
-              Action non disponible (Refusée par le service)
-            </span>
-          </ng-container>
-  
-          <ng-container *ngIf="columnName === 'valideeService'">
-            <c-badge [color]="getBadge(item.valideeService)">
-              {{ item.valideeService == 0 ? 'En attente' : (item.valideeService === 1 ? 'Validée par le service' : 'Refusée par le service') }}
+          <!-- Messages d'état -->
+          <span *ngIf="item.valideeService === 0" class="text-muted">
+            En attente de validation du service
+          </span>
+          <span *ngIf="item.valideeService === -1" class="text-muted">
+            Refusée par le service
+          </span>
+        </ng-container>
+
+        <!-- Colonne État -->
+        <ng-container *ngIf="columnName === 'valideeService'">
+          <c-badge [color]="getBadge(item.valideeService)">
+            {{ item.valideeService == 0 ? 'En attente de validation du service' : 
+               item.valideeService === 1 ? 'Validée par le service' : 
+               'Refusée par le service' }}
+          </c-badge>
+          
+          <!-- État comité SEULEMENT si validé par le service -->
+          <div *ngIf="item.valideeService === 1" class="mt-1">
+            <c-badge [color]="getBadge(item.valideeComiteChefDepartement)">
+              {{ item.valideeComiteChefDepartement === 1 ? 'Validée par le comité' : 
+                 item.valideeComiteChefDepartement === -1 ? 'Refusée par le comité' : 
+                 'En attente du comité' }}
             </c-badge>
-            <!-- Afficher le statut du comité SEULEMENT si validé par le service -->
-            <div *ngIf="item.valideeService === 1" class="mt-1">
-              <c-badge [color]="getBadge(item.valideeComiteChefDepartement)">
-                {{ item.valideeComiteChefDepartement === 1 ? 'Validée par la comité' : 
-                   item.valideeComiteChefDepartement === -1 ? 'Refusée par la comité' : 'En attente du comité' }}
-              </c-badge>
-            </div>
-          </ng-container>
+          </div>
+        </ng-container>
+
         <ng-container *ngIf="columnName === 'dateDepot'">
           {{ getDate(item.dateDepot) }}
         </ng-container>
+        
         <ng-container *ngIf="columnName === 'fichierPDFNom'">
           <a *ngIf="item.fichierPDFChemin" (click)="downloadPDF(item.fichierPDFNom)"
             class="text-primary text-decoration-underline" style="cursor: pointer;">
             {{item.fichierPDFNom}}
           </a>
         </ng-container>
-  
       </td>
     </ng-template>
-  </c-smart-table>
+</c-smart-table>
