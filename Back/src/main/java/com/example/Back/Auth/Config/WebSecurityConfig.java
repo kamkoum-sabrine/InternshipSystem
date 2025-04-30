@@ -130,7 +130,7 @@ public class WebSecurityConfig {
 
                         .requestMatchers("/api/conventionStagPFE/RefuserConventionDirectionEnicar/{id}").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
                         .requestMatchers("/api/conventionStagPFE/ValiderConventionDirectionEnicar/{id}").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
-
+                        .requestMatchers("api/attestations/upload").hasAnyAuthority("ROLE_ETUDIANT")
 
                         .requestMatchers("/api/conventionStage/validees-chef-departementETE").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
                         .requestMatchers("/api/conventionStage/validees-chef-departementPFE").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
@@ -140,7 +140,9 @@ public class WebSecurityConfig {
 
 
                                 .anyRequest().authenticated())
-                /** .requestMatchers("/api/login", "/api/admin/register", "/api/admin/activate",
+                //ATTESTATIONS
+
+                                /** .requestMatchers("/api/login", "/api/admin/register", "/api/admin/activate",
 
                  "/api/auth/desactivate","/api/entreprises","/api/auth/users",
                  "/api/auth/etudiants","/api/soutenance","api/enseingnant")
