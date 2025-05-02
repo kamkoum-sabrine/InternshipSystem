@@ -81,7 +81,10 @@ export const routes: Routes = [
         path: 'conventionsEtudiant',
         loadChildren: () => import('./views/conventionsEtudiants/routes').then((m) => m.routes)
       },
-   
+      {
+        path: 'AttestationService',
+        loadChildren: () => import('./views/attestation-service/routes').then((m) => m.routes)
+      },
 
      { 
       path : 'ConventionsComiteChef',

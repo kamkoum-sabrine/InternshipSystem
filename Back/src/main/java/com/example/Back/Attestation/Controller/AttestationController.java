@@ -6,6 +6,7 @@ import com.example.Back.Attestation.Repositories.AttestationRepository;
 import com.example.Back.Attestation.Service.AttestationService;
 import com.example.Back.Auth.Models.User;
 import com.example.Back.Auth.Repositories.UserRepository;
+import com.example.Back.Conventions.Models.ConventionStageEte;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,11 @@ public class AttestationController {
             logger.error("Erreur lors de l'upload du fichier", e);
             return ResponseEntity.badRequest().body("Erreur lors de l'upload : " + e.getMessage());
         }
+    }
+    @GetMapping("/getAttestations")
+    public ResponseEntity<List<Attestation>> getAttestations() {
+        List<Attestation> attestations = attestationRepository.findAll();
+        return ResponseEntity.ok(attestations);
     }
 
     @GetMapping("/getMyAttestation/{id}")
@@ -139,7 +145,48 @@ public class AttestationController {
             return ResponseEntity.internalServerError().build();
         }
     }*/
-   @GetMapping("/uploads/{fileName:.+}")
+
+
+    @GetMapping("/download/{attestationId}")
+    public ResponseEntity<Resource> downloadAttestation(@PathVariable Long attestationId) {
+        logger.info("Téléchargement de l'attestation avec ID : {}", attestationId);
+        try {
+            Attestation attestation = attestationRepository.findById(attestationId).orElse(null);
+            if (attestation == null) {
+                logger.warn("Attestation non trouvée pour ID : {}", attestationId);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
+            String fileName = attestation.getNomFichier(); // Nom réel du fichier enregistré
+            Path filePath = Paths.get(uploadDir).resolve(fileName).normalize();
+
+            if (!Files.exists(filePath)) {
+                logger.warn("Fichier non trouvé : {}", filePath);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (!resource.exists() || !resource.isReadable()) {
+                logger.warn("Fichier illisible : {}", filePath);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            }
+
+            String contentType = Files.probeContentType(filePath);
+            if (contentType == null) contentType = "application/pdf";
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+
+        } catch (IOException e) {
+            logger.error("Erreur lors du téléchargement de l'attestation", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/uploads/{fileName:.+}")
    public ResponseEntity<Resource> getFile(@PathVariable String fileName) {
        try {
            Path filePath = Paths.get(uploadDir).resolve(fileName);

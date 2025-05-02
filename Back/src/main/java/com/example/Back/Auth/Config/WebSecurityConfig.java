@@ -58,7 +58,9 @@ public class WebSecurityConfig {
                         .requestMatchers("api/attestations/uploads/**").permitAll() // Autoriser l'accès aux fichiers dans /uploads
                         .requestMatchers("/api/login").permitAll()
                         .requestMatchers("/api/roles/all").hasRole("SUPER_ADMINISTRATEUR")
+                        .requestMatchers("api/attestations/getAttestations").permitAll() // Autoriser l'accès aux fichiers dans /uploads
                         .requestMatchers("/api/users/register").hasRole("SUPER_ADMINISTRATEUR")
+                        .requestMatchers("/api/attestations/download/{attestationId}").permitAll()
                         .requestMatchers("/api/users/activate").hasRole("SUPER_ADMINISTRATEUR")
                         .requestMatchers("/api/users/desactivate").hasRole("SUPER_ADMINISTRATEUR")
                         .requestMatchers("/api/users/getAll").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
