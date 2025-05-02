@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -8,12 +8,15 @@ import { Observable } from 'rxjs';
 export class GererAttestationsService {
 
   private apiUrl = 'http://localhost:8081/api';
+  private Url = 'http://localhost:8081/api';  // Remplacez par votre URL de l'API backend
 
   constructor(private http: HttpClient) { }
 
-  deposerConventionEtudiant(convention: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/conventionStagEte/create`, convention);
+  
+  uploadAttestation(formData: FormData): Observable<any> {
+    return this.http.post<any>('http://localhost:8081/api/attestations/upload', formData);
   }
+  
   deposerConventionEtudiantPFE(conventionPFE: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/conventionStagPFE/create`, conventionPFE);
   }

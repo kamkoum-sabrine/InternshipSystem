@@ -1,1 +1,40 @@
-<p>add-attestation-dialog works!</p>
+<c-row class="fixed-dialog">
+    <c-col xs="12">
+        <c-card class="mb-4">
+            <c-card-header ngPreserveWhitespaces>
+                <strong>Dépot d'une attestation</strong>
+            </c-card-header>
+            <c-card-body>
+                <form (ngSubmit)="onSubmit()" cForm>
+
+                    <c-row class="mb-3 align-items-center">
+                        <label cLabel class="col-sm-3 col-form-label fw-semibold" for="fichierPDF">
+                            Déposer votre attestation
+                        </label>
+                        <c-col sm="9">
+                            <input type="file" (change)="onFileSelected($event)" accept="application/pdf"
+                                [(ngModel)]="attestation.fichierPDF" name="fichierPDF" cFormControl id="fichierPDF"
+                                class="form-control custom-file-input" required />
+                            <small class="text-danger d-block mt-2">
+                                Seuls les fichiers PDF sont acceptés
+                            </small>
+                        </c-col>
+                    </c-row>
+
+                    <c-row class="mb-3">
+                        <c-col sm="12" class="d-flex justify-content-end">
+                            <button cButton class="me-2" color="danger" type="button" style="color: #ffffff"
+                                (click)="onNoClick()">
+                                Annuler
+                            </button>
+                            <button cButton color="info" style="color: #ffffff" type="submit">
+                                Soumettre
+                            </button>
+                        </c-col>
+                    </c-row>
+
+                </form>
+            </c-card-body>
+        </c-card>
+    </c-col>
+</c-row>

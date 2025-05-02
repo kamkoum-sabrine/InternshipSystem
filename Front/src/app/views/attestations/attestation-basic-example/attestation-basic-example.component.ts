@@ -87,10 +87,14 @@ export class AttestationBasicExampleComponent implements OnInit {
   }
 
   openDialog(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const etudiantId = user.id;
     const dialogRef = this.dialog.open(AddAttestationDialogComponent, {
       width: '600px',
       minWidth: '600px',  // Largeur minimale de 400px
       maxWidth: '600px',
+      data: { etudiantId }  // <-- On passe l'id ici
+
     });
 
     dialogRef.afterClosed().subscribe(result => {

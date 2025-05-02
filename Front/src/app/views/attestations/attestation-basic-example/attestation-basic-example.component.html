@@ -1,6 +1,5 @@
-<button class="btn btn-warning text-white mb-3" (click)="telechargerConvention()">Télécharger ma convention</button>
 <br />
-<button class="btn btn-warning text-white mb-3" (click)="openDialog()">Déposer une convention</button>
+<button class="btn btn-warning text-white mb-3" (click)="openDialog()">Déposer votre attestation</button>
 
 <c-smart-table *ngIf="myAttestations && myAttestations.length > 0" [activePage]="1" [columnSorter]="true"
   [columns]="columns" [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="5" [items]="myAttestations"
