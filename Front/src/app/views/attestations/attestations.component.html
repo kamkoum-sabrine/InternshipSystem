@@ -1,0 +1,23 @@
+<c-row>
+    <c-col xs="12">
+      <c-card class="mb-4">
+        <c-card-header ngPreserveWhitespaces>
+          <strong>Gérer </strong> <small>Mes conventions</small>
+        </c-card-header>
+      <c-card-body>
+        <div *ngIf="myAttestations">
+            <app-attestation-basic-example [myAttestations]="myAttestations" [tabs]="0" />
+          </div>
+
+      </c-card-body>
+              
+  
+               
+            
+      
+  
+  
+      </c-card>
+    </c-col>
+  
+  </c-row>

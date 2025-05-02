@@ -28,7 +28,6 @@ public class Attestation {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateDepot;
 
-    // 🔽 Méthodes explicites (optionnelles si tu veux personnaliser ou debugger)
 
     public void setEtudiant(User etudiant) {
         this.etudiant = etudiant;

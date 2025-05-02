@@ -88,6 +88,10 @@ export const routes: Routes = [
       loadChildren: () => import('./views/convention-comite-chef/routes').then((m) => m.routes)
      },
 
+     { 
+      path : 'Attestations',
+      loadComponent: () => import('./views/attestations/attestations.component').then((m) => m.AttestationsComponent)
+     },
 
       {
         path: 'conventionsService',

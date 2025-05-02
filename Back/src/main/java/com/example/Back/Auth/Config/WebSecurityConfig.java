@@ -123,6 +123,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/conventionStagPFE/annuler/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT","ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
                         .requestMatchers("/api/conventionStagPFE/refuserAnnulation/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT","ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
                         .requestMatchers("/api/conventionStagPFE/ValiderConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
+                        .requestMatchers("/api/attestations/getMyAttestation/{id}").hasAnyAuthority( "ROLE_ETUDIANT")
 
                         .requestMatchers("/api/conventionStagPFE/RefuserConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
                         .requestMatchers("/api/conventionStagPFE/ConventionsAvecPreuveNonAnnulees").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")

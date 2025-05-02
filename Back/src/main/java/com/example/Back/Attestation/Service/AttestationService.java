@@ -28,7 +28,7 @@ public class AttestationService {
     @Value("${file.upload-dir}/attestations")
     private String uploadDir;
     @Autowired
-    private UserRepository userRepository; // assure-toi que ce repo existe
+    private UserRepository userRepository;
 
     public AttestationDTO uploadAttestation(User etudiant, MultipartFile file) throws IOException {
         File uploadDirectory = new File(uploadDir);
@@ -40,7 +40,6 @@ public class AttestationService {
         Path filePath = Paths.get(uploadDir, fileName);
         Files.write(filePath, file.getBytes());
 
-        // Charger l'étudiant complet depuis la base
         User fullEtudiant = userRepository.findById(etudiant.getId())
                 .orElseThrow(() -> new RuntimeException("Étudiant non trouvé"));
 
@@ -48,12 +47,11 @@ public class AttestationService {
         attestation.setEtudiant(fullEtudiant);
         attestation.setNomFichier(file.getOriginalFilename());
         attestation.setCheminFichier(filePath.toString());
-        attestation.setDateDepot(new Date()); // Ajout de la date de dépôt actuelle
+        attestation.setDateDepot(new Date());
 
 
         Attestation saved = attestationRepository.save(attestation);
 
-        // Construire le DTO enrichi
         AttestationDTO dto = new AttestationDTO();
         dto.setId(saved.getId());
         dto.setEtudiantId(fullEtudiant.getId());
