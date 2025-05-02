@@ -102,26 +102,8 @@ export class AttestationBasicExampleComponent implements OnInit {
   }
   downloadPDF(nomFichier: string) {
     console.log("Queellee page", this.tabs)
-    let fileUrl;
-    if (this.tabs == 0) {
-      fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
-
-    }
-    else {
-      fileUrl = `http://localhost:8081/api/conventionStagPFE/uploads/${nomFichier}`;
-
-    }
-
-    // console.log("nomFichier", nomFichier)
-    // // const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
-
-    // const link = document.createElement("a");
-    // link.href = fileUrl;
-    // link.download = nomFichier;
-    // link.target = "_blank";
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
+    const  fileUrl = `http://localhost:8081/api/attestations/uploads/${nomFichier}`;
+    
     fetch(fileUrl, {
       method: "GET",
       headers: {
@@ -140,6 +122,11 @@ export class AttestationBasicExampleComponent implements OnInit {
       })
       .catch(error => console.error("Erreur lors du téléchargement :", error));
   }
+  
+
+  
+  
+  
 
   getItem(item: any) {
     console.log("item " + item)

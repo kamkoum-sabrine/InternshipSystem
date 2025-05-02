@@ -36,7 +36,7 @@ public class AttestationService {
             uploadDirectory.mkdirs();
         }
 
-        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        String fileName =file.getOriginalFilename();
         Path filePath = Paths.get(uploadDir, fileName);
         Files.write(filePath, file.getBytes());
 

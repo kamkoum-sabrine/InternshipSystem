@@ -26,11 +26,40 @@
   <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
     <td [ngSwitch]="columnName">
 
-     
+      <!-- valideeService -->
+      <ng-container *ngSwitchCase="'valideeService'">
+        <c-badge [color]="getBadge(tdContent)">
+          {{ item.valideeService == 0 ? 'En attente' : (item.valideeService === 1 ? 'Validée' : 'Refusée') }}
+        </c-badge>
+      </ng-container>
 
 
-   
+      <!-- valideeDirection -->
+      <ng-container *ngSwitchCase="'valideeDirection'">
+        <c-badge [color]="getBadge(tdContent)">
+          {{ item.valideeDirection == 0 ? 'En attente' : (item.valideeDirection === 1 ? 'Validée' : 'Refusée') }}
+        </c-badge>
+      </ng-container>
 
+      <!-- preuveAnnulation -->
+      <ng-container *ngSwitchCase="'preuveAnnulation'">
+        <ng-container *ngIf="item.preuveAnnulationNom; else nonDispo">
+          <button (click)="downloadPreuveAnnulation(item.preuveAnnulationNom)" cButton color="primary" size="sm"
+            variant="ghost" class="position-relative overflow-hidden"
+            style="border: 1px solid #6f42c1; min-width: 120px; font-family: 'Segoe UI', Roboto, sans-serif; font-weight: 500; letter-spacing: 0.5px; color: #6f42c1 !important;">
+            <i class="cil-cloud-download me-2"></i>
+            <span style="font-size: 0.85rem;">TÉLÉCHARGER</span>
+            <span class="position-absolute top-0 start-0 w-100 h-100 bg-primary"
+              style="opacity: 0; transition: opacity 0.3s;"></span>
+          </button>
+        </ng-container>
+        <ng-template #nonDispo>
+          <span class="badge bg-light text-muted border"
+            style="font-family: 'Segoe UI', Roboto, sans-serif; font-size: 0.8rem;">
+            NON DISPONIBLE
+          </span>
+        </ng-template>
+      </ng-container>
 
       <!-- dateDepot -->
       <ng-container *ngSwitchCase="'dateDepot'">
@@ -38,13 +67,24 @@
       </ng-container>
 
       <!-- annulee -->
-      
+      <ng-container *ngSwitchCase="'annulee'">
+        <ng-container *ngIf="item.annulee == -2; else badgeAnnulation">
+          <button (click)="openAnnulationModal(item.id)" cButton color="info" class="text-white" size="sm">
+            Annuler
+          </button>
+        </ng-container>
+        <ng-template #badgeAnnulation>
+          <c-badge [color]="getBadge(tdContent)">
+            {{ item.annulee == 0 ? 'En attente' : (item.annulee === 1 ? 'Annulation validée' : 'Annulation refusée') }}
+          </c-badge>
+        </ng-template>
+      </ng-container>
 
       <!-- fichierPDFNom -->
-      <ng-container *ngSwitchCase="'fichierPDFNom'">
-        <a *ngIf="item.fichierPDFChemin" (click)="downloadPDF(item.fichierPDFNom)"
+      <ng-container *ngSwitchCase="'nomFichier'">
+        <a *ngIf="item.nomFichier" (click)="downloadPDF(item.nomFichier)"
           class="text-primary text-decoration-underline" style="cursor: pointer;">
-          {{item.fichierPDFNom}}
+          {{item.nomFichier}}
         </a>
       </ng-container>
 
