@@ -152,6 +152,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/conventions/lettre-affectation/downloadLettreAffectation/{conventionId}").permitAll()
                         .requestMatchers("/api/statistiques/**").permitAll()
                         .requestMatchers("/api/statistiques/students-distribution").permitAll()
+                        .requestMatchers("/api/conventions/stats").permitAll()
 
 
                                 .anyRequest().authenticated())

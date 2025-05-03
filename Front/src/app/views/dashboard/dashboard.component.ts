@@ -29,6 +29,8 @@ import { StatistiquesService } from '../widgets/widgets-dropdown/statistiques.se
 // import { NgChartsConfiguration, NgChartsModule } from 'ng2-charts';
 // import { NgChartsModule } from 'ng2-charts';
 import { BaseChartDirective } from 'ng2-charts';
+
+import { NgApexchartsModule } from 'ng-apexcharts';
 interface IUser {
   name: string;
   state: string;
@@ -47,14 +49,23 @@ interface IUser {
   templateUrl: 'dashboard.component.html',
   styleUrls: ['dashboard.component.scss'],
   standalone: true,
-  imports: [WidgetsDropdownComponent, CommonModule, BaseChartDirective, TextColorDirective, CardComponent, CardBodyComponent, RowComponent, ColComponent, ButtonDirective, IconDirective, ReactiveFormsModule, ButtonGroupComponent, FormCheckLabelDirective, ChartjsComponent, NgStyle, CardFooterComponent, GutterDirective, ProgressBarDirective, ProgressComponent, WidgetsBrandComponent, CardHeaderComponent, TableDirective, AvatarComponent]
+  imports: [WidgetsDropdownComponent, NgApexchartsModule, CommonModule, BaseChartDirective, TextColorDirective, CardComponent, CardBodyComponent, RowComponent, ColComponent, ButtonDirective, IconDirective, ReactiveFormsModule, ButtonGroupComponent, FormCheckLabelDirective, ChartjsComponent, NgStyle, CardFooterComponent, GutterDirective, ProgressBarDirective, ProgressComponent, WidgetsBrandComponent, CardHeaderComponent, TableDirective, AvatarComponent]
 })
 export class DashboardComponent implements OnInit {
 
   role: string = '';
   isSuperAdmin: boolean = false;
-  isAdmin: boolean = false;
+  isServiceStage: boolean = false;
   isEtudiant: boolean = false;
+
+  stats: any;
+  isLoading = true;
+
+  // Options pour les chartes
+  statusChartOptions: any;
+  typeChartOptions: any;
+  validationChartOptions: any;
+  dureeChartOptions: any;
 
   // Configuration du graphique
   public barChartOptions: ChartConfiguration['options'] = {
@@ -110,7 +121,7 @@ export class DashboardComponent implements OnInit {
 
     // Détermine le type d'utilisateur
     this.isSuperAdmin = this.role === 'SUPER_ADMINISTRATEUR';
-    this.isAdmin = this.role === 'ADMIN';
+    this.isServiceStage = this.role === 'SERVICE_STAGE';
     this.isEtudiant = this.role === 'ETUDIANT';
 
     console.log('Rôle utilisateur :', this.role);
@@ -122,8 +133,8 @@ export class DashboardComponent implements OnInit {
     // Chargement des données selon le rôle
     if (this.isSuperAdmin) {
       this.loadSuperAdminData();
-    } else if (this.isAdmin) {
-      this.loadAdminData();
+    } else if (this.isServiceStage) {
+      this.loadServiceData();
     } else {
       this.loadDefaultData();
     }
@@ -142,11 +153,120 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  private loadAdminData(): void {
+  private loadServiceData(): void {
     // Charger des données spécifiques pour ADMIN
-    console.log('Chargement des données Admin');
+    console.log('Chargement des données de service de stage');
+    this.isLoading = true;
+    this.statisticsService.getStats().subscribe(data => {
+      this.stats = data;
+      this.initCharts();
+      this.isLoading = false;
+    });
   }
 
+  initCharts(): void {
+    // Chart 1: Statut des conventions
+    this.statusChartOptions = {
+      series: [
+        this.stats.conventionsSignees,
+        this.stats.conventionsEnAttente,
+        this.stats.conventionsRefusees
+      ],
+      chart: {
+        type: 'pie',
+        height: 350
+      },
+      labels: ['Signées', 'En attente', 'Refusées'],
+      title: {
+        text: 'Statut des conventions'
+      },
+      colors: ['#4CAF50', '#FFC107', '#F44336']
+    };
+
+    // Chart 2: Répartition par type
+    this.typeChartOptions = {
+      series: [
+        this.stats.stageEteCount,
+        this.stats.stagePFECount,
+      ],
+      chart: {
+        type: 'donut',
+        height: 350
+      },
+      labels: ['Stage été', 'Stage PFE'],
+      title: {
+        text: 'Répartition par type de stage'
+      },
+      colors: ['#2196F3', '#9C27B0']
+    };
+
+    // Chart 3: Taux de validation
+    this.validationChartOptions = {
+      series: [{
+        name: 'Taux de validation',
+        data: [
+          this.stats.tauxValidationService,
+          this.stats.tauxValidationDirection,
+          this.stats.tauxValidationChefDepartement,
+          this.stats.tauxValidationComite
+        ]
+      }],
+      chart: {
+        type: 'bar',
+        height: 350
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          horizontal: true,
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: (val: number) => val.toFixed(1) + '%'
+      },
+      xaxis: {
+        categories: ['Service', 'Direction', 'Chef Département', 'Comité'],
+        max: 100
+      },
+      title: {
+        text: 'Taux de validation par service'
+      },
+      colors: ['#673AB7']
+    };
+
+    // Chart 4: Durée moyenne
+    this.dureeChartOptions = {
+      series: [{
+        name: 'Durée moyenne (jours)',
+        data: [
+          this.stats.dureeMoyenneEte,
+          this.stats.dureeMoyennePFE
+        ]
+      }],
+      chart: {
+        type: 'bar',
+        height: 350
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          columnWidth: '45%',
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: (val: number) => val.toFixed(1) + ' jours'
+      },
+      xaxis: {
+        categories: ['Stage été', 'Stage PFE']
+      },
+      title: {
+        text: 'Durée moyenne des stages'
+      },
+      colors: ['#009688']
+    };
+  }
   private loadDefaultData(): void {
     // Charger des données par défaut pour les autres rôles
     console.log('Chargement des données par défaut');
