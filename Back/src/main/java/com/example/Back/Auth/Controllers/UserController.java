@@ -68,6 +68,7 @@ public class UserController {
                     .body(error);
         }
         User appUser = new User();
+        System.out.println("Filliiieereeeee "+userDTO.getFiliere());
         appUser.setNom(userDTO.getNom());
         appUser.setPrenom(userDTO.getPrenom());
         appUser.setEmail(userDTO.getEmail());

@@ -15,19 +15,20 @@ import {
 } from '@coreui/angular-pro';
 import Swal from 'sweetalert2';
 import { AddConventionDialogComponent } from '../add-convention-dialog/add-convention-dialog.component';
-import { ConventionsServiceService } from '../conventionsService-service.service';
+import { ConventionsDirectionEnicarService } from '../conventionsDirectionEnicar-service.service';
 
 import usersData from '../_data';
-import { GererConventionsServiceService } from './gerer-conventionsService.service';
+import { GererConventionsDirectionEnicarService } from './gerer-conventionsDirectionEnicar.service';
+import { ConventionsServiceService } from '../../conventionsService/conventionsService-service.service';
 
 @Component({
-  selector: 'app-conventionsService-basic-example',
-  templateUrl: './conventionsService-basic-example.component.html',
-  styleUrls: ['./conventionsService-basic-example.component.scss'],
+  selector: 'app-conventionsDirectionEnicar-basic-example',
+  templateUrl: './conventionsDirectionEnicar-basic-example.component.html',
+  styleUrls: ['./conventionsDirectionEnicar-basic-example.component.scss'],
   standalone: true,
   imports: [CommonModule, BadgeComponent, ButtonDirective, CollapseDirective, SmartTableComponent, TemplateIdDirective, TextColorDirective]
 })
-export class ConventionsServiceBasicExampleComponent implements OnInit {
+export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
 
   usersData = usersData;
   @Input() conventions: any[] = [];;
@@ -55,8 +56,13 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
     },
 
     {
-      key: 'valideeService',
+      key: 'valideeDirectionEnicar',
       label: 'Etat'
+    },
+
+    {
+      key: 'lettreAffectationNom',
+      label: ' Lettre d\'affectation'
     },
 
     {
@@ -66,7 +72,7 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
   ];
   details_visible = Object.create({});
 
-  constructor(private cdr: ChangeDetectorRef, private router: Router, private gererConventionsServiceService: GererConventionsServiceService, public dialog: MatDialog, private modalService: NgbModal, private conventionsServiceService: ConventionsServiceService) { }
+  constructor(private cdr: ChangeDetectorRef, private router: Router, private gererConventionsDirectionEnicarService: GererConventionsDirectionEnicarService, public dialog: MatDialog, private modalService: NgbModal, private conventionsDirectionEnicarService: ConventionsDirectionEnicarService, private conventionsServicesService: ConventionsDirectionEnicarService) { }
 
 
 
@@ -105,6 +111,35 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
     }
     else {
       fileUrl = `http://localhost:8081/api/conventionStagPFE/uploads/${nomFichier}`;
+
+    }
+    fetch(fileUrl, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`, // Récupère le token si JWT est utilisé
+      },
+    })
+      .then(response => {
+        if (!response.ok) throw new Error("Accès refusé !");
+        return response.blob();
+      })
+      .then(blob => {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = nomFichier;
+        link.click();
+      })
+      .catch(error => console.error("Erreur lors du téléchargement :", error));
+  }
+
+  downloadPDFAffectation(nomFichier: string) {
+    let fileUrl;
+    if (this.tabs == 0) {
+      fileUrl = `http://localhost:8081/api/conventions/lettre-affectation/uploads/${nomFichier}`;
+
+    }
+    else {
+      fileUrl = `http://localhost:8081/api/conventions/lettre-affectation/uploads/${nomFichier}`;
 
     }
     fetch(fileUrl, {
@@ -170,13 +205,24 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
         reverseButtons: true
       }).then((result) => {
         if (result.isConfirmed) {
-          this.conventionsServiceService.validerConvention(id).subscribe(data => {
+          this.conventionsDirectionEnicarService.validerConvention(id).subscribe(data => {
             console.log(data);
-            this.conventionsServiceService.getConventions().subscribe(data => {
-              this.conventions = data
+            console.log("1")
+            this.conventionsDirectionEnicarService.generateLettreAffectation(id).subscribe(data => {
+              console.log("2")
+              this.conventionsDirectionEnicarService.getConventions().subscribe(data => {
+                console.log("dataaaa ", data)
+                console.log("3")
+                this.conventions = data
+              });
+
             });
 
+
+
           });
+
+
           Swal.fire('Covention validée !', '', 'success');
           // Ajouter la logique de confirmation ici
         } else if (result.isDismissed) {
@@ -195,12 +241,25 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
         reverseButtons: true
       }).then((result) => {
         if (result.isConfirmed) {
-          this.conventionsServiceService.validerConventionPFE(id).subscribe(data => {
+          this.conventionsDirectionEnicarService.validerConventionPFE(id).subscribe(data => {
             console.log(data);
-            this.conventionsServiceService.getConventionsPFE().subscribe(data => {
-              this.conventions = data
+
+            this.conventionsDirectionEnicarService.generateLettreAffectationPFE(id).subscribe(data => {
+              console.log("2")
+              this.conventionsDirectionEnicarService.getConventions().subscribe(data => {
+                console.log("dataaaa ", data)
+                console.log("3")
+                this.conventions = data
+              });
+
             });
 
+
+          });
+          this.conventionsDirectionEnicarService.getConventions().subscribe(data => {
+            console.log("dataaaa ", data)
+            console.log("3")
+            this.conventions = data
           });
           Swal.fire('Covention validée !', '', 'success');
           // Ajouter la logique de confirmation ici
@@ -213,18 +272,73 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
 
   }
   openDialogRemarque(id: number): void {
-    const dialogRef = this.dialog.open(AddConventionDialogComponent, {
-      width: '600px',
-      minWidth: '600px',  // Largeur minimale de 400px
-      maxWidth: '600px',
-      data: { id: id, tabs: this.tabs }
-    });
+    if (this.tabs == 0) {
+      Swal.fire({
+        title: 'Êtes-vous sûr ?',
+        text: 'Voulez vous refuser cette conventions',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Oui, valider!',
+        cancelButtonText: 'Annuler',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.conventionsServicesService.refuserConvention(id).subscribe(data => {
+            console.log(data);
+            this.conventionsServicesService.getConventions().subscribe(data => {
+              // this.conventions = data
+              window.location.reload()
+            });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        console.log('Editer utilisateur:', result);
-      }
-    });
+          });
+          Swal.fire('Convention refusée !', '', 'success');
+          // Ajouter la logique de confirmation ici
+        } else if (result.isDismissed) {
+          // L'événement est annulé
+          Swal.fire('Refus annulé', '', 'info');
+        }
+      });
+    }
+    else {
+      Swal.fire({
+        title: 'Êtes-vous sûr ?',
+        text: 'Voulez vous refuser cette conventions',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Oui, valider!',
+        cancelButtonText: 'Annuler',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.conventionsServicesService.refuserConventionPFE(id).subscribe(data => {
+            console.log(data);
+            this.conventionsServicesService.getConventions().subscribe(data => {
+              // this.conventions = data
+              window.location.reload()
+
+            });
+
+          });
+          Swal.fire('Convention refusée !', '', 'success');
+          // Ajouter la logique de confirmation ici
+        } else if (result.isDismissed) {
+          // L'événement est annulé
+          Swal.fire('Refus annulé', '', 'info');
+        }
+      });
+    }
+    /* const dialogRef = this.dialog.open(AddConventionDialogComponent, {
+       width: '600px',
+       minWidth: '600px',  // Largeur minimale de 400px
+       maxWidth: '600px',
+       data: { id: id, tabs: this.tabs }
+     });
+ 
+     dialogRef.afterClosed().subscribe(result => {
+       if (result) {
+         console.log('Editer utilisateur:', result);
+       }
+     });*/
 
   }
 
@@ -279,8 +393,8 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
       });
       return;
     }
-    this.gererConventionsServiceService.downloadPdf(user.id);
-    this.gererConventionsServiceService.downloadWord(user.id);
+    this.gererConventionsDirectionEnicarService.downloadPdf(user.id);
+    this.gererConventionsDirectionEnicarService.downloadWord(user.id);
 
 
   }
@@ -308,6 +422,8 @@ export class ConventionsServiceBasicExampleComponent implements OnInit {
         Swal.fire('Erreur', 'Impossible de télécharger le fichier', 'error');
       });
   }
+
+
   openAnnulationModal(conventionId: number) {
     this.currentConventionId = conventionId;
     this.modalService.open(this.annulationModal);

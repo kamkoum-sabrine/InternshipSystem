@@ -1,5 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { ConventionsServiceBasicExampleComponent } from './conventionsService-basic-example/conventionsService-basic-example.component';
+import { ConventionsDirectionEnicarBasicExampleComponent } from './conventionsDirectionEnicar-basic-example/conventionsDirectionEnicar-basic-example.component';
 import {
   CardBodyComponent,
   CardComponent,
@@ -16,7 +16,7 @@ import {
 
 //import { DocsExampleComponent } from '@docs-components/public-api';
 
-import { ConventionsServiceService } from './conventionsService-service.service';
+import { ConventionsDirectionEnicarService } from './conventionsDirectionEnicar-service.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
@@ -26,18 +26,18 @@ import { MatDialogModule } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
 import { IconDirective } from '@coreui/icons-angular';
 @Component({
-  selector: 'app-conventionsService',
-  templateUrl: './conventionsService.component.html',
-  styleUrls: ['./conventionsService.component.scss'],
+  selector: 'app-conventionsDirectionEnicar',
+  templateUrl: './conventionsDirectionEnicar.component.html',
+  styleUrls: ['./conventionsDirectionEnicar.component.scss'],
   standalone: true,
-  imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, ConventionsServiceBasicExampleComponent, MatDialogModule, MatButtonModule, TabDirective,
+  imports: [CommonModule, HttpClientModule, RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, ConventionsDirectionEnicarBasicExampleComponent, MatDialogModule, MatButtonModule, TabDirective,
     TabPanelComponent,
     TabsComponent,
     TabsContentComponent,
     TabsListComponent,
     IconDirective]
 })
-export class ConventionsServiceComponent implements OnInit {
+export class ConventionsDirectionEnicarComponent implements OnInit {
   conventions: any;
   conventionsPFE: any
   public panes = [
@@ -54,14 +54,17 @@ export class ConventionsServiceComponent implements OnInit {
 
 
 
-  constructor(private conventionsServicesService: ConventionsServiceService, public dialog: MatDialog) { }
+  constructor(private conventionsDirectionEnicarService: ConventionsDirectionEnicarService, public dialog: MatDialog) { }
   ngOnInit(): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    this.conventionsServicesService.getConventions().subscribe({
-      next: (data) => this.conventions = data,
+    this.conventionsDirectionEnicarService.getConventions().subscribe({
+      next: (data) => {
+        this.conventions = data
+        console.log("cccccc ", this.conventions)
+      },
       error: (err) => console.error('Erreur:', err)
     });
-    this.conventionsServicesService.getConventionsPFE().subscribe({
+    this.conventionsDirectionEnicarService.getConventionsPFE().subscribe({
       next: (data) => {
         this.conventionsPFE = data
         console.log("Conventionssssssssssss ", this.conventionsPFE)

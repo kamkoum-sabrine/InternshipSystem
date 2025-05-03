@@ -10,11 +10,13 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { FormControlDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonDirective, CardBodyComponent, CardComponent, CardHeaderComponent, ColComponent, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, FormDirective, FormFeedbackComponent, FormLabelDirective, FormSelectDirective, InputGroupComponent, InputGroupTextDirective, ListGroupDirective, ListGroupItemDirective, RowComponent, TextColorDirective } from '@coreui/angular-pro';
 import { DocsExampleComponent } from '@docs-components/public-api';
-import { GererConventionsServiceService } from '../conventionsService-basic-example/gerer-conventionsService.service';
+import { GererConventionsDirectionEnicarService } from '../conventionsDirectionEnicar-basic-example/gerer-conventionsDirectionEnicar.service';
 import { EntreprisesServiceService } from '../../entreprises/entreprises-service.service'
 import { formatDate } from '@angular/common';
 import Swal from 'sweetalert2';
-import { ConventionsServiceService } from '../conventionsService-service.service';
+import { ConventionsDirectionEnicarService } from '../conventionsDirectionEnicar-service.service';
+import { GererConventionsServiceService } from '../../conventionsService/conventionsService-basic-example/gerer-conventionsService.service';
+import { ConventionsServiceService } from '../../conventionsService/conventionsService-service.service';
 @Component({
   selector: 'app-add-convention-dialog',
   standalone: true,
