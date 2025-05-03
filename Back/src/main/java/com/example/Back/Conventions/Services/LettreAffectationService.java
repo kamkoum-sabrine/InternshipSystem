@@ -5,7 +5,7 @@ import com.example.Back.Conventions.Repositories.ConventionStageEteRepository;
 import com.example.Back.Entreprises.Models.Entreprise;
 import com.example.Back.Auth.Models.User;
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.*;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,109 +31,113 @@ public class LettreAffectationService {
 
     private static final Logger logger = LoggerFactory.getLogger(LettreAffectationService.class);
 
+
     @Autowired
     private ConventionStageEteRepository conventionRepository;
 
     @Value("${file.upload-dir}/lettreAffectation")
     private String uploadDir;
 
+    @Value("${signature.directrice.path}")
+    private String signaturePath;
+
     private Path fileStorageLocation;
 
     @PostConstruct
     public void init() {
-        this.fileStorageLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
         try {
+            this.fileStorageLocation = Paths.get(uploadDir).toAbsolutePath().normalize();
             Files.createDirectories(this.fileStorageLocation);
+            logger.info("Répertoire de stockage initialisé : {}", this.fileStorageLocation);
         } catch (Exception ex) {
-            throw new RuntimeException(
-                    "Impossible de créer le répertoire où les fichiers seront stockés.", ex);
+            logger.error("ERREUR CRITIQUE: Impossible de créer le répertoire de stockage", ex);
+            throw new RuntimeException("Initialisation du service échouée", ex);
         }
     }
 
-    public ConventionStageEte generateAndStoreLettreAffectation(Long conventionId) {
+    public ConventionStageEte generateAndStoreSignedLettreAffectation(Long conventionId) {
         try {
-            logger.info("Début de génération de lettre d'affectation pour la convention ID: {}", conventionId);
+            logger.info("Début de génération de lettre d'affectation signée pour la convention ID: {}", conventionId);
 
             ConventionStageEte convention = conventionRepository.findById(conventionId)
-                    .orElseThrow(() -> {
-                        String errorMsg = "Convention non trouvée avec l'ID: " + conventionId;
-                        logger.error(errorMsg);
-                        return new RuntimeException(errorMsg);
-                    });
+                    .orElseThrow(() -> new RuntimeException("Convention non trouvée avec l'ID: " + conventionId));
 
-            logger.debug("Convention trouvée : {}", convention);
+            validateConvention(convention);
 
-            if (convention.getEtudiant() == null) {
-                String errorMsg = "Aucun étudiant associé à la convention ID: " + conventionId;
-                logger.error(errorMsg);
-                throw new RuntimeException(errorMsg);
-            }
+            // Générer le nom du fichier signé
+            String signedFileName = "lettre_affectation_signe_" + conventionId + "_" + System.currentTimeMillis() + ".pdf";
+            Path signedFilePath = fileStorageLocation.resolve(signedFileName);
 
-            if (convention.getEntreprise() == null) {
-                String errorMsg = "Aucune entreprise associée à la convention ID: " + conventionId;
-                logger.error(errorMsg);
-                throw new RuntimeException(errorMsg);
-            }
+            // Générer directement le PDF signé
+            generateSignedPdf(convention, signedFilePath.toFile());
 
-            String fileName = generateLettreAffectationPdf(convention);
-            logger.info("PDF généré avec succès : {}", fileName);
+            // Mettre à jour la convention avec le chemin du PDF signé
+            convention.setLettreAffectationNom(signedFileName);
+            convention.setLettreAffectationChemin(signedFilePath.toString());
 
-            convention.setLettreAffectationNom(fileName);
-            convention.setLettreAffectationChemin(fileStorageLocation.resolve(fileName).toString());
+            // Enregistrer la convention avec le PDF signé
+            return conventionRepository.save(convention);
 
-            ConventionStageEte savedConvention = conventionRepository.save(convention);
-            logger.info("Convention mise à jour avec les infos du PDF");
-
-            return savedConvention;
         } catch (Exception e) {
-            logger.error("ERREUR lors de la génération de la lettre d'affectation", e);
-            throw new RuntimeException("Échec de la génération du PDF: " + e.getMessage(), e);
+            logger.error("ERREUR lors de la génération de la lettre d'affectation signée", e);
+            throw new RuntimeException("Échec de la génération du PDF signé: " + e.getMessage(), e);
         }
     }
 
+    private void validateConvention(ConventionStageEte convention) {
+        if (convention.getEtudiant() == null) {
+            throw new RuntimeException("Aucun étudiant associé à la convention");
+        }
+        if (convention.getEntreprise() == null) {
+            throw new RuntimeException("Aucune entreprise associée à la convention");
+        }
+    }
 
-    private String generateLettreAffectationPdf(ConventionStageEte convention) {
-        String fileName = "lettre_affectation_" + convention.getId() + "_" + System.currentTimeMillis() + ".pdf";
-        logger.debug("Génération du PDF: {}", fileName);
-
+    private void generateSignedPdf(ConventionStageEte convention, File outputFile) throws Exception {
         Document document = new Document();
-        FileOutputStream fos = null;
+        PdfWriter writer = null;
 
         try {
-            fos = new FileOutputStream(fileStorageLocation.resolve(fileName).toFile());
-            PdfWriter.getInstance(document, fos);
+            writer = PdfWriter.getInstance(document, new FileOutputStream(outputFile));
             document.open();
 
-            logger.debug("Ajout des métadonnées...");
+            // Ajouter le contenu standard
             addMetaData(document);
-
-            logger.debug("Ajout du titre...");
             addTitle(document);
-
-            logger.debug("Ajout du contenu...");
             addContent(document, convention);
 
-            document.close();
-            logger.debug("PDF généré avec succès");
+            // Ajouter la signature directement
+            addSignature(document, writer);
 
-            return fileName;
-        } catch (Exception e) {
-            logger.error("ERREUR lors de la génération du PDF", e);
-            // Nettoyage en cas d'erreur
-            if (document.isOpen()) {
+        } finally {
+            if (document != null && document.isOpen()) {
                 document.close();
             }
-            // Suppression du fichier partiellement créé
-            try {
-                if (fos != null) {
-                    fos.close();
-                }
-                Files.deleteIfExists(fileStorageLocation.resolve(fileName));
-            } catch (IOException ioEx) {
-                logger.error("Échec du nettoyage après erreur", ioEx);
-            }
-            throw new RuntimeException("Échec de la génération du PDF", e);
         }
+    }
+
+    private void addSignature(Document document, PdfWriter writer) throws Exception {
+        PdfContentByte canvas = writer.getDirectContentUnder();
+
+        // Ajouter l'image de signature
+        Image signature = Image.getInstance(signaturePath);
+        signature.scaleAbsolute(120, 60);
+        signature.setAbsolutePosition(450, 300);
+        canvas.addImage(signature);
+
+        // Ajouter la date de signature
+        BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+        canvas.beginText();
+        canvas.setFontAndSize(bf, 10);
+        String dateSignature = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+        canvas.showTextAligned(PdfContentByte.ALIGN_LEFT, "Fait à Tunis, le " + dateSignature, 450, 270, 0);
+        canvas.endText();
+
+        // Ajouter le titre de la directrice
+        canvas.beginText();
+        canvas.setFontAndSize(bf, 10);
+        //canvas.showTextAligned(PdfContentByte.ALIGN_LEFT, "La Directrice", 450, 190, 0);
+        canvas.endText();
     }
 
     private void addMetaData(Document document) {
@@ -228,11 +232,11 @@ public class LettreAffectationService {
         document.add(Chunk.NEWLINE);
         document.add(Chunk.NEWLINE);
 
-        Paragraph signature = new Paragraph("Directeur de l'ENICarthage", normalFont);
+        Paragraph signature = new Paragraph("Directrice de l'ENICarthage", normalFont);
         signature.setAlignment(Element.ALIGN_RIGHT);
         document.add(signature);
 
-        Paragraph directorName = new Paragraph("Hassen Zairi", boldFont);
+        Paragraph directorName = new Paragraph("Houda BEN ATTIA SETTHOM", boldFont);
         directorName.setAlignment(Element.ALIGN_RIGHT);
         document.add(directorName);
     }

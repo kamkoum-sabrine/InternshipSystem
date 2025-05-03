@@ -19,7 +19,7 @@ public class LettreAffectationController {
 
     @PostMapping("/generate/{conventionId}")
     public ResponseEntity<Resource> generateLettreAffectation(@PathVariable Long conventionId) {
-        ConventionStageEte convention = lettreAffectationService.generateAndStoreLettreAffectation(conventionId);
+        ConventionStageEte convention = lettreAffectationService.generateAndStoreSignedLettreAffectation(conventionId);
 
         Resource resource = lettreAffectationService.loadLettreAffectationAsResource(
                 convention.getLettreAffectationChemin());
