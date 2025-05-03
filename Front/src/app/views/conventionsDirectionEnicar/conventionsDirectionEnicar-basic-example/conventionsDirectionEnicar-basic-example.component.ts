@@ -61,6 +61,11 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
     },
 
     {
+      key: 'lettreAffectationNom',
+      label: ' Lettre d\'affectation'
+    },
+
+    {
       key: 'actions',
       label: 'Actions'
     }
@@ -102,6 +107,35 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
     let fileUrl;
     if (this.tabs == 0) {
       fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
+
+    }
+    else {
+      fileUrl = `http://localhost:8081/api/conventionStagPFE/uploads/${nomFichier}`;
+
+    }
+    fetch(fileUrl, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`, // Récupère le token si JWT est utilisé
+      },
+    })
+      .then(response => {
+        if (!response.ok) throw new Error("Accès refusé !");
+        return response.blob();
+      })
+      .then(blob => {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = nomFichier;
+        link.click();
+      })
+      .catch(error => console.error("Erreur lors du téléchargement :", error));
+  }
+
+  downloadPDFAffectation(nomFichier: string) {
+    let fileUrl;
+    if (this.tabs == 0) {
+      fileUrl = `http://localhost:8081/api/conventions/lettre-affectation/uploads/${nomFichier}`;
 
     }
     else {
@@ -364,6 +398,8 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
         Swal.fire('Erreur', 'Impossible de télécharger le fichier', 'error');
       });
   }
+
+
   openAnnulationModal(conventionId: number) {
     this.currentConventionId = conventionId;
     this.modalService.open(this.annulationModal);

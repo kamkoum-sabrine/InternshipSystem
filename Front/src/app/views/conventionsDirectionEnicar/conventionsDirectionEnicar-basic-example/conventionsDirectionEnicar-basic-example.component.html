@@ -46,6 +46,14 @@
         </a>
       </ng-container>
 
+      <ng-container *ngIf="columnName === 'lettreAffectationNom'">
+        <a *ngIf="item.fichierPDFChemin" (click)="downloadPDFAffectation(item.lettreAffectationNom)"
+          class="text-primary text-decoration-underline" style="cursor: pointer;">
+          {{item.lettreAffectationNom}}
+        </a>
+      </ng-container>
+
+
     </td>
   </ng-template>
 </c-smart-table>
