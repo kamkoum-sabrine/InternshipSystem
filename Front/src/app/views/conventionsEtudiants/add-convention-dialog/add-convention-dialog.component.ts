@@ -100,7 +100,6 @@ export class AddConventionDialogComponent {
     cahierDeCharge: '',
     materielALaDispositionEtudiant: '',
     materielDeRealisation: '',
-    // fichierPDF: null as File | null
 
   }
   userId: any;
@@ -132,23 +131,14 @@ export class AddConventionDialogComponent {
       }
       i++;
 
-
     }
 
     this.extractedText = fullText;
     this.isLoading = false;
     this.isSubmitDisabled = false; // Réactive le bouton
     console.log("extractedText ", this.extractedText)
-    // if (images.length > 0) {
-    //   const blob = await this.canvasToBlob(images[0]);
-    //   const extractedText = await this.ocrService.extractText(new File([blob], "image.png"));
-    //   this.extractedText = extractedText;
-    //   // Traitement terminé
-    //   this.isLoading = false;
-    //   this.isSubmitDisabled = false; // Réactive le bouton
-    // }
+   
   }
-  // Méthode factice pour simuler l'extraction (à remplacer par votre code)
   private simulatePdfExtraction(file: File): Promise<string> {
     return new Promise((resolve) => {
       setTimeout(() => {
@@ -167,7 +157,6 @@ export class AddConventionDialogComponent {
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const data = imageData.data;
 
-    // Convertir en niveaux de gris et augmenter le contraste
     for (let i = 0; i < data.length; i += 4) {
       let avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
       avg = avg > 128 ? 255 : 0; // Binarisation
@@ -178,14 +167,7 @@ export class AddConventionDialogComponent {
     return this.canvasToBlob(canvas);
   }
 
-  // Fonction pour extraire une valeur entre deux clés
-  // extractValue(text: string, startKey: string, endKey: string): string {
-  //   const startIndex = text.indexOf(startKey) + startKey.length;
-  //   const endIndex = text.indexOf(endKey, startIndex);
-  //   return text.substring(startIndex, endIndex).trim();
-  // }
-
-  // Fonction pour parser TOUTES les données de l'entreprise
+  
   parseEntrepriseDataEte(text: string) {
     return {
       nom: this.extractValue(text, "L’établissement d’accueil :", "Adresse :"),
@@ -199,22 +181,8 @@ export class AddConventionDialogComponent {
   }
 
 
-  // parseEntrepriseDataPFE(text: string) {
-
-  //   return {
-  //     nom: this.extractValue(text, "Dénomination sociale :", "Adresse :"),
-  //     adresse: this.extractValue(text, "Adresse :", "Représenté par :"),
-  //     representePar: this.extractValue(text, "Représenté par :", "En qualité de : "),
-  //     tuteur: "",
-  //     email: this.extractValue(text, "E-mail : ", "Site Web :"),
-  //     telephone: this.extractValue(text, "N° téléphone : ", "Fax : "),
-  //     fax: this.extractValue(text, "Fax : ", "E-mail : "),
-  //     siteWeb: this.extractValue(text, "Site Web :", "Concernant l’étudiant stagiaire :"),
-  //     domaineActivites: this.extractValue(text, "Domaine d’activités :", "N° téléphone : ")
-  //   };
-  // }
+ 
   parseEntrepriseDataPFE(text: string) {
-    // D'abord, isoler la section de l'entreprise d'accueil
     const entrepriseSection = this.extractValue(
       text,
       "Et I’établissement d accueil ci-dessous désigné :",
@@ -223,18 +191,15 @@ export class AddConventionDialogComponent {
     console.log(text)
     console.log("Entreprise Section", entrepriseSection)
 
-    // Ensuite extraire chaque champ précisément
     return {
       nom: this.extractValue(entrepriseSection, "Dénomination sociale :", "Adresse :"),
       adresse: this.extractValue(entrepriseSection, "Adresse :", "Représenté par :"),
       representePar: this.extractValue(entrepriseSection, "Représenté par :", "En qualité de :"),
-      // qualite: this.extractValue(entrepriseSection, "En qualité de :", "Domaine d'activités :"),
       domaineActivites: this.extractValue(entrepriseSection, "Domaine d’activités :", "Ne téléphone :"),
       telephone: this.extractValue(entrepriseSection, "Ne téléphone :", "Fax :"),
       fax: this.extractValue(entrepriseSection, "Fax :", "E-mail :"),
       email: this.extractValue(entrepriseSection, "E-mail :", "Site Web :"),
       siteWeb: this.extractValue(entrepriseSection, "Site Web :", "Concernant I’étudiant stagiaire :"),
-      // tuteur: this.parseTuteurDataPFE(text) // Extraction séparée du tuteur
       tuteur: ''
     };
   }
@@ -260,7 +225,6 @@ export class AddConventionDialogComponent {
   }
 
   parseConventionDataPFE(text: string) {
-    // D'abord, isoler la section de l'entreprise d'accueil
     const conventionPFESection = this.extractValue(
       text,
       "Description détaillée du stage (réservée a I’établissement d’accueil) :",
@@ -269,21 +233,18 @@ export class AddConventionDialogComponent {
     console.log(text)
     console.log("Convention PFE Section", conventionPFESection)
 
-    // Ensuite extraire chaque champ précisément
     return {
       lieu: this.extractValue(conventionPFESection, "Lieu (En Tunisie ou a I’étranger) :", "Intitulé du sujet :"),
       intituleSujet: this.extractValue(conventionPFESection, "Intitulé du sujet :", "Cahier des charges :"),
       materielALaDispositionEtudiant: this.extractValue(conventionPFESection, "Matériel mis a la disposition de I’étudiant stagiaire :", "Matériel nécessaire a la réalisation :"),
       cahierDeCharge: this.extractValue(conventionPFESection, "Cahier des charges :", "Matériel mis a la disposition de I’étudiant stagiaire :"),
       materielDeRealisation: this.extractValue(conventionPFESection, "Matériel nécessaire a la réalisation :", "Tuteur encadrant I’étudiant dans I’établissement d accueil :"),
-      // fichierPDF: null,
       tuteurStage: '',
       entrepriseId: '',
       etudiantId: ''
     };
 
   }
-  // Version améliorée de extractValue
   extractValue(text: string, startKey: string, endKey: string): string {
     if (!text) return '';
 
@@ -300,10 +261,7 @@ export class AddConventionDialogComponent {
     return text.substring(valueStart, endIndex).trim();
   }
   parseDureeData(text: string): { dateDebut: string, dateFin: string } {
-    // Nettoyage du texte pour uniformiser les sauts de ligne
     const cleanText = text.replace(/\r?\n|\r/g, ' ');
-
-    // Pattern amélioré pour capturer spécifiquement les dates
     const pattern = /Pour la durée\s*:\s*Du\s*:\s*([0-9\/]+)\s*au\s*:\s*([0-9\/]+)/i;
     const match = cleanText.match(pattern);
 
@@ -314,7 +272,6 @@ export class AddConventionDialogComponent {
       };
     }
 
-    // Fallback si le premier pattern ne fonctionne pas
     const fallbackPattern = /Du\s*:\s*([0-9\/]+)\s*au\s*:\s*([0-9\/]+)/i;
     const fallbackMatch = cleanText.match(fallbackPattern);
 
@@ -323,11 +280,9 @@ export class AddConventionDialogComponent {
       : { dateDebut: '', dateFin: '' };
   }
 
-  // Dans votre composant/service
   prepareConventionData() {
     const rawData = this.parseDureeData(this.extractedText);
 
-    // Conversion des dates au format ISO (yyyy-MM-dd)
     const conventionData = {
       dateDebut: this.convertToJavaDate(rawData.dateDebut),
       dateFin: this.convertToJavaDate(rawData.dateFin)
@@ -339,15 +294,10 @@ export class AddConventionDialogComponent {
   private convertToJavaDate(dateString: string): string {
     if (!dateString) return '';
 
-    // Formatage pour Java (yyyy-MM-dd)
     const [day, month, year] = dateString.split('/');
     return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
   }
 
-  // Alternative avec DatePipe si disponible
-  // private convertWithDatePipe(dateString: string): string {
-  //   return this.datePipe.transform(dateString, 'yyyy-MM-dd');
-  // }
   ngOnInit() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.utilisateur = user
@@ -358,23 +308,20 @@ export class AddConventionDialogComponent {
       this.myConventions = data;
       console.log(this.myConventions);
     });
-    // this.gererConventionsEtudiantService.getAllRoles().subscribe((data) => {
-    //   this.roles = data;
-    // });
+   
 
   }
 
-  // Fermer le modal sans enregistrer
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  // Soumettre le formulaire
   onSubmit(): void {
     if (this.isSubmitDisabled) return; // Empêche la soumission si désactivé
     const user = JSON.parse(localStorage.getItem('user') || '{}');
+    console.log(user.niveau);
 
-    if (user.niveau == "DEUXIEME") {
+    if (user.niveau == "DEUXIEME" || user.niveau == "PREMIERE") {
       this.entreprise = this.parseEntrepriseDataEte(this.extractedText);
       console.log(this.entreprise); // Vérifiez les données extraites
 
@@ -391,17 +338,13 @@ export class AddConventionDialogComponent {
         if (data.exists == false) {
           this.entrepriseService.addEntreprise(this.entreprise).subscribe((data) => {
             console.log("entreprise insére " + data.id)
-            // this.tuteurPFE.entreprise = data.id
             this.checkExistenceTuteurPFE(data.id)
-            // this.continuerSoumission(data.id, user.niveau);
           });
         }
         else {
 
           console.log("entreprise id ", data.entreprise.id)
-          // this.tuteurPFE.entreprise = data.tuteur.id
           this.checkExistenceTuteurPFE(data.entreprise.id)
-          // this.continuerSoumission(data.entreprise.id, user.niveau,);
         }
       },
       error: (err) => {
@@ -422,9 +365,7 @@ export class AddConventionDialogComponent {
       }
     })
 
-
   }
-
   checkExistenceTuteurPFE(idEntreprise: any): void {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
 
@@ -437,8 +378,6 @@ export class AddConventionDialogComponent {
           this.tuteurPFEService.addTuteur(this.tuteurPFE, idEntrepriseTuteur).subscribe((data) => {
             console.log("tuteur insére " + data.id)
             this.idTuteurInserted = data.id
-            // this.continuerSoumission(data.entreprise.id, user.niveau);
-
             this.continuerSoumission(data.id, user.niveau);
           });
         }
@@ -449,7 +388,6 @@ export class AddConventionDialogComponent {
           this.idTuteurInserted = data.tuteur.id
           this.continuerSoumission(data.tuteur.id, user.niveau);
 
-          // this.continuerSoumission(data.entreprise.id);
         }
       },
       error: (err) => {
@@ -483,11 +421,9 @@ export class AddConventionDialogComponent {
       const formData = new FormData();
       formData.append('etudiantId', this.convention.etudiantId);
       formData.append('entrepriseId', idEntreprise);
-      // formData.append('adresse', this.convention.adresse);
-      // formData.append('representePar', this.convention.representePar);
+      
       formData.append('tuteurStage', this.entreprise.tuteur);
-      // formData.append('email', this.convention.email);
-      // formData.append('telephone', this.convention.telephone);
+      
       formData.append('dateDebut', dureeStageCorrect.dateDebut);
       formData.append('dateFin', dureeStageCorrect.dateFin);
 
@@ -509,17 +445,10 @@ export class AddConventionDialogComponent {
             text: 'La convention a été créée avec succès !',
             confirmButtonText: 'OK'
           });
-          // this.conventionsEtudiantsService.getMesConventions(this.convention.etudiantId).subscribe(data => {
-          //   this.myConventions = data;
-          //   console.log(this.myConventions);
-          // });
+         
           this.dialogRef.close();
           window.location.reload();
-          // this.conventionsEtudiantsService.getMesConventions(user.id).subscribe(data => {
-          //   this.myConventions = data;
-          //   console.log(this.myConventions);
-          // });
-          // this.dialogRef.close(this.utilisateur);
+          
         }
       );
     }
@@ -561,17 +490,10 @@ export class AddConventionDialogComponent {
             text: 'La convention a été créée avec succès !',
             confirmButtonText: 'OK'
           });
-          // this.conventionsEtudiantsService.getMesConventions(this.convention.etudiantId).subscribe(data => {
-          //   this.myConventions = data;
-          //   console.log(this.myConventions);
-          // });
+         
           this.dialogRef.close();
           window.location.reload();
-          // this.conventionsEtudiantsService.getMesConventions(user.id).subscribe(data => {
-          //   this.myConventions = data;
-          //   console.log(this.myConventions);
-          // });
-          // this.dialogRef.close(this.utilisateur);
+          
         }
       );
 

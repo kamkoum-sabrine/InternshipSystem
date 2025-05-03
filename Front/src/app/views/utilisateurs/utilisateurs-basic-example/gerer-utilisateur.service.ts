@@ -31,8 +31,13 @@ export class GererUtilisateurService {
   }
 
   updateProfile(user: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/users/etudiants/${user.id}`, user);
+    return this.http.put<any>(`${this.apiUrl}/users/update/${user.id}`, user);
   }
+
+  getEmailsPhonesFax(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/users/emailsphonesfax`);
+  }
+
 
 
 

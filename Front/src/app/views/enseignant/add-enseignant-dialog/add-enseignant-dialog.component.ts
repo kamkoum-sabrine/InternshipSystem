@@ -1,37 +1,47 @@
-import { Component } from '@angular/core';
-import { GererEnseignatService } from '../enseignant-basic-example/gerer-enseignant-service.service';
-import { Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
-import { RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, FormControlDirective, FormDirective, FormLabelDirective, FormSelectDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, ButtonDirective, ColDirective, InputGroupComponent, InputGroupTextDirective } from '@coreui/angular-pro';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+  RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent,
+  CardBodyComponent, FormControlDirective, FormDirective, FormLabelDirective,
+  FormSelectDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective,
+  ButtonDirective, ColDirective, InputGroupComponent, InputGroupTextDirective
+} from '@coreui/angular-pro';
+
+import { GererEnseignatService } from '../enseignant-basic-example/gerer-enseignant-service.service';
+import { EnseignantService } from '../enseignant-service.service';
 
 @Component({
   selector: 'app-add-enseignant-dialog',
   standalone: true,
   imports: [
     CommonModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    FormsModule,
-    RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent, CardBodyComponent, FormControlDirective, ReactiveFormsModule, FormsModule, FormDirective, FormLabelDirective, FormSelectDirective, FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective, ButtonDirective, ColDirective, InputGroupComponent, InputGroupTextDirective
+    MatDialogModule, MatButtonModule, MatFormFieldModule, MatInputModule,
+    FormsModule, ReactiveFormsModule,
+    RowComponent, ColComponent, TextColorDirective, CardComponent, CardHeaderComponent,
+    CardBodyComponent, FormControlDirective, FormDirective, FormLabelDirective, FormSelectDirective,
+    FormCheckComponent, FormCheckInputDirective, FormCheckLabelDirective,
+    ButtonDirective, ColDirective, InputGroupComponent, InputGroupTextDirective
   ],
   templateUrl: './add-enseignant-dialog.component.html',
   styleUrl: './add-enseignant-dialog.component.scss'
 })
-export class AddEnseignantDialogComponent {
+export class AddEnseignantDialogComponent implements OnInit {
 
   enseignantForm: FormGroup;
+  emailsExistants: string[] = [];
+  emailExistant: boolean = false;
 
-  constructor(private fb: FormBuilder, private GererEnseignatService: GererEnseignatService,
+  constructor(
+    private fb: FormBuilder,
+    private gererEnseignatService: GererEnseignatService,
+    private enseignatService: EnseignantService,
     public dialogRef: MatDialogRef<AddEnseignantDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -42,23 +52,50 @@ export class AddEnseignantDialogComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.getEmails();
+  }
+
+  getEmails(): void {
+    this.enseignatService.getEnseignants().subscribe(
+      (enseignants: any[]) => {
+        this.emailsExistants = enseignants
+          .map(e => e.email?.toLowerCase()?.trim())
+          .filter(email => !!email); // garde uniquement les emails valides
+      },
+      error => {
+        console.error("Erreur lors du chargement des emails existants", error);
+      }
+    );
+  }
+
+
   onNoClick(): void {
     this.dialogRef.close();
   }
 
   onSubmit(): void {
-    if (this.enseignantForm.valid) {
-      const enseignantData = this.enseignantForm.value; // Récupérer les données du formulaire
-      console.log('Soutenance créée:', enseignantData);
+    const { email } = this.enseignantForm.value;
+    const emailLower = email?.toLowerCase().trim();
 
-      this.GererEnseignatService.addEnseignant(enseignantData).subscribe(
+    if (this.emailsExistants.includes(emailLower)) {
+      this.emailExistant = true;
+      return;
+    }
+
+    this.emailExistant = false;
+
+    if (this.enseignantForm.valid) {
+      const enseignantData = this.enseignantForm.value;
+
+      this.gererEnseignatService.addEnseignant(enseignantData).subscribe(
         response => {
-          console.log('Soutenance enregistrée avec succès:', response);
+          console.log('Enseignant ajouté avec succès:', response);
           this.dialogRef.close(enseignantData);
           window.location.reload();
         },
         error => {
-          console.error('Erreur lors de l\'enregistrement de la soutenance:', error);
+          console.error('Erreur lors de l\'ajout de l\'enseignant:', error);
         }
       );
     } else {

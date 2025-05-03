@@ -1,0 +1,37 @@
+<c-row>
+    <c-col xs="12">
+      <c-card class="mb-4">
+        <c-card-header ngPreserveWhitespaces>
+          <strong>Gérer </strong> <small>Les attestations</small>
+        </c-card-header>
+        <!-- <button mat-raised-button (click)="openDialog()">Ajouter un utilisateur</button> -->
+        <!-- <button class="btn btn-primary mb-3" (click)="openDialog()">Ajouter un utilisateur</button> -->
+  
+        <c-card-body>
+          <c-tabs [activeItemKey]="0" (activeItemKeyChange)="handleActiveItemChange($event)">
+           
+            <c-tabs-content>
+              <c-tab-panel [itemKey]="0" class="p-3">
+                <!-- <strong class="text-info">Conventions stage d'été</strong> -->
+                <div *ngIf="attestations">
+                  <app-attestation-service-basic-example [attestations]="attestations" [tabs]="0" />
+                </div>
+  
+                <!-- <app-utilisateurs-basic-example [users]="users" /> -->
+                <!-- </app-docs-example> -->
+              </c-tab-panel>
+            
+  
+            </c-tabs-content>
+          </c-tabs>
+        </c-card-body>
+  
+        <!-- <c-card-body>
+          <div *ngIf="conventions">
+            <app-conventionsService-basic-example [conventions]="conventions" />
+          </div>
+        </c-card-body> -->
+      </c-card>
+    </c-col>
+  
+  </c-row>

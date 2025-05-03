@@ -25,9 +25,10 @@ import {
   TextColorDirective,
   ThemeDirective
 } from '@coreui/angular-pro';
-
 import { IconDirective } from '@coreui/icons-angular';
+import { NotificationService } from 'src/app/layout/default-layout/default-header/notification.service';
 import { AuthService } from 'src/app/views/pages/login/auth.service';
+import { SoutenancesServiceService } from 'src/app/views/soutenances/soutenances-service.service';
 
 @Component({
   selector: 'app-default-header',
@@ -35,7 +36,12 @@ import { AuthService } from 'src/app/views/pages/login/auth.service';
   standalone: true,
   imports: [ContainerComponent, HeaderTogglerDirective, SidebarToggleDirective, IconDirective, HeaderNavComponent, NavItemComponent, NavLinkDirective, RouterLink, RouterLinkActive, NgTemplateOutlet, BreadcrumbRouterComponent, ThemeDirective, DropdownComponent, DropdownToggleDirective, TextColorDirective, AvatarComponent, DropdownMenuDirective, DropdownHeaderDirective, DropdownItemDirective, BadgeComponent, DropdownDividerDirective, ProgressBarDirective, ProgressComponent, NgStyle]
 })
+
 export class DefaultHeaderComponent extends HeaderComponent {
+  isetudiant: any = false;
+  etudiant: any;
+  soutenance: any;
+  soutenances: any;
 
   readonly #colorModeService = inject(ColorModeService);
   readonly colorMode = this.#colorModeService.colorMode;
@@ -46,18 +52,54 @@ export class DefaultHeaderComponent extends HeaderComponent {
     { name: 'auto', text: 'Auto', icon: 'cilContrast' }
   ];
   user: any;
+  public newNotifications: any[] = [];
 
   readonly icons = computed(() => {
     const currentMode = this.colorMode();
     return this.colorModes.find(mode => mode.name === currentMode)?.icon ?? 'cilSun';
   });
 
-  constructor(public authService: AuthService) {
+  constructor(
+    public authService: AuthService,
+    private notificationService: NotificationService,
+    private SoutenancesServiceService: SoutenancesServiceService
+  ) {
     super();
   }
 
   ngOnInit(): void {
     this.loadCurrentUser();
+
+    this.SoutenancesServiceService.getSoutenances().subscribe(data => {
+      this.soutenances = data;
+      this.checkStudentNotifications();
+      this.setupNotificationSubscription();
+    });
+  }
+
+  private checkStudentNotifications(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (user.role?.nom === 'ETUDIANT') {
+      this.isetudiant = true;
+      this.etudiant = user;
+      this.soutenances = this.soutenances.filter((soutenance: any) => soutenance.etudiant.id === this.etudiant.id);
+
+      if (this.soutenances.length > 0) {
+        this.notificationService.addNotification({
+          id: 1,
+          title: 'Nouvelle soutenance',
+          icon: 'cilCalendar',
+          color: 'danger',
+          link: 'soutenances'
+        });
+      }
+    }
+  }
+
+  private setupNotificationSubscription(): void {
+    this.notificationService.currentNotifications.subscribe(notifs => {
+      this.newNotifications = notifs.filter(n => n); // Filtre les valeurs null
+    });
   }
 
   loadCurrentUser(): void {
@@ -131,19 +173,15 @@ export class DefaultHeaderComponent extends HeaderComponent {
     }
   ];
 
-  public newNotifications = [
-    { id: 0, title: 'New user registered', icon: 'cilUserFollow', color: 'success' },
-    { id: 1, title: 'User deleted', icon: 'cilUserUnfollow', color: 'danger' },
-    { id: 2, title: 'Sales report is ready', icon: 'cilChartPie', color: 'info' },
-    { id: 3, title: 'New client', icon: 'cilBasket', color: 'primary' },
-    { id: 4, title: 'Server overloaded', icon: 'cilSpeedometer', color: 'warning' }
-  ];
 
+
+
+  /*
   public newStatus = [
     { id: 0, title: 'CPU Usage', value: 25, color: 'info', details: '348 Processes. 1/4 Cores.' },
     { id: 1, title: 'Memory Usage', value: 70, color: 'warning', details: '11444GB/16384MB' },
     { id: 2, title: 'SSD 1 Usage', value: 90, color: 'danger', details: '243GB/256GB' }
-  ];
+  ];*/
 
   public newTasks = [
     { id: 0, title: 'Upgrade NPM', value: 0, color: 'info' },

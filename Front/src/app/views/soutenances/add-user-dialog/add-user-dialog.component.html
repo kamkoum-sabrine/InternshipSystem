@@ -7,6 +7,18 @@
             <c-card-body>
                 <form (ngSubmit)="onSubmit()" cForm>
 
+
+                    <c-row *ngIf="errorMessage" class="mb-3">
+                        <c-col xs="12">
+                            <div class="alert alert-danger alert-dismissible fade show" [innerHTML]="errorMessage"
+                                role="alert">
+                                <strong>Erreur :</strong> {{ errorMessage }}
+                                <button type="button" class="btn-close" (click)="errorMessage = null"
+                                    aria-label="Close"></button>
+                            </div>
+                        </c-col>
+                    </c-row>
+
                     <!-- Date Field -->
                     <c-row class="mb-3">
                         <label cLabel class="col-sm-2 col-form-label" for="date">Date</label>
@@ -88,21 +100,13 @@
 
 
                     <!-- Afficher l'erreur en haut du formulaire -->
-                    <c-row *ngIf="errorMessage" class="mb-3">
-                        <c-col xs="12">
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong>Erreur :</strong> {{ errorMessage }}
-                                <button type="button" class="btn-close" (click)="errorMessage = null"
-                                    aria-label="Close"></button>
-                            </div>
-                        </c-col>
-                    </c-row>
+
 
                     <!-- ... reste de votre formulaire ... -->
 
 
                     <!-- Action Buttons -->
-                    <c-row class="mb-3">
+                    <c-row class="mb-3 mt-4">
                         <c-col sm="12" class="d-flex justify-content-end">
                             <button cButton class="me-3" color="danger" type="button" style="color: #ffffff;"
                                 (click)="onNoClick()">Annuler</button>

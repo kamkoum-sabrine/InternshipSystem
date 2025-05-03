@@ -1,0 +1,67 @@
+<div *ngIf="deadlineLivrable" class="alert alert-warning d-flex align-items-center" role="alert">
+    <i class="fa fa-exclamation-triangle me-2"></i>
+    <div>
+        Date limite de dépôt : <strong>{{ deadlineLivrable | date: 'dd/MM/yyyy' }}</strong>
+    </div>
+</div>
+
+<div *ngIf="isEtudiant === true" class="d-flex justify-content-end mb-3">
+    <button class="btn btn-success text-white me-5 mt-4" (click)="openDialog()">
+        Déposer un livrable
+    </button>
+</div>
+
+<c-smart-table *ngIf="livrables && livrables.length > 0" [activePage]="1" [columnSorter]="true" [columns]="columns"
+    [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="10" [items]="livrables"
+    [sorterValue]="{ column: 'name', state: 'asc' }" [tableProps]="{ hover: true, striped: true, responsive: true }"
+    [tableBodyProps]="{ align: 'middle' }" clickableRows header pagination>
+
+    <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item">
+        <td>
+
+            <!-- Lien vers le fichier PDF -->
+            <ng-container *ngIf="columnName === 'fichier'">
+                <a [href]="livrablesService.getLivrableFileUrl(item.fichierPDFNom)" target="_blank"
+                    class="btn btn-link">
+                    {{ item.fichierPDFNom }}
+                </a>
+
+            </ng-container>
+
+            <!-- Affichage de l'état avec badge -->
+            <ng-container *ngIf="columnName === 'etat'">
+                <c-badge [color]="getEtatColor(item.etat)">
+                    {{ item.etat }}
+                </c-badge>
+            </ng-container>
+
+            <!-- Affichage de l'action (ex : supprimer un livrable) uniquement pour l'étudiant -->
+            <ng-container *ngIf="columnName === 'action'">
+                <!-- Boutons pour l'étudiant -->
+                <ng-container *ngIf="isEtudiant">
+                    <ng-container *ngIf="item.etat === 'Déposé'">
+                        <button cButton color="danger" size="sm" (click)="deleteLivrable(item.id)">
+                            <i class="fa fa-times" style="color: #ffffff;"></i>
+                        </button>
+                    </ng-container>
+                </ng-container>
+
+                <!-- Boutons pour le personnel administratif -->
+                <ng-container *ngIf="!isEtudiant">
+                    <button cButton color="success" size="sm" class="me-2" (click)="validerLivrable(item.id)">
+                        <i class="fa fa-check" style="color: #ffffff;"></i>
+                    </button>
+                    <button cButton color="danger" size="sm" (click)="refuserLivrable(item.id)">
+                        <i class="fa fa-times" style="color: #ffffff;"></i>
+                    </button>
+                </ng-container>
+            </ng-container>
+
+            <!-- Affichage générique pour les autres colonnes -->
+            <ng-container *ngIf="!['fichier', 'etat', 'action'].includes(columnName)">
+                {{ item[columnName] }}
+            </ng-container>
+
+        </td>
+    </ng-template>
+</c-smart-table>

@@ -1,0 +1,33 @@
+<!-- <button class="btn btn-warning text-white mb-3" (click)="telechargerConvention()">Télécharger ma convention</button>
+<br />
+<button class="btn btn-warning text-white mb-3" (click)="openDialog()">Déposer une convention</button> -->
+
+<c-smart-table *ngIf="attestations && attestations.length > 0" [activePage]="1" [columnSorter]="true" [columns]="columns"
+    [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="5" [items]="attestations"
+    [sorterValue]="{ column: 'name', state: 'asc' }" [tableFilter]="true"
+    [tableProps]="{ hover: true, striped: true, responsive: true }" [tableBodyProps]="{ align: 'middle' }" cleaner
+    clickableRows footer header pagination>
+  
+    <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
+      <td>
+        <ng-container *ngIf=" columnName==='etudiant'">
+            {{item[columnName].nom}} {{item[columnName].prenom}}
+          </ng-container>
+  
+        <!-- Pour la colonne 'Action', afficher les boutons de suppression et de modification -->
+       
+  
+        
+        <ng-container *ngIf="columnName === 'dateDepot'">
+          {{ getDate(item.dateDepot) }}
+        </ng-container>
+        <ng-container *ngIf="columnName === 'nomFichier'">
+          <a *ngIf="item.cheminFichier" (click)="downloadPDF(item.id)"
+            class="text-primary text-decoration-underline" style="cursor: pointer;">
+            {{item.nomFichier}}
+          </a>
+        </ng-container>
+  
+      </td>
+    </ng-template>
+  </c-smart-table>

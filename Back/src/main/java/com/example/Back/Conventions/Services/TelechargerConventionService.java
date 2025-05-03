@@ -31,10 +31,10 @@ public class TelechargerConventionService {
 
 
 
-            if (formData.get("Formation").equals(String.valueOf(Formation.INGENIERIE))) {
+            if (formData.get("Formation").equals(String.valueOf(Formation.Ingénierie))) {
                 drawText(canvas, font, "x", 93, 508);
             }//Ingénierie
-            else if (formData.get("Formation").equals(String.valueOf(Formation.MASTERE))) {
+            else if (formData.get("Formation").equals(String.valueOf(Formation.Mastère))) {
                 drawText(canvas, font, "x", 154, 508);
             }
 

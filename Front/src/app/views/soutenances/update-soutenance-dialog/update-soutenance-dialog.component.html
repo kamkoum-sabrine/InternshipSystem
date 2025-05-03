@@ -7,6 +7,17 @@
             <c-card-body>
                 <form (ngSubmit)="onSubmit()" cForm>
 
+                    <c-row *ngIf="errorMessage" class="mb-3">
+                        <c-col xs="12">
+                            <div class="alert alert-danger alert-dismissible fade show" [innerHTML]="errorMessage"
+                                role="alert">
+                                <strong>Erreur :</strong> {{ errorMessage }}
+                                <button type="button" class="btn-close" (click)="errorMessage = null"
+                                    aria-label="Close"></button>
+                            </div>
+                        </c-col>
+                    </c-row>
+
                     <!-- Date Field -->
                     <c-row class="mb-3">
                         <label cLabel class="col-sm-2 col-form-label" for="date">Date</label>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+
+    <!-- Appenders -->
+    <Appenders>
+        <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <!-- File Appender -->
+        <File name="FileLogger" fileName="C:/Users/LENOVO/Desktop/Web Project/InternshipSystem/Back/src/main/resources/logs/app.log" append="true">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+    </Appenders>
+
+    <!-- Loggers -->
+    <Loggers>
+        <!-- Root Logger (logs to Console and File) -->
+        <Root level="debug">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileLogger"/>
+        </Root>
+
+        <!-- Logger for the 'com.example.Back' package (logs to Console and File) -->
+        <Logger name="com.example.Back" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="FileLogger"/>
+        </Logger>
+    </Loggers>
+
+</Configuration>

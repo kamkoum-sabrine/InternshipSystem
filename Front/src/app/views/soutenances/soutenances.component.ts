@@ -28,8 +28,10 @@ export class SoutenancesComponent {
 
   soutenances: any;
 
+
   constructor(private SoutenancesServiceService: SoutenancesServiceService, public dialog: MatDialog) { }
   ngOnInit(): void {
+
     this.SoutenancesServiceService.getSoutenances().subscribe(data => {
       this.soutenances = data;
       console.log(this.soutenances);
@@ -38,7 +40,7 @@ export class SoutenancesComponent {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(AddUserDialogComponent, {
-      width: '600px',
+      width: '600px',  // Largeur de la boîte de dialogue
       minWidth: '600px',  // Largeur minimale de 400px
       maxWidth: '600px',
     });

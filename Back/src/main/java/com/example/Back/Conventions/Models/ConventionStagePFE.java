@@ -50,6 +50,7 @@ public class ConventionStagePFE {
     private Integer valideeDirection;// 0 : en attente , 1: validée , -1 : non validée
     private Integer valideeComite;// 0 : en attente , 1: validée , -1 : non validée
     private Integer valideeChefDepartement;// 0 : en attente , 1: validée , -1 : non validée
+    private Integer valideeComiteChefDepartement;// 0 : en attente , 1: validée , -1 : non validée
 
     private Integer annulee; // par defaut 0 (en attente et si preuve annulation <> null)
     @Column(nullable = true)

@@ -28,6 +28,7 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }**/
+
    public String generateToken(String username) {
        // Récupérer l'utilisateur et ses rôles
        User user = userRepository.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));

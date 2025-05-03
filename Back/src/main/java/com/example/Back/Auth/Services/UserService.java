@@ -1,5 +1,6 @@
 package com.example.Back.Auth.Services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -130,5 +131,18 @@ public class UserService {
         userRepository.save(existingUser);
     }
 
+
+    public List<String> getAllEmailsAndPhonesAndFax () {
+        List<User> users = userRepository.findAll() ;
+        List<String> EmailsPhonesFax = new ArrayList<String>();
+        for (User user : users) {
+            EmailsPhonesFax.add(user.getEmail());
+            EmailsPhonesFax.add(user.getTel());
+            EmailsPhonesFax.add(user.getFax());
+            EmailsPhonesFax.add(String.valueOf(user.getCin()));
+
+        }
+        return EmailsPhonesFax ;
+    }
 
 }

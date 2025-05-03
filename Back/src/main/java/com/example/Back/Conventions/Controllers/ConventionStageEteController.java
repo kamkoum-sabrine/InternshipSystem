@@ -284,6 +284,33 @@ public class ConventionStageEteController {
                     .body(response);
       //  return ResponseEntity.ok("Convention validée avec succes");
     }
+    @PutMapping("/ValiderConventionComiteChef/{id}")
+    public ResponseEntity<?> ValiderConventionComiteChef(@PathVariable Long id)
+    {
+        Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(id);
+        if (conventionOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Convention non trouvée");
+        }
+        ConventionStageEte convention = conventionOptional.get();
+        /** if (convention.getValideeService() == -1) {
+         return ResponseEntity.badRequest().body("Cette convention n'est pas validée.");
+         }
+         if (convention.getValideeService() ==1 ) {
+         return ResponseEntity.badRequest().body("Cette convention est déja validée");
+         }**/
+        convention.setValideeComiteChefDepartement(1);
+        conventionStageEteRepository.save(convention);
+        Map<String, Object> response = new HashMap<>();
+
+
+        response.put("message", "Convention validée avec succes");
+        response.put("status", HttpStatus.ACCEPTED.value());
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+        //  return ResponseEntity.ok("Convention validée avec succes");
+    }
+
 
 
     @PutMapping("/RefuserConvention/{id}")
@@ -314,6 +341,35 @@ public class ConventionStageEteController {
                 .body(response);
        // return ResponseEntity.ok("Convention refusée avec succes");
     }
+    @PutMapping("/RefuserConventionComiteChef/{id}")
+    public ResponseEntity<?> RefuserConventionComiteChef(@PathVariable Long id,  @RequestBody RefusConventionDTO dto)
+    {
+        Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(id);
+        if (conventionOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Convention non trouvée");
+        }
+        ConventionStageEte convention = conventionOptional.get();
+        /** if (convention.getValideeService() == 1) {
+         return ResponseEntity.badRequest().body("Cette convention a été validée précedemment");
+         }
+         if (convention.getValideeService() ==-1 ) {
+         return ResponseEntity.badRequest().body("Cette convention est déja refusée");
+         }**/
+        convention.setValideeComiteChefDepartement(-1);
+        String remarques = dto.getRemarquesService();
+        convention.setRemarquesService(remarques);
+        conventionStageEteRepository.save(convention);
+        Map<String, Object> response = new HashMap<>();
+
+
+        response.put("message", "Convention refusée avec succes");
+        response.put("status", HttpStatus.ACCEPTED.value());
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+        // return ResponseEntity.ok("Convention refusée avec succes");
+    }
+
 
     @PutMapping("/ValiderConventionDirectionEnicar/{id}")
     public ResponseEntity<?> ValiderConventionDirectionEnicar(@PathVariable Long id) {
