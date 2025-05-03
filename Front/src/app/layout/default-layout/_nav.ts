@@ -34,6 +34,23 @@ export const navItems: INavDataExtended[] = [
     roles: ['SERVICE_STAGE', 'DIRECTION_STAGE']
   },
   {
+    name:'Attestations',
+    url:'/Attestations',
+    iconComponent: { name: 'cil-file' },
+
+    roles :['ETUDIANT']
+  },
+  {
+    name:' Les attestations',
+    url:'/AttestationService',
+    iconComponent: { name: 'cil-file' },
+
+    roles :['SERVICE_STAGE']
+  },
+
+
+
+  {
     name: 'Mes conventions',
     url: '/conventionsEtudiant',
     iconComponent: { name: 'cil-file' },
@@ -49,6 +66,13 @@ export const navItems: INavDataExtended[] = [
 
     roles: ['SERVICE_STAGE']
   },
+  {
+     name :'Les conventions',
+      url : '/ConventionsComiteChef',
+      iconComponent : { name : 'cil-file' },
+    roles: ['COMITE_CHEF_DEPARTEMENT']
+  },
+  
   {
     name: 'Les conventions',
     url: '/conventionsDirectionEnicar',

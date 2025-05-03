@@ -82,6 +82,25 @@ export const routes: Routes = [
         loadChildren: () => import('./views/conventionsEtudiants/routes').then((m) => m.routes)
       },
       {
+        path: 'conventionsEtudiant',
+        loadChildren: () => import('./views/conventionsEtudiants/routes').then((m) => m.routes)
+      },
+      {
+        path: 'AttestationService',
+        loadChildren: () => import('./views/attestation-service/routes').then((m) => m.routes)
+      },
+
+     { 
+      path : 'ConventionsComiteChef',
+      loadChildren: () => import('./views/convention-comite-chef/routes').then((m) => m.routes)
+     },
+
+     { 
+      path : 'Attestations',
+      loadComponent: () => import('./views/attestations/attestations.component').then((m) => m.AttestationsComponent)
+     },
+
+      {
         path: 'conventionsService',
         loadChildren: () => import('./views/conventionsService/routes').then((m) => m.routes)
 
