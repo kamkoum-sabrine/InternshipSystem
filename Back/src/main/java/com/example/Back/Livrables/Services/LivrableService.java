@@ -1,6 +1,8 @@
 package com.example.Back.Livrables.Services;
 
 
+import com.example.Back.Dealines.Model.Deadlines;
+import com.example.Back.Dealines.Repository.DeadlinesRepository;
 import com.example.Back.Auth.Models.User;
 import com.example.Back.Auth.Repositories.UserRepository;
 import com.example.Back.Livrables.Models.Livrable;
@@ -17,7 +19,6 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -25,10 +26,12 @@ import java.util.UUID;
 public class LivrableService {
     private final Livrablerepository livrableRepository;
     private final UserRepository userRepository;
+    private final DeadlinesRepository deadlinesRepository;
 
-    public LivrableService(Livrablerepository livrableRepository, UserRepository userRepository) {
+    public LivrableService(Livrablerepository livrableRepository, UserRepository userRepository , DeadlinesRepository deadlinesRepository) {
         this.livrableRepository = livrableRepository;
         this.userRepository = userRepository;
+        this.deadlinesRepository = deadlinesRepository;
     }
 
     public List<Livrable> getLivrables() {
@@ -53,10 +56,23 @@ public class LivrableService {
         livrable.setDateDepot(LocalDate.now());
         livrable.setFichierPDFNom(uniqueFileName);
         livrable.setFichierPDFChemin(filePath.toString());
-        livrable.setEtat(EtatLivrable.Déposé);
+
+        Deadlines deadlines;
+        LocalDate deadlineLivrable ;
+        deadlines = deadlinesRepository.findDeadlinesById(1L) ;
+        deadlineLivrable = deadlines.getDeadlineLivrable();
+
+
+        // Déterminer l'état selon la deadline
+        if (LocalDate.now().isAfter(deadlineLivrable)) {
+            livrable.setEtat(EtatLivrable.Retard);
+        } else {
+            livrable.setEtat(EtatLivrable.Déposé);
+        }
 
         return livrableRepository.save(livrable);
     }
+
 
     private String generateUniqueFileName(String originalName) {
         return UUID.randomUUID() + "_" + originalName;
@@ -142,4 +158,29 @@ public class LivrableService {
             throw new IllegalArgumentException("Échec de la suppression du fichier");
         }
     }
+
+    public Livrable validerLivrable(Long id, String username) {
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé"));
+
+
+
+        Livrable livrable = livrableRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Livrable non trouvé"));
+
+        livrable.setEtat(EtatLivrable.Validé);
+        return livrableRepository.save(livrable);
+    }
+
+    public Livrable refuserLivrable(Long id, String username) {
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé"));
+
+        Livrable livrable = livrableRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Livrable non trouvé"));
+
+        livrable.setEtat(EtatLivrable.Refusé);
+        return livrableRepository.save(livrable);
+    }
+
 }

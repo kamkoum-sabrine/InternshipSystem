@@ -11,14 +11,15 @@
                     <c-row class="mb-3">
                         <c-col sm="10">
                             <div class="position-relative d-inline-block">
-                                <img [src]="user.photo || 'assets/images/avatars/10.jpg'"
+                                <img [src]="user.photo || 'assets/images/avatars/etudiant.png'"
                                     class="rounded-circle avatar-xl">
-                                <label for="avatarUpload" class="avatar-edit">
+                                <label *ngIf="!isEtudiant" for="avatarUpload" class="avatar-edit">
                                     <c-icon name="cil-pencil"></c-icon>
                                     <input id="avatarUpload" type="file" (change)="onFileSelected($event)"
                                         accept="image/*" class="d-none">
                                 </label>
-                                <label *ngIf="user.photo" for="avatarDelete" class="avatar-delete text-danger mt-2">
+                                <label *ngIf="user.photo && !isEtudiant" for="avatarDelete"
+                                    class="avatar-delete text-danger mt-2">
                                     <c-icon name="cil-trash"></c-icon>
                                 </label>
                                 <input id="avatarDelete" type="button" class="d-none" (click)="deletePhoto()" />
@@ -34,7 +35,8 @@
                         <label cLabel class="col-sm-2 col-form-label" for="nom">Nom <span
                                 class="text-danger">*</span></label>
                         <c-col sm="10">
-                            <input formControlName="nom" id="nom" type="text" cFormControl placeholder="Votre nom">
+                            <input formControlName="nom" id="nom" type="text" cFormControl placeholder="Votre nom"
+                                readonly>
                             <div *ngIf="userForm.get('nom')?.invalid && (userForm.get('nom')?.touched || userForm.get('nom')?.dirty)"
                                 class="text-danger">
                                 <div *ngIf="userForm.get('nom')?.errors?.['required']">Le nom est requis</div>
@@ -48,7 +50,7 @@
                         <label cLabel class="col-sm-2 col-form-label" for="prenom">Prénom <span
                                 class="text-danger">*</span></label>
                         <c-col sm="10">
-                            <input formControlName="prenom" id="prenom" type="text" cFormControl>
+                            <input formControlName="prenom" id="prenom" type="text" cFormControl readonly>
                             <div *ngIf="userForm.get('prenom')?.invalid && (userForm.get('prenom')?.touched || userForm.get('prenom')?.dirty)"
                                 class="text-danger">
                                 <div *ngIf="userForm.get('prenom')?.errors?.['required']">Le prénom est requis</div>
@@ -62,7 +64,7 @@
                         <label cLabel class="col-sm-2 col-form-label" for="cin">CIN <span
                                 class="text-danger">*</span></label>
                         <c-col sm="10">
-                            <input formControlName="cin" id="cin" type="text" cFormControl>
+                            <input formControlName="cin" id="cin" type="text" cFormControl readonly>
                             <div *ngIf="userForm.get('cin')?.invalid && (userForm.get('cin')?.touched || userForm.get('cin')?.dirty)"
                                 class="text-danger">
                                 <div *ngIf="userForm.get('cin')?.errors?.['required']">Le CIN est requis</div>
@@ -77,13 +79,7 @@
                         <label cLabel class="col-sm-2 col-form-label" for="sexe">Sexe <span
                                 class="text-danger">*</span></label>
                         <c-col sm="10">
-                            <select formControlName="sexe" id="sexe" cSelect cFormControl>
-                                <option *ngFor="let f of sexeOptions" [value]="f">{{ f }}</option>
-                            </select>
-                            <div *ngIf="userForm.get('sexe')?.invalid && (userForm.get('sexe')?.touched || userForm.get('sexe')?.dirty)"
-                                class="text-danger">
-                                <div *ngIf="userForm.get('sexe')?.errors?.['required']">Le sexe est requis</div>
-                            </div>
+                            <input type="text" cFormControl [value]="userForm.get('sexe')?.value" readonly>
                         </c-col>
                     </c-row>
 
@@ -92,7 +88,8 @@
                         <label cLabel class="col-sm-2 col-form-label" for="dateDeNaissance">Date de naissance <span
                                 class="text-danger">*</span></label>
                         <c-col sm="10">
-                            <input formControlName="dateDeNaissance" id="dateDeNaissance" type="date" cFormControl>
+                            <input formControlName="dateDeNaissance" id="dateDeNaissance" type="date" cFormControl
+                                readonly>
                             <div *ngIf="userForm.get('dateDeNaissance')?.invalid && (userForm.get('dateDeNaissance')?.touched || userForm.get('dateDeNaissance')?.dirty)"
                                 class="text-danger">
                                 <div *ngIf="userForm.get('dateDeNaissance')?.errors?.['required']">Date requise</div>
@@ -104,7 +101,7 @@
                     <c-row class="mb-3">
                         <label cLabel class="col-sm-2 col-form-label" for="lieuNaissance">Lieu de naissance</label>
                         <c-col sm="10">
-                            <input formControlName="lieuNaissance" id="lieuNaissance" type="text" cFormControl>
+                            <input formControlName="lieuNaissance" id="lieuNaissance" type="text" cFormControl readonly>
                         </c-col>
                     </c-row>
 
@@ -169,13 +166,7 @@
                         <label cLabel class="col-sm-2 col-form-label" for="filiere">Filière <span
                                 class="text-danger">*</span></label>
                         <c-col sm="10">
-                            <select formControlName="filiere" id="filiere" cSelect cFormControl>
-                                <option *ngFor="let f of filiereOptions" [value]="f">{{ f }}</option>
-                            </select>
-                            <div *ngIf="userForm.get('filiere')?.invalid && (userForm.get('filiere')?.touched || userForm.get('filiere')?.dirty)"
-                                class="text-danger">
-                                <div *ngIf="userForm.get('filiere')?.errors?.['required']">Filière requise</div>
-                            </div>
+                            <input type="text" cFormControl [value]="userForm.get('filiere')?.value" readonly>
                         </c-col>
                     </c-row>
 
@@ -184,13 +175,7 @@
                         <label cLabel class="col-sm-2 col-form-label" for="formation">Formation <span
                                 class="text-danger">*</span></label>
                         <c-col sm="10">
-                            <select formControlName="formation" id="formation" cSelect cFormControl>
-                                <option *ngFor="let f of formationOptions" [value]="f">{{ f }}</option>
-                            </select>
-                            <div *ngIf="userForm.get('formation')?.invalid && (userForm.get('formation')?.touched || userForm.get('formation')?.dirty)"
-                                class="text-danger">
-                                <div *ngIf="userForm.get('formation')?.errors?.['required']">Formation requise</div>
-                            </div>
+                            <input type="text" cFormControl [value]="userForm.get('formation')?.value" readonly>
                         </c-col>
                     </c-row>
 
@@ -199,9 +184,7 @@
                         <label cLabel class="col-sm-2 col-form-label" for="niveau">Niveau <span
                                 class="text-danger">*</span></label>
                         <c-col sm="10">
-                            <select formControlName="niveau" id="niveau" cSelect cFormControl>
-                                <option *ngFor="let n of niveauOptions" [value]="n">{{ n }} année</option>
-                            </select>
+                            <input type="text" cFormControl [value]="userForm.get('niveau')?.value" readonly>
                             <div *ngIf="userForm.errors?.['masterError'] && userForm.get('niveau')?.touched"
                                 class="text-danger">
                                 Un étudiant inscrit en Mastère ne peut pas être en troisième année
@@ -213,17 +196,13 @@
                         </c-col>
                     </c-row>
 
-
-
                     <!-- Option -->
-                    <c-row *ngIf="isEtudiant" class="mb-3">
+                    <c-row *ngIf="  " class="mb-3">
                         <label cLabel class="col-sm-2 col-form-label" for="option">Option</label>
                         <c-col sm="10">
-                            <input formControlName="option" id="option" type="text" cFormControl>
+                            <input formControlName="option" id="option" type="text" cFormControl readonly>
                         </c-col>
                     </c-row>
-
-
 
                     <!-- Boutons -->
                     <c-row class="mt-4">
