@@ -2,6 +2,9 @@ package com.example.Back.Entreprises.Services;
 
 import com.example.Back.Entreprises.Models.Entreprise;
 import com.example.Back.Entreprises.Repositories.EntreprisesRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +14,10 @@ import java.util.regex.Pattern;
 
 @Service
 public class EntreprisesService {
+
     private final EntreprisesRepository entrepriseRepository;
+
+    private static final Logger logger = LogManager.getLogger(EntreprisesService.class);
 
     @Autowired
     public EntreprisesService(EntreprisesRepository entrepriseRepository) {
@@ -19,6 +25,8 @@ public class EntreprisesService {
     }
 
     public Entreprise addEntreprise(Entreprise entreprise) {
+        logger.info("Ajout de l'entreprise: {}", entreprise.getNom());
+
         // Vérification que les champs obligatoires ne sont pas vides
         if (entreprise.getNom() == null || entreprise.getNom().trim().isEmpty() ||
                 entreprise.getAdresse() == null || entreprise.getAdresse().trim().isEmpty() ||
@@ -31,11 +39,6 @@ public class EntreprisesService {
         if (entreprise.getNom().trim().length() < 2) {
             throw new IllegalArgumentException("Le nom doit contenir au moins 2 caractères !");
         }
-
-        // Vérification de la longueur de l'adresse (au moins 5 caractères)
-      /*  if (entreprise.getAdresse().trim().length() < 5) {
-            throw new IllegalArgumentException("L'adresse doit contenir au moins 5 caractères !");
-        }*/
 
         // Vérification du format de l'email et de son unicité
         String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
@@ -56,8 +59,15 @@ public class EntreprisesService {
         }
 
         // Sauvegarde de l'entreprise
-        return entrepriseRepository.save(entreprise);
+        Entreprise saved = entrepriseRepository.save(entreprise);
+
+        // Log des informations complètes de l'entreprise ajoutée
+        logger.info("Entreprise ajoutée avec succès : Nom = {}, Adresse = {}, Email = {}, Téléphone = {}",
+                saved.getNom(), saved.getAdresse(), saved.getEmail(), saved.getTelephone());
+
+        return saved;
     }
+
     public Optional<Entreprise> checkIfEntrepriseExists(String nom, String adresse, String email) {
         return entrepriseRepository.findByNomAndAdresseAndEmail(nom, adresse, email);
     }

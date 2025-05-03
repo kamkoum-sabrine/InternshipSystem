@@ -12,32 +12,32 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "entreprises")
-
 public class Entreprise {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private String nom;
+
     @Column(nullable = false)
     private String adresse;
-    @Column(nullable = false )
+
+    @Column(nullable = false)
     private String email;
-    @Column(nullable = false , unique = true)
+
+    @Column(nullable = false, unique = true)
     private Long telephone;
 
-    @Column(nullable = true)
-    private  String siteWeb;
+    @Column
+    private String siteWeb;
 
-    @Column(nullable = true)
+    @Column
     private String domaineActivites;
 
-    @Column(nullable = false )
+    @Column
     private String representePar;
 
-    public Entreprise() {
-
-    }
-
-
+    public Entreprise() {}
 }
+
