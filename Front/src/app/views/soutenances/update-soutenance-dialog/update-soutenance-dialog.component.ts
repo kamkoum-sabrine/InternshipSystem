@@ -26,6 +26,7 @@ import {
   MultiSelectOptionComponent,
 
 } from '@coreui/angular-pro';
+import { SoutenancesServiceService } from '../soutenances-service.service';
 @Component({
   selector: 'app-update-soutenance-dialog',
   standalone: true,
@@ -50,11 +51,13 @@ export class UpdateSoutenanceDialogComponent implements OnInit {
   encadrants: any[] = [];
   jurySelectionnes: any[] = [];
   juryMember: any[] = [];// Stocker les IDs des membres du jury sélectionnés
-
+  soutenancesExistantes: any[] = [];// tableau de soutenances existantes
+  errorMessage: string | null = null;
   constructor(
     public dialogRef: MatDialogRef<UpdateSoutenanceDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { soutenanceId: number },
-    private GererSoutenancesService: GererSoutenancesService
+    private GererSoutenancesService: GererSoutenancesService,
+    private soutenancesService: SoutenancesServiceService,
   ) {
 
   }
@@ -63,9 +66,18 @@ export class UpdateSoutenanceDialogComponent implements OnInit {
     this.chargerEtudiants();
     this.chargerEncadrants();
     this.chargerSoutenance();
+    this.soutenancesService.getSoutenances().subscribe(data => {
+      this.soutenancesExistantes = data;
+      console.log(this.soutenancesExistantes);
+    });
+    this.elimininerSoutenanceParId(this.soutenance);
 
 
 
+  }
+
+  elimininerSoutenanceParId(id: number): void {
+    this.soutenancesExistantes = this.soutenancesExistantes.filter(soutenance => soutenance.id !== id);
   }
 
   getJuryIds(): void {
@@ -117,6 +129,62 @@ export class UpdateSoutenanceDialogComponent implements OnInit {
   }
 
   onSubmit(): void {
+    console.log('Soutenance à ajouter :', this.soutenance);
+
+    const conflit = this.soutenancesExistantes.find(existing => {
+      const existingHeure = existing.heure ? existing.heure.substring(0, 5) : '';
+      const newHeure = this.soutenance.heure ? this.soutenance.heure.substring(0, 5) : '';
+
+      // Vérifie si l'ID du jury de la soutenance existe déjà dans la soutenance existante
+      const juryConflit = existing.jury?.some((jury: { id: number }) =>
+        this.soutenance.jury?.some((jurySoutenance: { id: number }) => jurySoutenance.id === jury.id)
+      );
+
+      return existing.date === this.soutenance.date &&
+        existingHeure === newHeure &&
+        (
+          existing.salle?.toString() === this.soutenance.salle?.toString() ||
+          Number(existing.encadrant?.id) === Number(this.soutenance.encadrantId) ||
+          Number(existing.etudiant?.id) === Number(this.soutenance.etudiantId) ||
+          juryConflit
+        );
+    });
+
+    console.log('Conflit détecté :', conflit);
+
+    if (conflit) {
+      let details: string[] = [];
+
+      if (conflit.salle?.toString() === this.soutenance.salle?.toString()) {
+        details.push(`la salle "${conflit.salle}" est déjà réservée`);
+      }
+
+      if (conflit.encadrant?.id === Number(this.soutenance.encadrantId)) {
+        details.push(`l'encadrant "${conflit.encadrant.nom} ${conflit.encadrant.prenom}" est déjà pris`);
+      }
+
+      if (conflit.etudiant?.id === Number(this.soutenance.etudiantId)) {
+        details.push(`l'étudiant "${conflit.etudiant.nom} ${conflit.etudiant.prenom}" est déjà planifié`);
+      }
+
+      // Vérification des jurys en conflit
+      const jurysEnConflit = conflit.jury?.filter((jury: { id: number }) =>
+        this.juryMember.includes(jury.id) // Utilisation correcte de juryMember
+      );
+
+      if (jurysEnConflit && jurysEnConflit.length > 0) {
+        const jurysDetails = jurysEnConflit.map((j: { nom: string, prenom: string }) => `${j.nom} ${j.prenom}`);
+        details.push(`les jurys suivants sont déjà affectés : ${jurysDetails.join(', ')}`);
+      }
+
+      this.errorMessage = `Erreur de planification :<br>
+      Une soutenance est déjà prévue le ${conflit.date} à ${this.normalizeTime(conflit.heure)} avec :<br><br>
+      ${details.map(d => `• ${d}`).join('<br>')}`;
+
+      return;
+    }
+
+    // Si aucun conflit n'est trouvé, mettre à jour la soutenance
     this.GererSoutenancesService.updateSoutenance(this.soutenance).subscribe(
       (response) => {
         console.log('Soutenance modifiée avec succès', response);
@@ -129,7 +197,13 @@ export class UpdateSoutenanceDialogComponent implements OnInit {
     );
   }
 
+
   onCancel(): void {
     this.dialogRef.close();
   }
+
+  normalizeTime(time: string): string {
+    return time.slice(0, 5); // Ex: "10:30:00" → "10:30"
+  }
+
 }

@@ -50,6 +50,9 @@
                                 <div *ngIf="enseignantForm.get('email')?.errors?.['email']">L'email doit être valide.
                                 </div>
                             </div>
+                            <div *ngIf="emailExistant" class="text-danger">
+                                Cet email est déjà utilisé.
+                            </div>
                         </c-col>
                     </c-row>
 

@@ -175,6 +175,11 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/emailsphonesfax")
+    public List<String> getAllEmailsPhonesFax() {
+        return userService.getAllEmailsAndPhonesAndFax();
+    }
+
      @GetMapping("/userId/{id}")
     public Optional<User> getUserById(@PathVariable Long id) {
          return userService.findUserById(id);
@@ -185,7 +190,7 @@ public class UserController {
         return userService.getAlletudiants();
     }
 
-    @PutMapping("/etudiants/{id}")
+    @PutMapping("/update/{id}")
     public void updateUser(@PathVariable Long id, @RequestBody User user) {
         this.userService.updateUser(id, user);
     }

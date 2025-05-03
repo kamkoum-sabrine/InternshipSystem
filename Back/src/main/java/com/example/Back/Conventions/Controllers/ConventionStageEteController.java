@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -371,31 +372,51 @@ public class ConventionStageEteController {
 
 
     @PutMapping("/ValiderConventionDirectionEnicar/{id}")
-    public ResponseEntity<?> ValiderConventionDirectionEnicar(@PathVariable Long id)
-    {
+    public ResponseEntity<?> ValiderConventionDirectionEnicar(@PathVariable Long id) {
         Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(id);
         if (conventionOptional.isEmpty()) {
             return ResponseEntity.badRequest().body("Convention non trouvée");
         }
+
         ConventionStageEte convention = conventionOptional.get();
-        /** if (convention.getValideeService() == -1) {
-         return ResponseEntity.badRequest().body("Cette convention n'est pas validée.");
-         }
-         if (convention.getValideeService() ==1 ) {
-         return ResponseEntity.badRequest().body("Cette convention est déja validée");
-         }**/
-        convention.setValideeDirectionEnicar(1);
-        conventionStageEteRepository.save(convention);
-        Map<String, Object> response = new HashMap<>();
 
+        try {
+            // Valider
+            convention.setValideeDirectionEnicar(1);
 
-        response.put("message", "Convention validée avec succes");
-        response.put("status", HttpStatus.ACCEPTED.value());
-        return ResponseEntity.status(HttpStatus.ACCEPTED)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(response);
-        //  return ResponseEntity.ok("Convention validée avec succes");
+            // Signature PDF
+            String cheminOriginal = convention.getFichierPDFChemin();
+            String nomPDF = convention.getFichierPDFNom();
+            String signaturePath = "src/main/resources/static/images/signature.png";
+            //String dossierDestination = "src/main/resources/static/images/signature_direction.png"; // À adapter
+            String dossierDestination = "uploads/conventionsStageEte";
+
+            // Créer le dossier s'il n'existe pas
+            File dir = new File(dossierDestination);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            // Ajouter la signature
+            String nouveauChemin = PDFSignatureUtils.ajouterSignatureDirection(cheminOriginal, nomPDF, signaturePath, dossierDestination);
+
+            // Mise à jour de la convention
+            convention.setFichierPDFChemin(nouveauChemin);
+            convention.setFichierPDFNom("SIGNE_" + nomPDF);
+            conventionStageEteRepository.save(convention);
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Convention validée et signée avec succès");
+            response.put("status", HttpStatus.ACCEPTED.value());
+
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur lors de la signature : " + e.getMessage());
+        }
     }
+
 
 
     @PutMapping("/RefuserConventionDirectionEnicar/{id}")
@@ -468,6 +489,65 @@ public class ConventionStageEteController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @PutMapping("/ValiderConventionChefDepartement/{id}")
+    public ResponseEntity<?> ValiderConventionChefDepartement(@PathVariable Long id)
+    {
+        Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(id);
+        if (conventionOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Convention non trouvée");
+        }
+        ConventionStageEte convention = conventionOptional.get();
+        /** if (convention.getValideeService() == -1) {
+         return ResponseEntity.badRequest().body("Cette convention n'est pas validée.");
+         }
+         if (convention.getValideeService() ==1 ) {
+         return ResponseEntity.badRequest().body("Cette convention est déja validée");
+         }**/
+        convention.setValideeChefDepartement(1);
+        conventionStageEteRepository.save(convention);
+        Map<String, Object> response = new HashMap<>();
+
+
+        response.put("message", "Convention validée avec succes");
+        response.put("status", HttpStatus.ACCEPTED.value());
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+        //  return ResponseEntity.ok("Convention validée avec succes");
+    }
+
+
+    @PutMapping("/RefuserConventionChefDepartement/{id}")
+    public ResponseEntity<?> RefuserConventionChefDepartement(@PathVariable Long id)
+    {
+        Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(id);
+        if (conventionOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Convention non trouvée");
+        }
+        ConventionStageEte convention = conventionOptional.get();
+        /** if (convention.getValideeService() == 1) {
+         return ResponseEntity.badRequest().body("Cette convention a été validée précedemment");
+         }
+         if (convention.getValideeService() ==-1 ) {
+         return ResponseEntity.badRequest().body("Cette convention est déja refusée");
+         }**/
+        convention.setValideeChefDepartement(-1);
+        // String remarques = dto.getRemarquesService();
+        //convention.setRemarquesService(remarques);
+        conventionStageEteRepository.save(convention);
+        Map<String, Object> response = new HashMap<>();
+
+
+        response.put("message", "Convention refusée avec succes");
+        response.put("status", HttpStatus.ACCEPTED.value());
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(response);
+        // return ResponseEntity.ok("Convention refusée avec succes");
+    }
+
+
 
 
 }

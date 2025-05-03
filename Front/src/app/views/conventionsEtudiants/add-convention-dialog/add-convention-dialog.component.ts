@@ -319,8 +319,9 @@ export class AddConventionDialogComponent {
   onSubmit(): void {
     if (this.isSubmitDisabled) return; // Empêche la soumission si désactivé
     const user = JSON.parse(localStorage.getItem('user') || '{}');
+    console.log(user.niveau);
 
-    if (user.niveau == "DEUXIEME") {
+    if (user.niveau == "DEUXIEME" || user.niveau == "PREMIERE") {
       this.entreprise = this.parseEntrepriseDataEte(this.extractedText);
       console.log(this.entreprise); // Vérifiez les données extraites
 

@@ -1,9 +1,13 @@
-<button class="btn btn-warning text-white mb-3" (click)="openDialog()">Ajouter un enseignant</button>
-<c-smart-table *ngIf="Enseignants && Enseignants.length > 0" [activePage]="1" [columnSorter]="true" [columns]="columns"
-    [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="10" [items]="Enseignants"
-    [sorterValue]="{ column: 'name', state: 'asc' }" [tableFilter]="true"
-    [tableProps]="{ hover: true, striped: true, responsive: true }" [tableBodyProps]="{ align: 'middle' }" cleaner
-    clickableRows header pagination>
+<div class="d-flex justify-content-end mb-3 ">
+    <button class="btn btn-success text-white me-5 mt-4" (click)="openDialog()">
+        Ajouter un enseignant
+    </button>
+</div>
+
+<c-smart-table *ngIf="Enseignants && Enseignants.length > 0" [activePage]="1" [columns]="columns" [columnFilter]="true"
+    [itemsPerPageSelect]="true" [itemsPerPage]="10" [items]="Enseignants"
+    [sorterValue]="{ column: 'name', state: 'asc' }" [tableProps]="{ hover: true, striped: true, responsive: true }"
+    [tableBodyProps]="{ align: 'middle' }" clickableRows header pagination>
 
 
     <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
@@ -17,7 +21,7 @@
 
             <!-- Pour la colonne 'Action', afficher les boutons de suppression et de modification -->
             <ng-container *ngIf="columnName === 'actions'">
-                <button cButton color="info" size="sm" (click)="openDialogUpdate(item.id)">
+                <button cButton color="info" size="sm" class="me-2" (click)="openDialogUpdate(item.id)">
                     <i class="fa fa-edit" style="color: #ffffff;"></i> <!-- Icon for edit -->
                 </button>
                 <button cButton class="ms-1" color="danger" size="sm" (click)="supprimerEnseignant(item.id)">

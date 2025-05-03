@@ -16,6 +16,8 @@ import { UpdateSoutenanceDialogComponent } from '../update-soutenance-dialog/upd
 import { AfficherJuryDialogComponent } from '../afficher-jury-dialog/afficher-jury-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.component';
+import { DefaultHeaderComponent } from 'src/app/layout/default-layout/default-header/default-header.component';
+import { NotificationService } from 'src/app/layout/default-layout/default-header/notification.service';
 
 
 @Component({
@@ -28,18 +30,27 @@ import { AddUserDialogComponent } from '../add-user-dialog/add-user-dialog.compo
 export class SoutenancesBasicExampleComponent implements OnInit {
 
   @Input() soutenances: any[] = [];
+  isetudiant: any = false;
+  etudiant: any;
+  soutenance: any;
 
   columns: IColumn[] = [
     {
       key: 'etudiant',
       label: 'Nom & Prénom',
-      _style: { width: '15%' },
+      _style: { width: '20%' },
       filter: true
     },
     {
       key: 'date',
       label: 'Date',
-      _style: { width: '15%' },
+      _style: { width: '10%' },
+      filter: true
+    },
+    {
+      key: 'heure',
+      label: 'Heure',
+      _style: { width: '10%' },
       filter: true
     },
     {
@@ -57,28 +68,33 @@ export class SoutenancesBasicExampleComponent implements OnInit {
     {
       key: 'encadrant',
       label: 'Encadrant',
-      _style: { width: '15%' },
+      _style: { width: '10%' },
       filter: true
 
     },
     {
       key: 'action',
       label: 'Action',
-      _style: { width: '25%' },
+      _style: { width: '30%' },
       filter: false,
       sorter: false
     }
   ];
 
-  constructor(private cdr: ChangeDetectorRef, private GererSoutenancesService: GererSoutenancesService, public dialog: MatDialog) { }
+  constructor(private cdr: ChangeDetectorRef, private GererSoutenancesService: GererSoutenancesService, public dialog: MatDialog
+  ) { }
 
   ngOnInit() {
-    console.log('Valeur reçue du parent:', this.soutenances);
-    // Créer une propriété combinée pour l'étudiant
-    this.soutenances.forEach(item => {
-      item.etudiantNomComplet = `${item.etudiant?.nom} ${item.etudiant?.prenom}`; // Combinaison du nom et prénom
-    });
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (user.role?.nom === 'ETUDIANT') {
+      this.isetudiant = true;
+      this.etudiant = user;
+      this.soutenances = this.soutenances.filter((soutenance: any) => soutenance.etudiant.id === this.etudiant.id);
 
+      this.soutenances.forEach(item => {
+        item.etudiantNomComplet = `${item.etudiant?.nom} ${item.etudiant?.prenom}`;
+      });
+    }
   }
 
 

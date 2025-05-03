@@ -153,8 +153,8 @@ public class TelechargerConventionController {
     }
     private void handleCheckboxesFormation(XWPFDocument doc, User etudiant) {
         // Déterminez l'état des cases
-        boolean isIngenieur = Formation.INGENIERIE.equals(etudiant.getFormation());
-        boolean isMaster = Formation.MASTERE.equals(etudiant.getFormation());
+        boolean isIngenieur = Formation.Ingénierie.equals(etudiant.getFormation());
+        boolean isMaster = Formation.Mastère.equals(etudiant.getFormation());
          final String CHECKED = "✓"; // ou "🗹" pour un style plus carré
          final String UNCHECKED = "□"; // ou "☐" si vous préférez
         // Map des replacements spécifiques aux cases

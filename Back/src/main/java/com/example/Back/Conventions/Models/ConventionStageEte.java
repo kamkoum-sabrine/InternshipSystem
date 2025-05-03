@@ -52,6 +52,12 @@ public class ConventionStageEte {
     private String preuveAnnulationChemin;
 
     @Column(nullable = true)
+    private String lettreAffectationNom;
+    @Column(nullable = true)
+
+    private String lettreAffectationChemin;
+
+    @Column(nullable = true)
     private String remarquesService;
 
     @Column(nullable = true)

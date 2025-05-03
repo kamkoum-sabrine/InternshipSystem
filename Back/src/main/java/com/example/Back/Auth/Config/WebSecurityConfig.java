@@ -63,6 +63,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/attestations/download/{attestationId}").permitAll()
                         .requestMatchers("/api/users/activate").hasRole("SUPER_ADMINISTRATEUR")
                         .requestMatchers("/api/users/desactivate").hasRole("SUPER_ADMINISTRATEUR")
+
                         .requestMatchers("/api/users/getAll").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
                         .requestMatchers("/api/userId/{id}").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
                         .requestMatchers("/api/users/etudiants").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
@@ -84,10 +85,153 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/conventionStagPFE/RefuserConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
                         .requestMatchers("/api/attestations/getMyAttestation/{id}").hasAnyAuthority( "ROLE_ETUDIANT")
                         .requestMatchers("/api/attestations/list").permitAll()
+                        
+
+                        .requestMatchers("/api/users/emailsphonesfax").permitAll()
+
+                        .requestMatchers("/api/users/getAll").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/userId/{id}").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/users/etudiants").hasAnyAuthority("ROLE_SUPER_ADMINISTRATEUR","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/users/update/{id}").permitAll()
+
+
+                        .requestMatchers( "/api/soutenance/{id}").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
+                        .requestMatchers( "/api/soutenance").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
+                        //.requestMatchers( "/api/soutenance/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        //.requestMatchers( "/api/soutenance/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/entreprises").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
+                        .requestMatchers("/api/entreprises/{id}").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
+                        .requestMatchers("/api/entreprises/check-existence").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
+
+                        //.requestMatchers( "/api/enseignant/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        // .requestMatchers("/api/enseignant/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        // .requestMatchers("/api/enseignant/{id}").hasAnyAuthority("ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/enseignant/{id}").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/enseignant").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/enseignant/emails").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagEte/create").hasAnyAuthority("ROLE_SERVICE_STAGE", "ROLE_ETUDIANT")
+
+                        .requestMatchers("/api/conventionStagEte/getMyConventions/{id}").hasAnyAuthority("ROLE_ETUDIANT","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagPFE/getMyConventions/{id}").hasAnyAuthority("ROLE_ETUDIANT","ROLE_SERVICE_STAGE")
+
+
+
+                        .requestMatchers("/api/pdf/PFE/convention/word/{id}").permitAll()
+
+                        .requestMatchers("/api/pdf/convention/word/{id}").permitAll()
+
+                        .requestMatchers("/api/pdf/convention/{id}").permitAll()
+
+                        .requestMatchers("/api/conventionStagEte/uploadPreuveAnnulation/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT")
+                        .requestMatchers("/api/conventionStagEte/annuler/{conventionId}").hasAnyAuthority( "ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagEte/refuserAnnulation/{conventionId}").hasAnyAuthority( "ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagEte/ValiderConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagEte/RefuserConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagEte/ConventionsAvecPreuveNonAnnulees").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagEte/getConventions").hasAnyAuthority( "ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagEte/ConventionsAvecPreuveNonAnnulees").hasAnyAuthority( "ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagEte/downloadPreuveAnnulation/{conventionId}").hasAnyAuthority( "ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagPFE/ValiderConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagPFE/RefuserConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagEte/ValiderConventionDirectionEnicar/{id}").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
+                        .requestMatchers("/api/conventionStagEte/RefuserConventionDirectionEnicar/{id}").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
+
+
+
+                        .requestMatchers("/api/pdf/convention/{id}","/api/users/etudiants/**").hasAnyAuthority("ROLE_ETUDIANT")
+
+                        .requestMatchers("/api/tuteurPFE").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
+                        .requestMatchers("/api/conventionStagPFE/create").hasAnyAuthority("ROLE_ETUDIANT","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/tuteurPFE/check-existence").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
+
+                        .requestMatchers("/api/conventionStagPFE/uploadPreuveAnnulation/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagPFE/annuler/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagPFE/refuserAnnulation/{conventionId}").hasAnyAuthority( "ROLE_ETUDIANT","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagPFE/ValiderConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagPFE/RefuserConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagPFE/ConventionsAvecPreuveNonAnnulees").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+
+                        // Endpoints Livrables
+                        .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/livrable/{etudiantId}").hasAnyAuthority("ROLE_ETUDIANT")
+                        .requestMatchers(HttpMethod.GET, "/api/livrable").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
+                        .requestMatchers(HttpMethod.POST, "/api/livrable").hasAnyAuthority("ROLE_ETUDIANT")
+                        .requestMatchers(HttpMethod.PUT, "/api/livrable/**").hasAnyAuthority("ROLE_ETUDIANT","ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers(HttpMethod.DELETE, "/api/livrable/**").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_ETUDIANT")
+                        .requestMatchers(HttpMethod.DELETE, "/api/livrable/**").hasAnyAuthority("ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
+
+                        .requestMatchers("/api/conventionStagPFE/getConventions").hasAnyAuthority( "ROLE_SERVICE_STAGE","ROLE_DIRECTION_STAGE")
+
+                        .requestMatchers("/api/conventionStagPFE/RefuserConventionDirectionEnicar/{id}").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
+                        .requestMatchers("/api/conventionStagPFE/ValiderConventionDirectionEnicar/{id}").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
+
+                        .requestMatchers("/api/conventionStagPFE/RefuserConventionChefDepartement/{id}").hasAnyAuthority( "ROLE_CHEF_DEPARTEMENT_INFO","ROLE_CHEF_DEPARTEMENT_ELECTRIQUE","ROLE_CHEF_DEPARTEMENT_INDUS" )
+                        .requestMatchers("/api/conventionStagPFE/ValiderConventionChefDepartement/{id}").hasAnyAuthority( "ROLE_CHEF_DEPARTEMENT_INFO","ROLE_CHEF_DEPARTEMENT_ELECTRIQUE","ROLE_CHEF_DEPARTEMENT_INDUS")
+
+                        .requestMatchers("/api/conventionStagEte/RefuserConventionChefDepartement/{id}").hasAnyAuthority( "ROLE_CHEF_DEPARTEMENT_INFO","ROLE_CHEF_DEPARTEMENT_ELECTRIQUE","ROLE_CHEF_DEPARTEMENT_INDUS" )
+                        .requestMatchers("/api/conventionStagEte/ValiderConventionChefDepartement/{id}").hasAnyAuthority( "ROLE_CHEF_DEPARTEMENT_INFO","ROLE_CHEF_DEPARTEMENT_ELECTRIQUE","ROLE_CHEF_DEPARTEMENT_INDUS")
+
+
+                        .requestMatchers("/api/conventionStagPFE/RefuserConventionChefDepartement/{id}").hasAnyAuthority( "ROLE_CHEF_DEPARTEMENT_INFO","ROLE_CHEF_DEPARTEMENT_ELECTRIQUE","ROLE_CHEF_DEPARTEMENT_INDUS" )
+                        .requestMatchers("/api/conventionStagPFE/ValiderConventionChefDepartement/{id}").hasAnyAuthority( "ROLE_CHEF_DEPARTEMENT_INFO","ROLE_CHEF_DEPARTEMENT_ELECTRIQUE","ROLE_CHEF_DEPARTEMENT_INDUS")
+
+
+                        .requestMatchers("/api/conventionStage/validees-chef-departementETE").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
+                        .requestMatchers("/api/conventionStage/validees-chef-departementPFE").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
+
+
+                        .requestMatchers("/api/conventionStagEte/uploads/**").permitAll()//hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
+                        .requestMatchers("/api/conventionStagPFE/uploads/**").permitAll()//hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
+                        .requestMatchers("/api/conventions/lettre-affectation/uploads/**").permitAll()//hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
+
+
+                        .requestMatchers("/api/conventions/lettre-affectation/generate/{conventionId}").hasAnyAuthority("ROLE_DIRECTION_ENICAR")
+                        .requestMatchers("/api/conventions/lettre-affectation/generatePFE/{conventionId}").hasAnyAuthority("ROLE_DIRECTION_ENICAR")
+
+                        .requestMatchers("/api/conventions/lettre-affectation/downloadLettreAffectation/{conventionId}").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/deadlines").permitAll()//.hasAnyAuthority("ROLE_DIRECTION_STAGE", "ROLE_SERVICE_STAGE")
+                        .requestMatchers(HttpMethod.GET, "/api/deadlines/{id}").permitAll()//.hasAnyAuthority("ROLE_DIRECTION_STAGE", "ROLE_SERVICE_STAGE")
+                        .requestMatchers(HttpMethod.POST, "/api/deadlines").permitAll()//.hasAnyAuthority("ROLE_DIRECTION_STAGE")
+                        .requestMatchers(HttpMethod.PUT, "/api/deadlines/{id}").permitAll()//.hasAnyAuthority("ROLE_DIRECTION_STAGE")
+                        .requestMatchers(HttpMethod.DELETE, "/api/deadlines/{id}").permitAll()//.hasAnyAuthority("ROLE_DIRECTION_STAGE")
+                        .requestMatchers( "/api/livrable/{id}/valider").hasAnyAuthority("ROLE_DIRECTION_STAGE", "ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/livrable/{id}/rejeter").hasAnyAuthority("ROLE_DIRECTION_STAGE", "ROLE_SERVICE_STAGE")
+                        .requestMatchers(HttpMethod.GET, "/api/livrable/download/**").permitAll()
                         .anyRequest().authenticated())
-                .exceptionHandling(exception ->
-                        exception.accessDeniedHandler(customAccessDeniedHandler))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Ajout du filtre JWT
+                /** .requestMatchers("/api/login", "/api/admin/register", "/api/admin/activate",
+
+                 "/api/auth/desactivate","/api/entreprises","/api/auth/users",
+                 "/api/auth/etudiants","/api/soutenance","api/enseingnant")
+
+
+                 .requestMatchers("/api/auth/login", "/api/auth/register", "/api/auth/activate",
+                 "/api/auth/desactivate","/api/entreprises/**","/api/auth/users","/api/roles/all","/api/auth/etudiants","/api/soutenance")
+
+
+
+                 .permitAll()
+                 .requestMatchers(HttpMethod.DELETE, "/api/soutenance/{id}").permitAll()
+                 .requestMatchers(HttpMethod.POST, "/api/soutenance").permitAll()
+                 .requestMatchers(HttpMethod.GET, "/api/soutenance/{id}").permitAll()
+                 .requestMatchers(HttpMethod.PUT, "/api/soutenance/{id}").permitAll()
+                 .requestMatchers(HttpMethod.GET, "/api/auth/userId/{id}").permitAll()
+
+                 // publiques**/
+
+                // Routes protégées en fonction des rôles
+
+
+
+
+
+                // publiques
+                // .anyRequest().authenticated())
+               .exceptionHandling(exception ->
+                       exception.accessDeniedHandler(customAccessDeniedHandler))
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Ajout du
+        // filtre JWT
+
 
         return http.build();
     }
