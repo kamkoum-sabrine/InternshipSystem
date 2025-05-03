@@ -25,12 +25,29 @@ public class ConventionStatsService {
                 eteStatsRepository.countStageEteSignees() +
                         pfeStatsRepository.countStagePFESignees()
         );
+        stats.setConventionsSignees(
+                eteStatsRepository.countStageEteSignees() +
+                        pfeStatsRepository.countStagePFESignees()
+        );
+        stats.setConventionsSigneesDirection(
+                eteStatsRepository.countStageEteValideesServiceDirection() +
+                        pfeStatsRepository.countStagePFESignees()
+        );
         stats.setConventionsEnAttente(
                 eteStatsRepository.countStageEteEnAttente() +
                         pfeStatsRepository.countStagePFEEnAttente()
         );
+        stats.setConventionsEnAttenteDirection(
+                eteStatsRepository.countStageEteEnAttenteDirection() +
+                        pfeStatsRepository.countStagePFEEnAttente()
+        );
         stats.setConventionsRefusees(
                 eteStatsRepository.countStageEteRefusees() +
+                        pfeStatsRepository.countStagePFERefusees()
+        );
+
+        stats.setConventionsRefuseesDirection(
+                eteStatsRepository.countStageEteRefuseesDirection() +
                         pfeStatsRepository.countStagePFERefusees()
         );
 
@@ -47,7 +64,7 @@ public class ConventionStatsService {
                         (totalValideesService * 100.0 / stats.getTotalConventions()) : 0
         );
 
-      
+
 
         long totalValideesDirectionEnicar = eteStatsRepository.countStageEteValideesDirectionEnicar() +
                 pfeStatsRepository.countStagePFEValideesService();

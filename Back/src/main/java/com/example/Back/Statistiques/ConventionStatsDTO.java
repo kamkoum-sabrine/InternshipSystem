@@ -15,6 +15,9 @@ public class ConventionStatsDTO {
     private long conventionsEnAttente;
     private long conventionsRefusees;
 
+    private long conventionsSigneesDirection;
+    private long conventionsEnAttenteDirection;
+    private long conventionsRefuseesDirection;
     // Répartition par type
     private long stageEteCount;
     private long stagePFECount;

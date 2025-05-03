@@ -30,4 +30,16 @@ public interface ConventionStatsRepository extends JpaRepository<ConventionStage
     @Query("SELECT COUNT(c) FROM ConventionStageEte c WHERE c.valideeDirectionEnicar = 1")
     long countStageEteValideesDirectionEnicar();
 
+
+    @Query("SELECT COUNT(c) FROM ConventionStageEte c WHERE c.valideeDirectionEnicar = 0 ")
+    long countStageEteEnAttenteDirection();
+
+    @Query("SELECT COUNT(c) FROM ConventionStageEte c WHERE c.valideeDirectionEnicar = -1 ")
+    long countStageEteRefuseesDirection();
+
+
+    @Query("SELECT COUNT(c) FROM ConventionStageEte c WHERE c.valideeDirectionEnicar = 1")
+    long countStageEteValideesServiceDirection();
+
+
 }
