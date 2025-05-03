@@ -127,11 +127,10 @@ public class UserService {
         existingUser.setDateDeNaissance(updatedUser.getDateDeNaissance());
         existingUser.setPhoto(updatedUser.getPhoto());
 
-        // Ne pas mettre à jour le mot de passe ici (doit être géré séparément avec encodage)
-
-        // Sauvegarde de l'utilisateur mis à jour
+         // Sauvegarde de l'utilisateur mis à jour
         userRepository.save(existingUser);
     }
+
 
     public List<String> getAllEmailsAndPhonesAndFax () {
         List<User> users = userRepository.findAll() ;
@@ -145,4 +144,5 @@ public class UserService {
         }
         return EmailsPhonesFax ;
     }
+
 }

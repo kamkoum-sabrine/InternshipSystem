@@ -189,6 +189,9 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/conventions/lettre-affectation/generatePFE/{conventionId}").hasAnyAuthority("ROLE_DIRECTION_ENICAR")
 
                         .requestMatchers("/api/conventions/lettre-affectation/downloadLettreAffectation/{conventionId}").permitAll()
+                        .requestMatchers("/api/statistiques/**").permitAll()
+                        .requestMatchers("/api/statistiques/students-distribution").permitAll()
+                        .requestMatchers("/api/conventions/stats").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/api/deadlines").permitAll()//.hasAnyAuthority("ROLE_DIRECTION_STAGE", "ROLE_SERVICE_STAGE")
                         .requestMatchers(HttpMethod.GET, "/api/deadlines/{id}").permitAll()//.hasAnyAuthority("ROLE_DIRECTION_STAGE", "ROLE_SERVICE_STAGE")

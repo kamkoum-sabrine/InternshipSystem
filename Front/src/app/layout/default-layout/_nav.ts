@@ -16,7 +16,7 @@ export const navItems: INavDataExtended[] = [
       color: 'info',
       text: 'NEW'
     },
-    roles: ['SUPER_ADMINISTRATEUR']
+    //roles: ['SUPER_ADMINISTRATEUR']
   },
   {
     name: 'Utilisateurs',

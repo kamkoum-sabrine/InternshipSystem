@@ -1,0 +1,79 @@
+::ng-deep c-widget-stat-a .c-widget-stat-a-icon {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+::ng-deep .c-widget-stat-a-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.card-modern {
+    background: #ffffff;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .icon-circle {
+        width: 48px;
+        height: 48px;
+        background-color: #f0f4ff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .icon-style {
+        color: #3366ff;
+    }
+
+    .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+        color: #1f1f1f;
+    }
+
+    .card-subtitle {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+
+    .progress-wrapper {
+        margin-top: 0.5rem;
+
+        .progress {
+            height: 5px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+        }
+
+        .progress-bar {
+            background-color: #3366ff;
+            border-radius: 4px;
+        }
+    }
+}
+
+c-widget-stat-a {
+    border-radius: 1rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
