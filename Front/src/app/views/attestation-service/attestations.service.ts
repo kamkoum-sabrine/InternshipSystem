@@ -64,7 +64,7 @@ export class AttestationsService {
       }
     });
   }
-
+  
   refuserConvention(id: number, convention: any): Observable<any> {
     console.log(convention)
     const url = `${this.apiUrl}/conventionStagEte/RefuserConvention/${id}`;
