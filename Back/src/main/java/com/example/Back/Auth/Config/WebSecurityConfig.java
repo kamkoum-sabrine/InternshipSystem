@@ -87,6 +87,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/conventionStagPFE/getMyConventions/{id}").hasAnyAuthority("ROLE_ETUDIANT","ROLE_SERVICE_STAGE")
 
 
+
                         .requestMatchers("/api/pdf/PFE/convention/word/{id}").permitAll()
 
                         .requestMatchers("/api/pdf/convention/word/{id}").permitAll()
@@ -142,6 +143,9 @@ public class WebSecurityConfig {
 
                         .requestMatchers("/api/conventionStagEte/uploads/**").permitAll()//hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
                         .requestMatchers("/api/conventionStagPFE/uploads/**").permitAll()//hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
+
+
+                        .requestMatchers("/api/conventions/lettre-affectation/generate/{conventionId}").hasAnyAuthority("ROLE_DIRECTION_ENICAR")
 
 
                                 .anyRequest().authenticated())
