@@ -18,7 +18,7 @@ export class GererEnseignatService {
   }
 
   constructor(private http: HttpClient) { }
-  
+
 
   addEnseignant(enseignant: any): Observable<any> {
     return this.http.post<any>(this.apiUrl, enseignant);
@@ -28,7 +28,11 @@ export class GererEnseignatService {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
-  updateSoutenance(enseignant: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${enseignant.id}`, enseignant);
+  updateEnseignant(id: number, enseignant: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}`, enseignant);
+  }
+
+  getEmails(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/emails`);
   }
 }

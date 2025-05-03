@@ -5,9 +5,11 @@ import com.example.Back.Soutenance.Model.Soutenance;
 import com.example.Back.Soutenance.Repository.EnseignantRepository;
 import com.example.Back.Soutenance.Repository.SoutenanceRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -101,4 +103,6 @@ public class EnseignantService {
         // Sauvegarder et retourner l'entité mise à jour
         return enseignantRepository.save(enseignant);
     }
+
+
 }

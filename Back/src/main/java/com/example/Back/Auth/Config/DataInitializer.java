@@ -109,9 +109,9 @@ public class DataInitializer implements CommandLineRunner {
                     false,LocalDateTime.now());
             User serviceStageUser = new User(null, "Toumi", "Mahdi", "toumimahdi@gmail.com",2145412,null,null, new BCryptPasswordEncoder().encode("password"),null,null,null,null,null,null,null,null,null, serviceRole,
                     false,LocalDateTime.now());
-            User etudiantUser = new User(null, "Ahmed", "Ahmed", "ahmedahmed@gmail.com",5656565, Filiere.Informatique, Niveau.TROISIEME, new BCryptPasswordEncoder().encode("password"),"mourouj","info","8888", Sexe.HOMME,"98578525","96321455", Formation.INGENIERIE,LocalDate.of(2001,10,26),null, etudiantRole,
+            User etudiantUser = new User(null, "Ahmed", "Ahmed", "ahmedahmed@gmail.com",5656565, Filiere.Informatique, Niveau.Troisième, new BCryptPasswordEncoder().encode("password"),"mourouj","info","8888", Sexe.Masculin,"98578525","96321455", Formation.Ingénierie,LocalDate.of(2001,10,26),null, etudiantRole,
                     false,LocalDateTime.now());
-            User etudiantUser1 = new User(null, "Amine", "Amine", "Amineamine@gmail.com",123456,Filiere.Informatique,Niveau.TROISIEME, new BCryptPasswordEncoder().encode("password"),null,null,null,null,null,null,null, null,null,etudiantRole,
+            User etudiantUser1 = new User(null, "Amine", "Amine", "Amineamine@gmail.com",123456,Filiere.Informatique,Niveau.Troisième, new BCryptPasswordEncoder().encode("password"),null,null,null,null,null,null,null, null,null,etudiantRole,
                     false,LocalDateTime.now());
             User etudiantUser2 = new User(null, "Mahdi", "Mahdi", "Mahdimahdi@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"),null,null,null,null,null,null,null,null, null,etudiantRole,
                     false,LocalDateTime.now());

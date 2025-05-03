@@ -70,6 +70,10 @@ export const routes: Routes = [
         loadChildren: () => import('./views/soutenances/routes').then((m) => m.routes)
       },
       {
+        path: 'livrables',
+        loadChildren: () => import('./views/livrables/routes').then((m) => m.routes)
+      },
+      {
         path: 'enseignants',
         loadChildren: () => import('./views/enseignant/routes').then((m) => m.routes)
       },

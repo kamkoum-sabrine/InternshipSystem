@@ -1,10 +1,13 @@
-<button class="btn btn-warning text-white mb-3" (click)="openDialog()">Ajouter une soutenance</button>
+<div *ngIf="isetudiant === false" class="d-flex justify-content-end mb-3 ">
+  <button class="btn btn-success text-white me-5 mt-4" (click)="openDialog()">
+    Ajouter une soutenance
+  </button>
+</div>
 
 <c-smart-table *ngIf="soutenances && soutenances.length > 0" [activePage]="1" [columnSorter]="true" [columns]="columns"
   [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="10" [items]="soutenances"
-  [sorterValue]="{ column: 'name', state: 'asc' }" [tableFilter]="true"
-  [tableProps]="{ hover: true, striped: true, responsive: true }" [tableBodyProps]="{ align: 'middle' }" cleaner
-  clickableRows header pagination>
+  [sorterValue]="{ column: 'name', state: 'asc' }" [tableProps]="{ hover: true, striped: true, responsive: true }"
+  [tableBodyProps]="{ align: 'middle' }" clickableRows header pagination>
 
 
   <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
@@ -28,13 +31,15 @@
 
       <!-- Pour la colonne 'Action', afficher les boutons de suppression et de modification -->
       <ng-container *ngIf="columnName === 'action'">
-        <button cButton class="me-3" color="info" size="sm" (click)="AfficherJury(item.id)" style="color: #ffffff;">
-          Afficher Jury
+        <button cButton class="me-2 btn-warning" size="sm" (click)="AfficherJury(item.id)" style="color: #ffffff;">
+          Jury
         </button>
-        <button cButton color="info" size="sm" (click)="openDialogUpdate(item.id)">
+        <button *ngIf="isetudiant === false" cButton class="me-2" color="info" size="sm"
+          (click)="openDialogUpdate(item.id)">
           <i class="fa fa-edit" style="color: #ffffff;"></i> <!-- Icon for edit -->
         </button>
-        <button cButton class="ms-1" color="danger" size="sm" (click)="supprimerSoutenance(item.id)">
+        <button *ngIf="isetudiant === false" cButton class="ms-1" color="danger" size="sm"
+          (click)="supprimerSoutenance(item.id)">
           <i class="fa fa-trash" style="color: #ffffff;"></i> <!-- Icon for delete -->
         </button>
       </ng-container>

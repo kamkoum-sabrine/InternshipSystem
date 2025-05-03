@@ -32,6 +32,8 @@ public class EnseignantController {
         return enseignantService.getEnseignantsById(id);
     }
 
+
+
     @PostMapping
     public void addEnseignant(@RequestBody Enseignant enseignant) {
         enseignantService.addEnseignant(enseignant);

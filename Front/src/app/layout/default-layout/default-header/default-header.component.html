@@ -19,7 +19,7 @@
 
     <c-header-nav class="d-none d-md-flex ms-auto ">
       <ng-container *ngTemplateOutlet="notifyDropdown" />
-      <ng-container *ngTemplateOutlet="taskDropdown" />
+      <!--<ng-container *ngTemplateOutlet="taskDropdown" />-->
       <!--<ng-container *ngTemplateOutlet="messagesDropdown" />-->
     </c-header-nav>
 
@@ -27,7 +27,7 @@
       <div class="nav-item py-1">
         <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
       </div>
-      <ng-container *ngTemplateOutlet="languageDropdown" />
+      <!-- <ng-container *ngTemplateOutlet="languageDropdown" /> -->
       <ng-container *ngTemplateOutlet="themeDropdown" />
       <div class="nav-item py-1">
         <div class="vr h-100 mx-2 text-body text-opacity-75"></div>
@@ -156,14 +156,12 @@
             <span>You have {{ newNotifications?.length ?? 0 }} notifications</span>
           </h6>
           @for (notification of newNotifications; track notification.id) {
-          <a cDropdownItem routerLink="">
+          <a cDropdownItem routerLink="{{notification.link}}">
             <svg cIcon class="me-2 text-{{notification.color}}" name="{{notification.icon}}"></svg>
             {{ notification.title }}
           </a>
           }
-          <h6 cDropdownHeader class="bg-body-secondary text-body-secondary fw-semibold my-2">
-            <span>Server</span>
-          </h6>
+
           @for (status of newStatus; track status.id; let last = $last) {
           <a cDropdownItem class="d-block {{last ? 'py-1' : 'py-2'}}" routerLink="">
             <div class="text-uppercase small fw-semibold mb-1">
