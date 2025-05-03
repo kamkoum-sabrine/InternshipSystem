@@ -68,9 +68,9 @@
 
       <!-- annulee -->
       <ng-container *ngSwitchCase="'annulee'">
-        <ng-container *ngIf="item.annulee == -2; else badgeAnnulation">
+        <ng-container *ngIf="item.annulee == 0; else badgeAnnulation">
           <button (click)="openAnnulationModal(item.id)" cButton color="info" class="text-white" size="sm">
-            Annuler
+            Demander annulation de convention
           </button>
         </ng-container>
         <ng-template #badgeAnnulation>

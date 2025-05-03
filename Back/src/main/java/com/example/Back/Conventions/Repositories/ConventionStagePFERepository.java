@@ -10,6 +10,6 @@ import java.util.List;
 public interface ConventionStagePFERepository extends JpaRepository<ConventionStagePFE, Long> {
     List<ConventionStagePFE> findByEtudiant(User etudiant);
 
-    List<ConventionStagePFE> findByValideeChefDepartement(Integer status);
+    List<ConventionStagePFE> findByValideeComiteChefDepartement(Integer status);
 
 }

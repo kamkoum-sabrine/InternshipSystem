@@ -222,7 +222,11 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
 
           });
 
-
+          this.conventionsDirectionEnicarService.getConventions().subscribe(data => {
+            console.log("dataaaa ", data)
+            console.log("3")
+            this.conventions = data
+          });
           Swal.fire('Covention validée !', '', 'success');
           // Ajouter la logique de confirmation ici
         } else if (result.isDismissed) {
@@ -262,6 +266,7 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
             this.conventions = data
           });
           Swal.fire('Covention validée !', '', 'success');
+          window.location.reload
           // Ajouter la logique de confirmation ici
         } else if (result.isDismissed) {
           // L'événement est annulé

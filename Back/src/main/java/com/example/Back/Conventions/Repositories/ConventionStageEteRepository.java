@@ -12,5 +12,5 @@ public interface ConventionStageEteRepository extends JpaRepository<ConventionSt
     @Query("SELECT c FROM ConventionStageEte c WHERE c.annulee = 0 AND c.preuveAnnulationNom IS NOT NULL AND c.preuveAnnulationChemin IS NOT NULL ")
     List<ConventionStageEte> findConventionsAvecPreuveMaisNonAnnulees();
 
-    List<ConventionStageEte> findByValideeChefDepartement(Integer status);
+    List<ConventionStageEte> findByValideeComiteChefDepartement(Integer status);
 }
