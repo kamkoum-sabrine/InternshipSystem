@@ -12,20 +12,23 @@ import { ChartjsComponent } from '@coreui/angular-chartjs';
 import { RouterLink } from '@angular/router';
 import { IconDirective } from '@coreui/icons-angular';
 import { RowComponent, ColComponent, WidgetStatAComponent, TemplateIdDirective, ThemeDirective, DropdownComponent, ButtonDirective, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective, DropdownDividerDirective } from '@coreui/angular-pro';
-
+import { StatistiquesService } from './statistiques.service'
+import { StatistiqueGlobale } from './statistiques.model';
+import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 @Component({
-    selector: 'app-widgets-dropdown',
-    templateUrl: './widgets-dropdown.component.html',
-    styleUrls: ['./widgets-dropdown.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Default,
-    standalone: true,
-    imports: [RowComponent, ColComponent, WidgetStatAComponent, TemplateIdDirective, IconDirective, ThemeDirective, DropdownComponent, ButtonDirective, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective, RouterLink, DropdownDividerDirective, ChartjsComponent]
+  selector: 'app-widgets-dropdown',
+  templateUrl: './widgets-dropdown.component.html',
+  styleUrls: ['./widgets-dropdown.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Default,
+  standalone: true,
+  imports: [RowComponent, CommonModule, ColComponent, WidgetStatAComponent, TemplateIdDirective, IconDirective, ThemeDirective, DropdownComponent, ButtonDirective, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective, RouterLink, DropdownDividerDirective, ChartjsComponent]
 })
 export class WidgetsDropdownComponent implements OnInit, AfterContentInit {
 
-  constructor(
-    private changeDetectorRef: ChangeDetectorRef
-  ) {}
+  // constructor(
+  //   private changeDetectorRef: ChangeDetectorRef
+  // ) { }
 
   data: any[] = [];
   options: any[] = [];
@@ -123,9 +126,103 @@ export class WidgetsDropdownComponent implements OnInit, AfterContentInit {
     }
   };
 
+  userCount = 0;
+  activatedCount = 0;
+  deactivatedCount = 0;
+  userRolesArray: { name: string, count: number }[] = [];
+
+
+  constructor(private statsService: StatistiquesService, private changeDetectorRef: ChangeDetectorRef, private http: HttpClient) { }
+
   ngOnInit(): void {
-    this.setData();
+    // this.setData();
+
+    this.statsService.getAllStats().subscribe((data: StatistiqueGlobale) => {
+      this.userCount = Object.values(data.usersByRole as { [key: string]: number })
+        .reduce((sum, val) => sum + val, 0);
+
+      this.activatedCount = data.activationStats.activés ?? 0;
+      this.deactivatedCount = data.activationStats.désactivés ?? 0;
+    });
+
+    this.http.get<{ [key: string]: number }>('http://localhost:8081/api/statistiques/roles')
+      .subscribe(data => {
+        this.userRolesArray = Object.entries(data).map(([name, count]) => ({
+          name,
+          count
+        }));
+      });
+    console.log("roooooooooooooleeeeeeee " + this.userRolesArray)
   }
+  getDummyChartData() {
+    return {
+      labels: ['Jan', 'Feb', 'Mar'],
+      datasets: [
+        {
+          label: 'Dummy',
+          backgroundColor: 'rgba(255,255,255,.1)',
+          borderColor: 'rgba(255,255,255,.55)',
+          data: [10, 10, 10],
+          fill: true,
+        },
+      ],
+    };
+  }
+
+  chartOptions = {
+    plugins: {
+      legend: {
+        display: false
+      }
+    },
+    elements: {
+      line: {
+        tension: 0.4
+      },
+      point: {
+        radius: 0
+      }
+    },
+    scales: {
+      x: {
+        display: false
+      },
+      y: {
+        display: false
+      }
+    }
+  };
+
+  getModernGradient(index: number): string {
+    return '#ffffff'; // ou un léger gris très clair si tu veux un fond adouci
+  }
+
+  // Ajoutez cette méthode à votre composant
+  getRandomColor(index: number): string {
+    // Tableau de gradients prédéfinis pour un look professionnel
+    const colorGradients = [
+      'primary-gradient',
+      'success-gradient',
+      'info-gradient',
+      'warning-gradient',
+      'danger-gradient',
+      'dark-gradient',
+      'secondary-gradient',
+      'light-gradient'
+    ];
+
+    // Utilisez l'index modulo la longueur du tableau pour éviter les doublons
+    return colorGradients[index % colorGradients.length];
+
+    // Alternative: Génération aléatoire pure (moins cohérent)
+    // const colors = ['primary', 'success', 'info', 'warning', 'danger', 'dark', 'secondary'];
+    // return `${colors[Math.floor(Math.random() * colors.length)]}-gradient`;
+  }
+  getPercentage(count: number): number {
+    const total = 50000;
+    return (count / total) * 100;
+  }
+
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
@@ -180,14 +277,14 @@ export class WidgetsDropdownComponent implements OnInit, AfterContentInit {
 }
 
 @Component({
-    selector: 'app-chart-sample',
-    template: '<c-chart type="line" [data]="data" [options]="options" width="300" #chart></c-chart>',
-    standalone: true,
-    imports: [ChartjsComponent]
+  selector: 'app-chart-sample',
+  template: '<c-chart type="line" [data]="data" [options]="options" width="300" #chart></c-chart>',
+  standalone: true,
+  imports: [ChartjsComponent]
 })
 export class ChartSample implements AfterViewInit {
 
-  constructor() {}
+  // constructor() {}
 
   @ViewChild('chart') chartComponent!: ChartjsComponent;
 

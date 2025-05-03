@@ -150,6 +150,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/conventions/lettre-affectation/generatePFE/{conventionId}").hasAnyAuthority("ROLE_DIRECTION_ENICAR")
 
                         .requestMatchers("/api/conventions/lettre-affectation/downloadLettreAffectation/{conventionId}").permitAll()
+                        .requestMatchers("/api/statistiques/**").permitAll()
+                        .requestMatchers("/api/statistiques/students-distribution").permitAll()
 
 
                                 .anyRequest().authenticated())
