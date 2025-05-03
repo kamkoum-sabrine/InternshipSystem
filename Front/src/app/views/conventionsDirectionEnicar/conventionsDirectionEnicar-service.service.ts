@@ -55,6 +55,25 @@ export class ConventionsDirectionEnicarService {
     });
   }
 
+  generateLettreAffectation(id: number): Observable<any> {
+    const url = `${this.apiUrl}/conventions/lettre-affectation/generate/${id}`;
+    console.log('[Service] generer lettre d\'affectation - URL:', url);
+    return this.http.post(url, {}, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
+
+  generateLettreAffectationPFE(id: number): Observable<any> {
+    const url = `${this.apiUrl}/conventions/lettre-affectation/generatePFE/${id}`;
+    console.log('[Service] generer lettre d\'affectation PFE - URL:', url);
+    return this.http.post(url, {}, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+  }
   refuserConvention(id: number): Observable<any> {
     const url = `${this.apiUrl}/conventionStagEte/RefuserConventionDirectionEnicar/${id}`;
     return this.http.put(url, {

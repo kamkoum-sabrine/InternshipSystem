@@ -139,7 +139,7 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
 
     }
     else {
-      fileUrl = `http://localhost:8081/api/conventionStagPFE/uploads/${nomFichier}`;
+      fileUrl = `http://localhost:8081/api/conventions/lettre-affectation/uploads/${nomFichier}`;
 
     }
     fetch(fileUrl, {
@@ -207,11 +207,22 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
         if (result.isConfirmed) {
           this.conventionsDirectionEnicarService.validerConvention(id).subscribe(data => {
             console.log(data);
-            this.conventionsDirectionEnicarService.getConventions().subscribe(data => {
-              this.conventions = data
+            console.log("1")
+            this.conventionsDirectionEnicarService.generateLettreAffectation(id).subscribe(data => {
+              console.log("2")
+              this.conventionsDirectionEnicarService.getConventions().subscribe(data => {
+                console.log("dataaaa ", data)
+                console.log("3")
+                this.conventions = data
+              });
+
             });
 
+
+
           });
+
+
           Swal.fire('Covention validée !', '', 'success');
           // Ajouter la logique de confirmation ici
         } else if (result.isDismissed) {
@@ -232,10 +243,23 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
         if (result.isConfirmed) {
           this.conventionsDirectionEnicarService.validerConventionPFE(id).subscribe(data => {
             console.log(data);
-            this.conventionsDirectionEnicarService.getConventionsPFE().subscribe(data => {
-              this.conventions = data
+
+            this.conventionsDirectionEnicarService.generateLettreAffectationPFE(id).subscribe(data => {
+              console.log("2")
+              this.conventionsDirectionEnicarService.getConventions().subscribe(data => {
+                console.log("dataaaa ", data)
+                console.log("3")
+                this.conventions = data
+              });
+
             });
 
+
+          });
+          this.conventionsDirectionEnicarService.getConventions().subscribe(data => {
+            console.log("dataaaa ", data)
+            console.log("3")
+            this.conventions = data
           });
           Swal.fire('Covention validée !', '', 'success');
           // Ajouter la logique de confirmation ici

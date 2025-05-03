@@ -57,4 +57,10 @@ public class ConventionStagePFE {
     @Column(nullable = true)
     private String preuveAnnulationChemin;
 
+    @Column(nullable = true)
+    private String lettreAffectationNom;
+    @Column(nullable = true)
+
+    private String lettreAffectationChemin;
+
 }

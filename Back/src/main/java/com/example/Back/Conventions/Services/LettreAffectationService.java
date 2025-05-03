@@ -1,7 +1,9 @@
 package com.example.Back.Conventions.Services;
 
 import com.example.Back.Conventions.Models.ConventionStageEte;
+import com.example.Back.Conventions.Models.ConventionStagePFE;
 import com.example.Back.Conventions.Repositories.ConventionStageEteRepository;
+import com.example.Back.Conventions.Repositories.ConventionStagePFERepository;
 import com.example.Back.Entreprises.Models.Entreprise;
 import com.example.Back.Auth.Models.User;
 import com.itextpdf.text.*;
@@ -34,6 +36,9 @@ public class LettreAffectationService {
 
     @Autowired
     private ConventionStageEteRepository conventionRepository;
+
+    @Autowired
+    private ConventionStagePFERepository conventionPFERepository;
 
     @Value("${file.upload-dir}/lettreAffectation")
     private String uploadDir;
@@ -84,6 +89,42 @@ public class LettreAffectationService {
         }
     }
 
+    public ConventionStagePFE generateAndStoreSignedLettreAffectationPFE(Long conventionId) {
+        try {
+            logger.info("Début de génération de lettre d'affectation signée pour la convention ID: {}", conventionId);
+
+            ConventionStagePFE convention = conventionPFERepository.findById(conventionId)
+                    .orElseThrow(() -> new RuntimeException("Convention non trouvée avec l'ID: " + conventionId));
+
+            validateConventionPFE(convention);
+
+            // Générer le nom du fichier signé
+            String signedFileName = "lettre_affectation_signe_" + conventionId + "_" + System.currentTimeMillis() + ".pdf";
+            Path signedFilePath = fileStorageLocation.resolve(signedFileName);
+
+            // Générer directement le PDF signé
+            generateSignedPdfPFE(convention, signedFilePath.toFile());
+
+            // Mettre à jour la convention avec le chemin du PDF signé
+            convention.setLettreAffectationNom(signedFileName);
+            convention.setLettreAffectationChemin(signedFilePath.toString());
+
+            // Enregistrer la convention avec le PDF signé
+            return conventionPFERepository.save(convention);
+
+        } catch (Exception e) {
+            logger.error("ERREUR lors de la génération de la lettre d'affectation signée", e);
+            throw new RuntimeException("Échec de la génération du PDF signé: " + e.getMessage(), e);
+        }
+    }
+    private void validateConventionPFE(ConventionStagePFE convention) {
+        if (convention.getEtudiant() == null) {
+            throw new RuntimeException("Aucun étudiant associé à la convention");
+        }
+        if (convention.getEntreprise() == null) {
+            throw new RuntimeException("Aucune entreprise associée à la convention");
+        }
+    }
     private void validateConvention(ConventionStageEte convention) {
         if (convention.getEtudiant() == null) {
             throw new RuntimeException("Aucun étudiant associé à la convention");
@@ -92,6 +133,30 @@ public class LettreAffectationService {
             throw new RuntimeException("Aucune entreprise associée à la convention");
         }
     }
+
+    private void generateSignedPdfPFE(ConventionStagePFE convention, File outputFile) throws Exception {
+        Document document = new Document();
+        PdfWriter writer = null;
+
+        try {
+            writer = PdfWriter.getInstance(document, new FileOutputStream(outputFile));
+            document.open();
+
+            // Ajouter le contenu standard
+            addMetaData(document);
+            addTitle(document);
+            addContentPFE(document, convention);
+
+            // Ajouter la signature directement
+            addSignature(document, writer);
+
+        } finally {
+            if (document != null && document.isOpen()) {
+                document.close();
+            }
+        }
+    }
+
 
     private void generateSignedPdf(ConventionStageEte convention, File outputFile) throws Exception {
         Document document = new Document();
@@ -240,6 +305,77 @@ public class LettreAffectationService {
         directorName.setAlignment(Element.ALIGN_RIGHT);
         document.add(directorName);
     }
+
+
+    private void addContentPFE(Document document, ConventionStagePFE convention) throws DocumentException {
+        User etudiant = convention.getEtudiant();
+        Entreprise entreprise = convention.getEntreprise();
+
+        Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 12, BaseColor.BLACK);
+        Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, BaseColor.BLACK);
+
+        // Objet
+        Paragraph subject = new Paragraph("Objet : Affectation à un stage", boldFont);
+        subject.setAlignment(Element.ALIGN_LEFT);
+        document.add(subject);
+
+        document.add(Chunk.NEWLINE);
+
+        // Introduction
+        Paragraph intro = new Paragraph("Dans le cadre de ses études à l'Ecole Nationale d'Ingénieurs de Carthage (ENICarthage),", normalFont);
+        document.add(intro);
+
+        document.add(Chunk.NEWLINE);
+
+        // Informations étudiant
+        Paragraph studentInfo = new Paragraph("l'étudiant(e) : ", normalFont);
+        studentInfo.add(new Chunk(etudiant.getNom() + " " + etudiant.getPrenom(), boldFont));
+        document.add(studentInfo);
+
+        if (etudiant.getCin() != null) {
+            Paragraph cinInfo = new Paragraph("CIN : ", normalFont);
+            cinInfo.add(new Chunk(etudiant.getCin().toString(), boldFont));
+            /**   cinInfo.add(new Chunk(", délivrée le " + formatDate(etudiant.getCinDateDelivrance()) +
+             " à : " + etudiant.getCinLieuDelivrance(), normalFont));**/
+            document.add(cinInfo);
+        }
+
+        Paragraph niveauInfo = new Paragraph("Inscrit(e) en : ", normalFont);
+        niveauInfo.add(new Chunk(etudiant.getNiveau() != null ? etudiant.getNiveau().toString() : "Non spécifié", boldFont));
+        document.add(niveauInfo);
+
+        document.add(Chunk.NEWLINE);
+
+        // Informations stage
+        Paragraph stageInfo = new Paragraph("est affecté(e) à un stage à : ", normalFont);
+        stageInfo.add(new Chunk(entreprise.getNom(), boldFont));
+        document.add(stageInfo);
+
+       // Paragraph datesInfo = new Paragraph("et ce, du ", normalFont);
+      //  datesInfo.add(new Chunk(formatDate(convention.getDateDebut()), boldFont));
+     //   datesInfo.add(new Chunk(" au ", normalFont));
+    //    datesInfo.add(new Chunk(formatDate(convention.getDateFin()), boldFont));
+      //  document.add(datesInfo);
+
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+
+        // Date et signature
+        Paragraph date = new Paragraph("Tunis, le : " + formatDate(new Date()), normalFont);
+        document.add(date);
+
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
+
+        Paragraph signature = new Paragraph("Directrice de l'ENICarthage", normalFont);
+        signature.setAlignment(Element.ALIGN_RIGHT);
+        document.add(signature);
+
+        Paragraph directorName = new Paragraph("Houda BEN ATTIA SETTHOM", boldFont);
+        directorName.setAlignment(Element.ALIGN_RIGHT);
+        document.add(directorName);
+    }
+
 
     private String formatDate(Date date) {
         if (date == null) return "";

@@ -2,6 +2,7 @@ package com.example.Back.Conventions.Controllers;
 
 
 import com.example.Back.Conventions.Models.ConventionStageEte;
+import com.example.Back.Conventions.Models.ConventionStagePFE;
 import com.example.Back.Conventions.Repositories.ConventionStageEteRepository;
 import com.example.Back.Conventions.Services.LettreAffectationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,21 @@ public class LettreAffectationController {
                         "attachment; filename=\"" + convention.getLettreAffectationNom() + "\"")
                 .body(resource);
     }
+
+    @PostMapping("/generatePFE/{conventionId}")
+    public ResponseEntity<Resource> generateLettreAffectationPFE(@PathVariable Long conventionId) {
+        ConventionStagePFE convention = lettreAffectationService.generateAndStoreSignedLettreAffectationPFE(conventionId);
+
+        Resource resource = lettreAffectationService.loadLettreAffectationAsResource(
+                convention.getLettreAffectationChemin());
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + convention.getLettreAffectationNom() + "\"")
+                .body(resource);
+    }
+
 
     @GetMapping("/uploads/{fileName:.+}")
 

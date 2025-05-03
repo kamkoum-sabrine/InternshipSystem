@@ -147,6 +147,8 @@ public class WebSecurityConfig {
 
 
                         .requestMatchers("/api/conventions/lettre-affectation/generate/{conventionId}").hasAnyAuthority("ROLE_DIRECTION_ENICAR")
+                        .requestMatchers("/api/conventions/lettre-affectation/generatePFE/{conventionId}").hasAnyAuthority("ROLE_DIRECTION_ENICAR")
+
                         .requestMatchers("/api/conventions/lettre-affectation/downloadLettreAffectation/{conventionId}").permitAll()
 
 
