@@ -173,7 +173,7 @@
   </c-card-body>
 </c-card>
 <!-- Contenu par défaut (autres rôles) -->
-<div *ngIf="!isSuperAdmin && !isServiceStage">
+<div *ngIf="isEtudiant">
   <c-card class="mb-4">
     <c-card-header>Tableau de bord Étudiant</c-card-header>
     <c-card-body>
