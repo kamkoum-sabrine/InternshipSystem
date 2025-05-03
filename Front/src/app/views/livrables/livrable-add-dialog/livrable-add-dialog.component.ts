@@ -81,6 +81,7 @@ export class LivrableAddDialogComponent implements OnInit {
     this.livrablesService.createLivrable(formData).subscribe({
       next: () => {
         this.dialogRef.close(true);
+        window.location.reload();
       },
       error: (err) => {
         console.error(err);

@@ -39,6 +39,7 @@ export class LivrablesBasicExampleComponent implements OnInit {
   @Input() livrables: any[] = [];
   isEtudiant = false;
   currentUser: any;
+  deadlineLivrable!: string;
 
   columns: IColumn[] = [
     {
@@ -78,27 +79,47 @@ export class LivrablesBasicExampleComponent implements OnInit {
       filter: false,
       sorter: false
     }
+
+
+
   ];
 
-  constructor(private dialog: MatDialog, livrablesService: LivrableService) { }
+  constructor(private dialog: MatDialog, private livrablesService: LivrableService) { }
 
   ngOnInit() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     this.isEtudiant = user.role?.nom === 'ETUDIANT';
     this.currentUser = user;
-
     if (this.isEtudiant) {
       this.livrables = this.livrables.filter(l => l.etudiant.id === user.id);
+
     }
+
+    this.livrablesService.getDeadline().subscribe({
+      next: (res) => {
+        this.deadlineLivrable = res.deadlineLivrable;
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement de la deadline', err);
+      }
+    });
   }
 
   getEtatColor(etat: string) {
-    switch (etat) {
-      case 'VALIDE': return 'success';
-      case 'REJETE': return 'danger';
-      default: return 'primary';
+    switch (etat.trim().toUpperCase()) {
+      case 'VALIDÉ':      // Validation réussie (couleur verte)
+        return 'success';
+      case 'REFUSÉ':      // Refusé (couleur rouge)
+        return 'danger';
+      case 'RETARD':      // Retard (couleur jaune)
+        return 'warning';
+      case 'DÉPOSÉ':      // Déposé (couleur bleue)
+        return 'primary';
+      default:
+        return 'secondary'; // Gris pour les états inconnus ou non spécifiés
     }
   }
+
 
   deleteLivrable(id: number) {
     Swal.fire({
@@ -110,24 +131,19 @@ export class LivrablesBasicExampleComponent implements OnInit {
       cancelButtonText: 'Annuler'
     }).then((result) => {
       if (result.isConfirmed) {
-        // Appel service suppression
+        this.livrablesService.deleteLivrable(id).subscribe({
+          next: () => {
+            Swal.fire('Supprimé!', 'Le livrable a été supprimé.', 'success');
+            this.livrables = this.livrables.filter(l => l.id !== id);
+          },
+          error: (err) => {
+            console.error(err);
+            Swal.fire('Erreur', 'Une erreur est survenue lors de la suppression.', 'error');
+          }
+        });
       }
     });
   }
-  /*
-  openUpdateDialog(id: number) {
-    const dialogRef = this.dialog.open(UpdateLivrableDialogComponent, {
-      width: '600px',
-      data: { livrableId: id }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        // Mise à jour
-      }
-    });
-  }*/
-
 
 
   openDialog(): void {
@@ -144,4 +160,41 @@ export class LivrablesBasicExampleComponent implements OnInit {
       }
     });
   }
+
+  validerLivrable(id: number) {
+    this.livrablesService.validerLivrable(id).subscribe({
+      next: (updated) => {
+        Swal.fire('Validé!', 'Le livrable a été validé.', 'success');
+        const index = this.livrables.findIndex(l => l.id === id);
+        if (index !== -1) {
+          this.livrables[index].etat = 'VALIDÉ';  // Mettre à jour l'état localement
+        }
+        // Rafraîchir la page après la validation
+        window.location.reload();
+      },
+      error: (err) => {
+        console.error(err);
+        Swal.fire('Erreur', 'Erreur lors de la validation.', 'error');
+      }
+    });
+  }
+
+  refuserLivrable(id: number) {
+    this.livrablesService.refuserLivrable(id).subscribe({
+      next: (updated) => {
+        Swal.fire('Refusé!', 'Le livrable a été refusé.', 'info');
+        const index = this.livrables.findIndex(l => l.id === id);
+        if (index !== -1) {
+          this.livrables[index].etat = 'REJETE';  // Mettre à jour l'état localement
+        }
+        // Rafraîchir la page après le refus
+        window.location.reload();
+      },
+      error: (err) => {
+        console.error(err);
+        Swal.fire('Erreur', 'Erreur lors du refus.', 'error');
+      }
+    });
+  }
+
 }

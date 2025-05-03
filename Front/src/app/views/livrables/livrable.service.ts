@@ -33,6 +33,20 @@ export class LivrableService {
   }
 
   getLivrableFileUrl(fileName: string): string {
-    return `${this.apiUrl}/uploads/livrable/${fileName}`;
+    return `${this.apiUrl}/download/${fileName}`;
   }
+
+  validerLivrable(id: number): Observable<Livrable> {
+    return this.http.put<Livrable>(`${this.apiUrl}/${id}/valider`, {});
+  }
+
+  refuserLivrable(id: number): Observable<Livrable> {
+    return this.http.put<Livrable>(`${this.apiUrl}/${id}/refuser`, {});
+  }
+
+  getDeadline(): Observable<{ deadlineLivrable: string }> {
+    return this.http.get<{ deadlineLivrable: string }>('http://localhost:8081/api/deadlines/1');
+  }
+
+
 }
