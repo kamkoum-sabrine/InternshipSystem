@@ -177,8 +177,57 @@
   <c-card class="mb-4">
     <c-card-header>Tableau de bord Étudiant</c-card-header>
     <c-card-body>
-      <!-- Contenu simplifié pour les étudiants -->
-      <p>Bienvenue sur votre espace personnel.</p>
+      <div class="welcome-container">
+        <div class="welcome-header">
+          <h1><i class="fas fa-graduation-cap"></i> Bienvenue sur la plateforme de gestion des stages</h1>
+          <p class="subtitle">Votre outil complet pour gérer votre parcours de stage</p>
+        </div>
+
+        <div class="welcome-content">
+          <!-- Section 1 : Présentation -->
+          <div class="info-section">
+            <h2><i class="fas fa-info-circle"></i> Comment utiliser cette plateforme ?</h2>
+            <div class="instructions">
+              <div class="step">
+                <span class="step-number">1</span>
+                <p>Déposez votre convention de stage dans la section <strong>"Mes Conventions"</strong></p>
+              </div>
+              <div class="step">
+                <span class="step-number">2</span>
+                <p>Suivez l'avancement de la validation en temps réel</p>
+              </div>
+              <div class="step">
+                <span class="step-number">3</span>
+                <p>Télécharger votre <strong>"Lettre d'affectation"</strong></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2 : Contacts -->
+          <div class="info-section contact-box">
+            <h2><i class="fas fa-envelope"></i> Besoin d'aide ?</h2>
+            <p>
+              Service des stages :<br>
+              <strong>stages ecole-ingenieur.fr</strong><br>
+              Tél: 01 23 45 67 89
+            </p>
+            <p>
+              Assistance technique :<br>
+              <strong>support-plateforme ecole-ingenieur.fr</strong>
+            </p>
+          </div>
+
+          <!-- Section 3 : Échéances -->
+          <div class="info-section">
+            <h2><i class="fas fa-calendar-alt"></i> Dates importantes</h2>
+            <ul class="deadlines">
+              <li>➤ <strong>15 septembre</strong> : Dépôt des conventions pour le semestre d'automne</li>
+              <li>➤ <strong>15 février</strong> : Dépôt des conventions pour le semestre de printemps</li>
+              <li>➤ <strong>30 jours avant le stage</strong> : Délai minimum pour la validation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </c-card-body>
   </c-card>
 </div>

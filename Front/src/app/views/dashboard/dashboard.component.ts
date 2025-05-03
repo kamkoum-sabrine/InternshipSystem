@@ -142,7 +142,12 @@ export class DashboardComponent implements OnInit {
         this.loadDirectionData();
       }
       else {
-        this.loadDefaultData();
+        if (this.isEtudiant) {
+          this.loadEtudiantData();
+        }
+        else {
+          this.loadDefaultData();
+        }
       }
     }
   }
@@ -158,6 +163,11 @@ export class DashboardComponent implements OnInit {
         console.error('Erreur lors du chargement des données:', err);
       }
     });
+  }
+  private loadEtudiantData(): void {
+    // Charger des données spécifiques pour SUPER_ADMIN
+    console.log('Chargement des données Super Admin');
+
   }
 
   private loadServiceData(): void {

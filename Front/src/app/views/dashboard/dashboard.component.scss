@@ -15,3 +15,70 @@
   color: #333;
   font-weight: 500;
 }
+
+.welcome-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.welcome-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.info-section {
+  background: white;
+  padding: 25px;
+  margin-bottom: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.instructions {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.step {
+  flex-basis: 30%;
+  text-align: center;
+  padding: 15px;
+}
+
+.step-number {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background: #3f51b5;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 30px;
+  margin-bottom: 10px;
+}
+
+.contact-box {
+  background: #e3f2fd;
+}
+
+.deadlines {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.deadlines li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+/* Icônes Font Awesome */
+.fas {
+  margin-right: 10px;
+  color: #3f51b5;
+}
