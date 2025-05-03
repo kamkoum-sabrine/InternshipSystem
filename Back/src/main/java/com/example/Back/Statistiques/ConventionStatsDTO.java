@@ -18,6 +18,10 @@ public class ConventionStatsDTO {
     private long conventionsSigneesDirection;
     private long conventionsEnAttenteDirection;
     private long conventionsRefuseesDirection;
+
+    private long conventionsSigneesComiteChef;
+    private long conventionsEnAttenteComiteChef;
+    private long conventionsRefuseesComiteChef;
     // Répartition par type
     private long stageEteCount;
     private long stagePFECount;
@@ -26,8 +30,8 @@ public class ConventionStatsDTO {
     // Taux de validation
     private double tauxValidationService;
     private double tauxValidationDirection;
-    private double tauxValidationChefDepartement;
-    private double tauxValidationComite;
+  //  private double tauxValidationChefDepartement;
+    private double tauxValidationComiteChef;
 
     // Durée moyenne
     private double dureeMoyenneEte;

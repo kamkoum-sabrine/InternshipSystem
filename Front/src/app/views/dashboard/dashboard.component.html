@@ -172,6 +172,84 @@
     </ng-template>
   </c-card-body>
 </c-card>
+<c-card class="mb-4" *ngIf="isComiteChef">
+  <c-card-header>Tableau de bord Comité pédagogique et chef de département</c-card-header>
+  <c-card-body>
+    <!-- stats-conventions.component.html -->
+    <div class="container" *ngIf="!isLoading; else loading">
+      <h2 class="my-4">Statistiques des conventions de stage</h2>
+
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="card-title">Statut des conventions</h5>
+                <span class="badge bg-primary">
+                  Total: {{stats.totalConventions}}
+                </span>
+              </div>
+              <div id="statusChart">
+                <apx-chart [series]="statusChartOptions.series" [chart]="statusChartOptions.chart"
+                  [labels]="statusChartOptions.labels" [title]="statusChartOptions.title"
+                  [colors]="statusChartOptions.colors">
+                </apx-chart>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title mb-3">Répartition par type de stage</h5>
+              <div id="typeChart">
+                <apx-chart [series]="typeChartOptions.series" [chart]="typeChartOptions.chart"
+                  [labels]="typeChartOptions.labels" [title]="typeChartOptions.title"
+                  [colors]="typeChartOptions.colors">
+                </apx-chart>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title mb-3">Taux de validation par service</h5>
+              <div id="validationChart">
+                <apx-chart [series]="validationChartOptions.series" [chart]="validationChartOptions.chart"
+                  [plotOptions]="validationChartOptions.plotOptions" [dataLabels]="validationChartOptions.dataLabels"
+                  [xaxis]="validationChartOptions.xaxis" [title]="validationChartOptions.title"
+                  [colors]="validationChartOptions.colors">
+                </apx-chart>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #loading>
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+        <p class="mt-2">Chargement des statistiques...</p>
+      </div>
+    </ng-template>
+  </c-card-body>
+</c-card>
 <!-- Contenu par défaut (autres rôles) -->
 <div *ngIf="isEtudiant">
   <c-card class="mb-4">

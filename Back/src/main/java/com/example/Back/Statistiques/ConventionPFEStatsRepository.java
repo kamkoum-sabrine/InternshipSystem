@@ -25,5 +25,17 @@ public interface ConventionPFEStatsRepository extends JpaRepository<ConventionSt
     @Query("SELECT COUNT(c) FROM ConventionStagePFE c WHERE c.valideeService = 1")
     long countStagePFEValideesService();
 
-    // Ajoutez d'autres méthodes spécifiques à PFE si nécessaire
+
+
+
+    @Query("SELECT COUNT(c) FROM ConventionStagePFE c WHERE c.valideeComiteChefDepartement = 0 ")
+    long countStagePFEEnAttenteComiteChef();
+
+    @Query("SELECT COUNT(c) FROM ConventionStagePFE c WHERE c.valideeComiteChefDepartement = -1 ")
+    long countStagePFERefuseesComiteChef();
+
+
+
+    @Query("SELECT COUNT(c) FROM ConventionStagePFE c WHERE c.valideeComiteChefDepartement = 1")
+    long countStagePFEValideesComiteChef();
 }

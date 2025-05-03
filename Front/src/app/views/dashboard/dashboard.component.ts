@@ -58,6 +58,7 @@ export class DashboardComponent implements OnInit {
   isServiceStage: boolean = false;
   isEtudiant: boolean = false;
   isDirectionEnicar: boolean = false;
+  isComiteChef: boolean = false;
   stats: any;
   isLoading = true;
 
@@ -123,7 +124,7 @@ export class DashboardComponent implements OnInit {
     this.isSuperAdmin = this.role === 'SUPER_ADMINISTRATEUR';
     this.isServiceStage = this.role === 'SERVICE_STAGE';
     this.isDirectionEnicar = this.role === 'DIRECTION_ENICAR';
-
+    this.isComiteChef = this.role === 'COMITE_CHEF_DEPARTEMENT';
     this.isEtudiant = this.role === 'ETUDIANT';
 
     console.log('Rôle utilisateur :', this.role);
@@ -145,8 +146,16 @@ export class DashboardComponent implements OnInit {
         if (this.isEtudiant) {
           this.loadEtudiantData();
         }
+
         else {
-          this.loadDefaultData();
+          if (this.isComiteChef) {
+            this.loadComiteChefData();
+
+          }
+          else {
+            this.loadDefaultData();
+
+          }
         }
       }
     }
@@ -181,6 +190,17 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  private loadComiteChefData(): void {
+    // Charger des données spécifiques pour ADMIN
+    console.log('Chargement des données de comite pedagogique');
+    this.isLoading = true;
+    this.statisticsService.getStats().subscribe(data => {
+      this.stats = data;
+      this.initChartsComite();
+      this.isLoading = false;
+    });
+  }
+
   private loadDirectionData(): void {
     // Charger des données spécifiques pour ADMIN
     console.log('Chargement des données de service de stage');
@@ -192,6 +212,109 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  initChartsComite(): void {
+    // Chart 1: Statut des conventions
+    this.statusChartOptions = {
+      series: [
+        this.stats.conventionsSigneesComiteChef,
+        this.stats.conventionsEnAttenteComiteChef,
+        this.stats.conventionsRefuseesComiteChef
+      ],
+      chart: {
+        type: 'pie',
+        height: 350
+      },
+      labels: ['Signées', 'En attente', 'Refusées'],
+      title: {
+        text: 'Statut des conventions'
+      },
+      colors: ['#4CAF50', '#FFC107', '#F44336']
+    };
+
+    // Chart 2: Répartition par type
+    this.typeChartOptions = {
+      series: [
+        this.stats.stageEteCount,
+        this.stats.stagePFECount,
+      ],
+      chart: {
+        type: 'donut',
+        height: 350
+      },
+      labels: ['Stage été', 'Stage PFE'],
+      title: {
+        text: 'Répartition par type de stage'
+      },
+      colors: ['#2196F3', '#9C27B0']
+    };
+
+    // Chart 3: Taux de validation
+    this.validationChartOptions = {
+      series: [{
+        name: 'Taux de validation',
+        data: [
+          this.stats.tauxValidationService,
+          this.stats.tauxValidationDirection,
+          this.stats.tauxValidationChefDepartement,
+          this.stats.tauxValidationComite
+        ]
+      }],
+      chart: {
+        type: 'bar',
+        height: 350
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          horizontal: true,
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: (val: number) => val.toFixed(1) + '%'
+      },
+      xaxis: {
+        categories: ['Service', 'Direction', 'Chef Département', 'Comité'],
+        max: 100
+      },
+      title: {
+        text: 'Taux de validation par service'
+      },
+      colors: ['#673AB7']
+    };
+
+    // Chart 4: Durée moyenne
+    this.dureeChartOptions = {
+      series: [{
+        name: 'Durée moyenne (jours)',
+        data: [
+          this.stats.dureeMoyenneEte,
+          this.stats.dureeMoyennePFE
+        ]
+      }],
+      chart: {
+        type: 'bar',
+        height: 350
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          columnWidth: '45%',
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: (val: number) => val.toFixed(1) + ' jours'
+      },
+      xaxis: {
+        categories: ['Stage été', 'Stage PFE']
+      },
+      title: {
+        text: 'Durée moyenne des stages'
+      },
+      colors: ['#009688']
+    };
+  }
   initChartsDirection(): void {
     // Chart 1: Statut des conventions
     this.statusChartOptions = {
