@@ -39,7 +39,6 @@ export class GererConventionsEtudiantService {
   }
 
   downloadWordPFE(studentId: number) {
-    console.log("hani hneee ")
     this.http.get(`http://localhost:8081/api/pdf/PFE/convention/word/${studentId}`, { responseType: 'blob' }).subscribe((response: Blob) => {
       const url = window.URL.createObjectURL(response);
       const a = document.createElement('a');
