@@ -61,6 +61,11 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
     },
 
     {
+      key: 'lettreAffectationNom',
+      label: ' Lettre d\'affectation'
+    },
+
+    {
       key: 'actions',
       label: 'Actions'
     }
@@ -106,6 +111,35 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
     }
     else {
       fileUrl = `http://localhost:8081/api/conventionStagPFE/uploads/${nomFichier}`;
+
+    }
+    fetch(fileUrl, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`, // Récupère le token si JWT est utilisé
+      },
+    })
+      .then(response => {
+        if (!response.ok) throw new Error("Accès refusé !");
+        return response.blob();
+      })
+      .then(blob => {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = nomFichier;
+        link.click();
+      })
+      .catch(error => console.error("Erreur lors du téléchargement :", error));
+  }
+
+  downloadPDFAffectation(nomFichier: string) {
+    let fileUrl;
+    if (this.tabs == 0) {
+      fileUrl = `http://localhost:8081/api/conventions/lettre-affectation/uploads/${nomFichier}`;
+
+    }
+    else {
+      fileUrl = `http://localhost:8081/api/conventions/lettre-affectation/uploads/${nomFichier}`;
 
     }
     fetch(fileUrl, {
@@ -173,11 +207,22 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
         if (result.isConfirmed) {
           this.conventionsDirectionEnicarService.validerConvention(id).subscribe(data => {
             console.log(data);
-            this.conventionsDirectionEnicarService.getConventions().subscribe(data => {
-              this.conventions = data
+            console.log("1")
+            this.conventionsDirectionEnicarService.generateLettreAffectation(id).subscribe(data => {
+              console.log("2")
+              this.conventionsDirectionEnicarService.getConventions().subscribe(data => {
+                console.log("dataaaa ", data)
+                console.log("3")
+                this.conventions = data
+              });
+
             });
 
+
+
           });
+
+
           Swal.fire('Covention validée !', '', 'success');
           // Ajouter la logique de confirmation ici
         } else if (result.isDismissed) {
@@ -198,10 +243,23 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
         if (result.isConfirmed) {
           this.conventionsDirectionEnicarService.validerConventionPFE(id).subscribe(data => {
             console.log(data);
-            this.conventionsDirectionEnicarService.getConventionsPFE().subscribe(data => {
-              this.conventions = data
+
+            this.conventionsDirectionEnicarService.generateLettreAffectationPFE(id).subscribe(data => {
+              console.log("2")
+              this.conventionsDirectionEnicarService.getConventions().subscribe(data => {
+                console.log("dataaaa ", data)
+                console.log("3")
+                this.conventions = data
+              });
+
             });
 
+
+          });
+          this.conventionsDirectionEnicarService.getConventions().subscribe(data => {
+            console.log("dataaaa ", data)
+            console.log("3")
+            this.conventions = data
           });
           Swal.fire('Covention validée !', '', 'success');
           // Ajouter la logique de confirmation ici
@@ -364,6 +422,8 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
         Swal.fire('Erreur', 'Impossible de télécharger le fichier', 'error');
       });
   }
+
+
   openAnnulationModal(conventionId: number) {
     this.currentConventionId = conventionId;
     this.modalService.open(this.annulationModal);

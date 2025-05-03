@@ -11,7 +11,7 @@
   <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
     <td>
       <ng-container
-        *ngIf="columnName !== 'action' && columnName !== 'valideeDirectionEnicar' && columnName !== 'etudiant' && columnName !== 'dateDepot'  && columnName !== 'fichierPDFNom'">
+        *ngIf="columnName !== 'action' && columnName !== 'valideeDirectionEnicar' && columnName !== 'etudiant' && columnName !== 'dateDepot'  && columnName !== 'fichierPDFNom'&& columnName !== 'lettreAffectationNom'">
         {{ item[columnName] }}
       </ng-container>
       <ng-container *ngIf=" columnName==='etudiant'">
@@ -31,7 +31,8 @@
       <ng-container *ngIf="columnName === 'valideeDirectionEnicar'">
 
         <c-badge [color]="getBadge(tdContent)">
-          {{ item.valideeDirectionEnicar == 0 ? 'En attente' : (item.valideeDirectionEnicar === 1 ? ' validée' :
+          {{ item.valideeDirectionEnicar == 0 ? 'En attente de réponse de chef département' :
+          (item.valideeDirectionEnicar === 1 ? ' validée' :
           'refusée')
           }}
         </c-badge>
@@ -45,6 +46,24 @@
           {{item.fichierPDFNom}}
         </a>
       </ng-container>
+
+      <ng-container *ngIf="columnName === 'lettreAffectationNom'">
+        <ng-container *ngIf="item.lettreAffectationNom; else nonDispo">
+          <a *ngIf="item.fichierPDFChemin" (click)="downloadPDFAffectation(item.lettreAffectationNom)"
+            class="text-primary text-decoration-underline" style="cursor: pointer;">
+            {{item.lettreAffectationNom}}
+          </a>
+        </ng-container>
+        <ng-template #nonDispo>
+          <span class="badge bg-light text-muted border"
+            style="font-family: 'Segoe UI', Roboto, sans-serif; font-size: 0.8rem;">
+            NON DISPONIBLE
+          </span>
+        </ng-template>
+      </ng-container>
+
+
+
 
     </td>
   </ng-template>
