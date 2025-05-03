@@ -1,0 +1,105 @@
+<div class="card">
+  <div class="card-body">
+    <div *ngIf="isLoading; else content">
+      <div class="text-center py-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #content>
+      <!-- Indication professionnelle pour double clic -->
+      <div class="alert alert-warning d-flex align-items-center mb-3 small-instruction">
+        <i class="cil-info me-2 fs-5 text-primary"></i>
+        <div>
+          <strong>Indication:</strong> double-cliquez sur une ligne contenant une demande d'annulation de convention
+          pour la traiter.
+        </div>
+      </div>
+
+      <c-smart-table [items]="conventions" [columns]="columns" [tableFilter]="true" [columnFilter]="true"
+        [columnSorter]="true" [itemsPerPage]="10" header pagination
+        tableProps="{ hover: true, striped: true, class: 'custom-table' }" (rowClick)="onRowClick($event)"
+        tableBodyProps="{ class: 'pointer-rows' }">
+        <!-- <ng-template cTemplateId="tableData" let-item="item" let-columnName="columnName">
+          <td>
+            <ng-container [ngSwitch]="columnName">
+              <ng-container *ngSwitchCase="'etudiantFullName'">
+                {{ item.etudiantFullName }}
+              </ng-container>
+              <ng-container *ngSwitchCase="'preuveNom'">
+                <ng-container *ngIf="item.preuveNom; else noProof">
+                  <a
+                    href="#"
+                    (click)="downloadPDF(item.preuveAnnulationNom); $event.preventDefault()"
+                    class="text-primary text-decoration-underline"
+                  >
+                    <i class="cil-cloud-download me-2"></i>
+                    Télécharger ({{ item.preuveAnnulationNom }})
+                  </a>
+                </ng-container>
+                <ng-template #noProof>
+                  <span class="text-muted">-</span>
+                </ng-template>
+              </ng-container>
+            </ng-container>
+          </td>
+        </ng-template>
+      </c-smart-table>
+    </ng-template> -->
+        <ng-template cTemplateId="tableData" let-columnName="columnName" let-item="item" let-tdContent="tdContent">
+          <td>
+            <!-- <ng-container
+              *ngIf="columnName !== 'actions' && columnName !== 'etudiantFullName' && columnName !== 'dateDepot'  && columnName !== 'preuveAnnulationNom'">
+              {{ item[columnName] }}
+            </ng-container> -->
+            <ng-container *ngIf=" columnName==='etudiantFullName'">
+              {{item[columnName].etudiantFullName}}
+            </ng-container>
+
+            <ng-container *ngIf="columnName === 'dateDepot'">
+              {{ getDate(item.dateDepot) }}
+            </ng-container>
+            <ng-container *ngIf="columnName === 'preuveAnnulationNom'">
+              <a *ngIf="item.preuveAnnulationChemin" (click)="downloadPDF(item.preuveAnnulationNom)"
+                class="text-primary text-decoration-underline" style="cursor: pointer;">
+                {{item.preuveAnnulationNom}}
+              </a>
+            </ng-container>
+          </td>
+        </ng-template>
+      </c-smart-table>
+    </ng-template>
+
+    <!-- Message utilisateur -->
+    <div *ngIf="showUserMessage" class="alert alert-info mt-3">
+      {{ userMessage }}
+    </div>
+
+    <!-- MODALE -->
+    <div class="modal fade show d-block" tabindex="-1" *ngIf="showModal" style="background-color: rgba(0, 0, 0, 0.5);">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-lg shadow-lg">
+          <div class="modal-header border-0">
+            <h5 class="modal-title text-dark">Action sur la convention</h5>
+            <button type="button" class="btn-close text-dark" (click)="closeModal()"></button>
+          </div>
+          <div class="modal-body text-center">
+            <p class="fs-5 text-dark">Souhaitez-vous accepter ou refuser cette demande d'annulation ?</p>
+          </div>
+          <div class="modal-footer border-0 justify-content-center">
+            <button type="button" class="btn btn-success px-4 py-2 fs-5 rounded-pill shadow-sm"
+              [disabled]="isProcessing" (click)="validerConvention()">
+              Accepter
+            </button>
+            <button type="button" class="btn btn-danger px-4 py-2 fs-5 rounded-pill shadow-sm" [disabled]="isProcessing"
+              (click)="refuserConvention()">
+              Refuser
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

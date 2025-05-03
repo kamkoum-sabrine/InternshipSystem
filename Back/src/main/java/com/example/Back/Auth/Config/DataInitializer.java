@@ -69,11 +69,37 @@ public class DataInitializer implements CommandLineRunner {
             Role serviceRole = new Role(null, "SERVICE_STAGE");
             Role directionRole = new Role(null, "DIRECTION_STAGE");
             Role etudiantRole = new Role(null, "ETUDIANT");
+            Role ComiteStageRole = new Role(null, "COMITE_STAGE");
+            Role DirectionEnicarRole = new Role(null, "DIRECTION_ENICAR");
+            Role ChefDepartementInfoRole = new Role(null, "CHEF_DEPARTEMENT_INFO");
+            Role ChefDepartementElecRole = new Role(null, "CHEF_DEPARTEMENT_ELECTRIQUE");
+            Role ChefDepartementIndusRole = new Role(null, "CHEF_DEPARTEMENT_INDUS");
+
 
             roleRepository.save(adminRole);
             roleRepository.save(serviceRole);
             roleRepository.save(directionRole);
             roleRepository.save(etudiantRole);
+            roleRepository.save(ComiteStageRole);
+            roleRepository.save(DirectionEnicarRole);
+            roleRepository.save(ChefDepartementInfoRole);
+            roleRepository.save(ChefDepartementElecRole);
+            roleRepository.save(ChefDepartementIndusRole);
+
+            User directriceUser = new User(null, "Directrice", "Directrice", "directionEnicar@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"),
+                    null,null,null,null,null,null,null,null,null,DirectionEnicarRole, false, LocalDateTime.now());
+
+            User comitePedagogiqueUser = new User(null, "Comite", "Pédagogique", "comitepedagogique@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"),
+                    null,null,null,null,null,null,null,null,null,ComiteStageRole, false, LocalDateTime.now());
+
+            User chefDepInfo = new User(null, "Chef dep", "Info", "chefDepInfo@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"),
+                    null,null,null,null,null,null,null,null,null,ChefDepartementInfoRole, false, LocalDateTime.now());
+
+            User chefDepElec = new User(null, "Chef dep", "Electrique", "chefDepElec@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"),
+                    null,null,null,null,null,null,null,null,null,ChefDepartementElecRole, false, LocalDateTime.now());
+
+            User chefDepIndus = new User(null, "Chef dep", "Industriel", "chefDepIndus@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"),
+                    null,null,null,null,null,null,null,null,null,ChefDepartementIndusRole, false, LocalDateTime.now());
 
             User superAdminUser = new User(null, "Kamkoum", "Sabrine", "kamkoumsabrine@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"),
 
@@ -103,6 +129,11 @@ public class DataInitializer implements CommandLineRunner {
             userRepository.save(etudiantUser2);
             userRepository.save(etudiantUser3);
             userRepository.save(etudiantUser4);
+            userRepository.save(directriceUser);
+            userRepository.save(comitePedagogiqueUser);
+            userRepository.save(chefDepIndus);
+            userRepository.save(chefDepInfo);
+            userRepository.save(chefDepElec);
 
             Enseignant e1 = new Enseignant("Mahdi", "Toumi", "Mahdi.Toumi");
             Enseignant e2 = new Enseignant("Ahmed", "Toumi", "Ahmed.Toumi");

@@ -161,6 +161,7 @@ public class TelechargerConventionPFEController {
     }
     private void replaceInParagraph(XWPFParagraph paragraph, Map<String, String> replacements) {
         // Fusionner les runs si nécessaire (évite les fragments)
+
         if (paragraph.getRuns().size() > 3) {
             String fullText = paragraph.getText();
             for (int i = paragraph.getRuns().size() - 1; i >= 0; i--) {
@@ -175,8 +176,11 @@ public class TelechargerConventionPFEController {
             String text = run.getText(0);
             if (text != null && !text.isEmpty()) {
                 for (Map.Entry<String, String> entry : replacements.entrySet()) {
-                    if (text.contains(entry.getKey())) {
-                        text = text.replace(entry.getKey(), entry.getValue());
+                    String placeholder = entry.getKey();
+                    String replacement = entry.getValue();
+
+                    if (placeholder != null && replacement != null && text.contains(placeholder)) {
+                        text = text.replace(placeholder, replacement);
                         run.setText(text, 0);
                         run.setFontSize(10); // Maintenir une taille cohérente
                     }
@@ -206,6 +210,7 @@ public class TelechargerConventionPFEController {
     @GetMapping("/convention/word/{id}")
     public ResponseEntity<byte[]> generateConvention(@PathVariable Long id) throws Exception  {
         // 1. Charger le template
+        System.err.println("haaniii hneeeee");
         ClassPathResource resource = new ClassPathResource("templates/stage_pfe_template.docx");
         XWPFDocument document = new XWPFDocument(OPCPackage.open(resource.getInputStream()));
         // 2. Insérer le logo
