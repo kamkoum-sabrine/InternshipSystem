@@ -3,4 +3,46 @@
     text-decoration: underline;
     cursor: pointer;
 }
+
 /* Optionnel - Pour ajuster l'espacement */
+/* Bouton Valider - Vert harmonieux */
+.validate-btn {
+    background-color: #2e8b57 !important;
+    /* SeaGreen - harmonieux avec votre palette */
+    border-color: #2e8b57 !important;
+    color: white !important;
+
+    &:hover {
+        background-color: #257346 !important;
+        border-color: #257346 !important;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(46, 139, 87, 0.3);
+    }
+
+    i {
+        color: white !important;
+    }
+}
+
+/* Bouton Refuser - Rouge de votre palette */
+.reject-btn {
+    background-color: #780000 !important;
+    border-color: #780000 !important;
+
+    &:hover {
+        background-color: #600000 !important;
+        border-color: #600000 !important;
+    }
+}
+
+/* Style commun aux boutons */
+.action-btn {
+    border-radius: 4px;
+    padding: 0.35rem 0.65rem;
+    transition: all 0.2s ease;
+    margin-right: 0.5rem;
+
+    i {
+        font-size: 0.875rem;
+    }
+}
