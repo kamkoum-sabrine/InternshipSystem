@@ -255,7 +255,7 @@ export class DashboardComponent implements OnInit {
       title: {
         text: 'Statut des conventions'
       },
-      colors: ['#4CAF50', '#FFC107', '#F44336']
+      colors: ['#669bbc', '#ffc300', '#780000']
     };
 
     // Chart 2: Répartition par type
@@ -343,7 +343,18 @@ export class DashboardComponent implements OnInit {
     };
   }
   initChartsDirection(): void {
-    // Chart 1: Statut des conventions
+    // Définition des couleurs harmonisées
+    const palette = {
+      red: '#780000',
+      darkBlue: '#003049',
+      mediumBlue: '#669bbc',
+      lightBlue: '#a8d0e6',
+      green: '#2e8b57',
+      purple: '#5e4b8b',
+      yellow: '#ffc300'
+    };
+
+    // Chart 1: Statut des conventions (Pie Chart)
     this.statusChartOptions = {
       series: [
         this.stats.conventionsSigneesDirection,
@@ -352,16 +363,35 @@ export class DashboardComponent implements OnInit {
       ],
       chart: {
         type: 'pie',
-        height: 350
+        height: 350,
+        foreColor: '#333' // Couleur du texte
       },
       labels: ['Signées', 'En attente', 'Refusées'],
       title: {
-        text: 'Statut des conventions'
+        text: 'Statut des conventions',
+        align: 'center',
+        style: {
+          fontSize: '16px',
+          fontWeight: '600',
+          color: palette.darkBlue
+        }
       },
-      colors: ['#4CAF50', '#FFC107', '#F44336']
+      colors: [palette.darkBlue, palette.lightBlue, palette.red],
+      legend: {
+        position: 'bottom',
+        markers: {
+          radius: 3
+        }
+      },
+      dataLabels: {
+        style: {
+          fontSize: '12px',
+          fontWeight: '500'
+        }
+      }
     };
 
-    // Chart 2: Répartition par type
+    // Chart 2: Répartition par type (Donut Chart)
     this.typeChartOptions = {
       series: [
         this.stats.stageEteCount,
@@ -373,50 +403,105 @@ export class DashboardComponent implements OnInit {
       },
       labels: ['Stage été', 'Stage PFE'],
       title: {
-        text: 'Répartition par type de stage'
+        text: 'Répartition par type de stage',
+        align: 'center',
+        style: {
+          fontSize: '16px',
+          fontWeight: '600',
+          color: palette.darkBlue
+        }
       },
-      colors: ['#2196F3', '#9C27B0']
+      colors: [palette.red, palette.lightBlue],
+      plotOptions: {
+        pie: {
+          donut: {
+            labels: {
+              show: true,
+              total: {
+                show: true,
+                label: 'Total',
+                color: palette.darkBlue
+              }
+            }
+          }
+        }
+      },
+      legend: {
+        position: 'bottom'
+      }
     };
 
-    // Chart 3: Taux de validation
+    // Chart 3: Taux de validation (Bar Chart Horizontal)
     this.validationChartOptions = {
       series: [{
         name: 'Taux de validation',
         data: [
           this.stats.tauxValidationService,
           this.stats.tauxValidationDirection,
-          this.stats.tauxValidationChefDepartement,
-          this.stats.tauxValidationComite
+          this.stats.tauxValidationComiteChef,
+          // this.stats.tauxValidationComite
         ]
       }],
       chart: {
         type: 'bar',
-        height: 350
+        height: 350,
+        toolbar: {
+          show: false
+        }
       },
       plotOptions: {
         bar: {
           borderRadius: 4,
           horizontal: true,
+          dataLabels: {
+            position: 'center'
+          }
         }
       },
       dataLabels: {
         enabled: true,
-        formatter: (val: number) => val.toFixed(1) + '%'
+        formatter: (val: number) => val.toFixed(1) + '%',
+        style: {
+          fontSize: '12px',
+          colors: ['#fff']
+        }
       },
       xaxis: {
-        categories: ['Service', 'Direction', 'Chef Département', 'Comité'],
-        max: 100
+        categories: ['Service', 'Direction', 'Comité pédagogique'],
+        max: 100,
+        labels: {
+          style: {
+            colors: palette.darkBlue
+          }
+        }
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: palette.darkBlue,
+            fontSize: '12px'
+          }
+        }
       },
       title: {
-        text: 'Taux de validation par service'
+        text: 'Taux de validation par service',
+        align: 'center',
+        style: {
+          fontSize: '16px',
+          fontWeight: '600',
+          color: palette.darkBlue
+        }
       },
-      colors: ['#673AB7']
+      colors: [palette.red],
+      grid: {
+        borderColor: '#f1f1f1'
+      }
     };
 
-    // Chart 4: Durée moyenne
+    // Chart 4: Durée moyenne (Bar Chart Vertical)
     this.dureeChartOptions = {
       series: [{
-        name: 'Durée moyenne (jours)',
+        name: 'Durée moyenne',
         data: [
           this.stats.dureeMoyenneEte,
           this.stats.dureeMoyennePFE
@@ -434,15 +519,40 @@ export class DashboardComponent implements OnInit {
       },
       dataLabels: {
         enabled: true,
-        formatter: (val: number) => val.toFixed(1) + ' jours'
+        formatter: (val: number) => val.toFixed(1) + ' jours',
+        style: {
+          fontSize: '12px',
+          colors: ['#fff']
+        }
       },
       xaxis: {
-        categories: ['Stage été', 'Stage PFE']
+        categories: ['Stage été', 'Stage PFE'],
+        labels: {
+          style: {
+            colors: palette.darkBlue
+          }
+        }
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: palette.darkBlue
+          }
+        }
       },
       title: {
-        text: 'Durée moyenne des stages'
+        text: 'Durée moyenne des stages',
+        align: 'center',
+        style: {
+          fontSize: '16px',
+          fontWeight: '600',
+          color: palette.darkBlue
+        }
       },
-      colors: ['#009688']
+      colors: [palette.mediumBlue],
+      grid: {
+        borderColor: '#f1f1f1'
+      }
     };
   }
   initCharts(): void {

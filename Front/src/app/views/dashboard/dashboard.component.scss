@@ -142,3 +142,37 @@
     transform: translateY(-2px);
   }
 }
+
+/* Style pour la carte d'en-tête des statistiques */
+.stats-header-card {
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border: none;
+  border-radius: 8px;
+
+  .stats-header {
+    background: white;
+    border-bottom: none;
+    padding: 1.25rem 1.5rem;
+
+    .header-content {
+      border-left: 4px solid #003049; // Bleu foncé de votre palette
+      padding-left: 1rem;
+    }
+
+    .section-role {
+      color: #669bbc; // Bleu clair de votre palette
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      color: #2c3e50;
+      font-weight: 600;
+      margin: 0.25rem 0 0;
+      font-size: 1.75rem;
+    }
+  }
+}
