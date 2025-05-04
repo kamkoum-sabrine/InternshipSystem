@@ -127,7 +127,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/conventionStagEte/refuserAnnulation/{conventionId}").hasAnyAuthority( "ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/conventionStagEte/ValiderConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/conventionStagEte/RefuserConvention/{id}").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
-                        .requestMatchers("/api/conventionStagEte/ConventionsAvecPreuveNonAnnulees").hasAnyAuthority( "ROLE_DIRECTION_STAGE","ROLE_SERVICE_STAGE")
+                        .requestMatchers("/api/conventionStagEte/ConventionsAvecPreuveNonAnnulees").permitAll()
                         .requestMatchers("/api/conventionStagEte/getConventions").hasAnyAuthority( "ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/conventionStagEte/ConventionsAvecPreuveNonAnnulees").hasAnyAuthority( "ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/conventionStagEte/downloadPreuveAnnulation/{conventionId}").hasAnyAuthority( "ROLE_SERVICE_STAGE")
@@ -160,7 +160,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/livrable/**").hasAnyAuthority("ROLE_DIRECTION_STAGE","ROLE_ETUDIANT")
                         .requestMatchers(HttpMethod.DELETE, "/api/livrable/**").hasAnyAuthority("ROLE_SERVICE_STAGE","ROLE_ETUDIANT")
 
-                        .requestMatchers("/api/conventionStagPFE/getConventions").hasAnyAuthority( "ROLE_SERVICE_STAGE","ROLE_DIRECTION_STAGE","ROLE_COMITE_CHEF_DEPARTEMENT")
+                        .requestMatchers("/api/conventionStagPFE/getConventions").permitAll()
 
                         .requestMatchers("/api/conventionStagPFE/RefuserConventionDirectionEnicar/{id}").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
                         .requestMatchers("/api/conventionStagPFE/ValiderConventionDirectionEnicar/{id}").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
@@ -174,7 +174,8 @@ public class WebSecurityConfig {
 
                         .requestMatchers("/api/conventionStagPFE/RefuserConventionChefDepartement/{id}").hasAnyAuthority( "ROLE_CHEF_DEPARTEMENT_INFO","ROLE_CHEF_DEPARTEMENT_ELECTRIQUE","ROLE_CHEF_DEPARTEMENT_INDUS" )
                         .requestMatchers("/api/conventionStagPFE/ValiderConventionChefDepartement/{id}").hasAnyAuthority( "ROLE_CHEF_DEPARTEMENT_INFO","ROLE_CHEF_DEPARTEMENT_ELECTRIQUE","ROLE_CHEF_DEPARTEMENT_INDUS")
-
+                        .requestMatchers("/api/conventionStagPFE/ValiderConventionComiteChef/{id}").permitAll()
+                        .requestMatchers("/api/conventionStagEte/ValiderConventionComiteChef/{id}").permitAll()
 
                         .requestMatchers("/api/conventionStage/validees-chef-departementETE").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
                         .requestMatchers("/api/conventionStage/validees-chef-departementPFE").hasAnyAuthority( "ROLE_DIRECTION_ENICAR")
