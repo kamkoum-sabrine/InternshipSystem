@@ -565,6 +565,15 @@ export class DashboardComponent implements OnInit {
     };
   }
   initCharts(): void {
+    const palette = {
+      red: '#780000',
+      darkBlue: '#003049',
+      mediumBlue: '#669bbc',
+      lightBlue: '#a8d0e6',
+      green: '#2e8b57',
+      purple: '#5e4b8b',
+      yellow: '#ffc300'
+    };
     // Chart 1: Statut des conventions
     this.statusChartOptions = {
       series: [
@@ -580,7 +589,7 @@ export class DashboardComponent implements OnInit {
       title: {
         text: 'Statut des conventions'
       },
-      colors: ['#4CAF50', '#FFC107', '#F44336']
+      colors: [palette.darkBlue, palette.lightBlue, palette.red]
     };
 
     // Chart 2: Répartition par type
@@ -597,7 +606,7 @@ export class DashboardComponent implements OnInit {
       title: {
         text: 'Répartition par type de stage'
       },
-      colors: ['#2196F3', '#9C27B0']
+      colors: [palette.lightBlue, palette.red]
     };
 
     // Chart 3: Taux de validation
@@ -607,8 +616,7 @@ export class DashboardComponent implements OnInit {
         data: [
           this.stats.tauxValidationService,
           this.stats.tauxValidationDirection,
-          this.stats.tauxValidationChefDepartement,
-          this.stats.tauxValidationComite
+          this.stats.tauxValidationComiteChef,
         ]
       }],
       chart: {
@@ -626,13 +634,13 @@ export class DashboardComponent implements OnInit {
         formatter: (val: number) => val.toFixed(1) + '%'
       },
       xaxis: {
-        categories: ['Service', 'Direction', 'Chef Département', 'Comité'],
+        categories: ['Service', 'Direction', 'Comité pédagogique'],
         max: 100
       },
       title: {
         text: 'Taux de validation par service'
       },
-      colors: ['#673AB7']
+      colors: [palette.red]
     };
 
     // Chart 4: Durée moyenne

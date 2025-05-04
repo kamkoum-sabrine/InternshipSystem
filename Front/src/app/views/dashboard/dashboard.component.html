@@ -126,7 +126,12 @@
 
 <!-- Contenu pour ADMIN -->
 <c-card class="mb-4" *ngIf="isServiceStage">
-  <c-card-header>Tableau de bord Service de stage</c-card-header>
+  <c-card-header class="dashboard-header">
+    <div class="header-content">
+      <span class="admin-role">SERVICE DE STAGE</span>
+      <h2>Tableau de bord</h2>
+    </div>
+  </c-card-header>
   <c-card-body>
     <!-- stats-conventions.component.html -->
     <div class="container" *ngIf="!isLoading; else loading">
