@@ -47,10 +47,19 @@ export class EntreprisesBasicExampleComponent implements OnInit {
   doubleClickTimeout: any = null;
   lastClickedId: number | null = null;
 
-  constructor(private entrepriseService: EntreprisesServiceService) {}
+  role: string = '';
+  isService: boolean = false;
+
+  constructor(private entrepriseService: EntreprisesServiceService) { }
 
   ngOnInit() {
     console.log('Entreprises reçues du parent:', this.entreprises);
+
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.role = user?.role?.nom || '';
+
+    // Détermine le type d'utilisateur
+    this.isService = this.role === 'SERVICE_STAGE';
   }
 
   onTelephoneInput(event: any) {
@@ -68,10 +77,10 @@ export class EntreprisesBasicExampleComponent implements OnInit {
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (!file) return;
-    
+
     // Reset the input value to allow re-upload of same file
     event.target.value = '';
-    
+
     this.isImporting = true;
     const reader = new FileReader();
     reader.onload = (e: any) => {
@@ -97,7 +106,7 @@ export class EntreprisesBasicExampleComponent implements OnInit {
 
   async processExcelData(excelData: any[]) {
     this.isImporting = true;
-    
+
     if (!excelData || excelData.length === 0) {
       this.isImporting = false;
       alert("Le fichier Excel est vide ou mal formaté");
@@ -140,7 +149,7 @@ export class EntreprisesBasicExampleComponent implements OnInit {
       }
 
       // Vérification des doublons dans le fichier
-      const duplicateInFile = excelData.slice(0, index).some((prevRow, prevIndex) => 
+      const duplicateInFile = excelData.slice(0, index).some((prevRow, prevIndex) =>
         (prevRow.email?.toString().trim().toLowerCase() === entreprise.email) ||
         (prevRow.telephone?.toString().trim() === entreprise.telephone)
       );
@@ -176,7 +185,7 @@ export class EntreprisesBasicExampleComponent implements OnInit {
       } catch (error: unknown) {
         errorCount++;
         let errorMessage = `Erreur lors de l'ajout de l'entreprise: ${entreprise.nom}`;
-        
+
         if (error instanceof HttpErrorResponse) {
           errorMessage += ` - ${error.error.message || error.message}`;
         } else if (error instanceof Error) {
@@ -184,7 +193,7 @@ export class EntreprisesBasicExampleComponent implements OnInit {
         } else {
           errorMessage += ` - Erreur inconnue`;
         }
-        
+
         errorMessages.push(errorMessage);
       }
     }
@@ -217,18 +226,18 @@ export class EntreprisesBasicExampleComponent implements OnInit {
 
   showImportResult(validCount: number, errorCount: number, errorMessages: string[]) {
     let message = `Résultat de l'import :\n\n`;
-    
+
     if (validCount > 0) {
       message += `✅ ${validCount} entreprise(s) ajoutée(s) avec succès\n\n`;
     }
 
     if (errorCount > 0) {
       message += `❌ ${errorCount} erreur(s) :\n`;
-      
+
       // Afficher les 5 premières erreurs
       const maxErrorsToShow = 5;
       const errorsToShow = errorMessages.slice(0, maxErrorsToShow);
-      
+
       errorsToShow.forEach(err => {
         message += `- ${err}\n`;
       });
@@ -248,7 +257,7 @@ export class EntreprisesBasicExampleComponent implements OnInit {
 
     // Afficher le message principal
     const userConfirmed = confirm(message);
-    
+
     // Si beaucoup d'erreurs, proposer de voir tout le détail
     if (errorMessages.length > 5 && userConfirmed) {
       confirm(`Toutes les erreurs :\n\n${errorMessages.join('\n')}`);
@@ -272,7 +281,7 @@ export class EntreprisesBasicExampleComponent implements OnInit {
   }
 
   telephoneExisteDeja(telephone: string): boolean {
-    return this.entreprises.some(entreprise => 
+    return this.entreprises.some(entreprise =>
       entreprise.telephone === telephone
     );
   }
@@ -431,16 +440,16 @@ export class EntreprisesBasicExampleComponent implements OnInit {
   }
 
   emailExisteDeja(email: string): boolean {
-    return this.entreprises.some(entreprise => 
+    return this.entreprises.some(entreprise =>
       entreprise.email.toLowerCase() === email.toLowerCase()
     );
   }
 
   telephoneExisteDejaPourAutreEntreprise(id: number, telephone: string): boolean {
     if (!telephone) return false;
-    
+
     const normalizedTel = telephone.toString().trim().replace(/\D/g, '');
-    
+
     return this.entreprises.some(entreprise => {
       if (entreprise.id === id) return false;
       const existingTel = entreprise.telephone.toString().trim().replace(/\D/g, '');
@@ -449,8 +458,8 @@ export class EntreprisesBasicExampleComponent implements OnInit {
   }
 
   emailExisteDejaPourAutreEntreprise(id: number, email: string): boolean {
-    return this.entreprises.some(entreprise => 
-      entreprise.id !== id && 
+    return this.entreprises.some(entreprise =>
+      entreprise.id !== id &&
       entreprise.email.toLowerCase() === email.toLowerCase()
     );
   }

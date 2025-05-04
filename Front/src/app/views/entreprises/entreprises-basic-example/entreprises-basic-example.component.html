@@ -1,8 +1,8 @@
 <!-- <button class="btn btn-primary mb-3" (click)="ouvrirModal()">Ajouter Entreprise</button> -->
-<button class="btn  text-white mb-3" style="background-color: #669bbc ;" (click)="ouvrirModal()"> <i
-    class="fas fa-plus-circle me-2"></i>Ajouter une
+<button *ngIf="isService" class="btn  text-white mb-3" style="background-color: #669bbc ;" (click)="ouvrirModal()">
+  <i class="fas fa-plus-circle me-2"></i>Ajouter une
   entreprise</button>
-<button class="btn  mb-3" (click)="fileInput.click()"
+<button *ngIf="isService" class="btn  mb-3" (click)="fileInput.click()"
   style="margin-left: 10px; background-color: #780000 ; color: white;">
   <i class="fas fa-file-excel me-2"></i>Upload Excel
 </button>
@@ -86,7 +86,7 @@
   </div>
 </div>
 <!-- Modal d'actions -->
-<div *ngIf="entrepriseSelectionnee" class="modal-overlay">
+<div *ngIf="entrepriseSelectionnee && isService" class="modal-overlay">
   <div class="modal-content">
     <h3>Gérer l'entreprise</h3>
     <p>Que souhaitez-vous faire avec cette entreprise ?</p>

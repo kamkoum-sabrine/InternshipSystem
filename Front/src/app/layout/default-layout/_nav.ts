@@ -31,21 +31,21 @@ export const navItems: INavDataExtended[] = [
     url: '/entreprises',
     iconComponent: { name: 'cil-LocationPin' },
 
-    roles: ['SERVICE_STAGE', 'DIRECTION_STAGE']
+    roles: ['SERVICE_STAGE', 'DIRECTION_STAGE', 'ETUDIANT']
   },
   {
-    name:'Attestations',
-    url:'/Attestations',
+    name: 'Attestations',
+    url: '/Attestations',
     iconComponent: { name: 'cil-file' },
 
-    roles :['ETUDIANT']
+    roles: ['ETUDIANT']
   },
   {
-    name:' Les attestations',
-    url:'/AttestationService',
+    name: ' Les attestations',
+    url: '/AttestationService',
     iconComponent: { name: 'cil-file' },
 
-    roles :['SERVICE_STAGE']
+    roles: ['SERVICE_STAGE']
   },
 
 
@@ -67,12 +67,12 @@ export const navItems: INavDataExtended[] = [
     roles: ['SERVICE_STAGE']
   },
   {
-     name :'Les conventions',
-      url : '/ConventionsComiteChef',
-      iconComponent : { name : 'cil-file' },
+    name: 'Les conventions',
+    url: '/ConventionsComiteChef',
+    iconComponent: { name: 'cil-file' },
     roles: ['COMITE_CHEF_DEPARTEMENT']
   },
-  
+
   {
     name: 'Les conventions',
     url: '/conventionsDirectionEnicar',
