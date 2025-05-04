@@ -1,8 +1,14 @@
 <c-row>
   <c-col xs="12">
     <c-card class="mb-4">
-      <c-card-header ngPreserveWhitespaces>
+      <!-- <c-card-header ngPreserveWhitespaces>
         <strong>Gérer </strong> <small>Les utilisateurs</small>
+      </c-card-header> -->
+      <c-card-header class="dashboard-header" ngPreserveWhitespaces>
+        <div class="header-content">
+          <span class="admin-role">SUPER ADMIN</span>
+          <h2>Gestion des utilisateurs</h2>
+        </div>
       </c-card-header>
       <!-- <button mat-raised-button (click)="openDialog()">Ajouter un utilisateur</button> -->
       <!-- <button class="btn btn-primary mb-3" (click)="openDialog()">Ajouter un utilisateur</button> -->
