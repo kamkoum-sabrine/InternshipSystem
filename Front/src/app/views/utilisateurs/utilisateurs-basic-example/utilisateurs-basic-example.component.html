@@ -1,4 +1,5 @@
-<button class="btn  text-white mb-3" style="background-color: #669bbc ;" (click)="openDialog()">Ajouter un
+<button class="btn  text-white mb-3" style="background-color: #669bbc ;" (click)="openDialog()"><i
+    class="fas fa-plus-circle me-2"></i>Ajouter un
   utilisateur</button>
 
 <c-smart-table *ngIf="users && users.length > 0" [activePage]="1" [columnSorter]="true" [columns]="columns"
