@@ -393,7 +393,14 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
     }
   }
   downloadPreuveAnnulation(nomFichier: string) {
-    const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
+    let fileUrl;
+    if (this.tabs == 0) {
+      fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
+
+    } else {
+      fileUrl = `http://localhost:8081/api/conventionStagPFE/uploads/${nomFichier}`;
+
+    }
 
     fetch(fileUrl, {
       method: "GET",

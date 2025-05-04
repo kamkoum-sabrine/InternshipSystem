@@ -1,12 +1,16 @@
-<button class="btn btn-warning text-white mb-3" (click)="telechargerConvention()">Télécharger ma convention</button>
+<button class="btn text-white mb-3" style="background-color: #669bbc ;" (click)="telechargerConvention()"> <i
+    class="fas fa-download mr-2"></i>Télécharger ma
+  convention</button>
 <br />
-<button class="btn btn-warning text-white mb-3" (click)="openDialog()">Déposer une convention</button>
+<button class="btn text-white mb-3" style="background-color: #669bbc ;" (click)="openDialog()">
+  <i class="fas fa-cloud-upload-alt mr-2"></i>
+  Déposer une
+  convention</button>
 
 <c-smart-table *ngIf="myConventions && myConventions.length > 0" [activePage]="1" [columnSorter]="true"
   [columns]="columns" [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="5" [items]="myConventions"
-  [sorterValue]="{ column: 'name', state: 'asc' }" [tableFilter]="true"
-  [tableProps]="{ hover: true, striped: true, responsive: true }" [tableBodyProps]="{ align: 'middle' }" cleaner
-  clickableRows footer header pagination>
+  [sorterValue]="{ column: 'name', state: 'asc' }" [tableProps]="{ hover: true, striped: true, responsive: true }"
+  [tableBodyProps]="{ align: 'middle' }" clickableRows header pagination>
   <!-- <ng-template cTemplateId="tableDetails" let-item="item">
 
     <div [visible]="this.details_visible[item.id]===true" cCollapse>
@@ -45,11 +49,10 @@
       <ng-container *ngSwitchCase="'preuveAnnulation'">
         <ng-container *ngIf="item.preuveAnnulationNom; else nonDispo">
           <button (click)="downloadPreuveAnnulation(item.preuveAnnulationNom)" cButton color="primary" size="sm"
-            variant="ghost" class="position-relative overflow-hidden"
-            style="border: 1px solid #6f42c1; min-width: 120px; font-family: 'Segoe UI', Roboto, sans-serif; font-weight: 500; letter-spacing: 0.5px; color: #6f42c1 !important;">
-            <i class="cil-cloud-download me-2"></i>
+            variant="ghost" class="position-relative overflow-hidden" style="background-color: #669bbc ;">
+            <i class="fas fa-download mr-2"></i>
             <span style="font-size: 0.85rem;">TÉLÉCHARGER</span>
-            <span class="position-absolute top-0 start-0 w-100 h-100 bg-primary"
+            <span class="position-absolute top-0 start-0 w-100 h-100 "
               style="opacity: 0; transition: opacity 0.3s;"></span>
           </button>
         </ng-container>
@@ -69,7 +72,8 @@
       <!-- annulee -->
       <ng-container *ngSwitchCase="'annulee'">
         <ng-container *ngIf="item.preuveAnnulationNom  == null; else badgeAnnulation">
-          <button (click)="openAnnulationModal(item.id)" cButton color="info" class="text-white" size="sm">
+          <button (click)="openAnnulationModal(item.id)" cButton style="background-color: #003049 ;" class="text-white"
+            size="sm">
             Demander annulation de convention
           </button>
         </ng-container>
@@ -162,18 +166,12 @@
         }
         @case ('preuveAnnulation') {
         @if (item.preuveAnnulationNom) {
-        <button (click)="downloadPreuveAnnulation(item.preuveAnnulationNom)" cButton color="primary" size="sm"
-          variant="ghost" class="position-relative overflow-hidden" style="border: 1px solid #6f42c1; 
-                         min-width: 120px; 
-                         font-family: 'Segoe UI', Roboto, sans-serif; 
-                         font-weight: 500; 
-                         letter-spacing: 0.5px;
-                         color: #b0a1ce !important;">
+        <button (click)="downloadPreuveAnnulation(item.preuveAnnulationNom)" cButton size="sm" variant="ghost"
+          class="position-relative overflow-hidden" style="background-color: #669bbc ;">
           <!-- Texte violet -->
-          <i class="cil-cloud-download me-2"></i>
+          <i class="fas fa-download mr-2"></i>
           <span style="font-size: 0.85rem;">TÉLÉCHARGER</span>
-          <span class="position-absolute top-0 start-0 w-100 h-100 bg-primary"
-            style="opacity: 0; transition: opacity 0.3s;"></span>
+
         </button>
         <style>
           .btn-primary-ghost:hover {
