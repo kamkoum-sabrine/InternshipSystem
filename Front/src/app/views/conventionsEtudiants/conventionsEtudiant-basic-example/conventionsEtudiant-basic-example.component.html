@@ -68,14 +68,15 @@
 
       <!-- annulee -->
       <ng-container *ngSwitchCase="'annulee'">
-        <ng-container *ngIf="item.annulee == 0; else badgeAnnulation">
+        <ng-container *ngIf="item.preuveAnnulationNom  == null; else badgeAnnulation">
           <button (click)="openAnnulationModal(item.id)" cButton color="info" class="text-white" size="sm">
             Demander annulation de convention
           </button>
         </ng-container>
         <ng-template #badgeAnnulation>
           <c-badge [color]="getBadge(tdContent)">
-            {{ item.annulee == 0 ? 'En attente' : (item.annulee === 1 ? 'Annulation validée' : 'Annulation refusée') }}
+            {{ item.annulee == 0 ? 'En cours de traitement' : (item.annulee === 1 ? 'Annulation validée' : 'Annulation
+            refusée') }}
           </c-badge>
         </ng-template>
       </ng-container>
@@ -86,6 +87,31 @@
           class="text-primary text-decoration-underline" style="cursor: pointer;">
           {{item.fichierPDFNom}}
         </a>
+      </ng-container>
+
+      <!-- fichierPDFNom -->
+      <ng-container *ngSwitchCase="'etat'">
+        <c-badge [color]="getBadge(item.valideeService)">
+          {{ item.valideeService == 0 ? 'En attente de validation du service' :
+          item.valideeService === 1 ? 'Validée par le service' :
+          'Refusée par le service' }}
+        </c-badge>
+
+        <!-- État comité SEULEMENT si validé par le service -->
+        <div *ngIf="item.valideeService === 1" class="mt-1">
+          <c-badge [color]="getBadge(item.valideeComiteChefDepartement)">
+            {{ item.valideeComiteChefDepartement === 1 ? 'Validée par la comité pédagogique' :
+            item.valideeComiteChefDepartement === -1 ? 'Refusée par la comité pédagogique' :
+            'En attente du comité' }}
+          </c-badge>
+        </div>
+        <div *ngIf="item.valideeComiteChefDepartement === 1" class="mt-1">
+          <c-badge [color]="getBadge(item.valideeComiteChefDepartement)">
+            {{ item.valideeDirectionEnicar === 1 ? 'Validée par la direction' :
+            item.valideeDirectionEnicar === -1 ? 'Refusée par la direction' :
+            'En attente du comité' }}
+          </c-badge>
+        </div>
       </ng-container>
 
       <!-- show -->
@@ -99,6 +125,7 @@
       <ng-container *ngSwitchCase="'role'">
         {{ item[columnName]?.nom }}
       </ng-container>
+
 
       <!-- default -->
       <ng-container *ngSwitchDefault>

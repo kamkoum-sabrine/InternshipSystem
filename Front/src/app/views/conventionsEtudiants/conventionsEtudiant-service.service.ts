@@ -29,4 +29,15 @@ export class ConventionsEtudiantService {
     );
   }
 
+  uploadPreuveAnnulationPFE(conventionId: number, formData: FormData): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/conventionStagPFE/uploadPreuveAnnulation/${conventionId}`,
+      formData,
+      {
+        withCredentials: true,
+        responseType: 'text' // Ajoutez ceci pour accepter une réponse texte
+      }
+    );
+  }
+
 }

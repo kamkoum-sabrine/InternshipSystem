@@ -50,13 +50,17 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
       label: 'Date de dépot',
     },
 
+    /*  {
+        key: 'valideeService',
+        label: 'Validée par le service de stage'
+      },
+      {
+        key: 'valideeDirection',
+        label: 'Validée par la direction de stage'
+      },*/
     {
-      key: 'valideeService',
-      label: 'Validée par le service de stage'
-    },
-    {
-      key: 'valideeDirection',
-      label: 'Validée par la direction de stage'
+      key: 'etat',
+      label: 'Etat'
     },
     {
       key: 'annulee',
@@ -381,20 +385,39 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
 
     const formData = new FormData();
     formData.append('preuveAnnulation', this.selectedFile);
+    console.log("taaabsss " + this.tabs)
+    if (this.tabs == 0) {
+      this.conventionsEtudiantService.uploadPreuveAnnulation(this.currentConventionId, formData)
+        .subscribe({
+          next: (response) => {
+            modal.close();
+            Swal.fire('Succès', 'Preuve d\'annulation uploadée avec succès', 'success');
+            window.location.reload(); // Rafraîchir la page pour voir les changements
+            // Rafraîchir les données si nécessaire
+          },
+          error: (error) => {
+            console.error('Erreur lors de l\'upload', error);
+            Swal.fire('Erreur', 'Une erreur est survenue lors de l\'upload', 'error');
+          }
+        });
+    }
+    else {
+      this.conventionsEtudiantService.uploadPreuveAnnulationPFE(this.currentConventionId, formData)
+        .subscribe({
+          next: (response) => {
+            modal.close();
+            Swal.fire('Succès', 'Preuve d\'annulation uploadée avec succès', 'success');
+            window.location.reload(); // Rafraîchir la page pour voir les changements
+            // Rafraîchir les données si nécessaire
+          },
+          error: (error) => {
+            console.error('Erreur lors de l\'upload', error);
+            Swal.fire('Erreur', 'Une erreur est survenue lors de l\'upload', 'error');
+          }
+        });
+    }
 
-    this.conventionsEtudiantService.uploadPreuveAnnulation(this.currentConventionId, formData)
-      .subscribe({
-        next: (response) => {
-          modal.close();
-          Swal.fire('Succès', 'Preuve d\'annulation uploadée avec succès', 'success');
-          window.location.reload(); // Rafraîchir la page pour voir les changements
-          // Rafraîchir les données si nécessaire
-        },
-        error: (error) => {
-          console.error('Erreur lors de l\'upload', error);
-          Swal.fire('Erreur', 'Une erreur est survenue lors de l\'upload', 'error');
-        }
-      });
+
   }
 
 
