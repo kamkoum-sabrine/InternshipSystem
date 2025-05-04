@@ -69,50 +69,77 @@ export class DashboardComponent implements OnInit {
   dureeChartOptions: any;
 
   // Configuration du graphique
-  public barChartOptions: ChartConfiguration['options'] = {
+  // Dans votre composant
+  barChartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: true,
         position: 'top',
+        labels: {
+          color: '#6c757d',
+          font: {
+            family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+            size: 12
+          }
+        }
       },
-      title: {
-        display: true,
-        text: 'Répartition des étudiants par filière',
-        font: {
-          size: 16
+      tooltip: {
+        backgroundColor: '#2c3e50',
+        titleFont: {
+          size: 14,
+          weight: 'bold'
+        },
+        bodyFont: {
+          size: 12
         }
       }
     },
     scales: {
-      y: {
-        beginAtZero: true,
+      x: {
+        grid: {
+          display: false
+        },
         ticks: {
-          precision: 0
+          color: '#495057',
+          font: {
+            weight: 500
+          }
+        }
+      },
+      y: {
+        grid: {
+          color: 'rgba(0, 0, 0, 0.05)'
+        },
+        ticks: {
+          color: '#6c757d'
         }
       }
     }
   };
 
-  public barChartData: ChartData<'bar'> = {
-    labels: ['Informatique', 'Mécatronique', 'Infotronique', 'GSIL'],
-    datasets: [{
-      data: [65, 59, 80, 81],
-      label: 'Nombre d\'étudiants',
-      backgroundColor: [
-        'rgba(103, 58, 183, 0.7)',
-        'rgba(233, 30, 99, 0.7)',
-        'rgba(255, 152, 0, 0.7)',
-        'rgba(0, 188, 212, 0.7)'
-      ],
-      borderColor: [
-        'rgba(103, 58, 183, 1)',
-        'rgba(233, 30, 99, 1)',
-        'rgba(255, 152, 0, 1)',
-        'rgba(0, 188, 212, 1)'
-      ],
-      borderWidth: 1
-    }]
+  barChartData = {
+    labels: ['Stage été', 'PFE', 'Stage ouvrier', 'International'],
+    datasets: [
+      {
+        label: 'Nombre de conventions',
+        data: [65, 59, 30, 18],
+        backgroundColor: [
+          'rgba(120, 0, 0, 0.7)',  // Rouge bordeaux
+          'rgba(44, 62, 80, 0.7)',  // Bleu ardoise
+          'rgba(52, 152, 219, 0.7)', // Bleu vif
+          'rgba(22, 160, 133, 0.7)'  // Vert émeraude
+        ],
+        borderColor: [
+          'rgba(120, 0, 0, 1)',
+          'rgba(44, 62, 80, 1)',
+          'rgba(52, 152, 219, 1)',
+          'rgba(22, 160, 133, 1)'
+        ],
+        borderWidth: 1,
+        borderRadius: 4
+      }
+    ]
   };
   constructor(private statisticsService: StatistiquesService) { }
 

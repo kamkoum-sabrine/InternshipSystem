@@ -3,10 +3,27 @@
 <br />
 <!-- Contenu pour SUPER_ADMIN -->
 <c-card class="mb-4" *ngIf="isSuperAdmin">
-  <c-card-header>Tableau de bord Super Admin</c-card-header>
+  <!-- <c-card-header>Tableau de bord Super Admin</c-card-header> -->
+  <c-card-header class="dashboard-header">
+    <div class="header-content">
+      <span class="admin-role">SUPER ADMIN</span>
+      <h2>Tableau de bord</h2>
+    </div>
+  </c-card-header>
   <c-card-body>
     <div class="chart-container">
-      <c-chart type="bar" [data]="barChartData" [options]="barChartOptions"></c-chart>
+      <c-card>
+        <c-card-header class="chart-header">
+          <h5>Répartition des conventions par type</h5>
+
+        </c-card-header>
+        <c-card-body>
+          <div style="height: 300px">
+            <c-chart type="bar" [data]="barChartData" [options]="barChartOptions"
+              [style]="'display: block; height: 100%; width: 100%;'"></c-chart>
+          </div>
+        </c-card-body>
+      </c-card>
     </div>
 
 
