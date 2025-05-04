@@ -138,7 +138,7 @@
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="card-title">Statut des conventions</h5>
-                <span class="badge bg-primary">
+                <span class="badge" style="background-color: #780000;">
                   Total: {{stats.totalConventions}}
                 </span>
               </div>
@@ -204,7 +204,12 @@
   </c-card-body>
 </c-card>
 <c-card class="mb-4" *ngIf="isComiteChef">
-  <c-card-header>Tableau de bord Comité pédagogique et chef de département</c-card-header>
+  <c-card-header class="dashboard-header">
+    <div class="header-content">
+      <span class="admin-role">COMITE PEDAGOGIQUE ET CHEF DE DEPARTEMENT</span>
+      <h2>Tableau de bord</h2>
+    </div>
+  </c-card-header>
   <c-card-body>
     <!-- stats-conventions.component.html -->
     <div class="container" *ngIf="!isLoading; else loading">
@@ -216,7 +221,7 @@
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="card-title">Statut des conventions</h5>
-                <span class="badge bg-primary">
+                <span class="badge" style="background-color: #780000;">
                   Total: {{stats.totalConventions}}
                 </span>
               </div>
