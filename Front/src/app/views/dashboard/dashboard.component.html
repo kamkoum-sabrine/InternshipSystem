@@ -294,7 +294,12 @@
 <!-- Contenu par défaut (autres rôles) -->
 <div *ngIf="isEtudiant">
   <c-card class="mb-4">
-    <c-card-header>Tableau de bord Étudiant</c-card-header>
+    <c-card-header class="dashboard-header-student">
+      <div class="header-content">
+        <!-- <span class="admin-role">ESPACE ETUDIANT</span> -->
+        <h2>ESPACE ETUDIANT</h2>
+      </div>
+    </c-card-header>
     <c-card-body>
       <div class="welcome-container">
         <div class="welcome-header">
@@ -340,9 +345,9 @@
           <div class="info-section">
             <h2><i class="fas fa-calendar-alt"></i> Dates importantes</h2>
             <ul class="deadlines">
-              <li>➤ <strong>15 septembre</strong> : Dépôt des conventions pour le semestre d'automne</li>
-              <li>➤ <strong>15 février</strong> : Dépôt des conventions pour le semestre de printemps</li>
-              <li>➤ <strong>30 jours avant le stage</strong> : Délai minimum pour la validation</li>
+              <li> <strong>15 septembre</strong> : Dépôt des conventions pour le semestre d'automne</li>
+              <li> <strong>15 février</strong> : Dépôt des conventions pour le semestre de printemps</li>
+              <li><strong>30 jours avant le stage</strong> : Délai minimum pour la validation</li>
             </ul>
           </div>
         </div>

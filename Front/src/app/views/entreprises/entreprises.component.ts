@@ -26,9 +26,18 @@ import { MatDialogModule } from '@angular/material/dialog';
 })
 export class EntreprisesComponent {
   entreprises: any;
-
+  role: string = '';
+  isService: boolean = false;
+  isEtudiant: boolean = false;
   constructor(private entrepriseService: EntreprisesServiceService, public dialog: MatDialog) { }
   ngOnInit(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.role = user?.role?.nom || '';
+
+    // Détermine le type d'utilisateur
+    this.isService = this.role === 'SERVICE_STAGE';
+    this.isEtudiant = this.role !== 'SERVICE_STAGE';
+
     this.entrepriseService.getEntreprises().subscribe(data => {
       this.entreprises = data;
       console.log(this.entreprises);

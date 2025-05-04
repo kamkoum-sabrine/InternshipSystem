@@ -27,10 +27,19 @@ import { MatDialogModule } from '@angular/material/dialog';
 export class SoutenancesComponent {
 
   soutenances: any;
+  role: string = '';
+  isService: boolean = false;
+  isEtudiant: boolean = false;
 
 
   constructor(private SoutenancesServiceService: SoutenancesServiceService, public dialog: MatDialog) { }
   ngOnInit(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.role = user?.role?.nom || '';
+
+    // Détermine le type d'utilisateur
+    this.isService = this.role === 'SERVICE_STAGE';
+    this.isEtudiant = this.role !== 'SERVICE_STAGE';
 
     this.SoutenancesServiceService.getSoutenances().subscribe(data => {
       this.soutenances = data;

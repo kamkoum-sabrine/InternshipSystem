@@ -3,7 +3,9 @@
     <c-card class="mb-4">
       <c-card-header class="dashboard-header" ngPreserveWhitespaces>
         <div class="header-content">
-          <span class="admin-role">SERVICE DE STAGE</span>
+          <span class="admin-role" *ngIf="isService">SERVICE DE STAGE</span>
+          <span class="admin-role" *ngIf="isEtudiant">ESPACE ETUDIANT</span>
+
           <h2>Gestion des soutenances</h2>
         </div>
       </c-card-header>

@@ -33,6 +33,9 @@ import { LivrablesBasicExampleComponent } from './livrable-basic-example/livrabl
 })
 export class LivrablesComponent {
   livrables: any;
+  role: string = '';
+  isService: boolean = false;
+  isEtudiant: boolean = false;
 
   constructor(
     private livrablesService: LivrableService,
@@ -40,7 +43,15 @@ export class LivrablesComponent {
   ) { }
 
   ngOnInit(): void {
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.role = user?.role?.nom || '';
+
+    // Détermine le type d'utilisateur
+    this.isService = this.role === 'SERVICE_STAGE';
+    this.isEtudiant = this.role !== 'SERVICE_STAGE';
+
     this.loadLivrables();
+
   }
 
   loadLivrables() {

@@ -1,5 +1,6 @@
 <br />
-<button class="btn btn-warning text-white mb-3" (click)="openDialog()">Déposer votre attestation</button>
+<button class="btn text-white mb-3" style="background-color: #669bbc ;" (click)="openDialog()"><i
+    class="fas fa-cloud-upload-alt mr-2"></i>Déposer votre attestation</button>
 
 <c-smart-table *ngIf="myAttestations && myAttestations.length > 0" [activePage]="1" [columnSorter]="true"
   [columns]="columns" [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="5" [items]="myAttestations"
@@ -81,8 +82,8 @@
 
       <!-- fichierPDFNom -->
       <ng-container *ngSwitchCase="'nomFichier'">
-        <a *ngIf="item.nomFichier" (click)="downloadPDF(item.nomFichier)"
-          class="text-primary text-decoration-underline" style="cursor: pointer;">
+        <a *ngIf="item.nomFichier" (click)="downloadPDF(item.nomFichier)" class="text-primary text-decoration-underline"
+          style="cursor: pointer;">
           {{item.nomFichier}}
         </a>
       </ng-container>
