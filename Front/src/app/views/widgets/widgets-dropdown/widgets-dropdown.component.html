@@ -1,6 +1,6 @@
 <c-row class="g-4">
   <c-col sm="4">
-    <c-widget-stat-a color="primary-gradient" [title]="'Utilisateurs'">
+    <c-widget-stat-a [style]="'background-color: #780000; color: white;'" [title]="'Utilisateurs'">
       <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
         {{ userCount }}
         <span class="fw-normal" style="font-size: 12px;">
@@ -16,7 +16,7 @@
   </c-col>
 
   <c-col sm="4">
-    <c-widget-stat-a color="success-gradient" [title]="'Comptes Activés'">
+    <c-widget-stat-a [style]="'background-color: #003049; color: white;'" [title]="'Comptes Activés'">
       <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
         {{ activatedCount }}
       </ng-template>
@@ -28,7 +28,7 @@
   </c-col>
 
   <c-col sm="4">
-    <c-widget-stat-a color="danger-gradient" [title]="'Comptes Désactivés'">
+    <c-widget-stat-a [style]="'background-color: #669bbc; color: white;'" [title]="'Comptes Désactivés'">
       <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
         {{ deactivatedCount }}
       </ng-template>

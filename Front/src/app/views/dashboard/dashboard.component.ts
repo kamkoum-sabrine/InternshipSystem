@@ -58,6 +58,7 @@ export class DashboardComponent implements OnInit {
   isServiceStage: boolean = false;
   isEtudiant: boolean = false;
   isDirectionEnicar: boolean = false;
+  isComiteChef: boolean = false;
   stats: any;
   isLoading = true;
 
@@ -68,50 +69,77 @@ export class DashboardComponent implements OnInit {
   dureeChartOptions: any;
 
   // Configuration du graphique
-  public barChartOptions: ChartConfiguration['options'] = {
+  // Dans votre composant
+  barChartOptions = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: true,
         position: 'top',
+        labels: {
+          color: '#6c757d',
+          font: {
+            family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+            size: 12
+          }
+        }
       },
-      title: {
-        display: true,
-        text: 'Répartition des étudiants par filière',
-        font: {
-          size: 16
+      tooltip: {
+        backgroundColor: '#2c3e50',
+        titleFont: {
+          size: 14,
+          weight: 'bold'
+        },
+        bodyFont: {
+          size: 12
         }
       }
     },
     scales: {
-      y: {
-        beginAtZero: true,
+      x: {
+        grid: {
+          display: false
+        },
         ticks: {
-          precision: 0
+          color: '#495057',
+          font: {
+            weight: 500
+          }
+        }
+      },
+      y: {
+        grid: {
+          color: 'rgba(0, 0, 0, 0.05)'
+        },
+        ticks: {
+          color: '#6c757d'
         }
       }
     }
   };
 
-  public barChartData: ChartData<'bar'> = {
-    labels: ['Informatique', 'Mécatronique', 'Infotronique', 'GSIL'],
-    datasets: [{
-      data: [65, 59, 80, 81],
-      label: 'Nombre d\'étudiants',
-      backgroundColor: [
-        'rgba(103, 58, 183, 0.7)',
-        'rgba(233, 30, 99, 0.7)',
-        'rgba(255, 152, 0, 0.7)',
-        'rgba(0, 188, 212, 0.7)'
-      ],
-      borderColor: [
-        'rgba(103, 58, 183, 1)',
-        'rgba(233, 30, 99, 1)',
-        'rgba(255, 152, 0, 1)',
-        'rgba(0, 188, 212, 1)'
-      ],
-      borderWidth: 1
-    }]
+  barChartData = {
+    labels: ['Stage été', 'PFE', 'Stage ouvrier', 'International'],
+    datasets: [
+      {
+        label: 'Nombre de conventions',
+        data: [65, 59, 30, 18],
+        backgroundColor: [
+          'rgba(120, 0, 0, 0.7)',  // Rouge bordeaux
+          'rgba(44, 62, 80, 0.7)',  // Bleu ardoise
+          'rgba(52, 152, 219, 0.7)', // Bleu vif
+          'rgba(22, 160, 133, 0.7)'  // Vert émeraude
+        ],
+        borderColor: [
+          'rgba(120, 0, 0, 1)',
+          'rgba(44, 62, 80, 1)',
+          'rgba(52, 152, 219, 1)',
+          'rgba(22, 160, 133, 1)'
+        ],
+        borderWidth: 1,
+        borderRadius: 4
+      }
+    ]
   };
   constructor(private statisticsService: StatistiquesService) { }
 
@@ -123,7 +151,7 @@ export class DashboardComponent implements OnInit {
     this.isSuperAdmin = this.role === 'SUPER_ADMINISTRATEUR';
     this.isServiceStage = this.role === 'SERVICE_STAGE';
     this.isDirectionEnicar = this.role === 'DIRECTION_ENICAR';
-
+    this.isComiteChef = this.role === 'COMITE_CHEF_DEPARTEMENT';
     this.isEtudiant = this.role === 'ETUDIANT';
 
     console.log('Rôle utilisateur :', this.role);
@@ -145,8 +173,16 @@ export class DashboardComponent implements OnInit {
         if (this.isEtudiant) {
           this.loadEtudiantData();
         }
+
         else {
-          this.loadDefaultData();
+          if (this.isComiteChef) {
+            this.loadComiteChefData();
+
+          }
+          else {
+            this.loadDefaultData();
+
+          }
         }
       }
     }
@@ -181,6 +217,17 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  private loadComiteChefData(): void {
+    // Charger des données spécifiques pour ADMIN
+    console.log('Chargement des données de comite pedagogique');
+    this.isLoading = true;
+    this.statisticsService.getStats().subscribe(data => {
+      this.stats = data;
+      this.initChartsComite();
+      this.isLoading = false;
+    });
+  }
+
   private loadDirectionData(): void {
     // Charger des données spécifiques pour ADMIN
     console.log('Chargement des données de service de stage');
@@ -192,13 +239,23 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  initChartsDirection(): void {
+  initChartsComite(): void {
+    const palette = {
+      red: '#780000',
+      darkBlue: '#003049',
+      mediumBlue: '#669bbc',
+      lightBlue: '#a8d0e6',
+      green: '#2e8b57',
+      purple: '#5e4b8b',
+      yellow: '#ffc300'
+    };
+
     // Chart 1: Statut des conventions
     this.statusChartOptions = {
       series: [
-        this.stats.conventionsSigneesDirection,
-        this.stats.conventionsEnAttenteDirection,
-        this.stats.conventionsRefuseesDirection
+        this.stats.conventionsSigneesComiteChef,
+        this.stats.conventionsEnAttenteComiteChef,
+        this.stats.conventionsRefuseesComiteChef
       ],
       chart: {
         type: 'pie',
@@ -208,7 +265,7 @@ export class DashboardComponent implements OnInit {
       title: {
         text: 'Statut des conventions'
       },
-      colors: ['#4CAF50', '#FFC107', '#F44336']
+      colors: [palette.darkBlue, palette.lightBlue, palette.red]
     };
 
     // Chart 2: Répartition par type
@@ -225,7 +282,7 @@ export class DashboardComponent implements OnInit {
       title: {
         text: 'Répartition par type de stage'
       },
-      colors: ['#2196F3', '#9C27B0']
+      colors: [palette.red, palette.lightBlue]
     };
 
     // Chart 3: Taux de validation
@@ -235,8 +292,7 @@ export class DashboardComponent implements OnInit {
         data: [
           this.stats.tauxValidationService,
           this.stats.tauxValidationDirection,
-          this.stats.tauxValidationChefDepartement,
-          this.stats.tauxValidationComite
+          this.stats.tauxValidationComiteChef,
         ]
       }],
       chart: {
@@ -254,13 +310,13 @@ export class DashboardComponent implements OnInit {
         formatter: (val: number) => val.toFixed(1) + '%'
       },
       xaxis: {
-        categories: ['Service', 'Direction', 'Chef Département', 'Comité'],
+        categories: ['Service', 'Direction', 'Comité pédagogique'],
         max: 100
       },
       title: {
         text: 'Taux de validation par service'
       },
-      colors: ['#673AB7']
+      colors: [palette.red]
     };
 
     // Chart 4: Durée moyenne
@@ -295,7 +351,229 @@ export class DashboardComponent implements OnInit {
       colors: ['#009688']
     };
   }
+  initChartsDirection(): void {
+    // Définition des couleurs harmonisées
+    const palette = {
+      red: '#780000',
+      darkBlue: '#003049',
+      mediumBlue: '#669bbc',
+      lightBlue: '#a8d0e6',
+      green: '#2e8b57',
+      purple: '#5e4b8b',
+      yellow: '#ffc300'
+    };
+
+    // Chart 1: Statut des conventions (Pie Chart)
+    this.statusChartOptions = {
+      series: [
+        this.stats.conventionsSigneesDirection,
+        this.stats.conventionsEnAttenteDirection,
+        this.stats.conventionsRefuseesDirection
+      ],
+      chart: {
+        type: 'pie',
+        height: 350,
+        foreColor: '#333' // Couleur du texte
+      },
+      labels: ['Signées', 'En attente', 'Refusées'],
+      title: {
+        text: 'Statut des conventions',
+        align: 'center',
+        style: {
+          fontSize: '16px',
+          fontWeight: '600',
+          color: palette.darkBlue
+        }
+      },
+      colors: [palette.darkBlue, palette.lightBlue, palette.red],
+      legend: {
+        position: 'bottom',
+        markers: {
+          radius: 3
+        }
+      },
+      dataLabels: {
+        style: {
+          fontSize: '12px',
+          fontWeight: '500'
+        }
+      }
+    };
+
+    // Chart 2: Répartition par type (Donut Chart)
+    this.typeChartOptions = {
+      series: [
+        this.stats.stageEteCount,
+        this.stats.stagePFECount,
+      ],
+      chart: {
+        type: 'donut',
+        height: 350
+      },
+      labels: ['Stage été', 'Stage PFE'],
+      title: {
+        text: 'Répartition par type de stage',
+        align: 'center',
+        style: {
+          fontSize: '16px',
+          fontWeight: '600',
+          color: palette.darkBlue
+        }
+      },
+      colors: [palette.red, palette.lightBlue],
+      plotOptions: {
+        pie: {
+          donut: {
+            labels: {
+              show: true,
+              total: {
+                show: true,
+                label: 'Total',
+                color: palette.darkBlue
+              }
+            }
+          }
+        }
+      },
+      legend: {
+        position: 'bottom'
+      }
+    };
+
+    // Chart 3: Taux de validation (Bar Chart Horizontal)
+    this.validationChartOptions = {
+      series: [{
+        name: 'Taux de validation',
+        data: [
+          this.stats.tauxValidationService,
+          this.stats.tauxValidationDirection,
+          this.stats.tauxValidationComiteChef,
+          // this.stats.tauxValidationComite
+        ]
+      }],
+      chart: {
+        type: 'bar',
+        height: 350,
+        toolbar: {
+          show: false
+        }
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          horizontal: true,
+          dataLabels: {
+            position: 'center'
+          }
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: (val: number) => val.toFixed(1) + '%',
+        style: {
+          fontSize: '12px',
+          colors: ['#fff']
+        }
+      },
+      xaxis: {
+        categories: ['Service', 'Direction', 'Comité pédagogique'],
+        max: 100,
+        labels: {
+          style: {
+            colors: palette.darkBlue
+          }
+        }
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: palette.darkBlue,
+            fontSize: '12px'
+          }
+        }
+      },
+      title: {
+        text: 'Taux de validation par service',
+        align: 'center',
+        style: {
+          fontSize: '16px',
+          fontWeight: '600',
+          color: palette.darkBlue
+        }
+      },
+      colors: [palette.red],
+      grid: {
+        borderColor: '#f1f1f1'
+      }
+    };
+
+    // Chart 4: Durée moyenne (Bar Chart Vertical)
+    this.dureeChartOptions = {
+      series: [{
+        name: 'Durée moyenne',
+        data: [
+          this.stats.dureeMoyenneEte,
+          this.stats.dureeMoyennePFE
+        ]
+      }],
+      chart: {
+        type: 'bar',
+        height: 350
+      },
+      plotOptions: {
+        bar: {
+          borderRadius: 4,
+          columnWidth: '45%',
+        }
+      },
+      dataLabels: {
+        enabled: true,
+        formatter: (val: number) => val.toFixed(1) + ' jours',
+        style: {
+          fontSize: '12px',
+          colors: ['#fff']
+        }
+      },
+      xaxis: {
+        categories: ['Stage été', 'Stage PFE'],
+        labels: {
+          style: {
+            colors: palette.darkBlue
+          }
+        }
+      },
+      yaxis: {
+        labels: {
+          style: {
+            colors: palette.darkBlue
+          }
+        }
+      },
+      title: {
+        text: 'Durée moyenne des stages',
+        align: 'center',
+        style: {
+          fontSize: '16px',
+          fontWeight: '600',
+          color: palette.darkBlue
+        }
+      },
+      colors: [palette.mediumBlue],
+      grid: {
+        borderColor: '#f1f1f1'
+      }
+    };
+  }
   initCharts(): void {
+    const palette = {
+      red: '#780000',
+      darkBlue: '#003049',
+      mediumBlue: '#669bbc',
+      lightBlue: '#a8d0e6',
+      green: '#2e8b57',
+      purple: '#5e4b8b',
+      yellow: '#ffc300'
+    };
     // Chart 1: Statut des conventions
     this.statusChartOptions = {
       series: [
@@ -311,7 +589,7 @@ export class DashboardComponent implements OnInit {
       title: {
         text: 'Statut des conventions'
       },
-      colors: ['#4CAF50', '#FFC107', '#F44336']
+      colors: [palette.darkBlue, palette.lightBlue, palette.red]
     };
 
     // Chart 2: Répartition par type
@@ -328,7 +606,7 @@ export class DashboardComponent implements OnInit {
       title: {
         text: 'Répartition par type de stage'
       },
-      colors: ['#2196F3', '#9C27B0']
+      colors: [palette.lightBlue, palette.red]
     };
 
     // Chart 3: Taux de validation
@@ -338,8 +616,7 @@ export class DashboardComponent implements OnInit {
         data: [
           this.stats.tauxValidationService,
           this.stats.tauxValidationDirection,
-          this.stats.tauxValidationChefDepartement,
-          this.stats.tauxValidationComite
+          this.stats.tauxValidationComiteChef,
         ]
       }],
       chart: {
@@ -357,13 +634,13 @@ export class DashboardComponent implements OnInit {
         formatter: (val: number) => val.toFixed(1) + '%'
       },
       xaxis: {
-        categories: ['Service', 'Direction', 'Chef Département', 'Comité'],
+        categories: ['Service', 'Direction', 'Comité pédagogique'],
         max: 100
       },
       title: {
         text: 'Taux de validation par service'
       },
-      colors: ['#673AB7']
+      colors: [palette.red]
     };
 
     // Chart 4: Durée moyenne

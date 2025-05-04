@@ -1,45 +1,45 @@
 <c-row>
   <c-col xs="12">
     <c-card class="mb-4">
-      <c-card-header ngPreserveWhitespaces>
-        <strong>Gérer </strong> <small>Les conventions</small>
+      <c-card-header class="dashboard-header" ngPreserveWhitespaces>
+        <div class="header-content">
+          <span class="admin-role">DIRECTION ENICARTHAGE</span>
+          <h2>Gestion des conventions</h2>
+        </div>
       </c-card-header>
       <!-- <button mat-raised-button (click)="openDialog()">Ajouter un utilisateur</button> -->
       <!-- <button class="btn btn-primary mb-3" (click)="openDialog()">Ajouter un utilisateur</button> -->
 
       <c-card-body>
         <c-tabs [activeItemKey]="0" (activeItemKeyChange)="handleActiveItemChange($event)">
-          <c-tabs-list variant="underline-border">
-            <button cTab [itemKey]="0">
-              <svg cIcon class="me-2" name="cilHome"></svg>
+          <c-tabs-list variant="underline-border" class="custom-tabs">
+            <button cTab [itemKey]="0" class="tab-button">
+              <!-- <i class="fas fa-solid fa-graduation-cap me-2" style="color: #669bbc;"></i> -->
+              <i class="fas fa-user-graduate me-2" style="color: #669bbc;"></i>
+              <!-- <i class="fas fa-sun me-2 " style="color: #669bbc;"></i> FontAwesome -->
               Stage été
             </button>
-            <button cTab [itemKey]="1">
-              <svg cIcon class="me-2" name="cilUser"></svg>
+            <button cTab [itemKey]="1" class="tab-button">
+              <!-- <svg cIcon class="me-2" name="cilTask"></svg> -->
+              <i class="fas fa-user-graduate me-2" style="color: #669bbc;"></i>
+
               Stage PFE
             </button>
-
           </c-tabs-list>
           <c-tabs-content>
-            <c-tab-panel [itemKey]="0" class="p-3">
-              <!-- <strong class="text-info">Conventions stage d'été</strong> -->
+            <c-tab-panel [itemKey]="0" class="p-3 tab-content">
               <div *ngIf="conventions">
                 <app-conventionsDirectionEnicar-basic-example [conventions]="conventions" [tabs]="0" />
               </div>
-
-              <!-- <app-utilisateurs-basic-example [users]="users" /> -->
-              <!-- </app-docs-example> -->
             </c-tab-panel>
-            <c-tab-panel [itemKey]="1" class="p-3">
+            <c-tab-panel [itemKey]="1" class="p-3 tab-content">
               <div *ngIf="conventionsPFE">
                 <app-conventionsDirectionEnicar-basic-example [conventions]="conventionsPFE" [tabs]="1" />
               </div>
             </c-tab-panel>
-
           </c-tabs-content>
         </c-tabs>
       </c-card-body>
-
       <!-- <c-card-body>
         <div *ngIf="conventions">
           <app-conventionsService-basic-example [conventions]="conventions" />

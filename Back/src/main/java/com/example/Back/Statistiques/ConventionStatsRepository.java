@@ -42,4 +42,20 @@ public interface ConventionStatsRepository extends JpaRepository<ConventionStage
     long countStageEteValideesServiceDirection();
 
 
+
+    @Query("SELECT COUNT(c) FROM ConventionStageEte c WHERE c.valideeComiteChefDepartement = 1")
+    long countStageEteValideesComiteChef();
+
+
+    @Query("SELECT COUNT(c) FROM ConventionStageEte c WHERE c.valideeComiteChefDepartement = 0 ")
+    long countStageEteEnAttenteComiteChef();
+
+    @Query("SELECT COUNT(c) FROM ConventionStageEte c WHERE c.valideeComiteChefDepartement = -1 ")
+    long countStageEteRefuseesComiteChef();
+
+
+    @Query("SELECT COUNT(c) FROM ConventionStageEte c WHERE c.valideeComiteChefDepartement = 1")
+    long countStageEteValideesServiceComiteChef();
+
+
 }

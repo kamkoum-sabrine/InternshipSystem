@@ -25,7 +25,7 @@ export class WidgetsBrandComponent implements AfterContentInit {
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef
-  ) {}
+  ) { }
 
   @Input() withCharts?: boolean;
   // @ts-ignore

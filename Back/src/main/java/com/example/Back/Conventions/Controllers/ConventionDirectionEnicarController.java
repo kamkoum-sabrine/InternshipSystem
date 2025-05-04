@@ -35,11 +35,11 @@ public class ConventionDirectionEnicarController {
 
     @GetMapping("/validees-chef-departementETE")
     public List<ConventionStageEte> getConventionsValideesChefDepartementETE() {
-        return conventionStageEteRepository.findByValideeChefDepartement(1);
+        return conventionStageEteRepository.findByValideeComiteChefDepartement(1);
     }
     @GetMapping("/validees-chef-departementPFE")
     public List<ConventionStagePFE> getConventionsValideesChefDepartementPFE() {
-        return conventionStagePFERepository.findByValideeChefDepartement(1);
+        return conventionStagePFERepository.findByValideeComiteChefDepartement(1);
     }
 
 }

@@ -3,10 +3,27 @@
 <br />
 <!-- Contenu pour SUPER_ADMIN -->
 <c-card class="mb-4" *ngIf="isSuperAdmin">
-  <c-card-header>Tableau de bord Super Admin</c-card-header>
+  <!-- <c-card-header>Tableau de bord Super Admin</c-card-header> -->
+  <c-card-header class="dashboard-header">
+    <div class="header-content">
+      <span class="admin-role">SUPER ADMIN</span>
+      <h2>Tableau de bord</h2>
+    </div>
+  </c-card-header>
   <c-card-body>
     <div class="chart-container">
-      <c-chart type="bar" [data]="barChartData" [options]="barChartOptions"></c-chart>
+      <c-card>
+        <c-card-header class="chart-header">
+          <h5>Répartition des conventions par type</h5>
+
+        </c-card-header>
+        <c-card-body>
+          <div style="height: 300px">
+            <c-chart type="bar" [data]="barChartData" [options]="barChartOptions"
+              [style]="'display: block; height: 100%; width: 100%;'"></c-chart>
+          </div>
+        </c-card-body>
+      </c-card>
     </div>
 
 
@@ -15,11 +32,25 @@
 
 <!-- Contenu pour ADMIN -->
 <c-card class="mb-4" *ngIf="isDirectionEnicar">
-  <c-card-header>Tableau de bord direction Enicarthage</c-card-header>
+  <c-card-header class="dashboard-header">
+    <div class="header-content">
+      <span class="admin-role">DIRECTION ENICARTHAGE</span>
+      <h2>Tableau de bord</h2>
+    </div>
+  </c-card-header>
   <c-card-body>
     <!-- stats-conventions.component.html -->
     <div class="container" *ngIf="!isLoading; else loading">
-      <h2 class="my-4">Statistiques des conventions de stage</h2>
+      <!-- <h2 class="my-4">Statistiques des conventions de stage</h2> -->
+      <!-- Remplacez votre h2 actuel par cette structure -->
+      <!-- <c-card class="stats-header-card">
+        <c-card-header class="stats-header">
+          <div class="header-content">
+            <span class="section-role">STATISTIQUES</span>
+            <h2>Conventions de stage</h2>
+          </div>
+        </c-card-header>
+      </c-card> -->
 
       <div class="row mb-4">
         <div class="col-md-6">
@@ -27,7 +58,7 @@
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="card-title">Statut des conventions</h5>
-                <span class="badge bg-primary">
+                <span class="badge" style="background-color: #780000;">
                   Total: {{stats.totalConventions}}
                 </span>
               </div>
@@ -95,7 +126,12 @@
 
 <!-- Contenu pour ADMIN -->
 <c-card class="mb-4" *ngIf="isServiceStage">
-  <c-card-header>Tableau de bord Service de stage</c-card-header>
+  <c-card-header class="dashboard-header">
+    <div class="header-content">
+      <span class="admin-role">SERVICE DE STAGE</span>
+      <h2>Tableau de bord</h2>
+    </div>
+  </c-card-header>
   <c-card-body>
     <!-- stats-conventions.component.html -->
     <div class="container" *ngIf="!isLoading; else loading">
@@ -107,7 +143,90 @@
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="card-title">Statut des conventions</h5>
-                <span class="badge bg-primary">
+                <span class="badge" style="background-color: #780000;">
+                  Total: {{stats.totalConventions}}
+                </span>
+              </div>
+              <div id="statusChart">
+                <apx-chart [series]="statusChartOptions.series" [chart]="statusChartOptions.chart"
+                  [labels]="statusChartOptions.labels" [title]="statusChartOptions.title"
+                  [colors]="statusChartOptions.colors">
+                </apx-chart>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title mb-3">Répartition par type de stage</h5>
+              <div id="typeChart">
+                <apx-chart [series]="typeChartOptions.series" [chart]="typeChartOptions.chart"
+                  [labels]="typeChartOptions.labels" [title]="typeChartOptions.title"
+                  [colors]="typeChartOptions.colors">
+                </apx-chart>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title mb-3">Taux de validation par service</h5>
+              <div id="validationChart">
+                <apx-chart [series]="validationChartOptions.series" [chart]="validationChartOptions.chart"
+                  [plotOptions]="validationChartOptions.plotOptions" [dataLabels]="validationChartOptions.dataLabels"
+                  [xaxis]="validationChartOptions.xaxis" [title]="validationChartOptions.title"
+                  [colors]="validationChartOptions.colors">
+                </apx-chart>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #loading>
+      <div class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Chargement...</span>
+        </div>
+        <p class="mt-2">Chargement des statistiques...</p>
+      </div>
+    </ng-template>
+  </c-card-body>
+</c-card>
+<c-card class="mb-4" *ngIf="isComiteChef">
+  <c-card-header class="dashboard-header">
+    <div class="header-content">
+      <span class="admin-role">COMITE PEDAGOGIQUE ET CHEF DE DEPARTEMENT</span>
+      <h2>Tableau de bord</h2>
+    </div>
+  </c-card-header>
+  <c-card-body>
+    <!-- stats-conventions.component.html -->
+    <div class="container" *ngIf="!isLoading; else loading">
+      <h2 class="my-4">Statistiques des conventions de stage</h2>
+
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="card-title">Statut des conventions</h5>
+                <span class="badge" style="background-color: #780000;">
                   Total: {{stats.totalConventions}}
                 </span>
               </div>

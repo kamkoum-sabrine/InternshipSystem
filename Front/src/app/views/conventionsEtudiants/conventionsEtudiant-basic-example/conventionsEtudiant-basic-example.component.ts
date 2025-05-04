@@ -50,13 +50,17 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
       label: 'Date de dépot',
     },
 
+    /*  {
+        key: 'valideeService',
+        label: 'Validée par le service de stage'
+      },
+      {
+        key: 'valideeDirection',
+        label: 'Validée par la direction de stage'
+      },*/
     {
-      key: 'valideeService',
-      label: 'Validée par le service de stage'
-    },
-    {
-      key: 'valideeDirection',
-      label: 'Validée par la direction de stage'
+      key: 'etat',
+      label: 'Etat'
     },
     {
       key: 'annulee',
@@ -65,6 +69,13 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
     {
       key: 'preuveAnnulation',
       label: 'Preuve Annulation',
+      _style: { width: '15%' },
+      filter: false,
+      sorter: false
+    },
+    {
+      key: 'lettreAffectation',
+      label: 'Lettre d\'affectation',
       _style: { width: '15%' },
       filter: false,
       sorter: false
@@ -128,6 +139,46 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
     }
     else {
       fileUrl = `http://localhost:8081/api/conventionStagPFE/uploads/${nomFichier}`;
+
+    }
+
+    // console.log("nomFichier", nomFichier)
+    // // const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
+
+    // const link = document.createElement("a");
+    // link.href = fileUrl;
+    // link.download = nomFichier;
+    // link.target = "_blank";
+    // document.body.appendChild(link);
+    // link.click();
+    // document.body.removeChild(link);
+    fetch(fileUrl, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`, // Récupère le token si JWT est utilisé
+      },
+    })
+      .then(response => {
+        if (!response.ok) throw new Error("Accès refusé !");
+        return response.blob();
+      })
+      .then(blob => {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = nomFichier;
+        link.click();
+      })
+      .catch(error => console.error("Erreur lors du téléchargement :", error));
+  }
+
+  downloadPDFLettreAffectation(nomFichier: string) {
+    console.log("Queellee page", this.tabs)
+    let fileUrl;
+    if (this.tabs == 0) {
+      fileUrl = `http://localhost:8081/api/conventions/lettre-affectation/uploads/${nomFichier}`;
+    }
+    else {
+      fileUrl = `http://localhost:8081/api/conventions/lettre-affectation/uploads/${nomFichier}`;
 
     }
 
@@ -342,7 +393,14 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
     }
   }
   downloadPreuveAnnulation(nomFichier: string) {
-    const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
+    let fileUrl;
+    if (this.tabs == 0) {
+      fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
+
+    } else {
+      fileUrl = `http://localhost:8081/api/conventionStagPFE/uploads/${nomFichier}`;
+
+    }
 
     fetch(fileUrl, {
       method: "GET",
@@ -381,20 +439,39 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
 
     const formData = new FormData();
     formData.append('preuveAnnulation', this.selectedFile);
+    console.log("taaabsss " + this.tabs)
+    if (this.tabs == 0) {
+      this.conventionsEtudiantService.uploadPreuveAnnulation(this.currentConventionId, formData)
+        .subscribe({
+          next: (response) => {
+            modal.close();
+            Swal.fire('Succès', 'Preuve d\'annulation uploadée avec succès', 'success');
+            window.location.reload(); // Rafraîchir la page pour voir les changements
+            // Rafraîchir les données si nécessaire
+          },
+          error: (error) => {
+            console.error('Erreur lors de l\'upload', error);
+            Swal.fire('Erreur', 'Une erreur est survenue lors de l\'upload', 'error');
+          }
+        });
+    }
+    else {
+      this.conventionsEtudiantService.uploadPreuveAnnulationPFE(this.currentConventionId, formData)
+        .subscribe({
+          next: (response) => {
+            modal.close();
+            Swal.fire('Succès', 'Preuve d\'annulation uploadée avec succès', 'success');
+            window.location.reload(); // Rafraîchir la page pour voir les changements
+            // Rafraîchir les données si nécessaire
+          },
+          error: (error) => {
+            console.error('Erreur lors de l\'upload', error);
+            Swal.fire('Erreur', 'Une erreur est survenue lors de l\'upload', 'error');
+          }
+        });
+    }
 
-    this.conventionsEtudiantService.uploadPreuveAnnulation(this.currentConventionId, formData)
-      .subscribe({
-        next: (response) => {
-          modal.close();
-          Swal.fire('Succès', 'Preuve d\'annulation uploadée avec succès', 'success');
-          window.location.reload(); // Rafraîchir la page pour voir les changements
-          // Rafraîchir les données si nécessaire
-        },
-        error: (error) => {
-          console.error('Erreur lors de l\'upload', error);
-          Swal.fire('Erreur', 'Une erreur est survenue lors de l\'upload', 'error');
-        }
-      });
+
   }
 
 

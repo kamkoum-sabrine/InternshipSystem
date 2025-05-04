@@ -26,12 +26,15 @@ import { MatDialogModule } from '@angular/material/dialog';
 })
 export class EntreprisesComponent {
   entreprises: any;
+
   constructor(private entrepriseService: EntreprisesServiceService, public dialog: MatDialog) { }
   ngOnInit(): void {
     this.entrepriseService.getEntreprises().subscribe(data => {
       this.entreprises = data;
       console.log(this.entreprises);
     });
+
+
   }
 
   openDialog(): void {

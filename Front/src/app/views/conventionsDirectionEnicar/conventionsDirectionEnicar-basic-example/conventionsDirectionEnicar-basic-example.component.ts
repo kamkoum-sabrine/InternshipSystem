@@ -33,6 +33,19 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
   usersData = usersData;
   @Input() conventions: any[] = [];;
   @Input() tabs: any;
+  // Ajoutez cette configuration dans votre composant ou service
+  private swalConfig = {
+    confirmButtonColor: '#003049',  // Bleu foncé
+    cancelButtonColor: '#780000',   // Rouge bordeaux
+    focusConfirm: false,
+    customClass: {
+      popup: 'custom-swal-popup',
+      title: 'custom-swal-title',
+      confirmButton: 'custom-swal-confirm-btn',
+      cancelButton: 'custom-swal-cancel-btn',
+      icon: 'custom-swal-icon'
+    }
+  };
 
   @ViewChild('annulationModal') annulationModal!: TemplateRef<any>; // Ajoutez cette ligne
 
@@ -197,12 +210,13 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
     if (this.tabs == 0) {
       Swal.fire({
         title: 'Êtes-vous sûr ?',
-        text: 'Voulez vous valider cette conventions',
-        icon: 'warning',
+        text: 'Voulez-vous valider cette convention ?',
+        icon: 'question',
         showCancelButton: true,
         confirmButtonText: 'Oui, valider!',
         cancelButtonText: 'Annuler',
-        reverseButtons: true
+        reverseButtons: true,
+        ...this.swalConfig  // Spread operator pour appliquer la config
       }).then((result) => {
         if (result.isConfirmed) {
           this.conventionsDirectionEnicarService.validerConvention(id).subscribe(data => {
@@ -222,23 +236,42 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
 
           });
 
+          this.conventionsDirectionEnicarService.getConventions().subscribe(data => {
+            console.log("dataaaa ", data)
+            console.log("3")
+            this.conventions = data
+          });
+          // Succès
+          Swal.fire({
+            title: 'Convention validée !',
+            icon: 'success',
+            ...this.swalConfig,
+            showConfirmButton: false,
+            timer: 2000
+          });
 
-          Swal.fire('Covention validée !', '', 'success');
           // Ajouter la logique de confirmation ici
         } else if (result.isDismissed) {
           // L'événement est annulé
-          Swal.fire('Validation annulé', '', 'info');
+
+          // Erreur
+          Swal.fire({
+            title: 'Erreur',
+            text: 'Une erreur est survenue',
+            icon: 'error',
+            ...this.swalConfig
+          });
         }
       });
     } else {
       Swal.fire({
-        title: 'Êtes-vous sûr ?',
-        text: 'Voulez vous valider cette conventions',
-        icon: 'warning',
+        title: 'Validation PFE',
+        text: 'Confirmez la validation de cette convention PFE',
+        icon: 'question',
         showCancelButton: true,
-        confirmButtonText: 'Oui, valider!',
+        confirmButtonText: 'Confirmer',
         cancelButtonText: 'Annuler',
-        reverseButtons: true
+        ...this.swalConfig
       }).then((result) => {
         if (result.isConfirmed) {
           this.conventionsDirectionEnicarService.validerConventionPFE(id).subscribe(data => {
@@ -261,11 +294,25 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
             console.log("3")
             this.conventions = data
           });
-          Swal.fire('Covention validée !', '', 'success');
+          // Swal.fire('Covention validée !', '', 'success');
+          Swal.fire({
+            title: 'Convention validée !',
+            icon: 'success',
+            ...this.swalConfig,
+            showConfirmButton: false,
+            timer: 2000
+          });
+          window.location.reload
           // Ajouter la logique de confirmation ici
         } else if (result.isDismissed) {
           // L'événement est annulé
-          Swal.fire('Validation annulé', '', 'info');
+          // Swal.fire('Validation annulé', '', 'info');
+          Swal.fire({
+            title: 'Erreur',
+            text: 'Une erreur est survenue',
+            icon: 'error',
+            ...this.swalConfig
+          });
         }
       });
     }
@@ -280,13 +327,14 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
         showCancelButton: true,
         confirmButtonText: 'Oui, valider!',
         cancelButtonText: 'Annuler',
-        reverseButtons: true
+        reverseButtons: true,
+        ...this.swalConfig
       }).then((result) => {
         if (result.isConfirmed) {
           this.conventionsServicesService.refuserConvention(id).subscribe(data => {
             console.log(data);
             this.conventionsServicesService.getConventions().subscribe(data => {
-              // this.conventions = data
+              this.conventions = data
               window.location.reload()
             });
 
@@ -305,15 +353,16 @@ export class ConventionsDirectionEnicarBasicExampleComponent implements OnInit {
         text: 'Voulez vous refuser cette conventions',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Oui, valider!',
+        confirmButtonText: 'Oui, Refuser!',
         cancelButtonText: 'Annuler',
-        reverseButtons: true
+        reverseButtons: true,
+        ...this.swalConfig
       }).then((result) => {
         if (result.isConfirmed) {
           this.conventionsServicesService.refuserConventionPFE(id).subscribe(data => {
             console.log(data);
             this.conventionsServicesService.getConventions().subscribe(data => {
-              // this.conventions = data
+              this.conventions = data
               window.location.reload()
 
             });

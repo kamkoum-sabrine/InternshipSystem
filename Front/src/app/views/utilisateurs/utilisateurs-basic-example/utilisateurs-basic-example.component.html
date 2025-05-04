@@ -1,4 +1,6 @@
-<button class="btn btn-warning text-white mb-3" (click)="openDialog()">Ajouter un utilisateur</button>
+<button class="btn  text-white mb-3" style="background-color: #669bbc ;" (click)="openDialog()"><i
+    class="fas fa-plus-circle me-2"></i>Ajouter un
+  utilisateur</button>
 
 <c-smart-table *ngIf="users && users.length > 0" [activePage]="1" [columnSorter]="true" [columns]="columns"
   [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="5" [items]="users"
@@ -35,7 +37,8 @@
       </c-badge>
       }
       @case ('show') {
-      <button (click)="toggleDetails(item.id)" cButton color="primary" size="sm" variant="outline">
+      <button (click)="toggleDetails(item.id)" cButton style="background-color: #003049 ; color: white;" size="sm"
+        variant="outline">
         Détails
       </button>
       }

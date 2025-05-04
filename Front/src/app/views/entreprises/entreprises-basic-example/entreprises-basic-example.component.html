@@ -1,6 +1,10 @@
-<button class="btn btn-primary mb-3" (click)="ouvrirModal()">Ajouter Entreprise</button>
-<button class="btn btn-success mb-3" (click)="fileInput.click()" style="margin-left: 10px;">
-  <i class="cil-cloud-upload"></i> Upload Excel
+<!-- <button class="btn btn-primary mb-3" (click)="ouvrirModal()">Ajouter Entreprise</button> -->
+<button *ngIf="isService" class="btn  text-white mb-3" style="background-color: #669bbc ;" (click)="ouvrirModal()">
+  <i class="fas fa-plus-circle me-2"></i>Ajouter une
+  entreprise</button>
+<button *ngIf="isService" class="btn  mb-3" (click)="fileInput.click()"
+  style="margin-left: 10px; background-color: #780000 ; color: white;">
+  <i class="fas fa-file-excel me-2"></i>Upload Excel
 </button>
 <input #fileInput type="file" accept=".xlsx, .xls" (change)="onFileSelected($event)" style="display: none;" />
 
@@ -15,9 +19,9 @@
 <!-- Smart Table -->
 <c-smart-table *ngIf="entreprises && entreprises.length > 0" (rowClick)="ouvrirModalActions($event)" [activePage]="1"
   [columnSorter]="true" [columns]="columns" [columnFilter]="true" [itemsPerPageSelect]="true" [itemsPerPage]="5"
-  [items]="entreprises" [sorterValue]="{ column: 'nom', state: 'asc' }" [tableFilter]="true"
-  [tableProps]="{ hover: true, striped: true, responsive: true }" [tableBodyProps]="{ align: 'middle' }" cleaner footer
-  header pagination>
+  [items]="entreprises" [sorterValue]="{ column: 'nom', state: 'asc' }"
+  [tableProps]="{ hover: true, striped: true, responsive: true }" [tableBodyProps]="{ align: 'middle' }" header
+  pagination>
 </c-smart-table>
 
 <!-- Modal d'ajout -->
@@ -54,33 +58,35 @@
         Cette adresse email est déjà utilisée
       </div>
       <label>Téléphone:</label>
-      <input type="text" [(ngModel)]="newEntreprise.telephone" name="telephone" 
-      required pattern="[0-9]{8,}" #telephone="ngModel"
-      (input)="onTelephoneInput($event)" (blur)="telephone.touched = true" />
-      
-<div *ngIf="telephone.invalid && (telephone.dirty || telephone.touched)" class="text-danger">
- <div *ngIf="telephone.errors?.['required']">Le téléphone est obligatoire</div>
- <div *ngIf="telephone.errors?.['pattern']">Le téléphone doit contenir au moins 8 chiffres</div>
-</div>
+      <input type="text" [(ngModel)]="newEntreprise.telephone" name="telephone" required pattern="[0-9]{8,}"
+        #telephone="ngModel" (input)="onTelephoneInput($event)" (blur)="telephone.touched = true" />
 
-<div *ngIf="telephone.valid && telephone.touched && telephoneExisteDejaPourAutreEntreprise(newEntreprise.id, newEntreprise.telephone)" 
-    class="text-danger">
- Ce numéro de téléphone est déjà utilisé par une autre entreprise
-</div>     
+      <div *ngIf="telephone.invalid && (telephone.dirty || telephone.touched)" class="text-danger">
+        <div *ngIf="telephone.errors?.['required']">Le téléphone est obligatoire</div>
+        <div *ngIf="telephone.errors?.['pattern']">Le téléphone doit contenir au moins 8 chiffres</div>
+      </div>
+
+      <div
+        *ngIf="telephone.valid && telephone.touched && telephoneExisteDejaPourAutreEntreprise(newEntreprise.id, newEntreprise.telephone)"
+        class="text-danger">
+        Ce numéro de téléphone est déjà utilisé par une autre entreprise
+      </div>
 
       <div class="modal-actions">
-        <button type="button" (click)="ajouterEntreprise()" class="btn btn-success" 
-                [disabled]="entrepriseForm.invalid || emailExisteDeja(newEntreprise.email) || telephoneExisteDejaPourAutreEntreprise(newEntreprise.id, newEntreprise.telephone)">
+        <button type="button" (click)="ajouterEntreprise()" class="btn "
+          style="background-color: #003049 ; color:white;"
+          [disabled]="entrepriseForm.invalid || emailExisteDeja(newEntreprise.email) || telephoneExisteDejaPourAutreEntreprise(newEntreprise.id, newEntreprise.telephone)">
 
           Ajouter
         </button>
-        <button type="button" (click)="fermerModal()" class="btn btn-secondary">Annuler</button>
+        <button type="button" (click)="fermerModal()" class="btn "
+          style="background-color: #780000 ; color:white;">Annuler</button>
       </div>
     </form>
   </div>
 </div>
 <!-- Modal d'actions -->
-<div *ngIf="entrepriseSelectionnee" class="modal-overlay">
+<div *ngIf="entrepriseSelectionnee && isService" class="modal-overlay">
   <div class="modal-content">
     <h3>Gérer l'entreprise</h3>
     <p>Que souhaitez-vous faire avec cette entreprise ?</p>
@@ -130,10 +136,10 @@
       </div>
 
       <label>Téléphone:</label>
-      <input type="text" [(ngModel)]="editedEntreprise.telephone" name="telephone" 
-             required pattern="[0-9]{8,}" #editTelephone="ngModel"
-             (input)="onEditTelephoneInput($event)" (blur)="editTelephone.control.markAsTouched()" />
-             
+      <input type="text" [(ngModel)]="editedEntreprise.telephone" name="telephone" required pattern="[0-9]{8,}"
+        #editTelephone="ngModel" (input)="onEditTelephoneInput($event)"
+        (blur)="editTelephone.control.markAsTouched()" />
+
 
       <div *ngIf="editTelephone.invalid && (editTelephone.dirty || editTelephone.touched)" class="text-danger">
         <div *ngIf="editTelephone.errors?.['required']">Le téléphone est obligatoire</div>
