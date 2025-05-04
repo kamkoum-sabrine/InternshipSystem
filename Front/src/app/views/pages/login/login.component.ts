@@ -10,6 +10,14 @@ import Swal from 'sweetalert2';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
+  host: {
+    '[style.background-image]': '"url(../../../../assets/images/bg1.jpg)"',
+    '[style.background-size]': '"cover"',
+    '[style.display]': '"flex"',
+    '[style.justify-content]': '"center"',
+    '[style.align-items]': '"center"',
+    '[style.min-height]': '"100vh"'
+  },
   standalone: true,
   imports: [ContainerComponent, RowComponent, ColComponent, CardGroupComponent, TextColorDirective, CardComponent, CardBodyComponent, FormDirective, InputGroupComponent, InputGroupTextDirective, IconDirective, FormControlDirective, ButtonDirective, NgStyle, FormsModule, ReactiveFormsModule]
 })
@@ -29,6 +37,8 @@ export class LoginComponent {
       password: this.password,
     };
     console.log("to dash")
+    console.log("email " + this.email)
+    console.log("password " + this.password)
     this.authService.login(this.email, this.password).subscribe({
       next: (response) => {
         console.log('Connexion réussie:', response);
