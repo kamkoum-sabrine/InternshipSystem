@@ -73,6 +73,13 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
       filter: false,
       sorter: false
     },
+    {
+      key: 'lettreAffectation',
+      label: 'Lettre d\'affectation',
+      _style: { width: '15%' },
+      filter: false,
+      sorter: false
+    },
     // {
     //   key: 'createdAt',
     //   label: 'Date Registered',
@@ -132,6 +139,46 @@ export class ConventionsEtudiantBasicExampleComponent implements OnInit {
     }
     else {
       fileUrl = `http://localhost:8081/api/conventionStagPFE/uploads/${nomFichier}`;
+
+    }
+
+    // console.log("nomFichier", nomFichier)
+    // // const fileUrl = `http://localhost:8081/api/conventionStagEte/uploads/${nomFichier}`;
+
+    // const link = document.createElement("a");
+    // link.href = fileUrl;
+    // link.download = nomFichier;
+    // link.target = "_blank";
+    // document.body.appendChild(link);
+    // link.click();
+    // document.body.removeChild(link);
+    fetch(fileUrl, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`, // Récupère le token si JWT est utilisé
+      },
+    })
+      .then(response => {
+        if (!response.ok) throw new Error("Accès refusé !");
+        return response.blob();
+      })
+      .then(blob => {
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = nomFichier;
+        link.click();
+      })
+      .catch(error => console.error("Erreur lors du téléchargement :", error));
+  }
+
+  downloadPDFLettreAffectation(nomFichier: string) {
+    console.log("Queellee page", this.tabs)
+    let fileUrl;
+    if (this.tabs == 0) {
+      fileUrl = `http://localhost:8081/api/conventions/lettre-affectation/uploads/${nomFichier}`;
+    }
+    else {
+      fileUrl = `http://localhost:8081/api/conventions/lettre-affectation/uploads/${nomFichier}`;
 
     }
 

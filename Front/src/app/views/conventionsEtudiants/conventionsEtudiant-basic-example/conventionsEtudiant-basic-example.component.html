@@ -89,6 +89,19 @@
         </a>
       </ng-container>
 
+      <ng-container *ngSwitchCase="'lettreAffectation'">
+        <a *ngIf="item.lettreAffectationNom!=null ; else nonDisponible"
+          (click)="downloadPDFLettreAffectation(item.lettreAffectationNom)"
+          class="text-primary text-decoration-underline" style="cursor: pointer;">
+          {{item.lettreAffectationNom}}
+        </a>
+        <ng-template #nonDisponible>
+          <span class="text-muted font-italic">
+            <i class="fas fa-times-circle text-danger mr-1"></i> Non disponible
+          </span>
+        </ng-template>
+      </ng-container>
+
       <!-- fichierPDFNom -->
       <ng-container *ngSwitchCase="'etat'">
         <c-badge [color]="getBadge(item.valideeService)">
@@ -177,9 +190,8 @@
           }
         </style>
         } @else {
-        <span class="badge bg-light text-muted border"
-          style="font-family: 'Segoe UI', Roboto, sans-serif; font-size: 0.8rem;">
-          NON DISPONIBLE
+        <span class="text-muted font-italic">
+          <i class="fas fa-times-circle text-danger mr-1"></i> Non disponible
         </span>
         }
         }
