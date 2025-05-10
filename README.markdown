@@ -23,13 +23,13 @@ Internship Management System is a web-based application developed by Sabrine Kam
    - MySQL or equivalent database
    - Modern web browser
 2. **Setup**:
-   - Clone the repository: `git clone https://github.com/yourusername/internship-management-system.git`
+   - Clone the repository: `git clone https://github.com/kamkoum-sabrine/InternshipSystem.git`
    - Configure the web server to point to the project directory.
    - Set up the database using the provided SQL schema (if applicable).
 3. **Run**:
    - Import the database schema.
    - Update configuration files with database credentials.
-   - Access the application via the browser (e.g., `http://localhost/internship-management-system`).
+   - Access the application via the browser (e.g., `http://localhost/login`).
 
 ## Project Structure
 - **Backend**: Handles user authentication, document management, and validation logic.
