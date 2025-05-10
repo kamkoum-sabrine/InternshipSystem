@@ -67,8 +67,5 @@ Internship Management System is a web-based application developed by Sabrine Kam
 - **Mahdi Toumi**
 - **Mohamed Houssem Salhi**
 
-## License
-This project is licensed under the MIT License. See the `LICENSE` file for details.
-
 ## Acknowledgments
 Developed as part of a project at the National Engineering School of Carthage, University of Carthage, submitted on February 8, 2025.
