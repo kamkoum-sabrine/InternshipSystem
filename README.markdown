@@ -68,4 +68,4 @@ Internship Management System is a web-based application developed by Sabrine Kam
 - **Mohamed Houssem Salhi**
 
 ## Acknowledgments
-Developed as part of a project at the National Engineering School of Carthage, University of Carthage, submitted on February 8, 2025.
+Developed as part of a project at the National Engineering School of Carthage, University of Carthage, submitted on Mai 4, 2025.
