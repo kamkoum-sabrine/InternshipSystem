@@ -51,6 +51,14 @@ Internship Management System is a web-based application developed by Sabrine Kam
    - Review and validate conventions based on internship criteria.
    - Ensure compliance with duration and subject requirements.
 
+## Screenshots 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/1946cb6d-1b8e-4b04-bc39-209a15553eed" alt="Spectacle Detail 1" width="300"/>
+  <img src="https://github.com/user-attachments/assets/6fb2da51-dd44-4d08-9f95-78dfed22436f" alt="Spectacle Detail 2" width="300"/>
+  <img src="https://github.com/user-attachments/assets/7bfc8f92-84fa-48b3-bb93-0dc8702fe7f8" alt="Spectacle Detail 3" width="300"/>
+</p>
+
+
 ## Limitations
 - Relies on PDF uploads, requiring manual enterprise stamp verification.
 - No mobile app; browser-based access only.
@@ -69,3 +77,8 @@ Internship Management System is a web-based application developed by Sabrine Kam
 
 ## Acknowledgments
 Developed as part of a project at the National Engineering School of Carthage, University of Carthage, submitted on Mai 4, 2025.
+
+
+
+
+
