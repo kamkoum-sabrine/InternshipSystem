@@ -46,11 +46,9 @@ public class UserService {
 
 
     public void updateUser(Long id, User updatedUser) {
-        // Vérifier si l'utilisateur existe
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Cet utilisateur n'existe pas !"));
 
-        // Vérification des champs obligatoires
         if (updatedUser.getNom() == null || updatedUser.getNom().trim().isEmpty() ||
                 updatedUser.getPrenom() == null || updatedUser.getPrenom().trim().isEmpty() ||
                 updatedUser.getEmail() == null || updatedUser.getEmail().trim().isEmpty() ||
@@ -58,7 +56,6 @@ public class UserService {
             throw new IllegalArgumentException("Nom, prénom, email et CIN sont obligatoires !");
         }
 
-        // Vérification de la longueur du nom (2-50 caractères)
         if (updatedUser.getNom().trim().length() < 2 || updatedUser.getNom().trim().length() > 50) {
             throw new IllegalArgumentException("Le nom doit contenir entre 2 et 50 caractères !");
         }
@@ -74,7 +71,6 @@ public class UserService {
             throw new IllegalArgumentException("L'email doit être au format valide (exemple@domaine.com) !");
         }
 
-        // Vérification de l'unicité de l'email (sauf pour l'utilisateur actuel)
         if (!existingUser.getEmail().equalsIgnoreCase(updatedUser.getEmail()) &&
                 userRepository.existsByEmailIgnoreCase(updatedUser.getEmail())) {
             throw new IllegalArgumentException("Cette adresse email est déjà utilisée !");

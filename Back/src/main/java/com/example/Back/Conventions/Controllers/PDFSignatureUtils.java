@@ -22,11 +22,9 @@ public class PDFSignatureUtils {
         PdfReader reader = new PdfReader(cheminOriginal);
         PdfStamper stamper = new PdfStamper(reader, new FileOutputStream(cheminFinal));
 
-        // Taille et position de l'image
         Image signature = Image.getInstance(signaturePath);
         signature.scaleAbsolute(100, 50); // Taille de l'image (ajustable)
 
-        // Position : à tester, mais en général vers X=370, Y=170 pour bas de page 1
         signature.setAbsolutePosition(370, 20);
 
         // Ajout à la première page
@@ -39,10 +37,8 @@ public class PDFSignatureUtils {
         canvas.beginText();
         canvas.setFontAndSize(bf, 10);
 
-// Format de la date (ex : 24/04/2025)
         String dateSignature = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
 
-// Position à ajuster selon ton PDF
         canvas.showTextAligned(PdfContentByte.ALIGN_LEFT, "Le " + dateSignature, 85, 175, 0);
         canvas.endText();
         // ... signature image

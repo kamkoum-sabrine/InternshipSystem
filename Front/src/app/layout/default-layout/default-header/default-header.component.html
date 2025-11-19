@@ -52,8 +52,10 @@
     <ng-template #userDropdown>
       <c-dropdown [popperOptions]="{ placement: 'bottom-start' }" variant="nav-item">
         <button [caret]="false" cDropdownToggle class="py-0" aria-label="Open user menu">
-          <img [src]="user.photo || 'assets/images/avatars/10.jpg'" class="rounded-circle" width="35" height="35"
+
+          <img [src]="user.photo || 'assets/images/avatars/etudiant.png'" class="rounded-circle" width="35" height="35"
             alt="User avatar">
+
         </button>
 
         <ul cDropdownMenu class="pt-0 w-auto">

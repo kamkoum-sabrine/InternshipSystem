@@ -27,7 +27,6 @@ public class EntreprisesService {
     public Entreprise addEntreprise(Entreprise entreprise) {
         logger.info("Ajout de l'entreprise: {}", entreprise.getNom());
 
-        // Vérification que les champs obligatoires ne sont pas vides
         if (entreprise.getNom() == null || entreprise.getNom().trim().isEmpty() ||
                 entreprise.getAdresse() == null || entreprise.getAdresse().trim().isEmpty() ||
                 entreprise.getEmail() == null || entreprise.getEmail().trim().isEmpty() ||
@@ -35,12 +34,10 @@ public class EntreprisesService {
             throw new IllegalArgumentException("Tous les champs sont obligatoires !");
         }
 
-        // Vérification de la longueur du nom (au moins 2 caractères)
         if (entreprise.getNom().trim().length() < 2) {
             throw new IllegalArgumentException("Le nom doit contenir au moins 2 caractères !");
         }
 
-        // Vérification du format de l'email et de son unicité
         String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         if (!Pattern.matches(emailRegex, entreprise.getEmail())) {
             throw new IllegalArgumentException("L'email doit être au format valide (example@domaine.com) !");
@@ -49,7 +46,6 @@ public class EntreprisesService {
             throw new IllegalArgumentException("Cet email est déjà utilisé par une autre entreprise !");
         }
 
-        // Vérification du téléphone (au moins 8 chiffres et unicité)
         String telephoneStr = String.valueOf(entreprise.getTelephone());
         if (telephoneStr.length() < 8) {
             throw new IllegalArgumentException("Le numéro de téléphone doit contenir au moins 8 chiffres !");
@@ -58,10 +54,8 @@ public class EntreprisesService {
             throw new IllegalArgumentException("Ce numéro de téléphone est déjà utilisé par une autre entreprise !");
         }
 
-        // Sauvegarde de l'entreprise
         Entreprise saved = entrepriseRepository.save(entreprise);
 
-        // Log des informations complètes de l'entreprise ajoutée
         logger.info("Entreprise ajoutée avec succès : Nom = {}, Adresse = {}, Email = {}, Téléphone = {}",
                 saved.getNom(), saved.getAdresse(), saved.getEmail(), saved.getTelephone());
 
@@ -87,7 +81,6 @@ public class EntreprisesService {
         Entreprise existingEntreprise = entrepriseRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Cette entreprise n'existe pas !"));
 
-        // Vérification que tous les champs sont remplis
         if (updatedEntreprise.getNom() == null || updatedEntreprise.getNom().trim().isEmpty() ||
                 updatedEntreprise.getAdresse() == null || updatedEntreprise.getAdresse().trim().isEmpty() ||
                 updatedEntreprise.getEmail() == null || updatedEntreprise.getEmail().trim().isEmpty() ||
@@ -95,23 +88,19 @@ public class EntreprisesService {
             throw new IllegalArgumentException("Tous les champs sont obligatoires !");
         }
 
-        // Vérification de la longueur du nom (2-50 caractères)
         if (updatedEntreprise.getNom().trim().length() < 2 || updatedEntreprise.getNom().trim().length() > 50) {
             throw new IllegalArgumentException("Le nom doit contenir entre 2 et 50 caractères !");
         }
 
-        // Vérification de la longueur de l'adresse (5-100 caractères)
         if (updatedEntreprise.getAdresse().trim().length() < 5 || updatedEntreprise.getAdresse().trim().length() > 100) {
             throw new IllegalArgumentException("L'adresse doit contenir entre 5 et 100 caractères !");
         }
 
-        // Vérification du format de l'email
         String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         if (!Pattern.matches(emailRegex, updatedEntreprise.getEmail())) {
             throw new IllegalArgumentException("L'email doit être au format valide (exemple@domaine.com) !");
         }
 
-        // Vérification de l'unicité de l'email (sauf pour l'entreprise actuelle)
         if (!existingEntreprise.getEmail().equalsIgnoreCase(updatedEntreprise.getEmail()) &&
                 entrepriseRepository.existsByEmailIgnoreCase(updatedEntreprise.getEmail())) {
             throw new IllegalArgumentException("Cette adresse email est déjà utilisée !");
@@ -129,13 +118,11 @@ public class EntreprisesService {
             throw new IllegalArgumentException("Ce numéro de téléphone est déjà utilisé !");
         }
 
-        // Mise à jour des champs
         existingEntreprise.setNom(updatedEntreprise.getNom().trim());
         existingEntreprise.setAdresse(updatedEntreprise.getAdresse().trim());
         existingEntreprise.setEmail(updatedEntreprise.getEmail().trim());
         existingEntreprise.setTelephone(updatedEntreprise.getTelephone());
 
-        // Sauvegarde de l'entreprise mise à jour
         entrepriseRepository.save(existingEntreprise);
     }
 }

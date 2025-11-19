@@ -43,12 +43,9 @@ public class AttestationController {
     @Autowired
     private AttestationRepository attestationRepository;
 
-   /* @Value("${file.upload-dir}")
-    private String baseUploadDir;*/
    @Value("${file.upload-dir}/attestations")
    private String uploadDir;
 
-  // private final String attestationSubDir = "attestations";
 
     @PostMapping("/upload")
     public ResponseEntity<?> uploadAttestation(@RequestParam("file") MultipartFile file,
@@ -90,61 +87,6 @@ public class AttestationController {
             return ResponseEntity.internalServerError().body("Erreur serveur");
         }
     }
-
-   /* @GetMapping("/uploads/{fileName:.+}")
-    public ResponseEntity<Resource> getFile(@PathVariable String fileName) {
-        logger.info(">>> Début de la récupération du fichier : {}", fileName);
-        try {
-            Path uploadPath = Paths.get(baseUploadDir, attestationSubDir).toAbsolutePath().normalize();
-            logger.info(">>> Dossier d'upload : {}", uploadPath);
-
-            Path filePath = uploadPath.resolve(fileName).normalize();
-            logger.info(">>> Chemin absolu reconstruit : {}", filePath);
-
-            // Sécurité : s'assurer que le fichier est bien dans le bon répertoire
-            if (!filePath.startsWith(uploadPath)) {
-                logger.warn(">>> Tentative d'accès interdit : {}", filePath);
-                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            }
-
-            if (!Files.exists(filePath)) {
-                logger.warn(">>> Fichier introuvable : {}", filePath);
-                return ResponseEntity.notFound().build();
-            }
-
-            Resource resource = new UrlResource(filePath.toUri());
-
-            if (!resource.isReadable()) {
-                logger.warn(">>> Fichier non lisible : {}", filePath);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
-
-            String contentType = Files.probeContentType(filePath);
-            if (contentType == null) {
-                contentType = "application/octet-stream";
-                logger.info(">>> Type MIME par défaut utilisé : {}", contentType);
-            } else {
-                logger.info(">>> Type MIME détecté : {}", contentType);
-            }
-
-            logger.info(">>> Fichier prêt à être envoyé : {}", fileName);
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
-                    .contentType(MediaType.parseMediaType(contentType))
-                    .body(resource);
-
-        } catch (MalformedURLException e) {
-            logger.error(">>> Erreur de format d'URL pour le fichier {}", fileName, e);
-            return ResponseEntity.internalServerError().build();
-        } catch (IOException e) {
-            logger.error(">>> Erreur d'accès au fichier {}", fileName, e);
-            return ResponseEntity.internalServerError().build();
-        } catch (Exception e) {
-            logger.error(">>> Erreur inattendue lors du téléchargement du fichier {}", fileName, e);
-            return ResponseEntity.internalServerError().build();
-        }
-    }*/
 
 
     @GetMapping("/download/{attestationId}")
@@ -204,30 +146,5 @@ public class AttestationController {
            return ResponseEntity.internalServerError().body(null);
        }
    }
-   /* @GetMapping("/list")
-    public ResponseEntity<?> listAllAttestationFiles() {
-        try {
-            Path uploadPath = Paths.get(baseUploadDir, attestationSubDir).toAbsolutePath().normalize();
-            logger.info("Liste des fichiers dans : {}", uploadPath);
-
-            if (!Files.exists(uploadPath) || !Files.isDirectory(uploadPath)) {
-                logger.warn("Répertoire non trouvé ou invalide : {}", uploadPath);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Répertoire introuvable.");
-            }
-
-            List<String> fileNames = Files.list(uploadPath)
-                    .filter(Files::isRegularFile)
-                    .map(path -> path.getFileName().toString())
-                    .toList();
-
-            logger.info("Fichiers trouvés : {}", fileNames);
-
-            return ResponseEntity.ok(fileNames);
-
-        } catch (IOException e) {
-            logger.error("Erreur lors de la lecture du répertoire des attestations", e);
-            return ResponseEntity.internalServerError().body("Erreur lors de la lecture du répertoire.");
-        }
-    }*/
 
 }

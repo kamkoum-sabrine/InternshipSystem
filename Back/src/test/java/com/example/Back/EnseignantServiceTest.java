@@ -6,6 +6,10 @@ import com.example.Back.Soutenance.Repository.SoutenanceRepository;
 import com.example.Back.Soutenance.Service.EnseignantService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 import java.util.Collections;
@@ -13,27 +17,32 @@ import java.util.Collections;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+
+// AJOUTER cette annotation
+@ExtendWith(MockitoExtension.class)
 class EnseignantServiceTest {
 
+    // UTILISER @Mock au lieu de mock()
+    @Mock
     private EnseignantRepository enseignantRepository;
-    private SoutenanceRepository soutenanceRepository;
-    private EnseignantService enseignantService;
 
-    @BeforeEach
-    void setUp() {
-        enseignantRepository = mock(EnseignantRepository.class);
-        soutenanceRepository = mock(SoutenanceRepository.class);
-        enseignantService = new EnseignantService(enseignantRepository, soutenanceRepository);
-    }
+    @Mock
+    private SoutenanceRepository soutenanceRepository;
+
+    // UTILISER @InjectMocks au lieu de construire manuellement
+    @InjectMocks
+    private EnseignantService enseignantService;
 
     @Test
     void testAddValidEnseignant() {
+        // Given
         Enseignant enseignant = new Enseignant("Dupont", "Jean", "jean.dupont@example.com");
-
         when(enseignantRepository.save(any(Enseignant.class))).thenReturn(enseignant);
 
+        // When
         Enseignant result = enseignantService.addEnseignant(enseignant);
 
+        // Then
         assertNotNull(result);
         assertEquals("Dupont", result.getNom());
         verify(enseignantRepository, times(1)).save(enseignant);
@@ -41,8 +50,10 @@ class EnseignantServiceTest {
 
     @Test
     void testAddInvalidEmail() {
+        // Given
         Enseignant enseignant = new Enseignant("Dupont", "Jean", "invalid-email");
 
+        // When & Then
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             enseignantService.addEnseignant(enseignant);
         });

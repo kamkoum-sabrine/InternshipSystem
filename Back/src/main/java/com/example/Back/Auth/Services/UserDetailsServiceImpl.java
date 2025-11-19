@@ -22,20 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-   /* @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findUserByEmail(email);
 
-        if (user.isEmpty()) {
-            throw new UsernameNotFoundException("User not found with email: " + email);
-        }
-
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.get().getEmail())
-                .password(user.get().getPassword()) // Mot de passe encodé !
-                .roles(user.get().getRole().getNom()) // Ajout du rôle
-                .build();
-    }*/
    @Override
    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
        User user = userRepository.findByEmail(email)
@@ -49,7 +36,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé"));
 
-        // Vérification du mot de passe avec BCrypt
         boolean passwordMatches = passwordEncoder.matches(rawPassword, user.getPassword());
 
         if (!passwordMatches) {

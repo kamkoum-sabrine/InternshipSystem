@@ -69,18 +69,14 @@ public class LettreAffectationService {
 
             validateConvention(convention);
 
-            // Générer le nom du fichier signé
             String signedFileName = "lettre_affectation_signe_" + conventionId + "_" + System.currentTimeMillis() + ".pdf";
             Path signedFilePath = fileStorageLocation.resolve(signedFileName);
 
-            // Générer directement le PDF signé
             generateSignedPdf(convention, signedFilePath.toFile());
 
-            // Mettre à jour la convention avec le chemin du PDF signé
             convention.setLettreAffectationNom(signedFileName);
             convention.setLettreAffectationChemin(signedFilePath.toString());
 
-            // Enregistrer la convention avec le PDF signé
             return conventionRepository.save(convention);
 
         } catch (Exception e) {
@@ -98,18 +94,14 @@ public class LettreAffectationService {
 
             validateConventionPFE(convention);
 
-            // Générer le nom du fichier signé
             String signedFileName = "lettre_affectation_signe_" + conventionId + "_" + System.currentTimeMillis() + ".pdf";
             Path signedFilePath = fileStorageLocation.resolve(signedFileName);
 
-            // Générer directement le PDF signé
             generateSignedPdfPFE(convention, signedFilePath.toFile());
 
-            // Mettre à jour la convention avec le chemin du PDF signé
             convention.setLettreAffectationNom(signedFileName);
             convention.setLettreAffectationChemin(signedFilePath.toString());
 
-            // Enregistrer la convention avec le PDF signé
             return conventionPFERepository.save(convention);
 
         } catch (Exception e) {
@@ -142,12 +134,10 @@ public class LettreAffectationService {
             writer = PdfWriter.getInstance(document, new FileOutputStream(outputFile));
             document.open();
 
-            // Ajouter le contenu standard
             addMetaData(document);
             addTitle(document);
             addContentPFE(document, convention);
 
-            // Ajouter la signature directement
             addSignature(document, writer);
 
         } finally {
@@ -166,12 +156,10 @@ public class LettreAffectationService {
             writer = PdfWriter.getInstance(document, new FileOutputStream(outputFile));
             document.open();
 
-            // Ajouter le contenu standard
             addMetaData(document);
             addTitle(document);
             addContent(document, convention);
 
-            // Ajouter la signature directement
             addSignature(document, writer);
 
         } finally {
@@ -184,13 +172,11 @@ public class LettreAffectationService {
     private void addSignature(Document document, PdfWriter writer) throws Exception {
         PdfContentByte canvas = writer.getDirectContentUnder();
 
-        // Ajouter l'image de signature
         Image signature = Image.getInstance(signaturePath);
         signature.scaleAbsolute(120, 60);
         signature.setAbsolutePosition(450, 300);
         canvas.addImage(signature);
 
-        // Ajouter la date de signature
         BaseFont bf = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
         canvas.beginText();
         canvas.setFontAndSize(bf, 10);
@@ -198,7 +184,6 @@ public class LettreAffectationService {
         canvas.showTextAligned(PdfContentByte.ALIGN_LEFT, "Fait à Tunis, le " + dateSignature, 450, 270, 0);
         canvas.endText();
 
-        // Ajouter le titre de la directrice
         canvas.beginText();
         canvas.setFontAndSize(bf, 10);
         //canvas.showTextAligned(PdfContentByte.ALIGN_LEFT, "La Directrice", 450, 190, 0);

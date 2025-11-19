@@ -50,15 +50,15 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsConfigurationSource, CustomAccessDeniedHandler customAccessDeniedHandler) throws Exception {
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Activer CORS
-                .csrf(csrf -> csrf.disable())  // Désactiver CSRF si nécessaire
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
                 .sessionManagement(management -> management
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("api/attestations/uploads/**").permitAll() // Autoriser l'accès aux fichiers dans /uploads
+                        .requestMatchers("api/attestations/uploads/**").permitAll()
                         .requestMatchers("/api/login").permitAll()
                         .requestMatchers("/api/roles/all").hasRole("SUPER_ADMINISTRATEUR")
-                        .requestMatchers("api/attestations/getAttestations").permitAll() // Autoriser l'accès aux fichiers dans /uploads
+                        .requestMatchers("api/attestations/getAttestations").permitAll()
                         .requestMatchers("/api/users/register").hasRole("SUPER_ADMINISTRATEUR")
                         .requestMatchers("/api/attestations/download/{attestationId}").permitAll()
                         .requestMatchers("/api/users/activate").hasRole("SUPER_ADMINISTRATEUR")

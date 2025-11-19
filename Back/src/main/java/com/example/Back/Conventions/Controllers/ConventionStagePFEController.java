@@ -183,7 +183,6 @@ public class ConventionStagePFEController {
                 Files.createDirectories(uploadPath);
             }
 
-            // Générer un nom de fichier unique pour éviter les collisions
             String fileName = "preuve_annulation_" + conventionId + "_" +
                     System.currentTimeMillis() +
                     "." + getFileExtension(preuveAnnulation.getOriginalFilename());
@@ -194,7 +193,6 @@ public class ConventionStagePFEController {
             // Mettre à jour la convention avec les infos de la preuve
             convention.setPreuveAnnulationNom(fileName);
             convention.setPreuveAnnulationChemin(filePath.toString());
-            // Note: On ne change pas annulee ici (reste à 0)
 
             conventionStagePFERepository.save(convention);
 
@@ -242,7 +240,6 @@ public class ConventionStagePFEController {
                     .body("Annulation impossible : aucune preuve d'annulation n'a été uploadée pour cette convention ");
         }
 
-        // 3. Vérifier si la convention n'est pas annulée
         if (convention.getAnnulee() == 1) {
             return ResponseEntity.badRequest()
                     .body("Cette convention est annulée");

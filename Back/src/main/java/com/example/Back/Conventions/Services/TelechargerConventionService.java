@@ -26,7 +26,6 @@ public class TelechargerConventionService {
             PdfCanvas canvas = new PdfCanvas(page);
 
 
-            // 🖊 Ajouter les champs aux positions spécifiques
 
 
 
@@ -63,7 +62,6 @@ public class TelechargerConventionService {
         }
     }
 
-    // 📌 Fonction pour écrire le texte à une position donnée
     private void drawText(PdfCanvas canvas, PdfFont font, String text, float x, float y) {
         if (text == null || text.isEmpty()) return; // Évite d'écrire du texte vide
 
@@ -72,7 +70,6 @@ public class TelechargerConventionService {
             float textWidth = font.getWidth(text, 11); // Largeur du texte
             float textHeight = 12; // Hauteur estimée du texte
 
-            // 🎨 Dessiner un rectangle blanc derrière le texte (pas pour "X")
             canvas.saveState()
                     .setFillColorRgb(1, 1, 1) // Blanc
                     .rectangle(x - 3, y - 2, textWidth + 5, textHeight) // Ajuster le padding
@@ -80,7 +77,6 @@ public class TelechargerConventionService {
                     .restoreState();
         }
 
-        // 📝 Écrire le texte normalement
         canvas.beginText()
                 .setFontAndSize(font, 11)
                 .moveText(x, y)

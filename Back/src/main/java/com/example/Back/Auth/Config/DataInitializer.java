@@ -31,18 +31,7 @@ import java.util.List;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
-    /**
-     * @Bean
-     *       CommandLineRunner initDatabase(RoleRepository roleRepository) {
-     *       return args -> {
-     *       roleRepository.save(new Role(null, "Super Administrateur"));
-     *       roleRepository.save(new Role(null, "Service Stage"));
-     *       roleRepository.save(new Role(null, "Direction stage"));
-     *       roleRepository.save(new Role(null, "Etudiant"));
-     *       System.out.println("Users inserted successfully!");
-     *       };
-     *       }
-     **/
+
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -71,9 +60,7 @@ public class DataInitializer implements CommandLineRunner {
             Role etudiantRole = new Role(null, "ETUDIANT");
             Role ComiteStageRole = new Role(null, "COMITE_STAGE");
             Role DirectionEnicarRole = new Role(null, "DIRECTION_ENICAR");
-           /* Role ChefDepartementInfoRole = new Role(null, "CHEF_DEPARTEMENT_INFO");
-            Role ChefDepartementElecRole = new Role(null, "CHEF_DEPARTEMENT_ELECTRIQUE");
-            Role ChefDepartementIndusRole = new Role(null, "CHEF_DEPARTEMENT_INDUS");*/
+
             Role ComiteChefRole = new Role(null, "COMITE_CHEF_DEPARTEMENT");
 
 
@@ -92,18 +79,7 @@ public class DataInitializer implements CommandLineRunner {
             User directriceUser = new User(null, "Directrice", "Directrice", "directionEnicar@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"),
                     null,null,null,null,null,null,null,null,null,DirectionEnicarRole, false, LocalDateTime.now());
 
-          /*  User comitePedagogiqueUser = new User(null, "Comite", "Pédagogique", "comitepedagogique@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"),
-                    null,null,null,null,null,null,null,null,null,ComiteStageRole, false, LocalDateTime.now());
 
-            User chefDepInfo = new User(null, "Chef dep", "Info", "chefDepInfo@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"),
-                    null,null,null,null,null,null,null,null,null,ChefDepartementInfoRole, false, LocalDateTime.now());
-
-            User chefDepElec = new User(null, "Chef dep", "Electrique", "chefDepElec@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"),
-                    null,null,null,null,null,null,null,null,null,ChefDepartementElecRole, false, LocalDateTime.now());
-
-            User chefDepIndus = new User(null, "Chef dep", "Industriel", "chefDepIndus@gmail.com",123456,null,null, new BCryptPasswordEncoder().encode("password"),
-                    null,null,null,null,null,null,null,null,null,ChefDepartementIndusRole, false, LocalDateTime.now());
-**/
             User superAdminUser = new User(null, "Kamkoum", "Sabrine", "kamkoumsabrine@enicar.ucar.tn",123456,null,null, new BCryptPasswordEncoder().encode("password"),
 
                     null,null,null,null,null,null,null,null,null,adminRole, false, LocalDateTime.now());
@@ -134,10 +110,7 @@ public class DataInitializer implements CommandLineRunner {
             userRepository.save(etudiantUser3);
             userRepository.save(etudiantUser4);
             userRepository.save(directriceUser);
-           /* userRepository.save(comitePedagogiqueUser);
-            userRepository.save(chefDepIndus);
-            userRepository.save(chefDepInfo);
-            userRepository.save(chefDepElec);*/
+
             userRepository.save(ComiteChefUser);
 
             Enseignant e1 = new Enseignant("Mahdi", "Toumi", "Mahdi.Toumi");
@@ -146,14 +119,13 @@ public class DataInitializer implements CommandLineRunner {
             Enseignant e4 = new Enseignant("Sabrine", "Toumi", "Sabrine.Toumi");
             enseignantRepository.saveAll(List.of(e1, e2, e3, e4));
 
-            // Save Soutenance entities
             Soutenance S1 = new Soutenance(
                     LocalDate.of(2025, 12, 12),
                     5,
                     LocalTime.of(10, 30),
                     etudiantUser,
-                    e4, // Use the saved Enseignant entity
-                    List.of(e2, e3), // Use the saved Enseignant entities
+                    e4,
+                    List.of(e2, e3),
                     "Conception"
             );
 
@@ -162,8 +134,8 @@ public class DataInitializer implements CommandLineRunner {
                     3,
                     LocalTime.of(14, 00),
                     etudiantUser1,
-                    e1, // Use the saved Enseignant entity
-                    List.of(e2, e3), // Use the saved Enseignant entities
+                    e1,
+                    List.of(e2, e3),
                     "Machine Learning"
             );
 

@@ -120,15 +120,13 @@ public class TelechargerConventionController {
         boolean isInformatique = Filiere.Informatique.equals(etudiant.getFiliere());
         boolean isElectrique = Filiere.Infotronique.equals(etudiant.getFiliere() ) || Filiere.Mecatronique.equals(etudiant.getFiliere() ) ;
         boolean isIndustriel = Filiere.GSIL.equals(etudiant.getFiliere());
-        final String CHECKED = "✓"; // ou "🗹" pour un style plus carré
-        final String UNCHECKED = "□"; // ou "☐" si vous préférez
-        // Map des replacements spécifiques aux cases
+        final String CHECKED = "✓";
+        final String UNCHECKED = "□";
         Map<String, String> checkboxes = new HashMap<>();
         checkboxes.put("${INFORMATIQUE}", isInformatique ? CHECKED : UNCHECKED);
         checkboxes.put("${ELECTRIQUE}", isElectrique ? CHECKED : UNCHECKED);
         checkboxes.put("${INDUSTRIEL}", isIndustriel ? CHECKED : UNCHECKED);
 
-        // Appliquez aux paragraphes
         for (XWPFParagraph p : doc.getParagraphs()) {
             String text = p.getText();
             if (text != null) {
@@ -152,17 +150,14 @@ public class TelechargerConventionController {
         newRun.setText(mergedText.replace(placeholder, value));
     }
     private void handleCheckboxesFormation(XWPFDocument doc, User etudiant) {
-        // Déterminez l'état des cases
         boolean isIngenieur = Formation.Ingénierie.equals(etudiant.getFormation());
         boolean isMaster = Formation.Mastère.equals(etudiant.getFormation());
          final String CHECKED = "✓"; // ou "🗹" pour un style plus carré
          final String UNCHECKED = "□"; // ou "☐" si vous préférez
-        // Map des replacements spécifiques aux cases
         Map<String, String> checkboxes = new HashMap<>();
         checkboxes.put("${INGENIEUR}", isIngenieur ? CHECKED : UNCHECKED);
         checkboxes.put("${MASTER}", isMaster ? CHECKED : UNCHECKED);
 
-        // Appliquez aux paragraphes
         for (XWPFParagraph p : doc.getParagraphs()) {
             String text = p.getText();
             if (text != null) {
@@ -215,15 +210,11 @@ public class TelechargerConventionController {
     }
     @GetMapping("/convention/word/{id}")
     public ResponseEntity<byte[]> generateConvention(@PathVariable Long id) throws Exception  {
-        // 1. Charger le template
         ClassPathResource resource = new ClassPathResource("templates/stage_ete_template.docx");
         XWPFDocument document = new XWPFDocument(OPCPackage.open(resource.getInputStream()));
-        // 2. Insérer le logo
         insertLogo(document);
-        // 2. Récupérer les données de l'étudiant
         User etudiant = userService.findUserById(id).orElseThrow();
 
-        // 3. Map des données à remplacer
         Map<String, String> replacements = new HashMap<>();
         replacements.put("${nom}", etudiant.getNom());
         replacements.put("${prenom}", etudiant.getPrenom());
@@ -232,7 +223,6 @@ public class TelechargerConventionController {
         replacements.put("${telephone}",String.valueOf(etudiant.getTel()));
         replacements.put("${email}",etudiant.getEmail());
 
-        // 3. Gérer les cases à cocher
         handleCheckboxesFormation(document, etudiant); // Ou handleWordCheckboxes()
         handleCheckboxesDepartement(document, etudiant); // Ou handleWordCheckboxes()
 
@@ -275,7 +265,6 @@ public class TelechargerConventionController {
         // 2. Fait le remplacement de texte normal
         replacePlaceholders(doc, replacements);
 
-        // 3. Réinsère les images
         for (XWPFParagraph p : doc.getParagraphs()) {
             for (XWPFRun run : p.getRuns()) {
                 if (run.getEmbeddedPictures().size() > 0) {
@@ -409,13 +398,11 @@ public class TelechargerConventionController {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         try {
-            // 1. Charger l'image depuis les ressources
             InputStream logoStream = this.getClass().getResourceAsStream("/static/images/Logo_ENICarthage-removebg-preview.png");
             if (logoStream == null) {
                 throw new IOException("Logo file not found in resources");
             }
 
-            // 2. Ajouter l'en-tête avec logo
             addHeaderWithLogo(document, logoStream);
 
             addTitle(document, "CONVENTION - STAGE D'ÉTÉ");
@@ -450,7 +437,6 @@ public class TelechargerConventionController {
 
         // Supprimer les bordures du tableau
       //  table.getCTTbl().getTblPr().unsetTblBorders();
-        // Supprimer les bordures du tableau (méthode correcte)
         CTTblPr tblPr = table.getCTTbl().getTblPr();
         CTTblBorders borders = tblPr.addNewTblBorders();
         borders.addNewBottom().setVal(STBorder.NONE);
@@ -459,15 +445,12 @@ public class TelechargerConventionController {
         borders.addNewTop().setVal(STBorder.NONE);
         borders.addNewInsideH().setVal(STBorder.NONE);
         borders.addNewInsideV().setVal(STBorder.NONE);
-        // Cellule du logo (20% de largeur)
         XWPFTableCell logoCell = table.getRow(0).getCell(0);
         logoCell.setWidth("20%");
         logoCell.getCTTc().addNewTcPr().addNewNoWrap();
 
-        // Ajouter l'image
         addImageToCell(logoCell, logoStream, XWPFDocument.PICTURE_TYPE_PNG);
 
-        // Cellule du texte (80% de largeur)
         XWPFTableCell textCell = table.getRow(0).getCell(1);
         textCell.setWidth("80%");
         textCell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
@@ -502,11 +485,9 @@ public class TelechargerConventionController {
 
         XWPFRun run = paragraph.createRun();
 
-        // Dimensions du logo (à ajuster selon vos besoins)
         int width = 80;
         int height = 80;
 
-        // Lire tout le flux en mémoire pour éviter les problèmes
         byte[] imageBytes = IOUtils.toByteArray(imageStream);
         try (InputStream byteStream = new ByteArrayInputStream(imageBytes)) {
             run.addPicture(byteStream,

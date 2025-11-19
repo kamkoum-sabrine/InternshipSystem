@@ -87,7 +87,6 @@ public class ConventionStageEteController {
         Entreprise entreprise = entrepriseOptional.get();
 
         try {
-            // Vérifier et créer le dossier d'upload si nécessaire
             Path uploadPath = Paths.get(uploadDir);
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
@@ -132,7 +131,6 @@ public class ConventionStageEteController {
                     @PathVariable Long conventionId,
             @RequestParam("preuveAnnulation") MultipartFile preuveAnnulation) {
 
-        // Trouver la convention
         Optional<ConventionStageEte> conventionOptional = conventionStageEteRepository.findById(conventionId);
         if (conventionOptional.isEmpty()) {
             return ResponseEntity.badRequest().body("Convention non trouvée");
@@ -140,13 +138,11 @@ public class ConventionStageEteController {
         ConventionStageEte convention = conventionOptional.get();
 
         try {
-            // Vérifier et créer le dossier d'upload si nécessaire
             Path uploadPath = Paths.get(uploadDir);
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
 
-            // Générer un nom de fichier unique pour éviter les collisions
             String fileName = "preuve_annulation_" + conventionId + "_" +
                     System.currentTimeMillis() +
                     "." + getFileExtension(preuveAnnulation.getOriginalFilename());
@@ -181,13 +177,11 @@ public class ConventionStageEteController {
                     .body("Annulation impossible : aucune preuve d'annulation n'a été uploadée pour cette convention ");
         }
 
-        // 3. Vérifier si la convention n'est pas déjà annulée
         if (convention.getAnnulee() == 1) {
             return ResponseEntity.badRequest()
                     .body("La convention est déjà annulée");
         }
 
-        // 4. Mettre à jour le statut
         convention.setAnnulee(1); // 1 = annulée
         conventionStageEteRepository.save(convention);
 
@@ -391,13 +385,11 @@ public class ConventionStageEteController {
             //String dossierDestination = "src/main/resources/static/images/signature_direction.png"; // À adapter
             String dossierDestination = "uploads/conventionsStageEte";
 
-            // Créer le dossier s'il n'existe pas
             File dir = new File(dossierDestination);
             if (!dir.exists()) {
                 dir.mkdirs();
             }
 
-            // Ajouter la signature
             String nouveauChemin = PDFSignatureUtils.ajouterSignatureDirection(cheminOriginal, nomPDF, signaturePath, dossierDestination);
 
             // Mise à jour de la convention

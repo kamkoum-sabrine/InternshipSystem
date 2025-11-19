@@ -30,20 +30,18 @@ public class JwtUtil {
     }**/
 
    public String generateToken(String username) {
-       // Récupérer l'utilisateur et ses rôles
        User user = userRepository.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-       String role = user.getRole().getNom(); // Récupérer le nom du rôle
+       String role = user.getRole().getNom();
 
-       // Ajouter le préfixe ROLE_ avant d'inclure le rôle dans le token
-       role = "ROLE_" + role.toUpperCase(); // Ajouter le préfixe ROLE_ et mettre le rôle en majuscules
-       //String role = user.getRole().getNom(); // Récupérer le nom du rôle
+       role = "ROLE_" + role.toUpperCase();
+       //String role = user.getRole().getNom();
        return Jwts.builder()
                .setSubject(username)
                .claim("role", role) // Ajouter les rôles dans le token
                .setIssuedAt(new Date())
-               .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 jour
-               .signWith(SignatureAlgorithm.HS256, SECRET_KEY) // Signature avec la même clé
+               .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+               .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                .compact();
    }
 

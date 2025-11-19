@@ -15,10 +15,9 @@ public class ConventionStatsService {
     public ConventionStatsDTO getConventionStats() {
         ConventionStatsDTO stats = new ConventionStatsDTO();
 
-        // Calcul des totaux
         long totalEte = eteStatsRepository.countAllStageEte();
         long totalPFE = pfeStatsRepository.countAllStagePFE();
-        long totalOuvrier = 0; // À adapter si vous avez ce type
+        long totalOuvrier = 0;
 
         stats.setTotalConventions(totalEte + totalPFE + totalOuvrier);
         stats.setConventionsSignees(

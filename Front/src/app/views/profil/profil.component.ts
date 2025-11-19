@@ -152,7 +152,7 @@ export class profil {
       email: this.userForm.value.email?.toLowerCase()?.trim() || '',
       tel: this.userForm.value.tel?.toLowerCase()?.trim() || '',
       fax: this.userForm.value.fax?.toLowerCase()?.trim() || '',
-      cin: this.userForm.value.cin?.toLowerCase()?.trim() || ''
+      cin: this.userForm.value.cin || ''
     };
     console.log('Form Data:', formData);
 

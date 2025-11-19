@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -50,7 +51,7 @@ public class AuthController {
             response.put("token", token);
 
 
-            User user = userRepository.findUserByEmail(authRequest.getEmail()).get();
+           /* User user = userRepository.findUserByEmail(authRequest.getEmail()).get();
             Object userResp = new Object() {
                 public Long id = user.getId();
                 public String nom = user.getNom();
@@ -61,6 +62,15 @@ public class AuthController {
 
             };
 
+            response.put("user", user);*/
+            // CORRECTION : Vérifiez si l'utilisateur existe avant d'utiliser .get()
+            Optional<User> userOptional = userRepository.findUserByEmail(authRequest.getEmail());
+
+            if (userOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            }
+
+            User user = userOptional.get();
             response.put("user", user);
 
             return ResponseEntity.ok(response);
