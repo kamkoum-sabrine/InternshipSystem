@@ -262,6 +262,7 @@ class ConventionsEteTest {
         RefusConventionDTO dto = new RefusConventionDTO();
         dto.setRemarquesService("Tentative de refus après validation");
 
+
         when(conventionStageEteRepository.findById(4L)).thenReturn(Optional.of(alreadyValidatedConvention));
         System.out.println("Mock configuré: findById retourne convention déjà validée");
 
