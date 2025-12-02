@@ -125,4 +125,9 @@ public class EntreprisesService {
 
         entrepriseRepository.save(existingEntreprise);
     }
+
+    public Entreprise getEntrepriseById(Long id) {
+        return entrepriseRepository.findById(id).orElse(null);
+    }
+
 }

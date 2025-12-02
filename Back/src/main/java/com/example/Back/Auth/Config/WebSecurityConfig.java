@@ -202,6 +202,8 @@ public class WebSecurityConfig {
                         .requestMatchers( "/api/livrable/{id}/valider").hasAnyAuthority("ROLE_DIRECTION_STAGE", "ROLE_SERVICE_STAGE")
                         .requestMatchers("/api/livrable/{id}/rejeter").hasAnyAuthority("ROLE_DIRECTION_STAGE", "ROLE_SERVICE_STAGE")
                         .requestMatchers(HttpMethod.GET, "/api/livrable/download/**").permitAll()
+                        .requestMatchers("/api/pdf/convention/{id}").permitAll()
+                        
                         .anyRequest().authenticated())
                 /** .requestMatchers("/api/login", "/api/admin/register", "/api/admin/activate",
 
