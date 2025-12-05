@@ -30,7 +30,16 @@ public class UserDTO {
     private Formation formation;
    private String tel;
     private LocalDate dateDeNaissance;
-  
+
+    public UserDTO(String john, String mail) {
+        this.nom = john;
+        this.email = mail;
+    }
+
+    public UserDTO() {
+
+    }
+
     public Formation getFormation() {
         return formation;
     }

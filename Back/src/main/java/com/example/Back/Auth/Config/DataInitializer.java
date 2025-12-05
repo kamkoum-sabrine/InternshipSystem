@@ -14,6 +14,7 @@ import com.example.Back.enums.Formation;
 import com.example.Back.enums.Niveau;
 import com.example.Back.enums.Sexe;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +29,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-
+@Profile("!test")
 @Component
 public class DataInitializer implements CommandLineRunner {
 

@@ -19,6 +19,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @Entity
+@Table(name = "`user`")
 public class User {
 
     @Id
@@ -64,6 +65,11 @@ public class User {
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    public User(String alice, String mail) {
+        this.nom = alice;
+        this.email = mail;
+    }
 
     public String getNom() {
         return nom;

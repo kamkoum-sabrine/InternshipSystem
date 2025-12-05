@@ -21,8 +21,9 @@ public interface ConventionStatsRepository extends JpaRepository<ConventionStage
     @Query("SELECT COUNT(c) FROM ConventionStageEte c WHERE c.valideeService = -1 ")
     long countStageEteRefusees();
 
-    @Query("SELECT AVG(DATEDIFF(c.dateFin, c.dateDebut)) FROM ConventionStageEte c")
+    @Query(value = "SELECT AVG(DATEDIFF(date_fin, date_debut)) FROM convention_stage_ete", nativeQuery = true)
     Double avgDureeStageEte();
+
 
     @Query("SELECT COUNT(c) FROM ConventionStageEte c WHERE c.valideeService = 1")
     long countStageEteValideesService();

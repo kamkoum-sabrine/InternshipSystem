@@ -29,32 +29,32 @@ public class JwtUtil {
         // Génère une clé sécurisée de 256 bits
         this.secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     }
-   /** public String generateToken(String username) {
+    /** public String generateToken(String username) {
 
+     return Jwts.builder()
+     .setSubject(username)
+     .setIssuedAt(new Date())
+     .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 jour
+     .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+     .compact();
+     }**/
+
+    public String generateToken(String username) {
+        User user = userRepository.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        String role = user.getRole().getNom();
+
+        role = "ROLE_" + role.toUpperCase();
+        //String role = user.getRole().getNom();
         return Jwts.builder()
                 .setSubject(username)
+                .claim("role", role) // Ajouter les rôles dans le token
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 jour
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+                //.signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .signWith(secretKey)
                 .compact();
-    }**/
-
-   public String generateToken(String username) {
-       User user = userRepository.findUserByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-       String role = user.getRole().getNom();
-
-       role = "ROLE_" + role.toUpperCase();
-       //String role = user.getRole().getNom();
-       return Jwts.builder()
-               .setSubject(username)
-               .claim("role", role) // Ajouter les rôles dans le token
-               .setIssuedAt(new Date())
-               .setExpiration(new Date(System.currentTimeMillis() + 86400000))
-               //.signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-               .signWith(secretKey)
-               .compact();
-   }
+    }
 
 
     public String extractUsername(String token) {
